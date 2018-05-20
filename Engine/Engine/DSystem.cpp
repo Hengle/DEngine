@@ -6,8 +6,9 @@ DSystem::DSystem()
 	m_applicationName = 0;
 	m_title = 0;
 	m_time = 0;
-	m_graphicsCore = 0;
+	m_graphics = 0;
 	m_logManager = 0;
+	m_input = 0;
 	m_hInstance = 0;
 	m_hwnd = 0;
 }
@@ -20,11 +21,19 @@ bool DSystem::Init()
 {
 	int width = D_DEFAULT_WIDTH, height = D_DEFAULT_HEIGHT;
 	InitWindow(width, height, false);
+
+	DInput::CreateInstance(&m_input);
+	if (!m_input->Init(m_hInstance, m_hwnd, width, height))
+	{
+		return false;
+	}
+
 	m_time = new DTime();
 	m_time->Init();
 
-	m_graphicsCore = new DGraphicsCore();
-	if (!m_graphicsCore->Init(width, height, false, m_hwnd)) {
+	m_graphics = new DGraphics();
+	if (!m_graphics->Init(width, height, false, m_hwnd))
+	{
 		return false;
 	}
 
@@ -71,13 +80,19 @@ void DSystem::Shutdown()
 {
 	DestroyWindow(m_hwnd);
 
+	if (m_input != NULL) 
+	{
+		m_input->Shutdown();
+	}
+	m_input = NULL;
+
 	m_time->Shutdown();
 	delete m_time;
 	m_time = NULL;
 
-	m_graphicsCore->Shutdown();
-	delete m_graphicsCore;
-	m_graphicsCore = NULL;
+	m_graphics->Shutdown();
+	delete m_graphics;
+	m_graphics = NULL;
 
 	m_sceneManager->UnloadAllScene();
 	delete m_sceneManager;
@@ -123,7 +138,9 @@ void DSystem::InitWindow(int& width, int& height, bool fullScreen)
 	posX = (GetSystemMetrics(SM_CXSCREEN) - width) / 2;
 	posY = (GetSystemMetrics(SM_CYSCREEN) - height) / 2;
 
-	m_hwnd = CreateWindowEx(WS_EX_APPWINDOW, m_applicationName, m_title, WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_POPUP, posX, posY, width, height, NULL, NULL, m_hInstance, NULL);
+	RECT rc = { 0, 0, width, height };
+	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
+	m_hwnd = CreateWindowEx(WS_EX_APPWINDOW, m_applicationName, m_title, WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_OVERLAPPEDWINDOW, posX, posY, rc.right - rc.left, rc.bottom - rc.top, NULL, NULL, m_hInstance, NULL);
 
 	ShowWindow(m_hwnd, SW_SHOW);
 	SetFocus(m_hwnd);
@@ -131,7 +148,12 @@ void DSystem::InitWindow(int& width, int& height, bool fullScreen)
 
 bool DSystem::Loop()
 {
-	if (!m_graphicsCore->Render(m_sceneManager, m_logManager, m_time)) {
+	if (!m_input->InputLoop(m_hwnd))
+	{
+		return false;
+	}
+	if (!m_graphics->Render(m_sceneManager, m_logManager, m_time)) 
+	{
 		return false;
 	}
 	return true;
@@ -139,7 +161,7 @@ bool DSystem::Loop()
 
 LRESULT CALLBACK DSystem::MessageHandler(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	if (m_graphicsCore != NULL && m_graphicsCore->MessageHandler(hwnd, uMsg, wParam, lParam))
+	if (m_graphics != NULL && m_graphics->MessageHandler(hwnd, uMsg, wParam, lParam))
 		return true;
 	switch (uMsg)
 	{
@@ -160,9 +182,9 @@ DSceneManager * DSystem::GetSceneManager()
 	return System->m_sceneManager;
 }
 
-DGraphicsCore * DSystem::GetGraphicsCore()
+DGraphics * DSystem::GetGraphicsCore()
 {
-	return System->m_graphicsCore;
+	return System->m_graphics;
 }
 
 DLogManager * DSystem::GetLogManager()
@@ -173,6 +195,10 @@ DLogManager * DSystem::GetLogManager()
 DTime * DSystem::GetTime()
 {
 	return System->m_time;
+}
+
+void DSystem::Quit()
+{
 }
 
 LRESULT CALLBACK SysWndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)

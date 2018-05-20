@@ -5,11 +5,11 @@
 #include "DLogManager.h"
 #include "DTime.h"
 
-class DGraphicsCore
+class DGraphics
 {
 public:
-	DGraphicsCore();
-	~DGraphicsCore();
+	DGraphics();
+	~DGraphics();
 	bool Init(int, int, bool, HWND);
 	bool Render(DSceneManager*, DLogManager*, DTime*);
 	void Shutdown();

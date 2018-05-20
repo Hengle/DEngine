@@ -1,7 +1,8 @@
 ﻿#include "DTime.h"
-#include "DGraphicsCore.h"
+#include "DGraphics.h"
 #include "DSceneManager.h"
 #include "DLogManager.h"
+#include "DInput.h"
 
 #define D_DEFAULT_FULL_SCREEN    FALSE
 #define D_DEFAULT_WIDTH          1024
@@ -22,9 +23,11 @@ public:
 	static HWND GetHWND();
 
 	static DSceneManager* GetSceneManager();
-	static DGraphicsCore* GetGraphicsCore();
+	static DGraphics* GetGraphicsCore();
 	static DLogManager* GetLogManager();
 	static DTime* GetTime();
+
+	static void Quit();
 
 private:
 	void InitWindow(int&, int&, bool);
@@ -33,14 +36,15 @@ private:
 private:
 	HWND m_hwnd;
 	DTime* m_time;
-	DGraphicsCore* m_graphicsCore;
+	DGraphics* m_graphics;
 	DSceneManager* m_sceneManager;
 	DLogManager* m_logManager;
+	DInput* m_input;
 	HINSTANCE m_hInstance;
 	LPCWSTR m_applicationName;
 	LPCWSTR m_title;
 
-	
+	bool m_quit;
 };
 
 static LRESULT CALLBACK SysWndProc(HWND, UINT, WPARAM, LPARAM);

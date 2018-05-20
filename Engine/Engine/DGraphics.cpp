@@ -1,18 +1,18 @@
-#include "DGraphicsCore.h"
+#include "DGraphics.h"
 
 
-DGraphicsCore::DGraphicsCore()
+DGraphics::DGraphics()
 {
 	m_D3D = 0;
 	m_GUI = 0;
 }
 
 
-DGraphicsCore::~DGraphicsCore()
+DGraphics::~DGraphics()
 {
 }
 
-bool DGraphicsCore::Init(int width, int height, bool fullScreen, HWND hwnd)
+bool DGraphics::Init(int width, int height, bool fullScreen, HWND hwnd)
 {
 	m_D3D = new D3DCore();
 	if(!m_D3D->Init(width, height, fullScreen, hwnd))
@@ -25,7 +25,7 @@ bool DGraphicsCore::Init(int width, int height, bool fullScreen, HWND hwnd)
 	return true;
 }
 
-bool DGraphicsCore::Render(DSceneManager* sceneManager, DLogManager* logManager, DTime* time)
+bool DGraphics::Render(DSceneManager* sceneManager, DLogManager* logManager, DTime* time)
 {
 	time->Update();
 
@@ -54,7 +54,7 @@ bool DGraphicsCore::Render(DSceneManager* sceneManager, DLogManager* logManager,
 	return true;
 }
 
-void DGraphicsCore::Shutdown()
+void DGraphics::Shutdown()
 {
 	if (m_GUI != NULL) {
 	m_GUI->ShutDown();
@@ -70,24 +70,24 @@ void DGraphicsCore::Shutdown()
 	
 }
 
-ID3D11Device * DGraphicsCore::GetDevice()
+ID3D11Device * DGraphics::GetDevice()
 {
 	return m_D3D->GetDevice();
 }
 
-ID3D11DeviceContext * DGraphicsCore::GetDeviceContext()
+ID3D11DeviceContext * DGraphics::GetDeviceContext()
 {
 	return m_D3D->GetDeviceContext();
 }
 
-LRESULT CALLBACK DGraphicsCore::MessageHandler(HWND hwnd, UINT uMsg, WPARAM wparam, LPARAM lparam)
+LRESULT CALLBACK DGraphics::MessageHandler(HWND hwnd, UINT uMsg, WPARAM wparam, LPARAM lparam)
 {
 	if (m_GUI != NULL && m_GUI->GUIMessageHandler(hwnd, uMsg, wparam, lparam))
 		return true;
 	return false;
 }
 
-void DGraphicsCore::GetResolution(FLOAT & width, FLOAT & height)
+void DGraphics::GetResolution(FLOAT & width, FLOAT & height)
 {
 	m_D3D->GetResolution(width, height);
 }

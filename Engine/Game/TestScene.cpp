@@ -21,6 +21,9 @@ void TestScene::OnGUI()
 	ImGui::Text("FixedDeltaTime:%lf", DTime::GetFixedDeltaTime());
 	ImGui::Text("Timer:%lf", DTime::GetTimer());
 	ImGui::Text("FPS:%d", DTime::GetFPS());
+	int x, y;
+	DInput::GetMousePosition(x, y);
+	ImGui::Text("Mouse:%d,%d", x, y);
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
 	D3DXVECTOR3 euler;
@@ -32,6 +35,22 @@ void TestScene::OnGUI()
 	ImGui::SliderFloat("Yall", &euler.y, 0.0f, 360.0f);
 	ImGui::SliderFloat("Roll", &euler.z, 0.0f, 360.0f);
 
+	if (DInput::IsMousePress(0)) 
+	{
+		ImGui::Text("Mouse Down");
+	}
+	if (DInput::IsMouseDown(0))
+	{
+		DLog::Info("Mouse Click");
+	}
+	if (DInput::IsKeyPress(DIK_A))
+	{
+		ImGui::Text("Key A Down");
+	}
+	if (DInput::IsKeyDown(DIK_A))
+	{
+		DLog::Info("Key A Click");
+	}
 
 	transform->SetEuler(euler.x, euler.y, euler.z);
 
@@ -62,7 +81,7 @@ void TestScene::OnLoad()
 	transform = m_light->GetTransform();
 	transform->SetEuler(50, -30, 0);
 
-	DModelMesh* mesh = new DModelMesh("../Res/beizi.obj");
+	DModelMesh* mesh = new DModelMesh("../Res/teapoat.obj");
 	DLightShader* shader = new DLightShader(L"../Res/light.vs", L"../Res/light.ps");
 	DTexture* texture = new DTexture(L"../Res/floor.jpg");
 	m_obj = new DDisplayObject(mesh, shader, texture, m_light);
@@ -71,6 +90,9 @@ void TestScene::OnLoad()
 	transform->SetEuler(40.269f, 83.385f, 41.898f);
 
 	AddDisplayObject(m_obj);
+
+	DLog::Err(u8"打印个日志测试");
+	DLog::Warn("Log Test");
 
 	//m_Model = new ModelClass;
 	//

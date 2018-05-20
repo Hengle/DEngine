@@ -123,12 +123,6 @@
     <ClInclude Include="imgui_impl_dx11.h">
       <Filter>头文件\Core\Graphics\ImGUI</Filter>
     </ClInclude>
-    <ClInclude Include="DGraphicsCore.h">
-      <Filter>头文件\Core\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="DInput.h">
-      <Filter>头文件\Core\Input</Filter>
-    </ClInclude>
     <ClInclude Include="DLogManager.h">
       <Filter>头文件\Core\Log</Filter>
     </ClInclude>
@@ -213,13 +207,16 @@
     <ClInclude Include="DModel.h">
       <Filter>头文件\Core\Object\ResObject</Filter>
     </ClInclude>
+    <ClInclude Include="DGraphics.h">
+      <Filter>头文件\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="DInput.h">
+      <Filter>头文件\Core\Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DFrameBase.cpp">
       <Filter>源文件\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="DGraphicsCore.cpp">
-      <Filter>源文件\Core\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="D3DCore.cpp">
       <Filter>源文件\Core\Graphics\D3DCore</Filter>
@@ -235,9 +232,6 @@
     </ClCompile>
     <ClCompile Include="DLogManager.cpp">
       <Filter>源文件\Core\Log</Filter>
-    </ClCompile>
-    <ClCompile Include="DInput.cpp">
-      <Filter>源文件\Core\Input</Filter>
     </ClCompile>
     <ClCompile Include="DMath.cpp">
       <Filter>源文件\Core\Math</Filter>
@@ -287,9 +281,6 @@
     <ClCompile Include="DSystem.cpp">
       <Filter>源文件\Core\System</Filter>
     </ClCompile>
-    <ClCompile Include="DSystemSingleton.cpp">
-      <Filter>源文件\Core\System</Filter>
-    </ClCompile>
     <ClCompile Include="DTime.cpp">
       <Filter>源文件\Core\Time</Filter>
     </ClCompile>
@@ -301,6 +292,12 @@
     </ClCompile>
     <ClCompile Include="DModel.cpp">
       <Filter>源文件\Core\Object\ResObject</Filter>
+    </ClCompile>
+    <ClCompile Include="DGraphics.cpp">
+      <Filter>源文件\Core\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="DInput.cpp">
+      <Filter>源文件\Core\Input</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

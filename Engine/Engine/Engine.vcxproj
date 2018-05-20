@@ -134,7 +134,7 @@
     <ClInclude Include="DCamera.h" />
     <ClInclude Include="DDisplayObject.h" />
     <ClInclude Include="DFrameBase.h" />
-    <ClInclude Include="DGraphicsCore.h" />
+    <ClInclude Include="DGraphics.h" />
     <ClInclude Include="DImGUI.h" />
     <ClInclude Include="DInput.h" />
     <ClInclude Include="DLight.h" />
@@ -170,7 +170,7 @@
     <ClCompile Include="DCamera.cpp" />
     <ClCompile Include="DDisplayObject.cpp" />
     <ClCompile Include="DFrameBase.cpp" />
-    <ClCompile Include="DGraphicsCore.cpp" />
+    <ClCompile Include="DGraphics.cpp" />
     <ClCompile Include="DImGUI.cpp" />
     <ClCompile Include="DInput.cpp" />
     <ClCompile Include="DLight.cpp" />
@@ -187,7 +187,6 @@
     <ClCompile Include="DSceneObject.cpp" />
     <ClCompile Include="DShader.cpp" />
     <ClCompile Include="DSystem.cpp" />
-    <ClCompile Include="DSystemSingleton.cpp" />
     <ClCompile Include="DTexture.cpp" />
     <ClCompile Include="DTime.cpp" />
     <ClCompile Include="DTransform.cpp" />

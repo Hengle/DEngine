@@ -21,7 +21,6 @@ void DTexture::Destroy()
 	}
 	if (m_textureFile != NULL)
 	{
-		delete m_textureFile;
 		m_textureFile = NULL;
 	}
 

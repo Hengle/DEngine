@@ -62,7 +62,7 @@ void TestScene::OnLoad()
 	transform = m_light->GetTransform();
 	transform->SetEuler(50, -30, 0);
 
-	DCubeMesh* mesh = new DCubeMesh();
+	DModelMesh* mesh = new DModelMesh("../Res/beizi.obj");
 	DLightShader* shader = new DLightShader(L"../Res/light.vs", L"../Res/light.ps");
 	DTexture* texture = new DTexture(L"../Res/floor.jpg");
 	m_obj = new DDisplayObject(mesh, shader, texture, m_light);

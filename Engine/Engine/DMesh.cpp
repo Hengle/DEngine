@@ -1,5 +1,5 @@
 #include "DMesh.h"
-
+#include "DModel.h"
 
 DMesh::DMesh()
 {
@@ -395,4 +395,18 @@ void DSphereMesh::CreateBuffer(void ** vertexBuffer, unsigned long ** indexBuffe
 	((VertexType*)(*vertexBuffer))[23].position = D3DXVECTOR3(sx, -sy, sz);
 	((VertexType*)(*vertexBuffer))[23].tex = D3DXVECTOR2(1.0f, 0.0f);
 	((VertexType*)(*vertexBuffer))[23].normal = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
+}
+
+DModelMesh::DModelMesh(char * filename) : DMesh()
+{
+	m_fileName = filename;
+}
+
+DModelMesh::~DModelMesh()
+{
+}
+
+void DModelMesh::CreateBuffer(void ** vertexBuffer, unsigned long ** indexBuffer, int & vertexCount, int & indexCount, int& dataSize)
+{
+	DObjModelLoader::LoadObj(m_fileName, vertexBuffer, indexBuffer, vertexCount, indexCount, dataSize);
 }

@@ -60,3 +60,16 @@ protected:
 private:
 	float m_radius;
 };
+
+class DModelMesh : public DMesh
+{
+public:
+	DModelMesh(char*);
+	~DModelMesh();
+
+protected:
+	virtual void CreateBuffer(void**, unsigned long**, int&, int&, int&);
+
+private:
+	char* m_fileName;
+};

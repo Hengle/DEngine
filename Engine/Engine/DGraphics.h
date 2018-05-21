@@ -21,5 +21,6 @@ public:
 private:
 	D3DCore* m_D3D;
 	DImGUI* m_GUI;
+	//DLine* m_line;
 };
 

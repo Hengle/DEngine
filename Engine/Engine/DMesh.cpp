@@ -6,6 +6,8 @@ DMesh::DMesh()
 	m_vertexBuffer = 0;
 	m_indexBuffer = 0;
 	m_dataSize = 0;
+
+	m_topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 }
 
 
@@ -17,6 +19,7 @@ void DMesh::Init(ID3D11Device * device)
 {
 	void* vertices;
 	unsigned long* indices;
+
 	CreateBuffer(&vertices, &indices, m_vertexCount, m_indexCount, m_dataSize);
 
 	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
@@ -57,10 +60,12 @@ void DMesh::Init(ID3D11Device * device)
 		return;
 	}
 
-	delete[] vertices;
+	if (vertices)
+		delete[] vertices;
 	vertices = 0;
 
-	delete[] indices;
+	if (indices)
+		delete[] indices;
 	indices = 0;
 }
 
@@ -91,7 +96,7 @@ void DMesh::Render(ID3D11DeviceContext * deviceContext)
 
 	deviceContext->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
-	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	deviceContext->IASetPrimitiveTopology(m_topology);
 }
 
 int DMesh::GetIndexCount()
@@ -102,6 +107,21 @@ int DMesh::GetIndexCount()
 int DMesh::GetVertexCount()
 {
 	return m_vertexCount;
+}
+
+D3D11_PRIMITIVE_TOPOLOGY DMesh::GetTopology()
+{
+	return m_topology;
+}
+
+void DMesh::SetTopology(D3D11_PRIMITIVE_TOPOLOGY topology)
+{
+	m_topology = topology;
+}
+
+int DMesh::GetDataSize()
+{
+	return m_dataSize;
 }
 
 DCubeMesh::DCubeMesh() : DCubeMesh(1.0f,1.0f,1.0f)
@@ -409,4 +429,44 @@ DModelMesh::~DModelMesh()
 void DModelMesh::CreateBuffer(void ** vertexBuffer, unsigned long ** indexBuffer, int & vertexCount, int & indexCount, int& dataSize)
 {
 	DObjModelLoader::LoadObj(m_fileName, vertexBuffer, indexBuffer, vertexCount, indexCount, dataSize);
+}
+
+DLine::DLine() : DMesh()
+{
+	m_topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+}
+
+DLine::~DLine()
+{
+}
+
+void DLine::UpdateVertex(const D3DXVECTOR3& begin, const D3DXVECTOR3& end, ID3D11DeviceContext * deviceContext)
+{
+	/*D3DXVECTOR3* vertices = new D3DXVECTOR3[2];
+	vertices[0] = begin;
+	vertices[1] = end;
+	D3D11_MAPPED_SUBRESOURCE resource;
+	ZeroMemory(&resource, sizeof(D3D11_MAPPED_SUBRESOURCE));
+	deviceContext->Map(m_vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
+	memcpy(resource.pData, vertices, GetDataSize());
+	deviceContext->Unmap(m_vertexBuffer, 0);
+
+	delete[] vertices;
+	vertices = 0;*/
+}
+
+void DLine::CreateBuffer(void ** vertexBuffer, unsigned long ** indexBuffer, int & vertexCount, int & indexCount, int& dataSize)
+{
+	vertexCount = 3;
+	indexCount = 3;
+
+	dataSize = sizeof(D3DXVECTOR3);
+
+	(*vertexBuffer) = new D3DXVECTOR3[vertexCount];
+	((D3DXVECTOR3*)(*vertexBuffer))[0] = D3DXVECTOR3(-5.700611f, -3.575672f, -3.757332f);
+	((D3DXVECTOR3*)(*vertexBuffer))[1] = D3DXVECTOR3(-4.700611f, 3.575672f, -4.757332f);
+	((D3DXVECTOR3*)(*vertexBuffer))[2] = D3DXVECTOR3(2.700611f, 3.575672f, -4.757332f);
+	(*indexBuffer) = new unsigned long[indexCount] {
+		0, 1, 2
+	};
 }

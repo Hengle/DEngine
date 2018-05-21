@@ -5,6 +5,7 @@ DGraphics::DGraphics()
 {
 	m_D3D = 0;
 	m_GUI = 0;
+	//m_line = 0;
 }
 
 
@@ -21,6 +22,9 @@ bool DGraphics::Init(int width, int height, bool fullScreen, HWND hwnd)
 	}
 	m_GUI = new DImGUI();
 	m_GUI->Init(hwnd, m_D3D->GetDevice(), m_D3D->GetDeviceContext());
+
+	//m_line = new DLine();
+	//m_line->Init(m_D3D->GetDevice());
 
 	return true;
 }
@@ -42,7 +46,7 @@ bool DGraphics::Render(DSceneManager* sceneManager, DLogManager* logManager, DTi
 
 	sceneManager->UpdateScene();
 
-	m_D3D->BeginRender(0, 0, 1, 1);
+	m_D3D->BeginRender(0, 0, 1, 0.5f);
 
 	sceneManager->RenderScene(m_D3D->GetDeviceContext());
 
@@ -56,13 +60,21 @@ bool DGraphics::Render(DSceneManager* sceneManager, DLogManager* logManager, DTi
 
 void DGraphics::Shutdown()
 {
-	if (m_GUI != NULL) {
-	m_GUI->ShutDown();
-	delete m_GUI;
+	/*if (m_line != NULL)
+	{
+		m_line->Destroy();
+		delete m_line;
+	}
+	m_line = NULL;*/
+	if (m_GUI != NULL)
+	{
+		m_GUI->ShutDown();
+		delete m_GUI;
 	}
 	m_GUI = NULL;
 
-	if (m_D3D != NULL) {
+	if (m_D3D != NULL)
+	{
 		m_D3D->Destroy();
 		delete m_D3D;
 	}
@@ -91,3 +103,9 @@ void DGraphics::GetResolution(FLOAT & width, FLOAT & height)
 {
 	m_D3D->GetResolution(width, height);
 }
+
+//void DGraphics::DrawLine(const D3DXVECTOR3& begin, const D3DXVECTOR3& end)
+//{
+//	m_line->UpdateVertex(begin, end, m_D3D->GetDeviceContext());
+//	m_line->Render(m_D3D->GetDeviceContext());
+//}

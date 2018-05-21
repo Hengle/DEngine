@@ -12,17 +12,20 @@ public:
 	void Render(ID3D11DeviceContext*);
 	int GetIndexCount();
 	int GetVertexCount();
+	D3D11_PRIMITIVE_TOPOLOGY GetTopology();
+	void SetTopology(D3D11_PRIMITIVE_TOPOLOGY);
 
 protected:
 	virtual void CreateBuffer(void**, unsigned long **, int&, int&, int&) = 0;
+	int GetDataSize();
 
 protected:
 	ID3D11Buffer* m_vertexBuffer, *m_indexBuffer;
+	D3D11_PRIMITIVE_TOPOLOGY m_topology;
 
 private:
 	int m_vertexCount, m_indexCount;
 	int m_dataSize;
-
 
 };
 
@@ -72,4 +75,15 @@ protected:
 
 private:
 	char* m_fileName;
+};
+
+class DLine : public DMesh
+{
+public:
+	DLine();
+	~DLine();
+	void UpdateVertex(const D3DXVECTOR3&, const D3DXVECTOR3&, ID3D11DeviceContext *);
+
+protected:
+	virtual void CreateBuffer(void**, unsigned long**, int&, int&, int&);
 };

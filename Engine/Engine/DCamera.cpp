@@ -147,7 +147,7 @@ bool DCamera::IsOrthographic()
 
 void DCamera::SetFieldOfView(float fieldOfView)
 {
-	if (!IS_FLOAT_EQUAL(m_fieldOfView, fieldOfView)) 
+	if (!(IS_FLOAT_EQUAL(m_fieldOfView, fieldOfView))) 
 	{
 		m_fieldOfView = fieldOfView;
 		if(!m_ortho)
@@ -157,7 +157,7 @@ void DCamera::SetFieldOfView(float fieldOfView)
 
 void DCamera::SetNear(float nearClip)
 {
-	if (!IS_FLOAT_EQUAL(m_near, nearClip))
+	if (!(IS_FLOAT_EQUAL(m_near, nearClip)))
 	{
 		m_near = nearClip;
 		m_isProjectionChanged = true;
@@ -166,7 +166,7 @@ void DCamera::SetNear(float nearClip)
 
 void DCamera::SetFar(float farClip)
 {
-	if (!IS_FLOAT_EQUAL(m_far, farClip))
+	if (!(IS_FLOAT_EQUAL(m_far, farClip)))
 	{
 		m_far = farClip;
 		m_isProjectionChanged = true;
@@ -175,7 +175,7 @@ void DCamera::SetFar(float farClip)
 
 void DCamera::SetAspect(float aspect)
 {
-	if (!IS_FLOAT_EQUAL(m_aspect, aspect))
+	if (!(IS_FLOAT_EQUAL(m_aspect, aspect)))
 	{
 		m_aspect = aspect;
 		m_isProjectionChanged = true;

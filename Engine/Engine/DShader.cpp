@@ -562,13 +562,13 @@ DLightShader::~DLightShader()
 {
 }
 
-bool DLightShader::Render(ID3D11DeviceContext *deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView *texture, D3DXVECTOR3 lightDirection, D3DXVECTOR4 diffuseColor)
+bool DLightShader::Render(ID3D11DeviceContext *deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView *texture, ID3D11ShaderResourceView *decal, D3DXVECTOR3 lightDirection, D3DXVECTOR4 diffuseColor)
 {
 	bool result;
 
 
 	// Set the shader parameters that it will use for rendering.
-	result = SetShaderParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, texture, lightDirection, diffuseColor);
+	result = SetShaderParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, texture, decal, lightDirection, diffuseColor);
 	if (!result)
 	{
 		return false;
@@ -775,7 +775,7 @@ void DLightShader::ShutdownShader()
 }
 
 bool DLightShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
-	D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView* texture, D3DXVECTOR3 lightDirection,
+	D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView* texture, ID3D11ShaderResourceView* decal, D3DXVECTOR3 lightDirection,
 	D3DXVECTOR4 diffuseColor)
 {
 	HRESULT result;
@@ -815,6 +815,8 @@ bool DLightShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, D3DXM
 	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
 
 	deviceContext->PSSetShaderResources(0, 1, &texture);
+
+	deviceContext->PSSetShaderResources(1, 1, &decal);
 
 	result = deviceContext->Map(m_lightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	if (FAILED(result))

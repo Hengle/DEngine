@@ -1,18 +1,25 @@
 #include "DTexture.h"
 
 
-DTexture::DTexture(WCHAR* fileName)
+DTexture::DTexture()
 {
-	m_texture = 0;
-	m_textureFile = fileName;
 }
-
 
 DTexture::~DTexture()
 {
 }
 
-void DTexture::Destroy()
+DTexture2D::DTexture2D(WCHAR * fileName) : DTexture()
+{
+	m_texture = 0;
+	m_textureFile = fileName;
+}
+
+DTexture2D::~DTexture2D()
+{
+}
+
+void DTexture2D::Destroy()
 {
 	if (m_texture)
 	{
@@ -27,7 +34,7 @@ void DTexture::Destroy()
 	return;
 }
 
-bool DTexture::Init(ID3D11Device *device)
+bool DTexture2D::Init(ID3D11Device * device)
 {
 	HRESULT result;
 
@@ -40,7 +47,7 @@ bool DTexture::Init(ID3D11Device *device)
 	return true;
 }
 
-ID3D11ShaderResourceView * DTexture::GetTexture()
+ID3D11ShaderResourceView * DTexture2D::GetTexture()
 {
 	return m_texture;
 }

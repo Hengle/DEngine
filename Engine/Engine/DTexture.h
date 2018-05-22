@@ -5,20 +5,24 @@
 class DTexture : public DResObject
 {
 public:
-	DTexture(WCHAR*);
+	DTexture();
 	~DTexture();
+	virtual bool Init(ID3D11Device*) = 0;
+
+};
+
+class DTexture2D : public DTexture 
+{
+public:
+	DTexture2D(WCHAR*);
+	~DTexture2D();
 	virtual void Destroy();
-	bool Init(ID3D11Device*);
+	virtual bool Init(ID3D11Device*);
 	ID3D11ShaderResourceView* GetTexture();
 
 private:
 	ID3D11ShaderResourceView* m_texture;
 	WCHAR* m_textureFile;
-};
-
-class DTexture2D : public DTexture 
-{
-
 };
 
 class DTextureCube : public DTexture

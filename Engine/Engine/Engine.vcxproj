@@ -132,6 +132,7 @@
   <ItemGroup>
     <ClInclude Include="D3DCore.h" />
     <ClInclude Include="DCamera.h" />
+    <ClInclude Include="DColor.h" />
     <ClInclude Include="DDisplayObject.h" />
     <ClInclude Include="DFrameBase.h" />
     <ClInclude Include="DGraphics.h" />
@@ -144,6 +145,7 @@
     <ClInclude Include="DMath.h" />
     <ClInclude Include="DMesh.h" />
     <ClInclude Include="DObject.h" />
+    <ClInclude Include="DRenderTexture.h" />
     <ClInclude Include="DRes.h" />
     <ClInclude Include="DResObject.h" />
     <ClInclude Include="DScene.h" />
@@ -168,6 +170,7 @@
   <ItemGroup>
     <ClCompile Include="D3DCore.cpp" />
     <ClCompile Include="DCamera.cpp" />
+    <ClCompile Include="DColor.cpp" />
     <ClCompile Include="DDisplayObject.cpp" />
     <ClCompile Include="DFrameBase.cpp" />
     <ClCompile Include="DGraphics.cpp" />
@@ -180,6 +183,7 @@
     <ClCompile Include="DMath.cpp" />
     <ClCompile Include="DMesh.cpp" />
     <ClCompile Include="DObject.cpp" />
+    <ClCompile Include="DRenderTexture.cpp" />
     <ClCompile Include="DRes.cpp" />
     <ClCompile Include="DResObject.cpp" />
     <ClCompile Include="DScene.cpp" />

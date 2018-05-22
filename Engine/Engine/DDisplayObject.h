@@ -9,7 +9,7 @@ class DDisplayObject : public DSceneObject
 {
 public:
 	DDisplayObject();
-	DDisplayObject(DMesh*, DLightShader*, DTexture*, DLight*);
+	DDisplayObject(DMesh*, DLightShader*, DTexture*, DTexture*, DLight*);
 	~DDisplayObject();
 	virtual void Render();
 	virtual void Init();
@@ -19,6 +19,7 @@ protected:
 	DMesh* m_mesh;
 	DLightShader* m_shader;
 	DTexture* m_texture;
+	DTexture* m_decal;
 	DLight* m_light;
 };
 

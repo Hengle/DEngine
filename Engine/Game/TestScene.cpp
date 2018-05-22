@@ -84,10 +84,12 @@ void TestScene::OnLoad()
 	DModelMesh* mesh = new DModelMesh("../Res/teapoat.obj");
 	DLightShader* shader = new DLightShader(L"../Res/light.vs", L"../Res/light.ps");
 	DTexture* texture = new DTexture(L"../Res/floor.jpg");
-	m_obj = new DDisplayObject(mesh, shader, texture, m_light);
+	DTexture* decal = new DTexture(L"../Res/decal.jpg");
+	m_obj = new DDisplayObject(mesh, shader, texture, decal, m_light);
 	transform = m_obj->GetTransform();
 	transform->SetPosition(-5.226904f, -4.441468f, -1.499356f);
 	transform->SetEuler(40.269f, 83.385f, 41.898f);
+
 
 	AddDisplayObject(m_obj);
 

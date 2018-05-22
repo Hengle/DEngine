@@ -1,5 +1,5 @@
 #include "DSystem.h"
-
+#include <dwmapi.h>
 
 DSystem::DSystem()
 {
@@ -141,9 +141,10 @@ void DSystem::InitWindow(int& width, int& height, bool fullScreen)
 	RECT rc = { 0, 0, width, height };
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 	m_hwnd = CreateWindowEx(WS_EX_APPWINDOW, m_applicationName, m_title, WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_OVERLAPPEDWINDOW, posX, posY, rc.right - rc.left, rc.bottom - rc.top, NULL, NULL, m_hInstance, NULL);
-
+	
 	ShowWindow(m_hwnd, SW_SHOW);
 	SetFocus(m_hwnd);
+
 }
 
 bool DSystem::Loop()

@@ -109,6 +109,12 @@
     <Filter Include="库\imgui">
       <UniqueIdentifier>{3563d4ad-6509-4821-854e-4c54b4c56404}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Core\Object\SceneObject\Camera">
+      <UniqueIdentifier>{4450bd32-5bbb-4a87-bc57-42ff6e7b38bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Core\Object\SceneObject\Camera">
+      <UniqueIdentifier>{8a76ab49-1472-49ff-898c-bb48a45316ba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -152,9 +158,6 @@
     </ClInclude>
     <ClInclude Include="DObject.h">
       <Filter>头文件\Core\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="DCamera.h">
-      <Filter>头文件\Core\Object\SceneObject</Filter>
     </ClInclude>
     <ClInclude Include="DDisplayObject.h">
       <Filter>头文件\Core\Object\SceneObject</Filter>
@@ -213,6 +216,15 @@
     <ClInclude Include="DInput.h">
       <Filter>头文件\Core\Input</Filter>
     </ClInclude>
+    <ClInclude Include="DCamera.h">
+      <Filter>头文件\Core\Object\SceneObject\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="DRenderTexture.h">
+      <Filter>头文件\Core\Object\ResObject</Filter>
+    </ClInclude>
+    <ClInclude Include="DColor.h">
+      <Filter>头文件\Core\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DFrameBase.cpp">
@@ -253,9 +265,6 @@
     </ClCompile>
     <ClCompile Include="DTexture.cpp">
       <Filter>源文件\Core\Object\ResObject</Filter>
-    </ClCompile>
-    <ClCompile Include="DCamera.cpp">
-      <Filter>源文件\Core\Object\SceneObject</Filter>
     </ClCompile>
     <ClCompile Include="DDisplayObject.cpp">
       <Filter>源文件\Core\Object\SceneObject</Filter>
@@ -298,6 +307,15 @@
     </ClCompile>
     <ClCompile Include="DInput.cpp">
       <Filter>源文件\Core\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="DCamera.cpp">
+      <Filter>源文件\Core\Object\SceneObject\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="DRenderTexture.cpp">
+      <Filter>源文件\Core\Object\ResObject</Filter>
+    </ClCompile>
+    <ClCompile Include="DColor.cpp">
+      <Filter>源文件\Core\Utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

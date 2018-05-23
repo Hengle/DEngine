@@ -10,6 +10,7 @@ D3DCore::D3DCore()
 	m_depthStencilBuffer = 0;
 	m_depthStencilState = 0;
 	m_depthStencilView = 0;
+	m_rasterState = 0;
 }
 
 
@@ -31,6 +32,9 @@ bool D3DCore::Init(int width, int height, bool fullScreen, HWND hwnd)
 	D3D11_TEXTURE2D_DESC depthBufferDesc;
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
+	D3D11_RASTERIZER_DESC rasterDesc;
+
+	D3D11_DEPTH_STENCIL_DESC depthDisabledStencilDesc;
 
 	int i, numerator, denominator;
 
@@ -233,6 +237,29 @@ bool D3DCore::Init(int width, int height, bool fullScreen, HWND hwnd)
 
 	m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
 
+	// Setup the raster description which will determine how and what polygons will be drawn.
+	rasterDesc.AntialiasedLineEnable = false;
+	rasterDesc.CullMode = D3D11_CULL_BACK;
+	rasterDesc.DepthBias = 0;
+	rasterDesc.DepthBiasClamp = 0.0f;
+	rasterDesc.DepthClipEnable = true;
+	rasterDesc.FillMode = D3D11_FILL_SOLID;
+	rasterDesc.FrontCounterClockwise = false;
+	rasterDesc.MultisampleEnable = false;
+	rasterDesc.ScissorEnable = false;
+	rasterDesc.SlopeScaledDepthBias = 0.0f;
+
+	// Create the rasterizer state from the description we just filled out.
+	result = m_device->CreateRasterizerState(&rasterDesc, &m_rasterState);
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	// Now set the rasterizer state.
+	m_deviceContext->RSSetState(m_rasterState);
+
+
 	m_width = width;
 	m_height = height;
 
@@ -241,6 +268,11 @@ bool D3DCore::Init(int width, int height, bool fullScreen, HWND hwnd)
 
 void D3DCore::Destroy()
 {
+	if (m_rasterState != NULL)
+	{
+		m_rasterState->Release();
+		m_rasterState = 0;
+	}
 	if (m_device != NULL)
 	{
 		m_device->Release();
@@ -308,6 +340,16 @@ ID3D11Device * D3DCore::GetDevice()
 ID3D11DeviceContext * D3DCore::GetDeviceContext()
 {
 	return m_deviceContext;
+}
+
+ID3D11DepthStencilView * D3DCore::GetDepthStencilView()
+{
+	return m_depthStencilView;
+}
+
+void D3DCore::SetBackBufferRenderTarget()
+{
+	m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
 }
 
 void D3DCore::GetResolution(FLOAT &width, FLOAT &height)

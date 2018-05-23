@@ -1,6 +1,6 @@
 #pragma once
 #include <math.h>
-#include <Windows.h>
+#include <d3dx10math.h>
 
 #define EPSINON 0.000001f
 #define RAD_TO_DEG 57.29577951308f

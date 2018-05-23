@@ -5,7 +5,7 @@ DDisplayObject::DDisplayObject()
 {
 }
 
-DDisplayObject::DDisplayObject(DMesh* mesh, DLightShader* shader, DTexture* texture, DTexture* decal, DLight* light)
+DDisplayObject::DDisplayObject(DMesh* mesh, DLightShader* shader, DTexture2D* texture, DTexture2D* decal, DLight* light)
 {
 	m_shader = shader;
 	m_mesh = mesh;

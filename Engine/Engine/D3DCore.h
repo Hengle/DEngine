@@ -14,8 +14,9 @@ public:
 	void EndRender();
 	ID3D11Device*GetDevice();
 	ID3D11DeviceContext*GetDeviceContext();
+	ID3D11DepthStencilView* GetDepthStencilView();
+	void SetBackBufferRenderTarget();
 	void GetResolution(FLOAT&, FLOAT&);
-
 
 private:
 	IDXGISwapChain* m_swapChain;
@@ -25,6 +26,7 @@ private:
 	ID3D11Texture2D* m_depthStencilBuffer;
 	ID3D11DepthStencilState* m_depthStencilState;
 	ID3D11DepthStencilView* m_depthStencilView;
+	ID3D11RasterizerState* m_rasterState;
 	FLOAT m_width;
 	FLOAT m_height;
 };

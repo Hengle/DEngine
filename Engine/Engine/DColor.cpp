@@ -1,5 +1,6 @@
 #include "DColor.h"
 #include "DMath.h"
+#include<exception> 
 
 DColor::DColor() : DColor(1.0f,1.0f,1.0f,1.0f)
 {
@@ -65,6 +66,27 @@ bool DColor::operator==(const DColor & color)
 bool DColor::operator!=(const DColor & color)
 {
 	return !(IS_FLOAT_EQUAL(r, color.r)) || !(IS_FLOAT_EQUAL(g, color.g)) || !(IS_FLOAT_EQUAL(b, color.b)) || !(IS_FLOAT_EQUAL(a, color.a));
+}
+
+float DColor::operator[](int index)
+{
+	if (index < 0 || index >= 4)
+	{
+		throw std::exception("无效的索引");
+	}
+	switch (index)
+	{
+	case 0:
+		return r;
+	case 1:
+		return g;
+	case 2:
+		return b;
+	case 3:
+		return a;
+	default:
+		return 0.0f;
+	}
 }
 
 DColor DColor::Lerp(DColor a, DColor b, float t)

@@ -17,6 +17,7 @@ public:
 	DColor operator/(const float&);
 	bool operator==(const DColor&);
 	bool operator!=(const DColor&);
+	float operator[](int);
 
 	static DColor Lerp(DColor, DColor, float);
 	static DColor HSVToRGB(float, float, float);

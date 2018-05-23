@@ -1,6 +1,6 @@
 #pragma once
-#include "d3dx10math.h"
 #include <math.h>
+#include <Windows.h>
 
 #define EPSINON 0.000001f
 #define RAD_TO_DEG 57.29577951308f
@@ -18,9 +18,39 @@ public:
 	FLOAT x, y, width, height;
 } DRect, *LPDRect;
 
+typedef struct DVector2
+{
+public:
+	DVector2();
+	DVector2(FLOAT, FLOAT);
+	void Magnitude();
+	
+public:
+	FLOAT x, y;
+} DVector2, *LPDVector2;
+
+typedef struct DVector3
+{
+public:
+	DVector3();
+	DVector3(FLOAT, FLOAT, FLOAT);
+
+public:
+	FLOAT x, y, z;
+} DVector3, *LPDVector3;
+
+typedef struct DVector4
+{
+public:
+	DVector4();
+	DVector4(FLOAT, FLOAT, FLOAT, FLOAT);
+
+public:
+	FLOAT x, y, z, w;
+} DVector4, *LPDVector4;
 
 class DMath
 {
 public :
-	static float Clamp()
+	static float Clamp();
 };

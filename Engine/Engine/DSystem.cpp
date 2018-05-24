@@ -31,7 +31,7 @@ bool DSystem::Init()
 	m_time = new DTime();
 	m_time->Init();
 
-	m_graphics = new DGraphics();
+	DGraphics::CreateInstance(&m_graphics);
 	if (!m_graphics->Init(width, height, false, m_hwnd))
 	{
 		return false;
@@ -83,6 +83,7 @@ void DSystem::Shutdown()
 	if (m_input != NULL) 
 	{
 		m_input->Shutdown();
+		delete m_input;
 	}
 	m_input = NULL;
 
@@ -90,8 +91,11 @@ void DSystem::Shutdown()
 	delete m_time;
 	m_time = NULL;
 
-	m_graphics->Shutdown();
-	delete m_graphics;
+	if (m_graphics != NULL)
+	{
+		m_graphics->Shutdown();
+		delete m_graphics;
+	}
 	m_graphics = NULL;
 
 	m_sceneManager->UnloadAllScene();

@@ -1,4 +1,5 @@
 #pragma once
+
 template<class T>
 class DSystemSingleton
 {
@@ -32,7 +33,7 @@ private:
 	class Garbo
 	{
 	public:
-		Garbo()
+		~Garbo()
 		{
 			if (DSystemSingleton::sInstance)
 			{

@@ -4,9 +4,11 @@
 #include "DSceneManager.h"
 #include "DLogManager.h"
 #include "DTime.h"
+#include "DSingleton.h"
 
-class DGraphics
+class DGraphics : public DSystemSingleton<DGraphics>
 {
+	friend class DSystemSingleton<DGraphics>;
 public:
 	DGraphics();
 	~DGraphics();
@@ -21,6 +23,5 @@ public:
 private:
 	D3DCore* m_D3D;
 	DImGUI* m_GUI;
-	//DLine* m_line;
 };
 

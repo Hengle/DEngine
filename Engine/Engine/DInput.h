@@ -1,6 +1,6 @@
 #pragma once
 #include <dinput.h>
-#include "DSystemSingleton.h"
+#include "DSingleton.h"
 
 class DInput : public DSystemSingleton<DInput>
 {

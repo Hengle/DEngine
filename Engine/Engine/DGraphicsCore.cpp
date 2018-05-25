@@ -1,21 +1,20 @@
-#include "DGraphics.h"
+#include "DGraphicsCore.h"
 
 
-DGraphics::DGraphics()
+DGraphicsCore::DGraphicsCore()
 {
 	m_D3D = 0;
 	m_GUI = 0;
-	//m_line = 0;
 }
 
 
-DGraphics::~DGraphics()
+DGraphicsCore::~DGraphicsCore()
 {
 }
 
-bool DGraphics::Init(int width, int height, bool fullScreen, HWND hwnd)
+bool DGraphicsCore::Init(int width, int height, bool fullScreen, HWND hwnd, DGraphicsAPI api)
 {
-	m_D3D = new D3DCore();
+	m_D3D = new D3DCore11();
 	if(!m_D3D->Init(width, height, fullScreen, hwnd))
 	{	
 		return false;
@@ -23,13 +22,10 @@ bool DGraphics::Init(int width, int height, bool fullScreen, HWND hwnd)
 	m_GUI = new DImGUI();
 	m_GUI->Init(hwnd, m_D3D->GetDevice(), m_D3D->GetDeviceContext());
 
-	//m_line = new DLine();
-	//m_line->Init(m_D3D->GetDevice());
-
 	return true;
 }
 
-bool DGraphics::Render(DSceneManager* sceneManager, DLogManager* logManager, DTime* time)
+bool DGraphicsCore::Render(DSceneManager* sceneManager, DLogManager* logManager, DTime* time)
 {
 	time->Update();
 
@@ -58,14 +54,8 @@ bool DGraphics::Render(DSceneManager* sceneManager, DLogManager* logManager, DTi
 	return true;
 }
 
-void DGraphics::Shutdown()
+void DGraphicsCore::Shutdown()
 {
-	/*if (m_line != NULL)
-	{
-		m_line->Destroy();
-		delete m_line;
-	}
-	m_line = NULL;*/
 	if (m_GUI != NULL)
 	{
 		m_GUI->ShutDown();
@@ -82,30 +72,25 @@ void DGraphics::Shutdown()
 	
 }
 
-ID3D11Device * DGraphics::GetDevice()
+ID3D11Device * DGraphicsCore::GetDevice()
 {
 	return m_D3D->GetDevice();
 }
 
-ID3D11DeviceContext * DGraphics::GetDeviceContext()
+ID3D11DeviceContext * DGraphicsCore::GetDeviceContext()
 {
 	return m_D3D->GetDeviceContext();
 }
 
-LRESULT CALLBACK DGraphics::MessageHandler(HWND hwnd, UINT uMsg, WPARAM wparam, LPARAM lparam)
+LRESULT CALLBACK DGraphicsCore::MessageHandler(HWND hwnd, UINT uMsg, WPARAM wparam, LPARAM lparam)
 {
 	if (m_GUI != NULL && m_GUI->GUIMessageHandler(hwnd, uMsg, wparam, lparam))
 		return true;
 	return false;
 }
 
-void DGraphics::GetResolution(FLOAT & width, FLOAT & height)
+void DGraphicsCore::GetResolution(FLOAT & width, FLOAT & height)
 {
 	m_D3D->GetResolution(width, height);
 }
 
-//void DGraphics::DrawLine(const D3DXVECTOR3& begin, const D3DXVECTOR3& end)
-//{
-//	m_line->UpdateVertex(begin, end, m_D3D->GetDeviceContext());
-//	m_line->Render(m_D3D->GetDeviceContext());
-//}

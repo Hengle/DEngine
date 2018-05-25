@@ -1,5 +1,5 @@
 ﻿#include "DTime.h"
-#include "DGraphics.h"
+#include "DGraphicsCore.h"
 #include "DSceneManager.h"
 #include "DLogManager.h"
 #include "DInput.h"
@@ -23,7 +23,7 @@ public:
 	static HWND GetHWND();
 
 	static DSceneManager* GetSceneManager();
-	static DGraphics* GetGraphicsCore();
+	static DGraphicsCore* GetGraphicsCore();
 	static DLogManager* GetLogManager();
 	static DTime* GetTime();
 
@@ -36,7 +36,7 @@ private:
 private:
 	HWND m_hwnd;
 	DTime* m_time;
-	DGraphics* m_graphics;
+	DGraphicsCore* m_graphics;
 	DSceneManager* m_sceneManager;
 	DLogManager* m_logManager;
 	DInput* m_input;

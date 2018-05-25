@@ -213,9 +213,6 @@
     <ClInclude Include="DModel.h">
       <Filter>头文件\Core\Object\ResObject</Filter>
     </ClInclude>
-    <ClInclude Include="DGraphics.h">
-      <Filter>头文件\Core\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="DInput.h">
       <Filter>头文件\Core\Input</Filter>
     </ClInclude>
@@ -236,6 +233,9 @@
     </ClInclude>
     <ClInclude Include="DSingleton.h">
       <Filter>头文件\Core\System</Filter>
+    </ClInclude>
+    <ClInclude Include="DGraphicsCore.h">
+      <Filter>头文件\Core\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -314,9 +314,6 @@
     <ClCompile Include="DModel.cpp">
       <Filter>源文件\Core\Object\ResObject</Filter>
     </ClCompile>
-    <ClCompile Include="DGraphics.cpp">
-      <Filter>源文件\Core\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="DInput.cpp">
       <Filter>源文件\Core\Input</Filter>
     </ClCompile>
@@ -333,6 +330,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="DRenderBuffer.cpp">
+      <Filter>源文件\Core\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="DGraphicsCore.cpp">
       <Filter>源文件\Core\Graphics</Filter>
     </ClCompile>
   </ItemGroup>

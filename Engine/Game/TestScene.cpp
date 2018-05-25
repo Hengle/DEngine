@@ -4,6 +4,7 @@
 #include "DSystem.h"
 #include "DTransform.h"
 #include "DLog.h"
+#include "imgui_impl_dx11.h"
 #include <D3DX10math.h>
 
 TestScene::TestScene(SCENEID sceneId, char * sceneName) : DScene(sceneId, sceneName)
@@ -81,14 +82,15 @@ void TestScene::OnLoad()
 	transform = m_light->GetTransform();
 	transform->SetEuler(50, -30, 0);
 
-	DModelMesh* mesh = new DModelMesh("../Res/teapoat.obj");
+	DModelMesh* mesh = new DModelMesh("../Res/eboy.obj");
 	DLightShader* shader = new DLightShader(L"../Res/light.vs", L"../Res/light.ps");
-	DTexture2D* texture = new DTexture2D(L"../Res/floor.jpg");
-	DTexture2D* decal = new DTexture2D(L"../Res/decal.jpg");
-	m_obj = new DDisplayObject(mesh, shader, texture, decal, m_light);
+	DTexture2D* texture = new DTexture2D(L"../Res/eboy.tif");
+	//DTexture2D* decal = new DTexture2D(L"../Res/decal.jpg");
+	m_obj = new DDisplayObject(mesh, shader, texture, m_light);
 	transform = m_obj->GetTransform();
 	transform->SetPosition(-5.226904f, -4.441468f, -1.499356f);
 	transform->SetEuler(40.269f, 83.385f, 41.898f);
+	transform->SetScale(0.5f, 0.5f, 0.5f);
 
 
 	AddDisplayObject(m_obj);

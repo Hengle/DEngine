@@ -70,8 +70,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>e:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>e:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>E:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -87,7 +91,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -137,7 +141,7 @@
     <ClInclude Include="DRenderBuffer.h" />
     <ClInclude Include="TestDebugWindow.h" />
     <ClInclude Include="DFrameBase.h" />
-    <ClInclude Include="DGraphics.h" />
+    <ClInclude Include="DGraphicsCore.h" />
     <ClInclude Include="DImGUI.h" />
     <ClInclude Include="DInput.h" />
     <ClInclude Include="DLight.h" />
@@ -177,7 +181,7 @@
     <ClCompile Include="DRenderBuffer.cpp" />
     <ClCompile Include="TestDebugWindow.cpp" />
     <ClCompile Include="DFrameBase.cpp" />
-    <ClCompile Include="DGraphics.cpp" />
+    <ClCompile Include="DGraphicsCore.cpp" />
     <ClCompile Include="DImGUI.cpp" />
     <ClCompile Include="DInput.cpp" />
     <ClCompile Include="DLight.cpp" />

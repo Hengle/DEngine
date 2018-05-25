@@ -1,7 +1,33 @@
 ﻿#include "D3DCore.h"
 
 
-D3DCore::D3DCore()
+D3DCoreBase::D3DCoreBase()
+{
+}
+
+
+D3DCoreBase::~D3DCoreBase()
+{
+}
+
+bool D3DCoreBase::Init(int width, int height, bool, HWND)
+{
+	m_width = width;
+	m_height = height;
+	return true;
+}
+
+void D3DCoreBase::GetResolution(FLOAT & width, FLOAT & height)
+{
+	width = m_width;
+	height = m_height;
+}
+
+D3DCore10::D3DCore10() : D3DCoreBase()
+{
+}
+
+D3DCore11::D3DCore11() : D3DCoreBase()
 {
 	m_device = 0;
 	m_deviceContext = 0;
@@ -13,13 +39,13 @@ D3DCore::D3DCore()
 	m_rasterState = 0;
 }
 
-
-D3DCore::~D3DCore()
+D3DCore11::~D3DCore11()
 {
 }
 
-bool D3DCore::Init(int width, int height, bool fullScreen, HWND hwnd)
+bool D3DCore11::Init(int width, int height, bool fullScreen, HWND hwnd)
 {
+	D3DCoreBase::Init(width, height, fullScreen, hwnd);
 	IDXGIFactory *factory;
 	HRESULT result;
 	IDXGIAdapter* adapter;
@@ -53,14 +79,14 @@ bool D3DCore::Init(int width, int height, bool fullScreen, HWND hwnd)
 	}
 
 	result = adapter->EnumOutputs(0, &output);
-	if (FAILED(result)) 
+	if (FAILED(result))
 	{
 		MessageBox(hwnd, L"枚举输出设备失败", L"初始化失败", MB_ERR_INVALID_CHARS);
 		return false;
 	}
 
 	result = output->GetDisplayModeList(format, DXGI_ENUM_MODES_INTERLACED, &numModes, NULL);
-	if (FAILED(result)) 
+	if (FAILED(result))
 	{
 		return false;
 	}
@@ -68,7 +94,7 @@ bool D3DCore::Init(int width, int height, bool fullScreen, HWND hwnd)
 	displayModes = new DXGI_MODE_DESC[numModes];
 
 	result = output->GetDisplayModeList(format, DXGI_ENUM_MODES_INTERLACED, &numModes, displayModes);
-	if (FAILED(result)) 
+	if (FAILED(result))
 	{
 		return false;
 	}
@@ -125,7 +151,7 @@ bool D3DCore::Init(int width, int height, bool fullScreen, HWND hwnd)
 
 	result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, &featureLevel, 1,
 		D3D11_SDK_VERSION, &sd, &m_swapChain, &m_device, NULL, &m_deviceContext);
-	if (FAILED(result)) 
+	if (FAILED(result))
 	{
 		return false;
 	}
@@ -259,14 +285,10 @@ bool D3DCore::Init(int width, int height, bool fullScreen, HWND hwnd)
 	// Now set the rasterizer state.
 	m_deviceContext->RSSetState(m_rasterState);
 
-
-	m_width = width;
-	m_height = height;
-
 	return true;
 }
 
-void D3DCore::Destroy()
+void D3DCore11::Destroy()
 {
 	if (m_rasterState != NULL)
 	{
@@ -288,7 +310,7 @@ void D3DCore::Destroy()
 		m_swapChain->Release();
 		m_swapChain = 0;
 	}
-	if (m_renderTargetView != NULL) 
+	if (m_renderTargetView != NULL)
 	{
 		m_renderTargetView->Release();
 		m_renderTargetView = 0;
@@ -312,7 +334,7 @@ void D3DCore::Destroy()
 	}
 }
 
-void D3DCore::BeginRender(float r, float g, float b, float a)
+void D3DCore11::BeginRender(float r, float g, float b, float a)
 {
 	float color[4];
 	color[0] = r;
@@ -325,35 +347,29 @@ void D3DCore::BeginRender(float r, float g, float b, float a)
 	m_deviceContext->ClearDepthStencilView(m_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
-void D3DCore::EndRender()
+void D3DCore11::EndRender()
 {
 	if (m_swapChain != NULL) {
 		m_swapChain->Present(0, 0);
 	}
 }
 
-ID3D11Device * D3DCore::GetDevice()
-{
-	return m_device;
-}
-
-ID3D11DeviceContext * D3DCore::GetDeviceContext()
-{
-	return m_deviceContext;
-}
-
-ID3D11DepthStencilView * D3DCore::GetDepthStencilView()
-{
-	return m_depthStencilView;
-}
-
-void D3DCore::SetBackBufferRenderTarget()
+void D3DCore11::SetBackBufferRenderTarget()
 {
 	m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
 }
 
-void D3DCore::GetResolution(FLOAT &width, FLOAT &height)
+ID3D11Device * D3DCore11::GetDevice()
 {
-	width = m_width;
-	height = m_height;
+	return m_device;
+}
+
+ID3D11DeviceContext * D3DCore11::GetDeviceContext()
+{
+	return m_deviceContext;
+}
+
+ID3D11DepthStencilView * D3DCore11::GetDepthStencilView()
+{
+	return m_depthStencilView;
 }

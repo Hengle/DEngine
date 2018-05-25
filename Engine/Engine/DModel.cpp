@@ -56,7 +56,7 @@ bool DObjModelLoader::LoadObj(const char * file, void** buffer, unsigned long **
 			{
 				ifile >> v[0] >> v[1] >> v[2];
 				uvs.push_back(v[0]);
-				uvs.push_back(v[1]);
+				uvs.push_back(1.0f - v[1]);
 			}
 			if (input == 'n')
 			{

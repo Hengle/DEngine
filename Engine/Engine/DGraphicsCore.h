@@ -6,13 +6,18 @@
 #include "DTime.h"
 #include "DSingleton.h"
 
-class DGraphics : public DSystemSingleton<DGraphics>
+enum DGraphicsAPI
 {
-	friend class DSystemSingleton<DGraphics>;
+	DGRAPHICS_API_D3D11 = 0,
+	DGRAPHICS_API_D3D10 = 1,
+};
+
+class DGraphicsCore
+{
 public:
-	DGraphics();
-	~DGraphics();
-	bool Init(int, int, bool, HWND);
+	DGraphicsCore();
+	~DGraphicsCore();
+	bool Init(int, int, bool, HWND, DGraphicsAPI);
 	bool Render(DSceneManager*, DLogManager*, DTime*);
 	void Shutdown();
 	ID3D11Device* GetDevice();
@@ -21,7 +26,7 @@ public:
 	void GetResolution(FLOAT&, FLOAT&);
 
 private:
-	D3DCore* m_D3D;
+	D3DCore11* m_D3D;
 	DImGUI* m_GUI;
 };
 

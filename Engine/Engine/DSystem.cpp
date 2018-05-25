@@ -31,8 +31,8 @@ bool DSystem::Init()
 	m_time = new DTime();
 	m_time->Init();
 
-	DGraphics::CreateInstance(&m_graphics);
-	if (!m_graphics->Init(width, height, false, m_hwnd))
+	m_graphics = new DGraphicsCore();
+	if (!m_graphics->Init(width, height, false, m_hwnd, DGRAPHICS_API_D3D11))
 	{
 		return false;
 	}
@@ -187,7 +187,7 @@ DSceneManager * DSystem::GetSceneManager()
 	return System->m_sceneManager;
 }
 
-DGraphics * DSystem::GetGraphicsCore()
+DGraphicsCore * DSystem::GetGraphicsCore()
 {
 	return System->m_graphics;
 }

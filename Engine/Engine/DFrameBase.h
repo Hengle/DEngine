@@ -1,5 +1,5 @@
 #pragma once
-#include "DSystem.h"
+#include "DScene.h"
 
 class DFrameBase
 {

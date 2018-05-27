@@ -1,5 +1,4 @@
 #pragma once
-#include "d3d11.h"
 #include "DSceneObject.h"
 
 class DCamera : public DSceneObject

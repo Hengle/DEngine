@@ -1,9 +1,17 @@
-#include "DColor.h"
+ï»¿#include "DColor.h"
 #include "DMath.h"
 #include<exception> 
 
 DColor::DColor() : DColor(1.0f,1.0f,1.0f,1.0f)
 {
+}
+
+DColor::DColor(const DColor & color)
+{
+	r = color.r;
+	g = color.g;
+	b = color.b;
+	a = color.a;
 }
 
 DColor::DColor(float red, float green, float blue, float alpha)
@@ -28,51 +36,105 @@ void DColor::ToHSV(float & h, float & s, float & v)
 	DColor::RGBToHSV(*this, h, s, v);
 }
 
-DColor DColor::operator+(const DColor & color)
+DColor DColor::operator+(const DColor & color) const
 {
 	return DColor(color.r + r, color.g + g, color.b + b, color.a + a);
 }
 
-DColor DColor::operator-(const DColor & color)
+DColor DColor::operator-(const DColor & color) const
 {
 	return DColor(r - color.r, g - color.g, b - color.b, a - color.a);
 }
 
-DColor DColor::operator*(const DColor & color)
+DColor DColor::operator*(const DColor & color) const
 {
 	return DColor(r * color.r, g * color.g, b * color.b, a * color.a);
 }
 
-DColor DColor::operator*(const float & scale)
+DColor DColor::operator*(const float  scale) const
 {
 	return DColor(r * scale, g * scale, b * scale, a * scale);
 }
 
-DColor DColor::operator/(const DColor & color)
+DColor DColor::operator/(const DColor & color) const
 {
 	return DColor(r / color.r, g / color.g, b / color.b, a / color.a);
 }
 
-DColor DColor::operator/(const float & scale)
+DColor DColor::operator/(const float scale) const
 {
 	return DColor(r / scale, g / scale, b / scale, a / scale);
 }
 
-bool DColor::operator==(const DColor & color)
+DColor & DColor::operator+=(const DColor & color)
+{
+	r = r + color.r;
+	g = g + color.g;
+	b = b + color.b;
+	a = a + color.a;
+	return *this;
+}
+
+DColor & DColor::operator-=(const DColor & color)
+{
+	r = r - color.r;
+	g = g - color.g;
+	b = b - color.b;
+	a = a - color.a;
+	return *this;
+}
+
+DColor & DColor::operator*=(const DColor & color)
+{
+	r = r * color.r;
+	g = g * color.g;
+	b = b * color.b;
+	a = a * color.a;
+	return *this;
+}
+
+DColor & DColor::operator*=(const float scale)
+{
+	r = r * scale;
+	g = g * scale;
+	b = b * scale;
+	a = a * scale;
+	return *this;
+}
+
+DColor & DColor::operator/=(const DColor & color)
+{
+	r = r / color.r;
+	g = g / color.g;
+	b = b / color.b;
+	a = a / color.a;
+	return *this;
+}
+
+DColor & DColor::operator/=(const float scale)
+{
+	r = r / scale;
+	g = g / scale;
+	b = b / scale;
+	a = a / scale;
+	return *this;
+}
+
+bool DColor::operator==(const DColor & color) const 
 {
 	return IS_FLOAT_EQUAL(r, color.r) && IS_FLOAT_EQUAL(g, color.g) && IS_FLOAT_EQUAL(b, color.b) && IS_FLOAT_EQUAL(a, color.a);
 }
 
-bool DColor::operator!=(const DColor & color)
+bool DColor::operator!=(const DColor & color) const
 {
 	return !(IS_FLOAT_EQUAL(r, color.r)) || !(IS_FLOAT_EQUAL(g, color.g)) || !(IS_FLOAT_EQUAL(b, color.b)) || !(IS_FLOAT_EQUAL(a, color.a));
 }
 
-float DColor::operator[](int index)
+float DColor::operator[](int index) const
 {
 	if (index < 0 || index >= 4)
 	{
-		throw std::exception("ÎÞÐ§µÄË÷Òý");
+		throw std::exception("æ— æ•ˆçš„ç´¢å¼•");
 	}
 	switch (index)
 	{
@@ -89,7 +151,7 @@ float DColor::operator[](int index)
 	}
 }
 
-DColor DColor::Lerp(DColor a, DColor b, float t)
+DColor DColor::Lerp(const DColor& a, const DColor& b, float t)
 {
 	return DColor(a.r + (b.r - a.r)*t, a.g + (b.g - a.g)*t, a.b + (b.b - a.b)*t, a.a + (b.a- a.a)*t);
 }
@@ -167,7 +229,7 @@ DColor DColor::HSVToRGB(float h, float s, float v)
 	return col;
 }
 
-void DColor::RGBToHSV(const DColor color, float & h, float & s, float & v)
+void DColor::RGBToHSV(const DColor& color, float & h, float & s, float & v)
 {
 	if (color.b > color.g && color.b > color.r)
 	{
@@ -219,4 +281,9 @@ void DColor::RGBToHSV_Internal(float offset, float dominantcolor, float colorone
 		s = 0.0f;
 		h = 0.0f;
 	}
+}
+
+DColor operator*(float scale, const DColor & color)
+{
+	return DColor(color.r * scale, color.g * scale, color.b * scale, color.a * scale);
 }

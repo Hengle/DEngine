@@ -29,7 +29,7 @@ void DScene::DrawGUI()
 	OnGUI();
 }
 
-void DScene::Render(ID3D11DeviceContext* deviceContext)
+void DScene::Render()
 {
 	if (!m_isEnter)
 		return;

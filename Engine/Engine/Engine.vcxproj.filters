@@ -25,38 +25,8 @@
     <Filter Include="头文件\Core\Graphics\ImGUI">
       <UniqueIdentifier>{c574f798-8ffb-4b99-912f-f923bc5fe556}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\Core\Input">
-      <UniqueIdentifier>{fe08685f-faf0-4c84-a24f-c3e1c7e50fb7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="头文件\Core\Log">
-      <UniqueIdentifier>{fefea625-a845-43e0-950d-8ee280a8e959}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="头文件\Core\Math">
-      <UniqueIdentifier>{6ab0111c-9c9c-4310-9cf7-8d9b08bac527}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="头文件\Core\Object">
-      <UniqueIdentifier>{43d0c325-e89d-4743-b16a-1a3814db7c35}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="头文件\Core\Res">
-      <UniqueIdentifier>{8685d3b8-3d37-4d91-aa20-d0d8ffcd643b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="头文件\Core\Scene">
-      <UniqueIdentifier>{2589bd25-2fd7-4d40-ab8a-e6a0fb90eada}</UniqueIdentifier>
-    </Filter>
     <Filter Include="头文件\Core\System">
       <UniqueIdentifier>{a99947ae-0235-4128-8116-737081ba43cf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="头文件\Core\Time">
-      <UniqueIdentifier>{6534c0b4-439b-44ab-847b-359fbdbdae76}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="头文件\Core\Utils">
-      <UniqueIdentifier>{ad57bcf2-e394-4980-a56e-4a6ea29e4ccb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="头文件\Core\Object\ResObject">
-      <UniqueIdentifier>{70736b7a-0f9d-4d7a-abea-bccfe57d61f6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="头文件\Core\Object\SceneObject">
-      <UniqueIdentifier>{1169f786-2101-4378-ada9-b116c0acad4c}</UniqueIdentifier>
     </Filter>
     <Filter Include="源文件\Core">
       <UniqueIdentifier>{0afd6448-bd31-4e8d-9f53-2f9b04ca2402}</UniqueIdentifier>
@@ -70,35 +40,8 @@
     <Filter Include="源文件\Core\Graphics\ImGUI">
       <UniqueIdentifier>{d702f8dd-a97f-4443-a8ce-ba68a0964010}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\Core\Log">
-      <UniqueIdentifier>{984c4cdf-36d5-49be-801f-43da80fc6e4e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="源文件\Core\Input">
-      <UniqueIdentifier>{952b6b97-32f6-4350-ab97-57910ae6cc87}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="源文件\Core\Math">
-      <UniqueIdentifier>{ad18eb5d-47cc-45f8-bd8f-7d00c589d414}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="源文件\Core\Object">
-      <UniqueIdentifier>{6e9684d9-24e2-4186-a17e-a86b71359ef8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="源文件\Core\Object\ResObject">
-      <UniqueIdentifier>{e2afcd2b-f064-423e-a9fc-f690388759aa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="源文件\Core\Object\SceneObject">
-      <UniqueIdentifier>{75e01f5d-6757-4517-95fb-eed96fb97fae}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="源文件\Core\Res">
-      <UniqueIdentifier>{c983c886-4e07-4a34-8cac-4e2a1ed01d46}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="源文件\Core\Scene">
-      <UniqueIdentifier>{719dd159-746f-4192-83a6-258351200b62}</UniqueIdentifier>
-    </Filter>
     <Filter Include="源文件\Core\System">
       <UniqueIdentifier>{37c62f9e-6490-495c-b0ab-42a674051164}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="源文件\Core\Time">
-      <UniqueIdentifier>{e67207ae-f5c6-42ea-ac47-0ac7e39d0b56}</UniqueIdentifier>
     </Filter>
     <Filter Include="源文件\Core\Utils">
       <UniqueIdentifier>{2d427a4f-c9b6-4310-836d-d4ad9d74d297}</UniqueIdentifier>
@@ -109,17 +52,47 @@
     <Filter Include="库\imgui">
       <UniqueIdentifier>{3563d4ad-6509-4821-854e-4c54b4c56404}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\Core\Object\SceneObject\Camera">
-      <UniqueIdentifier>{4450bd32-5bbb-4a87-bc57-42ff6e7b38bb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="源文件\Core\Object\SceneObject\Camera">
-      <UniqueIdentifier>{8a76ab49-1472-49ff-898c-bb48a45316ba}</UniqueIdentifier>
-    </Filter>
     <Filter Include="头文件\Engine">
       <UniqueIdentifier>{ec58dfdc-3f56-45f1-b7ba-48ae829f45b2}</UniqueIdentifier>
     </Filter>
     <Filter Include="源文件\Engine">
       <UniqueIdentifier>{8d5da22c-3eb6-4d17-a2c1-2f066a82f6d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Engine\GUI">
+      <UniqueIdentifier>{2c5c9b54-cfc1-4d9b-90a8-2b011443891d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Engine\GUI">
+      <UniqueIdentifier>{cd6e7dfe-2139-411b-8c71-3df2f58e2429}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Engine\Object">
+      <UniqueIdentifier>{6e9684d9-24e2-4186-a17e-a86b71359ef8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Engine\Object\ResObject">
+      <UniqueIdentifier>{e2afcd2b-f064-423e-a9fc-f690388759aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Engine\Object\SceneObject">
+      <UniqueIdentifier>{75e01f5d-6757-4517-95fb-eed96fb97fae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Engine\Object\SceneObject\Camera">
+      <UniqueIdentifier>{8a76ab49-1472-49ff-898c-bb48a45316ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Engine\Math">
+      <UniqueIdentifier>{ad18eb5d-47cc-45f8-bd8f-7d00c589d414}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Engine\Object">
+      <UniqueIdentifier>{43d0c325-e89d-4743-b16a-1a3814db7c35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Engine\Object\ResObject">
+      <UniqueIdentifier>{70736b7a-0f9d-4d7a-abea-bccfe57d61f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Engine\Object\SceneObject">
+      <UniqueIdentifier>{1169f786-2101-4378-ada9-b116c0acad4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Engine\Object\SceneObject\Camera">
+      <UniqueIdentifier>{4450bd32-5bbb-4a87-bc57-42ff6e7b38bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Engine\Math">
+      <UniqueIdentifier>{6ab0111c-9c9c-4310-9cf7-8d9b08bac527}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -135,59 +108,41 @@
     <ClInclude Include="imgui_impl_dx11.h">
       <Filter>头文件\Core\Graphics\ImGUI</Filter>
     </ClInclude>
-    <ClInclude Include="DLogManager.h">
-      <Filter>头文件\Core\Log</Filter>
-    </ClInclude>
-    <ClInclude Include="DLog.h">
-      <Filter>头文件\Core\Log</Filter>
-    </ClInclude>
     <ClInclude Include="DMath.h">
-      <Filter>头文件\Core\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="DTime.h">
-      <Filter>头文件\Core\Time</Filter>
+      <Filter>头文件\Engine\Math</Filter>
     </ClInclude>
     <ClInclude Include="DSystem.h">
       <Filter>头文件\Core\System</Filter>
     </ClInclude>
-    <ClInclude Include="DScene.h">
-      <Filter>头文件\Core\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="DSceneManager.h">
-      <Filter>头文件\Core\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="DRes.h">
-      <Filter>头文件\Core\Res</Filter>
-    </ClInclude>
     <ClInclude Include="DObject.h">
-      <Filter>头文件\Core\Object</Filter>
+      <Filter>头文件\Engine\Object</Filter>
     </ClInclude>
     <ClInclude Include="DDisplayObject.h">
-      <Filter>头文件\Core\Object\SceneObject</Filter>
+      <Filter>头文件\Engine\Object\SceneObject</Filter>
     </ClInclude>
     <ClInclude Include="DLight.h">
-      <Filter>头文件\Core\Object\SceneObject</Filter>
+      <Filter>头文件\Engine\Object\SceneObject</Filter>
     </ClInclude>
     <ClInclude Include="DSceneObject.h">
-      <Filter>头文件\Core\Object\SceneObject</Filter>
+      <Filter>头文件\Engine\Object\SceneObject</Filter>
     </ClInclude>
     <ClInclude Include="DTransform.h">
-      <Filter>头文件\Core\Object\SceneObject</Filter>
+      <Filter>头文件\Engine\Object\SceneObject</Filter>
     </ClInclude>
     <ClInclude Include="DMaterial.h">
-      <Filter>头文件\Core\Object\ResObject</Filter>
+      <Filter>头文件\Engine\Object\ResObject</Filter>
     </ClInclude>
     <ClInclude Include="DMesh.h">
-      <Filter>头文件\Core\Object\ResObject</Filter>
+      <Filter>头文件\Engine\Object\ResObject</Filter>
     </ClInclude>
     <ClInclude Include="DResObject.h">
-      <Filter>头文件\Core\Object\ResObject</Filter>
+      <Filter>头文件\Engine\Object\ResObject</Filter>
     </ClInclude>
     <ClInclude Include="DShader.h">
-      <Filter>头文件\Core\Object\ResObject</Filter>
+      <Filter>头文件\Engine\Object\ResObject</Filter>
     </ClInclude>
     <ClInclude Include="DTexture.h">
-      <Filter>头文件\Core\Object\ResObject</Filter>
+      <Filter>头文件\Engine\Object\ResObject</Filter>
     </ClInclude>
     <ClInclude Include="DFrameBase.h">
       <Filter>头文件\Core</Filter>
@@ -211,19 +166,13 @@
       <Filter>库\imgui</Filter>
     </ClInclude>
     <ClInclude Include="DModel.h">
-      <Filter>头文件\Core\Object\ResObject</Filter>
-    </ClInclude>
-    <ClInclude Include="DInput.h">
-      <Filter>头文件\Core\Input</Filter>
+      <Filter>头文件\Engine\Object\ResObject</Filter>
     </ClInclude>
     <ClInclude Include="DCamera.h">
-      <Filter>头文件\Core\Object\SceneObject\Camera</Filter>
+      <Filter>头文件\Engine\Object\SceneObject\Camera</Filter>
     </ClInclude>
     <ClInclude Include="DRenderTexture.h">
-      <Filter>头文件\Core\Object\ResObject</Filter>
-    </ClInclude>
-    <ClInclude Include="DColor.h">
-      <Filter>头文件\Core\Utils</Filter>
+      <Filter>头文件\Engine\Object\ResObject</Filter>
     </ClInclude>
     <ClInclude Include="TestDebugWindow.h">
       <Filter>头文件</Filter>
@@ -236,6 +185,30 @@
     </ClInclude>
     <ClInclude Include="DGraphicsCore.h">
       <Filter>头文件\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="DGUI.h">
+      <Filter>头文件\Engine\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="DColor.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="DScene.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="DInput.h">
+      <Filter>头文件\Core\System</Filter>
+    </ClInclude>
+    <ClInclude Include="DLog.h">
+      <Filter>头文件\Core\System</Filter>
+    </ClInclude>
+    <ClInclude Include="DTime.h">
+      <Filter>头文件\Core\System</Filter>
+    </ClInclude>
+    <ClInclude Include="DRes.h">
+      <Filter>头文件\Core\System</Filter>
+    </ClInclude>
+    <ClInclude Include="DSceneManager.h">
+      <Filter>头文件\Core\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -251,59 +224,41 @@
     <ClCompile Include="imgui_impl_dx11.cpp">
       <Filter>源文件\Core\Graphics\ImGUI</Filter>
     </ClCompile>
-    <ClCompile Include="DLog.cpp">
-      <Filter>源文件\Core\Log</Filter>
-    </ClCompile>
-    <ClCompile Include="DLogManager.cpp">
-      <Filter>源文件\Core\Log</Filter>
-    </ClCompile>
     <ClCompile Include="DMath.cpp">
-      <Filter>源文件\Core\Math</Filter>
+      <Filter>源文件\Engine\Math</Filter>
     </ClCompile>
     <ClCompile Include="DObject.cpp">
-      <Filter>源文件\Core\Object</Filter>
+      <Filter>源文件\Engine\Object</Filter>
     </ClCompile>
     <ClCompile Include="DResObject.cpp">
-      <Filter>源文件\Core\Object\ResObject</Filter>
+      <Filter>源文件\Engine\Object\ResObject</Filter>
     </ClCompile>
     <ClCompile Include="DMaterial.cpp">
-      <Filter>源文件\Core\Object\ResObject</Filter>
+      <Filter>源文件\Engine\Object\ResObject</Filter>
     </ClCompile>
     <ClCompile Include="DMesh.cpp">
-      <Filter>源文件\Core\Object\ResObject</Filter>
+      <Filter>源文件\Engine\Object\ResObject</Filter>
     </ClCompile>
     <ClCompile Include="DShader.cpp">
-      <Filter>源文件\Core\Object\ResObject</Filter>
+      <Filter>源文件\Engine\Object\ResObject</Filter>
     </ClCompile>
     <ClCompile Include="DTexture.cpp">
-      <Filter>源文件\Core\Object\ResObject</Filter>
+      <Filter>源文件\Engine\Object\ResObject</Filter>
     </ClCompile>
     <ClCompile Include="DDisplayObject.cpp">
-      <Filter>源文件\Core\Object\SceneObject</Filter>
+      <Filter>源文件\Engine\Object\SceneObject</Filter>
     </ClCompile>
     <ClCompile Include="DLight.cpp">
-      <Filter>源文件\Core\Object\SceneObject</Filter>
+      <Filter>源文件\Engine\Object\SceneObject</Filter>
     </ClCompile>
     <ClCompile Include="DSceneObject.cpp">
-      <Filter>源文件\Core\Object\SceneObject</Filter>
+      <Filter>源文件\Engine\Object\SceneObject</Filter>
     </ClCompile>
     <ClCompile Include="DTransform.cpp">
-      <Filter>源文件\Core\Object\SceneObject</Filter>
-    </ClCompile>
-    <ClCompile Include="DRes.cpp">
-      <Filter>源文件\Core\Res</Filter>
-    </ClCompile>
-    <ClCompile Include="DScene.cpp">
-      <Filter>源文件\Core\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="DSceneManager.cpp">
-      <Filter>源文件\Core\Scene</Filter>
+      <Filter>源文件\Engine\Object\SceneObject</Filter>
     </ClCompile>
     <ClCompile Include="DSystem.cpp">
       <Filter>源文件\Core\System</Filter>
-    </ClCompile>
-    <ClCompile Include="DTime.cpp">
-      <Filter>源文件\Core\Time</Filter>
     </ClCompile>
     <ClCompile Include="imgui.cpp">
       <Filter>库\imgui</Filter>
@@ -312,16 +267,13 @@
       <Filter>库\imgui</Filter>
     </ClCompile>
     <ClCompile Include="DModel.cpp">
-      <Filter>源文件\Core\Object\ResObject</Filter>
-    </ClCompile>
-    <ClCompile Include="DInput.cpp">
-      <Filter>源文件\Core\Input</Filter>
+      <Filter>源文件\Engine\Object\ResObject</Filter>
     </ClCompile>
     <ClCompile Include="DCamera.cpp">
-      <Filter>源文件\Core\Object\SceneObject\Camera</Filter>
+      <Filter>源文件\Engine\Object\SceneObject\Camera</Filter>
     </ClCompile>
     <ClCompile Include="DRenderTexture.cpp">
-      <Filter>源文件\Core\Object\ResObject</Filter>
+      <Filter>源文件\Engine\Object\ResObject</Filter>
     </ClCompile>
     <ClCompile Include="DColor.cpp">
       <Filter>源文件\Core\Utils</Filter>
@@ -334,6 +286,27 @@
     </ClCompile>
     <ClCompile Include="DGraphicsCore.cpp">
       <Filter>源文件\Core\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="DGUI.cpp">
+      <Filter>源文件\Engine\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="DScene.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="DInput.cpp">
+      <Filter>源文件\Core\System</Filter>
+    </ClCompile>
+    <ClCompile Include="DLog.cpp">
+      <Filter>源文件\Core\System</Filter>
+    </ClCompile>
+    <ClCompile Include="DTime.cpp">
+      <Filter>源文件\Core\System</Filter>
+    </ClCompile>
+    <ClCompile Include="DSceneManager.cpp">
+      <Filter>源文件\Core\System</Filter>
+    </ClCompile>
+    <ClCompile Include="DRes.cpp">
+      <Filter>源文件\Core\System</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

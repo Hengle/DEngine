@@ -1,8 +1,5 @@
 #pragma once
 #include "DResObject.h"
-#include <d3d11.h>
-#include <d3dx11async.h>
-#include <d3dx10math.h>
 #include <fstream>
 
 class DShader : public DResObject

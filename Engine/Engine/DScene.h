@@ -11,7 +11,7 @@ public:
 	DScene(SCENEID, char*);
 	~DScene();
 	void DrawGUI();
-	void Render(ID3D11DeviceContext*);
+	void Render();
 	void Update();
 	void FixedUpdate();
 	void Enter();

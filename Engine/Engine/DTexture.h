@@ -1,6 +1,5 @@
 #pragma once
 #include "DResObject.h"
-#include <D3DX11tex.h>
 
 class DTexture : public DResObject
 {

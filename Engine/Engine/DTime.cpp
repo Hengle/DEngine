@@ -77,20 +77,20 @@ bool DTime::BeginFixedUpdateLoop()
 
 double DTime::GetDeltaTime()
 {
-	return DSystem::GetTime()->m_deltaTime;
+	return DSystem::GetTimeMgr()->m_deltaTime;
 }
 
 double DTime::GetFixedDeltaTime()
 {
-	return DSystem::GetTime()->m_fixedDeltaTime;
+	return DSystem::GetTimeMgr()->m_fixedDeltaTime;
 }
 
 double DTime::GetTimer()
 {
-	return DSystem::GetTime()->m_timer;
+	return DSystem::GetTimeMgr()->m_timer;
 }
 
 unsigned int DTime::GetFPS()
 {
-	return DSystem::GetTime()->m_fps;
+	return DSystem::GetTimeMgr()->m_fps;
 }

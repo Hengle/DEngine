@@ -1,7 +1,7 @@
 ﻿#include "DTime.h"
 #include "DGraphicsCore.h"
 #include "DSceneManager.h"
-#include "DLogManager.h"
+#include "DLog.h"
 #include "DInput.h"
 
 #define D_DEFAULT_FULL_SCREEN    FALSE
@@ -22,10 +22,11 @@ public:
 	LRESULT CALLBACK MessageHandler(HWND, UINT, WPARAM, LPARAM);
 	static HWND GetHWND();
 
-	static DSceneManager* GetSceneManager();
-	static DGraphicsCore* GetGraphicsCore();
-	static DLogManager* GetLogManager();
-	static DTime* GetTime();
+	static DSceneManager* GetSceneMgr();
+	static DGraphicsCore* GetGraphicsMgr();
+	static DLog* GetLogMgr();
+	static DTime* GetTimeMgr();
+	static DInput* GetInputMgr();
 
 	static void Quit();
 
@@ -35,11 +36,11 @@ private:
 
 private:
 	HWND m_hwnd;
-	DTime* m_time;
-	DGraphicsCore* m_graphics;
-	DSceneManager* m_sceneManager;
-	DLogManager* m_logManager;
-	DInput* m_input;
+	DTime* m_timeMgr;
+	DGraphicsCore* m_graphicsMgr;
+	DSceneManager* m_sceneMgr;
+	DLog* m_logMgr;
+	DInput* m_inputMgr;
 	HINSTANCE m_hInstance;
 	LPCWSTR m_applicationName;
 	LPCWSTR m_title;

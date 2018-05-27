@@ -1,14 +1,14 @@
 #include "DSystem.h"
-#include <dwmapi.h>
 
 DSystem::DSystem()
 {
 	m_applicationName = 0;
 	m_title = 0;
-	m_time = 0;
-	m_graphics = 0;
-	m_logManager = 0;
-	m_input = 0;
+	m_timeMgr = 0;
+	m_graphicsMgr = 0;
+	m_logMgr = 0;
+	m_inputMgr = 0;
+	m_sceneMgr = 0;
 	m_hInstance = 0;
 	m_hwnd = 0;
 }
@@ -22,24 +22,24 @@ bool DSystem::Init()
 	int width = D_DEFAULT_WIDTH, height = D_DEFAULT_HEIGHT;
 	InitWindow(width, height, false);
 
-	DInput::CreateInstance(&m_input);
-	if (!m_input->Init(m_hInstance, m_hwnd, width, height))
+	m_inputMgr = new DInput();
+	if (!m_inputMgr->Init(m_hInstance, m_hwnd, width, height))
 	{
 		return false;
 	}
 
-	m_time = new DTime();
-	m_time->Init();
+	m_timeMgr = new DTime();
+	m_timeMgr->Init();
 
-	m_graphics = new DGraphicsCore();
-	if (!m_graphics->Init(width, height, false, m_hwnd, DGRAPHICS_API_D3D11))
+	m_graphicsMgr = new DGraphicsCore();
+	if (!m_graphicsMgr->Init(width, height, false, m_hwnd, DGRAPHICS_API_D3D11))
 	{
 		return false;
 	}
 
-	m_sceneManager = new DSceneManager();
-	m_logManager = new DLogManager();
-	m_logManager->Init();
+	m_sceneMgr = new DSceneManager();
+	m_logMgr = new DLog();
+	m_logMgr->Init();
 
 	return true;
 }
@@ -80,31 +80,40 @@ void DSystem::Shutdown()
 {
 	DestroyWindow(m_hwnd);
 
-	if (m_input != NULL) 
+	if (m_inputMgr != NULL)
 	{
-		m_input->Shutdown();
-		delete m_input;
+		m_inputMgr->Shutdown();
+		delete m_inputMgr;
 	}
-	m_input = NULL;
+	m_inputMgr = NULL;
 
-	m_time->Shutdown();
-	delete m_time;
-	m_time = NULL;
-
-	if (m_graphics != NULL)
+	if (m_timeMgr != NULL)
 	{
-		m_graphics->Shutdown();
-		delete m_graphics;
+		m_timeMgr->Shutdown();
+		delete m_timeMgr;
 	}
-	m_graphics = NULL;
+	m_timeMgr = NULL;
 
-	m_sceneManager->UnloadAllScene();
-	delete m_sceneManager;
-	m_sceneManager = NULL;
+	if (m_graphicsMgr != NULL)
+	{
+		m_graphicsMgr->Shutdown();
+		delete m_graphicsMgr;
+	}
+	m_graphicsMgr = NULL;
 
-	m_logManager->Shutdown();
-	delete m_logManager;
-	m_logManager = NULL;
+	if (m_sceneMgr != NULL)
+	{
+		m_sceneMgr->UnloadAllScene();
+		delete m_sceneMgr;
+	}
+	m_sceneMgr = NULL;
+
+	if (m_logMgr != NULL)
+	{
+		m_logMgr->Shutdown();
+		delete m_logMgr;
+	}
+	m_logMgr = NULL;
 
 	m_hwnd = NULL;
 	m_applicationName = NULL;
@@ -153,11 +162,11 @@ void DSystem::InitWindow(int& width, int& height, bool fullScreen)
 
 bool DSystem::Loop()
 {
-	if (!m_input->InputLoop(m_hwnd))
+	if (!m_inputMgr->InputLoop(m_hwnd))
 	{
 		return false;
 	}
-	if (!m_graphics->Render(m_sceneManager, m_logManager, m_time)) 
+	if (!m_graphicsMgr->Render())
 	{
 		return false;
 	}
@@ -166,7 +175,7 @@ bool DSystem::Loop()
 
 LRESULT CALLBACK DSystem::MessageHandler(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	if (m_graphics != NULL && m_graphics->MessageHandler(hwnd, uMsg, wParam, lParam))
+	if (m_graphicsMgr != NULL && m_graphicsMgr->MessageHandler(hwnd, uMsg, wParam, lParam))
 		return true;
 	switch (uMsg)
 	{
@@ -182,24 +191,29 @@ HWND DSystem::GetHWND()
 	return System->m_hwnd;
 }
 
-DSceneManager * DSystem::GetSceneManager()
+DSceneManager * DSystem::GetSceneMgr()
 {
-	return System->m_sceneManager;
+	return System->m_sceneMgr;
 }
 
-DGraphicsCore * DSystem::GetGraphicsCore()
+DGraphicsCore * DSystem::GetGraphicsMgr()
 {
-	return System->m_graphics;
+	return System->m_graphicsMgr;
 }
 
-DLogManager * DSystem::GetLogManager()
+DLog * DSystem::GetLogMgr()
 {
-	return System->m_logManager;
+	return System->m_logMgr;
 }
 
-DTime * DSystem::GetTime()
+DTime * DSystem::GetTimeMgr()
 {
-	return System->m_time;
+	return System->m_timeMgr;
+}
+
+DInput * DSystem::GetInputMgr()
+{
+	return System->m_inputMgr;
 }
 
 void DSystem::Quit()

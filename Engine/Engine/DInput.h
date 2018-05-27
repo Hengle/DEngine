@@ -1,16 +1,15 @@
 #pragma once
 #include <dinput.h>
-#include "DSingleton.h"
 
-class DInput : public DSystemSingleton<DInput>
+class DInput
 {
-	friend class DSystemSingleton<DInput>;
 public:
 	DInput();
 	~DInput();
 	bool Init(HINSTANCE, HWND, int, int);
 	void Shutdown();
 	bool InputLoop(HWND);
+
 	static void GetMousePosition(int&, int&);
 	static void GetDeltaMouseMove(int&, int&);
 	static bool IsMousePress(int button);

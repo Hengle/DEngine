@@ -1,4 +1,5 @@
 #include "DFrameBase.h"
+#include "DSystem.h"
 
 
 DFrameBase::DFrameBase()
@@ -35,10 +36,10 @@ void DFrameBase::RegisterScene(DScene * scene)
 {
 	if (scene == NULL)
 		return;
-	DSystem::GetSceneManager()->RegisterScene(scene);
+	DSystem::GetSceneMgr()->RegisterScene(scene);
 }
 
 void DFrameBase::ChangeScene(SCENEID sceneId)
 {
-	DSystem::GetSceneManager()->ChangeScene(sceneId);
+	DSystem::GetSceneMgr()->ChangeScene(sceneId);
 }

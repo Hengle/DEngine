@@ -1,27 +1,38 @@
 #pragma once
- 
+
 typedef struct DColor
 {
 public:
 	DColor();
+	DColor(const DColor&);
 	DColor(float, float, float, float);
 	DColor(float, float, float);
 	float GetGrayScale();
 	void ToHSV(float&, float&, float&);
 
-	DColor operator+(const DColor&);
-	DColor operator-(const DColor&);
-	DColor operator*(const DColor&);
-	DColor operator*(const float&);
-	DColor operator/(const DColor&);
-	DColor operator/(const float&);
-	bool operator==(const DColor&);
-	bool operator!=(const DColor&);
-	float operator[](int);
+	DColor operator+(const DColor&) const;
+	DColor operator-(const DColor&) const;
+	DColor operator*(const DColor&) const;
+	DColor operator*(float) const;
+	DColor operator/(const DColor&) const;
+	DColor operator/(float) const;
 
-	static DColor Lerp(DColor, DColor, float);
+	DColor& operator += (const DColor&);
+	DColor& operator -= (const DColor&);
+	DColor& operator *= (const DColor&);
+	DColor& operator *= (float);
+	DColor& operator /= (const DColor&);
+	DColor& operator /= (float);
+
+	bool operator==(const DColor&) const;
+	bool operator!=(const DColor&) const;
+	float operator[](int) const;
+
+	friend DColor operator * (float, const DColor&);
+
+	static DColor Lerp(const DColor&, const DColor&, float);
 	static DColor HSVToRGB(float, float, float);
-	static void RGBToHSV(const DColor, float&, float&, float&);
+	static void RGBToHSV(const DColor&, float&, float&, float&);
 
 private:
 	static void RGBToHSV_Internal(float, float, float, float, float&, float&, float&);

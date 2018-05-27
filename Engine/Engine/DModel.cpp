@@ -3,7 +3,6 @@
 #include <vector>
 #include <map>
 #include <fstream>
-#include <D3DX10math.h>
 
 using namespace std;
 

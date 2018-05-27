@@ -1,7 +1,6 @@
 #pragma once
 
 #include "DTexture.h"
-#include <d3d11.h>
 
 class DRenderTexture : public DTexture
 {

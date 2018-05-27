@@ -1,5 +1,5 @@
 #include "DInput.h"
-
+#include "DSystem.h"
 
 DInput::DInput()
 {
@@ -143,60 +143,60 @@ bool DInput::InputLoop(HWND hwnd)
 
 void DInput::GetMousePosition(int & x, int & y)
 {
-	x = DInput::GetInstance()->m_mouseX;
-	y = DInput::GetInstance()->m_mouseY;
+	x = DSystem::GetInputMgr()->m_mouseX;
+	y = DSystem::GetInputMgr()->m_mouseY;
 }
 
 void DInput::GetDeltaMouseMove(int & x, int & y)
 {
-	x = DInput::GetInstance()->m_deltaMouseX;
-	y = DInput::GetInstance()->m_deltaMouseY;
+	x = DSystem::GetInputMgr()->m_deltaMouseX;
+	y = DSystem::GetInputMgr()->m_deltaMouseY;
 }
 
 bool DInput::IsMousePress(int button)
 {
-	return DInput::GetInstance()->m_mouseState.rgbButtons[button] & 0x80;
+	return DSystem::GetInputMgr()->m_mouseState.rgbButtons[button] & 0x80;
 }
 
 bool DInput::IsMouseDown(int button)
 {
-	if (DInput::GetInstance()->m_mouseState.rgbButtons[button] & 0x80 && DInput::GetInstance()->m_mouseBtnState[button] == 0)
+	if (DSystem::GetInputMgr()->m_mouseState.rgbButtons[button] & 0x80 && DSystem::GetInputMgr()->m_mouseBtnState[button] == 0)
 	{
-		DInput::GetInstance()->m_mouseBtnState[button] = 1;
+		DSystem::GetInputMgr()->m_mouseBtnState[button] = 1;
 	}
-	else if (DInput::GetInstance()->m_mouseState.rgbButtons[button] & 0x80 && DInput::GetInstance()->m_mouseBtnState[button] == 1)
+	else if (DSystem::GetInputMgr()->m_mouseState.rgbButtons[button] & 0x80 && DSystem::GetInputMgr()->m_mouseBtnState[button] == 1)
 	{
-		DInput::GetInstance()->m_mouseBtnState[button] = 2;
+		DSystem::GetInputMgr()->m_mouseBtnState[button] = 2;
 	}
-	else if (!(DInput::GetInstance()->m_mouseState.rgbButtons[button] & 0x80))
+	else if (!(DSystem::GetInputMgr()->m_mouseState.rgbButtons[button] & 0x80))
 	{
-		DInput::GetInstance()->m_mouseBtnState[button] = 0;
+		DSystem::GetInputMgr()->m_mouseBtnState[button] = 0;
 	}
 
-	return DInput::GetInstance()->m_mouseBtnState[button] == 1;
+	return DSystem::GetInputMgr()->m_mouseBtnState[button] == 1;
 }
 
 bool DInput::IsKeyPress(int keycode)
 {
-	return DInput::GetInstance()->m_keyboardState[keycode] & 0x80;
+	return DSystem::GetInputMgr()->m_keyboardState[keycode] & 0x80;
 }
 
 bool DInput::IsKeyDown(int keycode)
 {
-	if (DInput::GetInstance()->m_keyboardState[keycode] & 0x80 && DInput::GetInstance()->m_keyboardDownState[keycode] == 0)
+	if (DSystem::GetInputMgr()->m_keyboardState[keycode] & 0x80 && DSystem::GetInputMgr()->m_keyboardDownState[keycode] == 0)
 	{
-		DInput::GetInstance()->m_keyboardDownState[keycode] = 1;
+		DSystem::GetInputMgr()->m_keyboardDownState[keycode] = 1;
 	}
-	else if (DInput::GetInstance()->m_keyboardState[keycode] & 0x80 && DInput::GetInstance()->m_keyboardDownState[keycode] == 1)
+	else if (DSystem::GetInputMgr()->m_keyboardState[keycode] & 0x80 && DSystem::GetInputMgr()->m_keyboardDownState[keycode] == 1)
 	{
-		DInput::GetInstance()->m_keyboardDownState[keycode] = 2;
+		DSystem::GetInputMgr()->m_keyboardDownState[keycode] = 2;
 	}
-	else if (!(DInput::GetInstance()->m_keyboardState[keycode] & 0x80))
+	else if (!(DSystem::GetInputMgr()->m_keyboardState[keycode] & 0x80))
 	{
-		DInput::GetInstance()->m_keyboardDownState[keycode] = 0;
+		DSystem::GetInputMgr()->m_keyboardDownState[keycode] = 0;
 	}
 
-	return DInput::GetInstance()->m_keyboardDownState[keycode] == 1;
+	return DSystem::GetInputMgr()->m_keyboardDownState[keycode] == 1;
 }
 
 bool DInput::ReadKeyboard()

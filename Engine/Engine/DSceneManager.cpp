@@ -70,10 +70,10 @@ void DSceneManager::DrawGUI()
 	}
 }
 
-void DSceneManager::RenderScene(ID3D11DeviceContext* deviceContext)
+void DSceneManager::RenderScene()
 {
 	if (m_currentScene != NULL) {
-		m_currentScene->Render(deviceContext);
+		m_currentScene->Render();
 	}
 }
 

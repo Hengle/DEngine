@@ -12,7 +12,7 @@ public:
 	DScene* LoadScene(SCENEID);
 	DScene* GetCurrentScene();
 	void DrawGUI();
-	void RenderScene(ID3D11DeviceContext*);
+	void RenderScene();
 	void UpdateScene();
 	void FixedUpdateScene();
 	bool UnLoadScene(SCENEID);

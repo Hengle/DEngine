@@ -10,8 +10,8 @@ public:
 	void EndRender();
 	virtual void Init();
 	virtual void Destroy();
-	void GetViewMatrix(D3DXMATRIX&);
-	void GetProjection(D3DXMATRIX&);
+	void GetViewMatrix(DMatrix4x4&);
+	void GetProjection(DMatrix4x4&);
 	float GetFieldOfView();
 	float GetNear();
 	float GetFar();
@@ -37,8 +37,8 @@ private:
 	bool m_ortho;
 	//D3DXVECTOR3 m_position;
 	//D3DXQUATERNION m_rotation;
-	D3DXMATRIX m_viewMatrix;
-	D3DXMATRIX m_projection;
+	DMatrix4x4 m_viewMatrix;
+	DMatrix4x4 m_projection;
 	bool m_isProjectionChanged;
 	
 };

@@ -1,12 +1,14 @@
 #pragma once
 #include "DResObject.h"
+#include <windows.h>
+#include <D3DX11.h>
 
 class DTexture : public DResObject
 {
 public:
 	DTexture();
 	~DTexture();
-	virtual bool Init(ID3D11Device*) = 0;
+	virtual bool Init() = 0;
 
 };
 
@@ -16,7 +18,7 @@ public:
 	DTexture2D(WCHAR*);
 	~DTexture2D();
 	virtual void Destroy();
-	virtual bool Init(ID3D11Device*);
+	virtual bool Init();
 	ID3D11ShaderResourceView* GetTexture();
 
 private:

@@ -1,5 +1,5 @@
 #include "DTexture.h"
-
+#include "DSystem.h"
 
 DTexture::DTexture()
 {
@@ -34,9 +34,11 @@ void DTexture2D::Destroy()
 	return;
 }
 
-bool DTexture2D::Init(ID3D11Device * device)
+bool DTexture2D::Init()
 {
 	HRESULT result;
+
+	ID3D11Device* device = DSystem::GetGraphicsMgr()->GetDevice();
 
 	result = D3DX11CreateShaderResourceViewFromFile(device, m_textureFile, NULL, NULL, &m_texture, NULL);
 	if (FAILED(result))

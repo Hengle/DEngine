@@ -1,3 +1,4 @@
+#include "DSystem.h"
 #include "DRenderTexture.h"
 
 DRenderTexture::DRenderTexture(int width, int height)
@@ -13,8 +14,10 @@ DRenderTexture::~DRenderTexture()
 {
 }
 
-bool DRenderTexture::Init(ID3D11Device * device)
+bool DRenderTexture::Init()
 {
+	ID3D11Device* device = DSystem::GetGraphicsMgr()->GetDevice();
+
 	D3D11_TEXTURE2D_DESC textureDesc;
 	HRESULT result;
 	D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;

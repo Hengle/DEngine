@@ -16,8 +16,8 @@ public:
 	bool Init(int, int, bool, HWND, DGraphicsAPI);
 	bool Render();
 	void Shutdown();
-	/*ID3D11Device* GetDevice();
-	ID3D11DeviceContext* GetDeviceContext();*/
+	ID3D11Device* GetDevice();
+	ID3D11DeviceContext* GetDeviceContext();
 	LRESULT CALLBACK MessageHandler(HWND, UINT, WPARAM, LPARAM);
 	void GetResolution(FLOAT&, FLOAT&);
 

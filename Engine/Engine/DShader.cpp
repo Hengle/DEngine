@@ -29,7 +29,7 @@ void DShader::Destroy()
 	ShutdownShader();
 }
 
-bool DShader::Render(ID3D11DeviceContext * deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projection)
+bool DShader::Render(ID3D11DeviceContext * deviceContext, int indexCount, DMatrix4x4 worldMatrix, DMatrix4x4 viewMatrix, DMatrix4x4 projection)
 {
 	bool result;
 
@@ -248,7 +248,7 @@ void DShader::OutputShaderErrorMessage(ID3D10Blob * errorMessage, WCHAR * shader
 	return;
 }
 
-bool DShader::SetShaderParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix)
+bool DShader::SetShaderParameters(ID3D11DeviceContext *deviceContext, DMatrix4x4 worldMatrix, DMatrix4x4 viewMatrix, DMatrix4x4 projectionMatrix)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -309,7 +309,7 @@ DTexShader::~DTexShader()
 {
 }
 
-bool DTexShader::Render(ID3D11DeviceContext * deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projection, ID3D11ShaderResourceView * texture)
+bool DTexShader::Render(ID3D11DeviceContext * deviceContext, int indexCount, DMatrix4x4 worldMatrix, DMatrix4x4 viewMatrix, DMatrix4x4 projection, ID3D11ShaderResourceView * texture)
 {
 	bool result;
 
@@ -497,7 +497,7 @@ void DTexShader::ShutdownShader()
 	return;
 }
 
-bool DTexShader::SetShaderParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView * texture)
+bool DTexShader::SetShaderParameters(ID3D11DeviceContext *deviceContext, DMatrix4x4 worldMatrix, DMatrix4x4 viewMatrix, DMatrix4x4 projectionMatrix, ID3D11ShaderResourceView * texture)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -562,7 +562,7 @@ DLightShader::~DLightShader()
 {
 }
 
-bool DLightShader::Render(ID3D11DeviceContext *deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView *texture, D3DXVECTOR3 lightDirection, D3DXVECTOR4 diffuseColor)
+bool DLightShader::Render(ID3D11DeviceContext *deviceContext, int indexCount, DMatrix4x4 worldMatrix, DMatrix4x4 viewMatrix, DMatrix4x4 projectionMatrix, ID3D11ShaderResourceView *texture, DVector3 lightDirection, DColor diffuseColor)
 {
 	bool result;
 
@@ -774,9 +774,9 @@ void DLightShader::ShutdownShader()
 	DTexShader::ShutdownShader();
 }
 
-bool DLightShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
-	D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView* texture, D3DXVECTOR3 lightDirection,
-	D3DXVECTOR4 diffuseColor)
+bool DLightShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, DMatrix4x4 worldMatrix, DMatrix4x4 viewMatrix,
+	DMatrix4x4 projectionMatrix, ID3D11ShaderResourceView* texture, DVector3 lightDirection,
+	DColor diffuseColor)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;

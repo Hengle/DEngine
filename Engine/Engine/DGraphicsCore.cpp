@@ -1,5 +1,5 @@
 #include "DGraphicsCore.h"
-
+#include "DSystem.h"
 
 DGraphicsCore::DGraphicsCore()
 {
@@ -25,8 +25,12 @@ bool DGraphicsCore::Init(int width, int height, bool fullScreen, HWND hwnd, DGra
 	return true;
 }
 
-bool DGraphicsCore::Render(DSceneManager* sceneManager, DLogManager* logManager, DTime* time)
+bool DGraphicsCore::Render()
 {
+	DTime* time = DSystem::GetTimeMgr();
+	DSceneManager* sceneManager = DSystem::GetSceneMgr();
+	DLog* logManager = DSystem::GetLogMgr();
+
 	time->Update();
 
 	m_GUI->NewFrame();
@@ -44,7 +48,7 @@ bool DGraphicsCore::Render(DSceneManager* sceneManager, DLogManager* logManager,
 
 	m_D3D->BeginRender(0, 0, 1, 0.5f);
 
-	sceneManager->RenderScene(m_D3D->GetDeviceContext());
+	sceneManager->RenderScene();
 
 	m_GUI->Render();
 	m_D3D->EndRender();

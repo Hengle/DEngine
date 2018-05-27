@@ -1,5 +1,6 @@
 #pragma once
 #include "DSceneObject.h"
+#include "DColor.h"
 
 enum DLightType
 {
@@ -12,14 +13,14 @@ class DLight : public DSceneObject
 public:
 	DLight();
 	~DLight();
-	void GetColor(D3DXVECTOR4&);
+	void GetColor(DColor&);
 	void SetColor(FLOAT, FLOAT, FLOAT, FLOAT);
-	void SetColor(D3DXVECTOR4);
+	void SetColor(DColor);
 	float GetIntensity();
 	void SetIntensity(float);
 
 protected:
-	D3DXVECTOR4 m_color;
+	DColor m_color;
 	float m_intensity;
 };
 

@@ -3,13 +3,13 @@
 
 DTransform::DTransform()
 {
-	m_position = D3DXVECTOR3(0,0,0);
+	m_position = DVector3(0,0,0);
 	//m_euler = D3DXVECTOR3();
-	m_scale = D3DXVECTOR3(1, 1, 1);
-	m_up = D3DXVECTOR3(0, 1, 0);
-	m_forward = D3DXVECTOR3(0, 0, 1);
-	m_rotation = D3DXQUATERNION(0, 0, 0, 1);
-	m_euler = D3DXVECTOR3(0, 0, 0);
+	m_scale = DVector3(1, 1, 1);
+	m_up = DVector3(0, 1, 0);
+	m_forward = DVector3(0, 0, 1);
+	m_rotation = DQuaterion(0, 0, 0, 1);
+	m_euler = DVector3(0, 0, 0);
 
 	m_isMatrixChanged = false;
 	m_isEulerChanged = false;
@@ -31,7 +31,7 @@ void DTransform::SetPosition(FLOAT x, FLOAT y, FLOAT z)
 	m_isMatrixChanged = true;
 }
 
-void DTransform::SetPosition(D3DXVECTOR3 position)
+void DTransform::SetPosition(DVector3 position)
 {
 	if (IS_FLOAT_EQUAL(m_position.x, position.x) && IS_FLOAT_EQUAL(m_position.y, position.y) && IS_FLOAT_EQUAL(m_position.z, position.z))
 		return;
@@ -51,7 +51,7 @@ void DTransform::SetRotation(FLOAT x, FLOAT y, FLOAT z, FLOAT w)
 	m_isEulerChanged = true;
 }
 
-void DTransform::SetRotation(D3DXQUATERNION rotation)
+void DTransform::SetRotation(DQuaterion rotation)
 {
 	if (IS_FLOAT_EQUAL(m_rotation.x, rotation.x) && IS_FLOAT_EQUAL(m_rotation.y, rotation.y) && IS_FLOAT_EQUAL(m_rotation.z, rotation.z) && IS_FLOAT_EQUAL(m_rotation.w, rotation.w))
 		return;
@@ -71,7 +71,7 @@ void DTransform::SetEuler(FLOAT pitch, FLOAT yaw, FLOAT roll)
 	m_isMatrixChanged = true;
 }
 
-void DTransform::SetEuler(D3DXVECTOR3 euler)
+void DTransform::SetEuler(DVector3 euler)
 {
 	if (IS_FLOAT_EQUAL(m_euler.x, euler.x) && IS_FLOAT_EQUAL(m_euler.y, euler.y) && IS_FLOAT_EQUAL(m_euler.z, euler.z))
 		return;
@@ -90,7 +90,7 @@ void DTransform::SetScale(FLOAT x, FLOAT y, FLOAT z)
 	m_isMatrixChanged = true;
 }
 
-void DTransform::SetScale(D3DXVECTOR3 scale)
+void DTransform::SetScale(DVector3 scale)
 {
 	if (IS_FLOAT_EQUAL(m_scale.x, scale.x) && IS_FLOAT_EQUAL(m_scale.y, scale.y) && IS_FLOAT_EQUAL(m_scale.z, scale.z))
 		return;
@@ -98,17 +98,17 @@ void DTransform::SetScale(D3DXVECTOR3 scale)
 	m_isMatrixChanged = true;
 }
 
-void DTransform::GetPosition(D3DXVECTOR3 &position)
+void DTransform::GetPosition(DVector3 &position)
 {
 	position = m_position;
 }
 
-void DTransform::GetRotation(D3DXQUATERNION & rotation)
+void DTransform::GetRotation(DQuaterion & rotation)
 {
 	rotation = m_rotation;
 }
 
-void DTransform::GetEuler(D3DXVECTOR3 & euler)
+void DTransform::GetEuler(DVector3 & euler)
 {
 	if (m_isEulerChanged) {
 		RefreshEuler();
@@ -117,12 +117,12 @@ void DTransform::GetEuler(D3DXVECTOR3 & euler)
 	euler = m_euler;
 }
 
-void DTransform::GetScale(D3DXVECTOR3 & scale)
+void DTransform::GetScale(DVector3 & scale)
 {
 	scale = m_scale;
 }
 
-void DTransform::GetUp(D3DXVECTOR3 & up)
+void DTransform::GetUp(DVector3 & up)
 {
 	if (m_isMatrixChanged) {
 		RefreshMatrix();
@@ -130,7 +130,7 @@ void DTransform::GetUp(D3DXVECTOR3 & up)
 	up = m_up;
 }
 
-void DTransform::GetForward(D3DXVECTOR3 & forward)
+void DTransform::GetForward(DVector3 & forward)
 {
 	if (m_isMatrixChanged) {
 		RefreshMatrix();
@@ -138,7 +138,7 @@ void DTransform::GetForward(D3DXVECTOR3 & forward)
 	forward = m_forward;
 }
 
-void DTransform::GetRight(D3DXVECTOR3 & right)
+void DTransform::GetRight(DVector3 & right)
 {
 	if (m_isMatrixChanged) {
 		RefreshMatrix();
@@ -146,14 +146,14 @@ void DTransform::GetRight(D3DXVECTOR3 & right)
 	D3DXVec3Cross(&right, &m_up, &m_forward);
 }
 
-void DTransform::GetLocalToWorld(D3DXMATRIX & localToWorld)
+void DTransform::GetLocalToWorld(DMatrix4x4 & localToWorld)
 {
 	if (!m_isMatrixChanged) {
 		localToWorld = m_localToWorld;
 		return;
 	}
 	D3DXMatrixIdentity(&m_localToWorld);
-	D3DXMATRIX t;
+	DMatrix4x4 t;
 
 	RefreshMatrix();
 	
@@ -167,15 +167,15 @@ bool DTransform::IsMatrixWillChange()
 
 void DTransform::RefreshMatrix()
 {
-	D3DXMATRIX t;
+	DMatrix4x4 t;
 	m_isMatrixChanged = false;
 
 	D3DXMatrixScaling(&t, m_scale.x, m_scale.y, m_scale.z);
 	D3DXMatrixMultiply(&m_localToWorld, &m_localToWorld, &t);
 
 	D3DXMatrixRotationQuaternion(&t, &m_rotation);
-	m_up = D3DXVECTOR3(0, 1, 0);
-	m_forward = D3DXVECTOR3(0, 0, 1);
+	m_up = dvec3_up;
+	m_forward = dvec3_forward;
 	D3DXVec3TransformCoord(&m_forward, &m_forward, &t);
 	D3DXVec3TransformCoord(&m_up, &m_up, &t);
 	D3DXMatrixMultiply(&m_localToWorld, &m_localToWorld, &t);

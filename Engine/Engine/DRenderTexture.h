@@ -1,5 +1,4 @@
 #pragma once
-
 #include "DTexture.h"
 
 class DRenderTexture : public DTexture
@@ -7,7 +6,7 @@ class DRenderTexture : public DTexture
 public:
 	DRenderTexture(int, int);
 	~DRenderTexture();
-	virtual bool Init(ID3D11Device*);
+	virtual bool Init();
 	virtual void Destroy();
 	void SetRenderTarget(ID3D11DeviceContext*, ID3D11DepthStencilView*);
 	void ClearRenderTarget(ID3D11DeviceContext*, ID3D11DepthStencilView*, float, float, float, float);

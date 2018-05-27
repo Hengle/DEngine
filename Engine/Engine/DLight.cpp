@@ -10,20 +10,20 @@ DLight::~DLight()
 {
 }
 
-void DLight::GetColor(D3DXVECTOR4& color)
+void DLight::GetColor(DColor& color)
 {
 	color = m_color;
 }
 
 void DLight::SetColor(FLOAT r, FLOAT g, FLOAT b, FLOAT a)
 {
-	m_color.x = r;
-	m_color.y = g;
-	m_color.z = b;
-	m_color.w = a;
+	m_color.r = r;
+	m_color.g = g;
+	m_color.b = b;
+	m_color.a = a;
 }
 
-void DLight::SetColor(D3DXVECTOR4 color)
+void DLight::SetColor(DColor color)
 {
 	m_color = color;
 }

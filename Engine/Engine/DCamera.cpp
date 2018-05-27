@@ -11,7 +11,7 @@ DCamera::DCamera()
 	m_viewPort = D3D11_VIEWPORT();
 	FLOAT width , height;
 	
-	DSystem::GetGraphicsCore()->GetResolution(width, height);
+	DSystem::GetGraphicsMgr()->GetResolution(width, height);
 	m_viewPort.Width = width;
 	m_viewPort.Height = height;
 	m_viewPort.MinDepth = 0.0f;
@@ -105,12 +105,12 @@ void DCamera::Destroy()
 	DSceneObject::Destroy();
 }
 
-void DCamera::GetViewMatrix(D3DXMATRIX& mOut)
+void DCamera::GetViewMatrix(DMatrix4x4& mOut)
 {
 	mOut = m_viewMatrix;
 }
 
-void DCamera::GetProjection(D3DXMATRIX& mOut)
+void DCamera::GetProjection(DMatrix4x4& mOut)
 {
 	mOut = m_projection;
 }

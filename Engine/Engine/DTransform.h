@@ -6,22 +6,22 @@ public:
 	DTransform();
 	~DTransform();
 	void SetPosition(FLOAT, FLOAT, FLOAT);
-	void SetPosition(D3DXVECTOR3);
+	void SetPosition(DVector3);
 	void SetRotation(FLOAT, FLOAT, FLOAT, FLOAT);
-	void SetRotation(D3DXQUATERNION);
+	void SetRotation(DQuaterion);
 	void SetEuler(FLOAT, FLOAT, FLOAT);
-	void SetEuler(D3DXVECTOR3);
+	void SetEuler(DVector3);
 	void SetScale(FLOAT, FLOAT, FLOAT);
-	void SetScale(D3DXVECTOR3);
+	void SetScale(DVector3);
 
-	void GetPosition(D3DXVECTOR3&);
-	void GetRotation(D3DXQUATERNION&);
-	void GetEuler(D3DXVECTOR3&);
-	void GetScale(D3DXVECTOR3&);
-	void GetUp(D3DXVECTOR3&);
-	void GetForward(D3DXVECTOR3&);
-	void GetRight(D3DXVECTOR3&);
-	void GetLocalToWorld(D3DXMATRIX&);
+	void GetPosition(DVector3&);
+	void GetRotation(DQuaterion&);
+	void GetEuler(DVector3&);
+	void GetScale(DVector3&);
+	void GetUp(DVector3&);
+	void GetForward(DVector3&);
+	void GetRight(DVector3&);
+	void GetLocalToWorld(DMatrix4x4&);
 
 	bool IsMatrixWillChange();
 
@@ -29,15 +29,15 @@ private:
 	void RefreshMatrix();
 	void RefreshEuler();
 private:
-	D3DXVECTOR3 m_position;
-	D3DXVECTOR3 m_euler;
-	D3DXVECTOR3 m_scale;
-	D3DXVECTOR3 m_up;
-	D3DXVECTOR3 m_forward;
-	D3DXQUATERNION m_rotation;
+	DVector3 m_position;
+	DVector3 m_euler;
+	DVector3 m_scale;
+	DVector3 m_up;
+	DVector3 m_forward;
+	DQuaterion m_rotation;
 
 	bool m_isMatrixChanged;
 	bool m_isEulerChanged;
 
-	D3DXMATRIX m_localToWorld;
+	DMatrix4x4 m_localToWorld;
 };

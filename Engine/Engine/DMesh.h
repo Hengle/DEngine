@@ -1,4 +1,5 @@
 #pragma once
+#include <d3d11.h>
 
 class DMesh
 {
@@ -41,27 +42,6 @@ private:
 	float m_sizeX, m_sizeY, m_sizeZ;
 };
 
-class DSphereMesh : public DMesh
-{
-private:
-	struct VertexType
-	{
-		D3DXVECTOR3 position;
-		D3DXVECTOR2 tex;
-		D3DXVECTOR3 normal;
-	};
-public:
-	DSphereMesh();
-	DSphereMesh(float);
-	~DSphereMesh();
-
-protected:
-	virtual void CreateBuffer(void**, unsigned long**, int&, int&, int&);
-
-private:
-	float m_radius;
-};
-
 class DModelMesh : public DMesh
 {
 public:
@@ -73,15 +53,4 @@ protected:
 
 private:
 	char* m_fileName;
-};
-
-class DLine : public DMesh
-{
-public:
-	DLine();
-	~DLine();
-	void UpdateVertex(const D3DXVECTOR3&, const D3DXVECTOR3&, ID3D11DeviceContext *);
-
-protected:
-	virtual void CreateBuffer(void**, unsigned long**, int&, int&, int&);
 };

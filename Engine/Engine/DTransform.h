@@ -1,17 +1,18 @@
-﻿#pragma once
+#pragma once
 #include "DMath.h"
 
-class DTransform {
+class DTransform
+{
 public:
 	DTransform();
 	~DTransform();
-	void SetPosition(FLOAT, FLOAT, FLOAT);
+	void SetPosition(float, float, float);
 	void SetPosition(DVector3);
-	void SetRotation(FLOAT, FLOAT, FLOAT, FLOAT);
+	void SetRotation(float, float, float, float);
 	void SetRotation(DQuaterion);
-	void SetEuler(FLOAT, FLOAT, FLOAT);
+	void SetEuler(float, float, float);
 	void SetEuler(DVector3);
-	void SetScale(FLOAT, FLOAT, FLOAT);
+	void SetScale(float, float, float);
 	void SetScale(DVector3);
 
 	void GetPosition(DVector3&);
@@ -41,3 +42,4 @@ private:
 
 	DMatrix4x4 m_localToWorld;
 };
+

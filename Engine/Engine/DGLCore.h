@@ -3,26 +3,26 @@
 #include <dxgi.h>
 #include <d3dcommon.h>
 
-class D3DCoreBase
+class DGLCore
 {
 public:
-	D3DCoreBase();
-	~D3DCoreBase();
+	DGLCore();
+	~DGLCore();
 	virtual bool Init(int, int, bool, HWND);
 	virtual void Destroy() = 0;
 	virtual void BeginRender(float, float, float, float) = 0;
 	virtual void EndRender() = 0;
-	
+
 	virtual void SetBackBufferRenderTarget() = 0;
 	void GetResolution(FLOAT&, FLOAT&);
 
 protected:
-	
+
 	FLOAT m_width;
 	FLOAT m_height;
 };
 
-class D3DCore11 : public D3DCoreBase
+class D3DCore11 : public DGLCore
 {
 public:
 	D3DCore11();
@@ -49,10 +49,9 @@ private:
 	ID3D11RasterizerState* m_rasterState;
 };
 
-class D3DCore10 : public D3DCoreBase
+class D3DCore10 : public DGLCore
 {
 public:
 	D3DCore10();
 
 };
-

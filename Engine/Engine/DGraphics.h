@@ -1,6 +1,6 @@
 #pragma once
-#include "D3DCore.h"
-#include "DImGUI.h"
+#include "DGLCore.h"
+//#include "DImGUI.h"
 
 enum DGraphicsAPI
 {
@@ -8,21 +8,23 @@ enum DGraphicsAPI
 	DGRAPHICS_API_D3D10 = 1,
 };
 
-class DGraphicsCore
+class DGraphics
 {
 public:
-	DGraphicsCore();
-	~DGraphicsCore();
+	DGraphics();
+	~DGraphics();
 	bool Init(int, int, bool, HWND, DGraphicsAPI);
 	bool Render();
 	void Shutdown();
-	ID3D11Device* GetDevice();
-	ID3D11DeviceContext* GetDeviceContext();
+	//ID3D11Device* GetDevice();
+	//ID3D11DeviceContext* GetDeviceContext();
 	LRESULT CALLBACK MessageHandler(HWND, UINT, WPARAM, LPARAM);
 	void GetResolution(FLOAT&, FLOAT&);
+	DGraphicsAPI GetAPI();
 
 private:
 	D3DCore11* m_D3D;
-	DImGUI* m_GUI;
+	DGraphicsAPI m_API;
+	//DImGUI* m_GUI;
 };
 

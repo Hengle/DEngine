@@ -1,5 +1,5 @@
 #include "DLog.h"
-#include "DImGUI.h"
+//#include "DImGUI.h"
 #include "DSystem.h"
 #include "atlstr.h"
 
@@ -85,7 +85,7 @@ void DLog::DrawMsgs()
 	int i;
 	int size = m_logMsgs->size();
 
-	ImGui::Begin("Console");
+	//ImGui::Begin("Console");
 	
 	for (i = 0; i < size && i <= DLOG_MAX_SHOW_LOG_NUMS; i++) {
 		DLogMsg* msg = m_logMsgs->at(i);
@@ -93,7 +93,7 @@ void DLog::DrawMsgs()
 			DrawMsg(msg);
 	}
 	
-	ImGui::End();
+	//ImGui::End();
 }
 
 void DLog::AddLog(DLogMsg * msg)
@@ -106,9 +106,9 @@ void DLog::AddLog(DLogMsg * msg)
 
 void DLog::DrawMsg(DLogMsg * msg)
 {
-	ImVec4 color;
+	//ImVec4 color;
 	
-	if (msg->type == DLogType::Info) {
+	/*if (msg->type == DLogType::Info) {
 		color.x = 1;
 		color.y = 1;
 		color.z = 1;
@@ -125,8 +125,8 @@ void DLog::DrawMsg(DLogMsg * msg)
 		color.y = 0;
 		color.z = 0;
 		color.w = 1;
-	}
-	ImGui::TextColored(color, msg->msg.data());
+	}*/
+	//ImGui::TextColored(color, msg->msg.data());
 }
 
 

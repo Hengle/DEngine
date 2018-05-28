@@ -48,4 +48,3 @@ private:
 	char* m_sceneName;
 	SCENEID m_sceneId;
 };
-

@@ -1,4 +1,5 @@
 #pragma once
+#include <math.h>
 
 #define EPSILNON 0.000001f
 #define D_PI 3.1415926535897f
@@ -100,7 +101,7 @@ public:
 	static float SqrMagnitude(const DVector3&);
 	static void Normalize(const DVector3&, DVector3&);
 	static void Scale(const DVector3&, const DVector3&, DVector3&);
-	static void Cross(const DVector3&, const DVector3&, DVector3&);
+	static void Cross(const DVector3& lhs, const DVector3& rhs, DVector3& out);
 	static void Project(const DVector3&, const DVector3&, DVector3&);
 	static void ProjectOnPlane(const DVector3&, const DVector3&, DVector3&);
 
@@ -156,6 +157,10 @@ public:
 	DQuaterion();
 	DQuaterion(const DQuaterion&);
 	DQuaterion(float, float, float, float);
+	void EulerAngle(float & eulerX, float & eulerY, float & eulerZ);
+	void EulerAngle(DVector3& euler);
+	static void Euler(DQuaterion* rotation, float, float, float);
+	static void Euler(DQuaterion* rotation, const DVector3&);
 
 public:
 	float x, y, z, w;
@@ -182,7 +187,9 @@ public:
 	void TransformPoint(const DVector3&, DVector3&) const;
 	void GetTranspose(DMatrix4x4&) const; 
 
-	//static void Perspective();
+	static void Perspective(DMatrix4x4*, float fov, float aspect, float near, float far);
+	static void Ortho(DMatrix4x4*, float width, float height, float near, float far);
+	static void Identity(DMatrix4x4*);
 	static void Scale(DMatrix4x4*, float, float, float);
 	static void Translate(DMatrix4x4*, float, float, float);
 	static void RotateX(DMatrix4x4*, float);
@@ -190,6 +197,8 @@ public:
 	static void RotateZ(DMatrix4x4*, float);
 	static void Rotate(DMatrix4x4*, const DQuaterion&);
 	static void TRS(DMatrix4x4*, const DVector3&, const DQuaterion&, const DVector3&);
+	static void TRS(DMatrix4x4*, DVector3* forward, DVector3* up, const DVector3&, const DQuaterion&, const DVector3&);
+	static void LookAt(DMatrix4x4*, const DVector3&, const DVector3&, const DVector3&);
 
 public:
 	float m00, m01, m02, m03;
@@ -197,12 +206,6 @@ public:
 	float m20, m21, m22, m23;
 	float m30, m31, m32, m33;
 } DMatrix4x4, *LPDMatrix4x4;
-
-class DMath
-{
-public:
-	static float Clamp();
-};
 
 const DVector2 dvec2_zero = DVector2(0.0f, 0.0f);
 const DVector2 dvec2_one = DVector2(1.0f, 1.0f);

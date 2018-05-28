@@ -1,33 +1,32 @@
-﻿#include "D3DCore.h"
+﻿#include "DGLCore.h"
 
-
-D3DCoreBase::D3DCoreBase()
+DGLCore::DGLCore()
 {
 }
 
 
-D3DCoreBase::~D3DCoreBase()
+DGLCore::~DGLCore()
 {
 }
 
-bool D3DCoreBase::Init(int width, int height, bool, HWND)
+bool DGLCore::Init(int width, int height, bool, HWND)
 {
 	m_width = width;
 	m_height = height;
 	return true;
 }
 
-void D3DCoreBase::GetResolution(FLOAT & width, FLOAT & height)
+void DGLCore::GetResolution(FLOAT & width, FLOAT & height)
 {
 	width = m_width;
 	height = m_height;
 }
 
-D3DCore10::D3DCore10() : D3DCoreBase()
+D3DCore10::D3DCore10() : DGLCore()
 {
 }
 
-D3DCore11::D3DCore11() : D3DCoreBase()
+D3DCore11::D3DCore11() : DGLCore()
 {
 	m_device = 0;
 	m_deviceContext = 0;
@@ -45,7 +44,7 @@ D3DCore11::~D3DCore11()
 
 bool D3DCore11::Init(int width, int height, bool fullScreen, HWND hwnd)
 {
-	D3DCoreBase::Init(width, height, fullScreen, hwnd);
+	DGLCore::Init(width, height, fullScreen, hwnd);
 	IDXGIFactory *factory;
 	HRESULT result;
 	IDXGIAdapter* adapter;

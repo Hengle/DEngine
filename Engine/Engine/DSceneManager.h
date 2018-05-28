@@ -22,4 +22,3 @@ private:
 	DScene *m_currentScene;
 	std::map<SCENEID, DScene*>* m_sceneMap;
 };
-

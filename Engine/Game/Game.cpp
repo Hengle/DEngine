@@ -3,14 +3,22 @@
 
 #include "stdafx.h"
 #include "GameFrame.h"
+#include "DMath.h"
+#include <Windows.h>
+#include <D3DX10math.h>
 using namespace std;
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline, int nCmdShow)
 {
-	GameFrame* frame = new GameFrame();
+	/*GameFrame* frame = new GameFrame();
 	frame->Create();
-	frame->Destroy();
+	frame->Destroy();*/
 
+	D3DXMATRIX proj;
+	D3DXMatrixPerspectiveFovLH(&proj, D_PI / 3.0f, 1.2f, 0.03f, 1000.0f);
+
+	DMatrix4x4 proj2;
+	DMatrix4x4::Perspective(&proj2, D_PI / 3.0f, 1.2f, 0.03f, 1000.0f);
 
 	return 0;
 }

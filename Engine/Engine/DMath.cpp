@@ -1,6 +1,5 @@
 ﻿#include "DMath.h"
 #include <exception>
-#include <math.h>
 #include <Windows.h>
 
 using namespace std;
@@ -183,7 +182,7 @@ float DVector2::Angle(const DVector2 & fromvec, const DVector2 & tovec)
 		v = -1.0f;
 	else if (v > 1.0f)
 		v = 1.0f;
-	return acos(v)*57.29578f;
+	return acosf(v)*57.29578f;
 }
 
 float DVector2::Dot(const DVector2 & lhs, const DVector2 & rhs)
@@ -404,7 +403,7 @@ float DVector3::Angle(const DVector3 & fromvec, const DVector3 & tovec)
 		v = -1.0f;
 	if (v > 1.0f)
 		v = 1.0f;
-	return acos(v) * 57.29578f;
+	return acosf(v) * 57.29578f;
 }
 
 float DVector3::Dot(const DVector3 & lhs, const DVector3 & rhs)
@@ -701,6 +700,80 @@ DQuaterion::DQuaterion(float x, float y, float z, float w)
 	this->w = w;
 }
 
+void DQuaterion::EulerAngle(float & eulerX, float & eulerY, float & eulerZ)
+{
+	long sp = -2.0f*(y*z - w*x);
+
+	if (abs(sp) > 0.9999f)
+	{
+		eulerX = 1.570796f * sp;
+		eulerY = atan2f(-x*z + w*y, 0.5f - y*y - z*z);
+		eulerZ = 0.0f;
+	}
+	else
+	{
+		eulerX = asinf(sp);
+		eulerY = atan2f(x*z + w*y, 0.5f - x*x - y*y);
+		eulerZ = atan2f(x*y + w*z, 0.5f - x*x - z*z);
+	}
+	eulerX *= RAD_TO_DEG;
+	eulerY *= RAD_TO_DEG;
+	eulerZ *= RAD_TO_DEG;
+}
+
+void DQuaterion::EulerAngle(DVector3 & euler)
+{
+	float sp = -2.0f*(y*z - w*x);
+
+	if (fabsf(sp) > 0.9999f)
+	{
+		euler.x = 1.570796f * sp;
+		euler.y = atan2f(-x*z + w*y, 0.5f - y*y - z*z);
+		euler.z = 0.0f;
+	}
+	else
+	{
+		euler.x = asinf(sp);
+		euler.y = atan2f(x*z + w*y, 0.5f - x*x - y*y);
+		euler.z = atan2f(x*y + w*z, 0.5f - x*x - z*z);
+	}
+	euler.x *= RAD_TO_DEG;
+	euler.y *= RAD_TO_DEG;
+	euler.z *= RAD_TO_DEG;
+}
+
+void DQuaterion::Euler(DQuaterion * rotation, float eulerX, float eulerY, float eulerZ)
+{
+	float cosx = cosf(eulerX*DEG_TO_RAD*0.5f);
+	float cosy = cosf(eulerY*DEG_TO_RAD*0.5f);
+	float cosz = cosf(eulerZ*DEG_TO_RAD*0.5f);
+
+	float sinx = sinf(eulerX*DEG_TO_RAD*0.5f);
+	float siny = sinf(eulerY*DEG_TO_RAD*0.5f);
+	float sinz = sinf(eulerZ*DEG_TO_RAD*0.5f);
+
+	rotation->x = cosy*sinx*cosz + siny*cosx*sinz;
+	rotation->y = siny*cosx*cosz - cosy*sinx*sinz;
+	rotation->z = cosy*cosx*sinz - siny*sinx*cosz;
+	rotation->w = cosy*cosx*cosz + siny*sinx*sinz;
+}
+
+void DQuaterion::Euler(DQuaterion * rotation, const DVector3 & euler)
+{
+	float cosx = cosf(euler.x*DEG_TO_RAD*0.5f);
+	float cosy = cosf(euler.y*DEG_TO_RAD*0.5f);
+	float cosz = cosf(euler.z*DEG_TO_RAD*0.5f);
+
+	float sinx = sinf(euler.x*DEG_TO_RAD*0.5f);
+	float siny = sinf(euler.y*DEG_TO_RAD*0.5f);
+	float sinz = sinf(euler.z*DEG_TO_RAD*0.5f);
+
+	rotation->x = cosy*sinx*cosz + siny*cosx*sinz;
+	rotation->y = siny*cosx*cosz - cosy*sinx*sinz;
+	rotation->z = cosy*cosx*sinz - siny*sinx*cosz;
+	rotation->w = cosy*cosx*cosz + siny*sinx*sinz;
+}
+
 DMatrix4x4::DMatrix4x4()
 {
 	m00 = 0.0f; m01 = 0.0f; m02 = 0.0f; m03 = 0.0f;
@@ -959,6 +1032,56 @@ void DMatrix4x4::GetTranspose(DMatrix4x4 & matrix) const
 	matrix.m32 = m23;
 }
 
+void DMatrix4x4::Perspective(DMatrix4x4 * matrix, float fov, float aspect, float nearplane, float farplane)
+{
+	float cotfov = 1.0f/tanf(fov*0.5f);
+	float delta = farplane - nearplane;
+	matrix->m00 = cotfov / aspect;
+	matrix->m01 = 0.0f;
+	matrix->m02 = 0.0f;
+	matrix->m03 = 0.0f;
+
+	matrix->m10 = 0.0f;
+	matrix->m11 = cotfov;
+	matrix->m12 = 0.0f;
+	matrix->m13 = 0.0f;
+
+	matrix->m20 = 0.0f;
+	matrix->m21 = 0.0f;
+	matrix->m22 = farplane / delta;
+	matrix->m23 = 1.0f;
+
+	matrix->m30 = 0.0f;
+	matrix->m31 = 0.0f;
+	matrix->m32 = -1.0f*nearplane*farplane/delta;
+	matrix->m33 = 0.0f;
+}
+
+void DMatrix4x4::Ortho(DMatrix4x4 * matrix, float width, float height, float nearplane, float farplane)
+{
+
+}
+
+void DMatrix4x4::Identity(DMatrix4x4 * matrix)
+{
+	matrix->m00 = 1;
+	matrix->m01 = 0;
+	matrix->m02 = 0;
+	matrix->m03 = 0;
+	matrix->m10 = 0;
+	matrix->m11 = 1;
+	matrix->m12 = 0;
+	matrix->m13 = 0;
+	matrix->m20 = 0;
+	matrix->m21 = 0;
+	matrix->m22 = 1;
+	matrix->m23 = 0;
+	matrix->m30 = 0;
+	matrix->m31 = 0;
+	matrix->m32 = 0;
+	matrix->m33 = 1;
+}
+
 void DMatrix4x4::Scale(DMatrix4x4 * matrix, float x, float y, float z)
 {
 	matrix->m00 = x;
@@ -1007,17 +1130,19 @@ void DMatrix4x4::Translate(DMatrix4x4 * matrix, float x, float y, float z)
 
 void DMatrix4x4::RotateX(DMatrix4x4 * matrix, float angle)
 {
+	float cosag = cosf(angle);
+	float sinag = sinf(angle);
 	matrix->m00 = 1.0f;
 	matrix->m01 = 0.0f;
 	matrix->m02 = 0.0f;
 	matrix->m03 = 0.0f;
 	matrix->m10 = 0.0f;
-	matrix->m11 = cos(angle);
-	matrix->m12 = sin(angle);
+	matrix->m11 = cosag;
+	matrix->m12 = sinag;
 	matrix->m13 = 0.0f;
 	matrix->m20 = 0.0f;
-	matrix->m21 = -sin(angle);
-	matrix->m22 = cos(angle);
+	matrix->m21 = -sinag;
+	matrix->m22 = cosag;
 	matrix->m23 = 0.0f;
 	matrix->m30 = 0.0f;
 	matrix->m31 = 0.0f;
@@ -1027,17 +1152,19 @@ void DMatrix4x4::RotateX(DMatrix4x4 * matrix, float angle)
 
 void DMatrix4x4::RotateY(DMatrix4x4 * matrix, float angle)
 {
-	matrix->m00 = cos(angle);
+	float cosag = cosf(angle);
+	float sinag = sinf(angle);
+	matrix->m00 = cosag;
 	matrix->m01 = 0.0f;
-	matrix->m02 = -sin(angle);
+	matrix->m02 = -sinag;
 	matrix->m03 = 0.0f;
 	matrix->m10 = 0.0f;
 	matrix->m11 = 1.0f;
 	matrix->m12 = 0.0f;
 	matrix->m13 = 0.0f;
-	matrix->m20 = sin(angle);
+	matrix->m20 = sinag;
 	matrix->m21 = 0.0f;
-	matrix->m22 = cos(angle);
+	matrix->m22 = cosag;
 	matrix->m23 = 0.0f;
 	matrix->m30 = 0.0f;
 	matrix->m31 = 0.0f;
@@ -1047,12 +1174,14 @@ void DMatrix4x4::RotateY(DMatrix4x4 * matrix, float angle)
 
 void DMatrix4x4::RotateZ(DMatrix4x4 * matrix, float angle)
 {
-	matrix->m00 = cos(angle);
-	matrix->m01 = sin(angle);
+	float cosag = cosf(angle);
+	float sinag = sinf(angle);
+	matrix->m00 = cosag;
+	matrix->m01 = sinag;
 	matrix->m02 = 0.0f;
 	matrix->m03 = 0.0f;
-	matrix->m10 = -sin(angle);
-	matrix->m11 = cos(angle);
+	matrix->m10 = -sinag;
+	matrix->m11 = cosag;
 	matrix->m12 = 0.0f;
 	matrix->m13 = 0.0f;
 	matrix->m20 = 0.0f;
@@ -1130,5 +1259,93 @@ void DMatrix4x4::TRS(DMatrix4x4 * matrix, const DVector3 & position, const DQuat
 	matrix->m30 = position.x;
 	matrix->m31 = position.y;
 	matrix->m32 = position.z;
+	matrix->m33 = 1.0f;
+}
+
+void DMatrix4x4::TRS(DMatrix4x4 * matrix, DVector3 * forward, DVector3 * up, const DVector3 & position, const DQuaterion & rotation, const DVector3 & scale)
+{
+	float x2 = 2.0f*rotation.x*rotation.x;
+	float y2 = 2.0f*rotation.y*rotation.y;
+	float z2 = 2.0f*rotation.z*rotation.z;
+	float xy = 2.0f*rotation.x*rotation.y;
+	float xz = 2.0f*rotation.x*rotation.z;
+	float xw = 2.0f*rotation.x*rotation.w;
+	float yz = 2.0f*rotation.y*rotation.z;
+	float yw = 2.0f*rotation.y*rotation.w;
+	float zw = 2.0f*rotation.z*rotation.w;
+	float ra = 1.0f - y2 - z2;
+	float rb = xy + zw;
+	float rc = xz - yw;
+	float rd = xy - zw;
+	float re = 1.0f - x2 - z2;
+	float rf = yz + xw;
+	float rg = xz + yw;
+	float rh = yz - xw;
+	float ri = 1.0f - x2 - y2;
+
+	forward->x = rg;
+	forward->y = rh;
+	forward->z = ri;
+
+	up->x = rd;
+	up->y = rd;
+	up->y = rf;
+
+	matrix->m00 = scale.x*ra;
+	matrix->m01 = scale.x*rb;
+	matrix->m02 = scale.x*rc;
+	matrix->m03 = 0.0f;
+	matrix->m10 = scale.y*rd;
+	matrix->m11 = scale.y*re;
+	matrix->m12 = scale.y*rf;
+	matrix->m13 = 0.0f;
+	matrix->m20 = scale.z*rg;
+	matrix->m21 = scale.z*rh;
+	matrix->m22 = scale.z*ri;
+	matrix->m23 = 0.0f;
+	matrix->m30 = position.x;
+	matrix->m31 = position.y;
+	matrix->m32 = position.z;
+	matrix->m33 = 1.0f;
+}
+
+void DMatrix4x4::LookAt(DMatrix4x4 * matrix, const DVector3 & eye, const DVector3 & lookat, const DVector3 & up)
+{
+	DVector3 x, y, z;
+	(lookat - eye).GetNormalized(z);
+	DVector3::Cross(up, z, x);
+	x.Normalize();
+	DVector3::Cross(z, x, y);
+
+	DMatrix4x4 o = DMatrix4x4(x.x, y.x, z.x, 0.0f,
+		x.y, y.y, z.y, 0.0f,
+		x.z, y.z, z.z, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f);
+
+	DMatrix4x4 t = DMatrix4x4(1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		-eye.x, -eye.y, -eye.z, 1.0f);
+
+	DVector3 be = eye*-1.0f;
+
+	matrix->m00 = x.x;
+	matrix->m01 = y.x;
+	matrix->m02 = z.x;
+	matrix->m03 = 0.0f;
+
+	matrix->m10 = x.y;
+	matrix->m11 = y.y;
+	matrix->m12 = z.y;
+	matrix->m13 = 0.0f;
+
+	matrix->m20 = x.z;
+	matrix->m21 = y.z;
+	matrix->m22 = z.z;
+	matrix->m23 = 0.0f;
+
+	matrix->m30 = DVector3::Dot(x, be);
+	matrix->m31 = DVector3::Dot(y, be);
+	matrix->m32 = DVector3::Dot(z, be);
 	matrix->m33 = 1.0f;
 }

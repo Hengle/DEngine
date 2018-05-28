@@ -21,7 +21,7 @@ void DSceneObject::Init()
 
 void DSceneObject::Destroy()
 {
-	
+
 }
 
 void DSceneObject::Update()

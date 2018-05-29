@@ -141,6 +141,21 @@ void DMesh::GetIndex(int index, unsigned long & outIndex)
 	outIndex = m_indexBuffer[index];
 }
 
+bool DMesh::HasNormal()
+{
+	return m_normalOffset > 0;
+}
+
+bool DMesh::HasColor()
+{
+	return m_colorOffset > 0;
+}
+
+bool DMesh::HasUV(int channel)
+{
+	return m_uvOffset > 0;
+}
+
 int DMesh::GetDataSize()
 {
 	return m_dataSize;
@@ -162,6 +177,8 @@ DMesh * DMesh::Create(char* fileName)
 	unsigned long* indices;
 	int vcount, icount, dsize;
 	DModelLoader::LoadObj(fileName, &vertices, &indices, vcount, icount, dsize);
+
+	WCHAR* a = L"sxzxca";
 
 	DMesh* mesh = new DMesh();
 	mesh->m_vertexBuffer = vertices;

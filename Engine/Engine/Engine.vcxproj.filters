@@ -126,6 +126,21 @@
     <ClInclude Include="DModelLoader.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="DLight.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DMaterial.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DShader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DTexture.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DResObject.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DMath.cpp">
@@ -189,6 +204,21 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="DModelLoader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DLight.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DMaterial.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DShader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DTexture.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DResObject.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

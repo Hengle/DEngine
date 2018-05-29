@@ -1015,21 +1015,52 @@ void DMatrix4x4::TransformPoint(const DVector3 & vector, DVector3 & out) const
 
 void DMatrix4x4::GetTranspose(DMatrix4x4 & matrix) const
 {
+	matrix.m00 = m00;
 	matrix.m01 = m10;
 	matrix.m02 = m20;
 	matrix.m03 = m30;
 
 	matrix.m10 = m01;
+	matrix.m11 = m11;
 	matrix.m12 = m21;
 	matrix.m13 = m31;
 
 	matrix.m20 = m02;
 	matrix.m21 = m12;
+	matrix.m22 = m22;
 	matrix.m23 = m32;
 
 	matrix.m30 = m03;
 	matrix.m31 = m13;
 	matrix.m32 = m23;
+	matrix.m33 = m33;
+}
+
+void DMatrix4x4::Transpose()
+{
+	float t01 = m01;
+	m01 = m10;
+	m10 = t01;
+
+	float t02 = m02;
+	m02 = m20;
+	m20 = t02;
+
+	float t03 = m03;
+	m03 = m30;
+	m30 = t03;
+
+	float t12 = m12;
+	m12 = m21;
+	m21 = t12;
+
+	float t13 = m13;
+	m13 = m31;
+	m31 = t13;
+
+	float t23 = m23;
+	m23 = m32;
+	m32 = t23;
 }
 
 void DMatrix4x4::Perspective(DMatrix4x4 * matrix, float fov, float aspect, float nearplane, float farplane)
@@ -1348,4 +1379,42 @@ void DMatrix4x4::LookAt(DMatrix4x4 * matrix, const DVector3 & eye, const DVector
 	matrix->m31 = DVector3::Dot(y, be);
 	matrix->m32 = DVector3::Dot(z, be);
 	matrix->m33 = 1.0f;
+}
+
+void DMatrix4x4::Transpose(DMatrix4x4 * out, const DMatrix4x4 & target)
+{
+	out->m00 = target.m00;
+	out->m11 = target.m11;
+	out->m22 = target.m22;
+	out->m33 = target.m33;
+
+	float t01, t02, t03, t10, t12, t13, t20, t21, t23, t30, t31, t32;
+	t01 = target.m01;
+	t02 = target.m02;
+	t03 = target.m03;
+	t10 = target.m10;
+	t12 = target.m12;
+	t13 = target.m13;
+	t20 = target.m20;
+	t21 = target.m21;
+	t23 = target.m23;
+	t30 = target.m30;
+	t31 = target.m31;
+	t32 = target.m32;
+
+	out->m01 = t10;
+	out->m02 = t20;
+	out->m03 = t30;
+
+	out->m10 = t01;
+	out->m12 = t21;
+	out->m13 = t31;
+
+	out->m20 = t02;
+	out->m21 = t12;
+	out->m23 = t32;
+
+	out->m30 = t03;
+	out->m31 = t13;
+	out->m32 = t23;
 }

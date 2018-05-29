@@ -21,6 +21,24 @@ private:
 	ID3D11Buffer* m_vertexBuffer, *m_indexBuffer;
 };
 
+class DTextureBuffer
+{
+public:
+	DTextureBuffer();
+	~DTextureBuffer();
+	virtual void Release() = 0;
+};
+
+class DTextureBuffer11 : public DTextureBuffer
+{
+public:
+	DTextureBuffer11(ID3D11ShaderResourceView*);
+	virtual void Release();
+
+private:
+	ID3D11ShaderResourceView* m_resourceView;
+};
+
 class DGLCore
 {
 public:
@@ -31,6 +49,7 @@ public:
 	virtual void BeginRender(float, float, float, float) = 0;
 	virtual void EndRender() = 0;
 	virtual DMeshBuffer* CreateMeshBuffer(int vertexCount, int indexCount, int dataSize, const float* vertices, const unsigned long* indices) = 0;
+	virtual DTextureBuffer* CreateTextureBuffer(WCHAR* fileName) = 0;
 
 	virtual void SetBackBufferRenderTarget() = 0;
 	void GetResolution(FLOAT&, FLOAT&);
@@ -51,6 +70,7 @@ public:
 	virtual void BeginRender(float, float, float, float);
 	virtual void EndRender();
 	virtual DMeshBuffer* CreateMeshBuffer(int vertexCount, int indexCount, int dataSize, const float* vertices, const unsigned long* indices);
+	virtual DTextureBuffer* CreateTextureBuffer(WCHAR* fileName);
 
 	virtual void SetBackBufferRenderTarget();
 

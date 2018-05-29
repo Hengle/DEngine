@@ -1,5 +1,7 @@
 ﻿#include "DGLCore.h"
 
+#include <D3DX11.h>
+
 DGLCore::DGLCore()
 {
 }
@@ -408,6 +410,19 @@ DMeshBuffer * D3DCore11::CreateMeshBuffer(int vertexCount, int indexCount, int d
 	return buffer;
 }
 
+DTextureBuffer * D3DCore11::CreateTextureBuffer(WCHAR * fileName)
+{
+	HRESULT result;
+	ID3D11ShaderResourceView* r;
+	result = D3DX11CreateShaderResourceViewFromFile(m_device, fileName, NULL, NULL, &r, NULL);
+	if (FAILED(result))
+	{
+		return NULL;
+	}
+
+	return new DTextureBuffer11(r);
+}
+
 void D3DCore11::SetBackBufferRenderTarget()
 {
 	m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
@@ -436,10 +451,44 @@ DMeshBuffer::~DMeshBuffer()
 {
 }
 
-DMeshBuffer11::DMeshBuffer11(ID3D11Buffer *, ID3D11Buffer *)
+DMeshBuffer11::DMeshBuffer11(ID3D11Buffer * vertexBuffer, ID3D11Buffer * indexBuffer) : DMeshBuffer()
 {
+	m_vertexBuffer = vertexBuffer;
+	m_indexBuffer = indexBuffer;
 }
 
 void DMeshBuffer11::Release()
 {
+	if (m_vertexBuffer != NULL)
+	{
+		m_vertexBuffer->Release();
+		m_vertexBuffer = NULL;
+	}
+	if (m_indexBuffer != NULL)
+	{
+		m_indexBuffer->Release();
+		m_indexBuffer = NULL;
+	}
+}
+
+DTextureBuffer::DTextureBuffer()
+{
+}
+
+DTextureBuffer::~DTextureBuffer()
+{
+}
+
+DTextureBuffer11::DTextureBuffer11(ID3D11ShaderResourceView * resourceView) : DTextureBuffer()
+{
+	m_resourceView = resourceView;
+}
+
+void DTextureBuffer11::Release()
+{
+	if (m_resourceView != NULL)
+	{
+		m_resourceView->Release();
+		m_resourceView = NULL;
+	}
 }

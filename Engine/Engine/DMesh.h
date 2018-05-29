@@ -29,6 +29,9 @@ public:
 	void SetColor(int index, const DColor&);
 	void SetUV(int index, int channel, const DVector3&);
 	void GetIndex(int index, unsigned long& outIndex);
+	bool HasNormal();
+	bool HasColor();
+	bool HasUV(int channel);
 	int GetDataSize();
 	DMeshBuffer* GetBuffer();
 

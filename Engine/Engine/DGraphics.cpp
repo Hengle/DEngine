@@ -76,6 +76,10 @@ void DGraphics::Shutdown()
 	m_D3D = NULL;
 
 }
+DGLCore * DGraphics::GetGLCore()
+{
+	return m_D3D;
+}
 //
 //ID3D11Device * DGraphics::GetDevice()
 //{

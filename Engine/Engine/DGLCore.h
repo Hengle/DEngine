@@ -3,6 +3,24 @@
 #include <dxgi.h>
 #include <d3dcommon.h>
 
+class DMeshBuffer
+{
+public:
+	DMeshBuffer();
+	~DMeshBuffer();
+	virtual void Release() = 0;
+};
+
+class DMeshBuffer11 : public DMeshBuffer
+{
+public:
+	DMeshBuffer11(ID3D11Buffer*, ID3D11Buffer*);
+	virtual void Release();
+
+private:
+	ID3D11Buffer* m_vertexBuffer, *m_indexBuffer;
+};
+
 class DGLCore
 {
 public:
@@ -12,6 +30,7 @@ public:
 	virtual void Destroy() = 0;
 	virtual void BeginRender(float, float, float, float) = 0;
 	virtual void EndRender() = 0;
+	virtual DMeshBuffer* CreateMeshBuffer(int vertexCount, int indexCount, int dataSize, const float* vertices, const unsigned long* indices) = 0;
 
 	virtual void SetBackBufferRenderTarget() = 0;
 	void GetResolution(FLOAT&, FLOAT&);
@@ -31,6 +50,7 @@ public:
 	virtual void Destroy();
 	virtual void BeginRender(float, float, float, float);
 	virtual void EndRender();
+	virtual DMeshBuffer* CreateMeshBuffer(int vertexCount, int indexCount, int dataSize, const float* vertices, const unsigned long* indices);
 
 	virtual void SetBackBufferRenderTarget();
 
@@ -47,6 +67,7 @@ private:
 	ID3D11DepthStencilState* m_depthStencilState;
 	ID3D11DepthStencilView* m_depthStencilView;
 	ID3D11RasterizerState* m_rasterState;
+	D3D11_VIEWPORT m_viewPort;
 };
 
 class D3DCore10 : public DGLCore

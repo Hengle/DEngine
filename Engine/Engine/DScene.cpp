@@ -35,7 +35,7 @@ void DScene::Render()
 		return;
 	if (!m_isLoaded)
 		return;
-	m_camera->BeginRender(deviceContext);
+	m_camera->BeginRender();
 	if (m_displayObjects != NULL) {
 		int i, size;
 		size = m_displayObjects->size();

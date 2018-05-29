@@ -284,6 +284,13 @@ bool D3DCore11::Init(int width, int height, bool fullScreen, HWND hwnd)
 	// Now set the rasterizer state.
 	m_deviceContext->RSSetState(m_rasterState);
 
+	m_viewPort.Width = width;
+	m_viewPort.Height = height;
+	m_viewPort.MaxDepth = 1.0f;
+	m_viewPort.MinDepth = 0.0f;
+	m_viewPort.TopLeftX = 0.0f;
+	m_viewPort.TopLeftY = 0.0f;
+
 	return true;
 }
 
@@ -344,6 +351,8 @@ void D3DCore11::BeginRender(float r, float g, float b, float a)
 	m_deviceContext->ClearRenderTargetView(m_renderTargetView, color);
 
 	m_deviceContext->ClearDepthStencilView(m_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+
+	m_deviceContext->RSSetViewports(1, &m_viewPort);
 }
 
 void D3DCore11::EndRender()
@@ -351,6 +360,52 @@ void D3DCore11::EndRender()
 	if (m_swapChain != NULL) {
 		m_swapChain->Present(0, 0);
 	}
+}
+
+DMeshBuffer * D3DCore11::CreateMeshBuffer(int vertexCount, int indexCount, int dataSize, const float* vertices, const unsigned long* indices)
+{
+	
+	ID3D11Buffer* vbuffer, *ibuffer;
+	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
+	D3D11_SUBRESOURCE_DATA vertexData, indexData;
+	HRESULT result;
+
+	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	vertexBufferDesc.ByteWidth = dataSize * vertexCount;
+	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufferDesc.CPUAccessFlags = 0;
+	vertexBufferDesc.MiscFlags = 0;
+	vertexBufferDesc.StructureByteStride = 0;
+
+	vertexData.pSysMem = vertices;
+	vertexData.SysMemPitch = 0;
+	vertexData.SysMemSlicePitch = 0;
+
+	result = m_device->CreateBuffer(&vertexBufferDesc, &vertexData, &vbuffer);
+	if (FAILED(result))
+	{
+		return NULL;
+	}
+
+	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	indexBufferDesc.ByteWidth = sizeof(unsigned long) * indexCount;
+	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	indexBufferDesc.CPUAccessFlags = 0;
+	indexBufferDesc.MiscFlags = 0;
+	indexBufferDesc.StructureByteStride = 0;
+
+	indexData.pSysMem = indices;
+	indexData.SysMemPitch = 0;
+	indexData.SysMemSlicePitch = 0;
+
+	result = m_device->CreateBuffer(&indexBufferDesc, &indexData, &ibuffer);
+	if (FAILED(result))
+	{
+		return NULL;
+	}
+
+	DMeshBuffer11* buffer = new DMeshBuffer11(vbuffer, ibuffer);
+	return buffer;
 }
 
 void D3DCore11::SetBackBufferRenderTarget()
@@ -371,4 +426,20 @@ ID3D11DeviceContext * D3DCore11::GetDeviceContext()
 ID3D11DepthStencilView * D3DCore11::GetDepthStencilView()
 {
 	return m_depthStencilView;
+}
+
+DMeshBuffer::DMeshBuffer()
+{
+}
+
+DMeshBuffer::~DMeshBuffer()
+{
+}
+
+DMeshBuffer11::DMeshBuffer11(ID3D11Buffer *, ID3D11Buffer *)
+{
+}
+
+void DMeshBuffer11::Release()
+{
 }

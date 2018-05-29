@@ -117,6 +117,15 @@
     <ClInclude Include="DCamera.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="DFrameBase.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DMesh.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DModelLoader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DMath.cpp">
@@ -171,6 +180,15 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="DCamera.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DFrameBase.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DMesh.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DModelLoader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

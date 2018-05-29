@@ -56,6 +56,7 @@ DScene * DSceneManager::LoadScene(SCENEID sceneId)
 		scene->Load();
 		return scene;
 	}
+	return NULL;
 }
 
 DScene * DSceneManager::GetCurrentScene()

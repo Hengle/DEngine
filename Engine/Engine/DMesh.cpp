@@ -178,8 +178,6 @@ DMesh * DMesh::Create(char* fileName)
 	int vcount, icount, dsize;
 	DModelLoader::LoadObj(fileName, &vertices, &indices, vcount, icount, dsize);
 
-	WCHAR* a = L"sxzxca";
-
 	DMesh* mesh = new DMesh();
 	mesh->m_vertexBuffer = vertices;
 	mesh->m_indexBuffer = indices;

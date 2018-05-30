@@ -15,6 +15,7 @@ protected:
 		DMatrix4x4 view;
 		DMatrix4x4 projection;
 	};
+	
 public:
 	DShader(WCHAR*, WCHAR*);
 	~DShader();
@@ -22,6 +23,8 @@ public:
 	virtual void Init(ID3D11Device*);
 	virtual void Destroy();
 	bool Render(ID3D11DeviceContext*, int, DMatrix4x4, DMatrix4x4, DMatrix4x4);
+
+	static DShader* Create(WCHAR*, WCHAR*);
 
 protected:
 	virtual bool InitializeShader(ID3D11Device*, WCHAR*, WCHAR*);

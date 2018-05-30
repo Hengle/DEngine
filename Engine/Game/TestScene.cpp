@@ -83,7 +83,7 @@ void TestScene::OnLoad()
 	//transform->SetEuler(50, -30, 0);
 
 	DMesh* mesh = DMesh::Create("../Res/eboy.obj");
-	DShader* shader = new DShader(L"../Res/color.vs", L"../Res/color.ps");
+	DShader* shader = new DShader(L"../Res/ntest.vs", L"../Res/ntest.ps");
 	//DTexture2D* texture = new DTexture2D(L"../Res/eboy.tif");
 	//DTexture2D* decal = new DTexture2D(L"../Res/decal.jpg");
 	m_obj = new DDisplayObject(mesh, shader);

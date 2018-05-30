@@ -141,6 +141,9 @@
     <ClInclude Include="DResObject.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="D3D11Core.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DMath.cpp">
@@ -219,6 +222,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="DResObject.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11Core.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -119,8 +119,34 @@ bool DShader::InitializeShader(ID3D11Device * device, WCHAR * vsFilename, WCHAR 
 		return false;
 	}
 
-	int byteLength = 0;
-	result = CreateInputLayoutFromShader(vertexShaderBuffer, device, &m_layout, &byteLength);
+	D3D11_INPUT_ELEMENT_DESC polygonLayout[2];
+	unsigned int numElements;
+
+	polygonLayout[0].SemanticName = "NORMAL";
+	polygonLayout[0].SemanticIndex = 0;
+	polygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	polygonLayout[0].InputSlot = 0;
+	polygonLayout[0].AlignedByteOffset = 20;
+	polygonLayout[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	polygonLayout[0].InstanceDataStepRate = 0;
+
+	polygonLayout[1].SemanticName = "POSITION";
+	polygonLayout[1].SemanticIndex = 0;
+	polygonLayout[1].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	polygonLayout[1].InputSlot = 0;
+	polygonLayout[1].AlignedByteOffset = 0;
+	polygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	polygonLayout[1].InstanceDataStepRate = 0;
+
+	// Get a count of the elements in the layout.
+	numElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
+
+	// Create the vertex input layout.
+	result = device->CreateInputLayout(polygonLayout, numElements, vertexShaderBuffer->GetBufferPointer(),
+		vertexShaderBuffer->GetBufferSize(), &m_layout);
+
+	//int byteLength = 0;
+	//result = CreateInputLayoutFromShader(vertexShaderBuffer, device, &m_layout, &byteLength);
 	if (FAILED(result))
 	{
 		return false;

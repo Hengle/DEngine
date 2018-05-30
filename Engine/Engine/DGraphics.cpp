@@ -15,7 +15,7 @@ DGraphics::~DGraphics()
 bool DGraphics::Init(int width, int height, bool fullScreen, HWND hwnd, DGraphicsAPI api)
 {
 	m_API = api;
-	m_D3D = new D3DCore11();
+	m_D3D = new D3D11Core();
 	if (!m_D3D->Init(width, height, fullScreen, hwnd))
 	{
 		return false;

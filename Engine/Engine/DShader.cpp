@@ -119,30 +119,6 @@ bool DShader::InitializeShader(ID3D11Device * device, WCHAR * vsFilename, WCHAR 
 		return false;
 	}
 
-	//// Create the vertex input layout description.
-	//// This setup needs to match the VertexType stucture in the ModelClass and in the shader.
-	//polygonLayout[0].SemanticName = "POSITION";
-	//polygonLayout[0].SemanticIndex = 0;
-	//polygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	//polygonLayout[0].InputSlot = 0;
-	//polygonLayout[0].AlignedByteOffset = 0;
-	//polygonLayout[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	//polygonLayout[0].InstanceDataStepRate = 0;
-
-	//polygonLayout[1].SemanticName = "COLOR";
-	//polygonLayout[1].SemanticIndex = 0;
-	//polygonLayout[1].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-	//polygonLayout[1].InputSlot = 0;
-	//polygonLayout[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-	//polygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	//polygonLayout[1].InstanceDataStepRate = 0;
-
-	//// Get a count of the elements in the layout.
-	//numElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
-
-	// Create the vertex input layout.
-	//result = device->CreateInputLayout(polygonLayout, numElements, vertexShaderBuffer->GetBufferPointer(),
-	//	vertexShaderBuffer->GetBufferSize(), &m_layout);
 	int byteLength = 0;
 	result = CreateInputLayoutFromShader(vertexShaderBuffer, device, &m_layout, &byteLength);
 	if (FAILED(result))
@@ -159,7 +135,8 @@ bool DShader::InitializeShader(ID3D11Device * device, WCHAR * vsFilename, WCHAR 
 
 	// Setup the description of the dynamic matrix constant buffer that is in the vertex shader.
 	matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	matrixBufferDesc.ByteWidth = sizeof(MatrixBufferType);
+	//matrixBufferDesc.ByteWidth = sizeof(MatrixBufferType);
+	matrixBufferDesc.ByteWidth = sizeof(DMatrix4x4) * 3;
 	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	matrixBufferDesc.MiscFlags = 0;
@@ -310,6 +287,14 @@ HRESULT DShader::CreateInputLayoutFromShader(ID3DBlob* pShaderBlob, ID3D11Device
 		//save element desc
 		inputLayoutDesc.push_back(elementDesc);
 	}
+	int msize = sizeof(DMatrix4x4) * 3;
+	for (unsigned int i = 0; i < shaderDesc.ConstantBuffers; ++i)
+	{
+		ID3D11ShaderReflectionConstantBuffer* bf = pVertexShaderReflection->GetConstantBufferByIndex(i);
+		D3D11_SHADER_BUFFER_DESC desc;
+		bf->GetDesc(&desc);
+		UINT siz = desc.Size;
+	}
 	// Try to create Input Layout
 	hr = pD3DDevice->CreateInputLayout(&inputLayoutDesc[0], inputLayoutDesc.size(), pShaderBlob->GetBufferPointer(), pShaderBlob->GetBufferSize(), pInputLayout);
 	//Free allocation shader reflection memory
@@ -323,7 +308,8 @@ bool DShader::SetShaderParameters(ID3D11DeviceContext *deviceContext, DMatrix4x4
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	MatrixBufferType* dataPtr;
+	//MatrixBufferType* dataPtr;
+	DMatrix4x4* dataPtr;
 	unsigned int bufferNumber;
 
 
@@ -340,12 +326,16 @@ bool DShader::SetShaderParameters(ID3D11DeviceContext *deviceContext, DMatrix4x4
 	}
 
 	// Get a pointer to the data in the constant buffer.
-	dataPtr = (MatrixBufferType*)mappedResource.pData;
+	//dataPtr = (MatrixBufferType*)mappedResource.pData;
+	dataPtr = (DMatrix4x4*)mappedResource.pData;
 
 	// Copy the matrices into the constant buffer.
-	dataPtr->world = worldMatrix;
-	dataPtr->view = viewMatrix;
-	dataPtr->projection = projectionMatrix;
+	//dataPtr->world = worldMatrix;
+	//dataPtr->view = viewMatrix;
+	//dataPtr->projection = projectionMatrix;
+	dataPtr[0] = worldMatrix;
+	dataPtr[1] = viewMatrix;
+	dataPtr[2] = projectionMatrix;
 
 	// Unlock the constant buffer.
 	deviceContext->Unmap(m_matrixBuffer, 0);

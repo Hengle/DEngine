@@ -51,8 +51,6 @@ bool DShader::InitializeShader(ID3D11Device * device, WCHAR * vsFilename, WCHAR 
 	ID3D10Blob* errorMessage;
 	ID3D10Blob* vertexShaderBuffer;
 	ID3D10Blob* pixelShaderBuffer;
-	D3D11_INPUT_ELEMENT_DESC polygonLayout[2];
-	unsigned int numElements;
 	D3D11_BUFFER_DESC matrixBufferDesc;
 
 
@@ -121,30 +119,32 @@ bool DShader::InitializeShader(ID3D11Device * device, WCHAR * vsFilename, WCHAR 
 		return false;
 	}
 
-	// Create the vertex input layout description.
-	// This setup needs to match the VertexType stucture in the ModelClass and in the shader.
-	polygonLayout[0].SemanticName = "POSITION";
-	polygonLayout[0].SemanticIndex = 0;
-	polygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	polygonLayout[0].InputSlot = 0;
-	polygonLayout[0].AlignedByteOffset = 0;
-	polygonLayout[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	polygonLayout[0].InstanceDataStepRate = 0;
+	//// Create the vertex input layout description.
+	//// This setup needs to match the VertexType stucture in the ModelClass and in the shader.
+	//polygonLayout[0].SemanticName = "POSITION";
+	//polygonLayout[0].SemanticIndex = 0;
+	//polygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	//polygonLayout[0].InputSlot = 0;
+	//polygonLayout[0].AlignedByteOffset = 0;
+	//polygonLayout[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	//polygonLayout[0].InstanceDataStepRate = 0;
 
-	polygonLayout[1].SemanticName = "COLOR";
-	polygonLayout[1].SemanticIndex = 0;
-	polygonLayout[1].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-	polygonLayout[1].InputSlot = 0;
-	polygonLayout[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-	polygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	polygonLayout[1].InstanceDataStepRate = 0;
+	//polygonLayout[1].SemanticName = "COLOR";
+	//polygonLayout[1].SemanticIndex = 0;
+	//polygonLayout[1].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	//polygonLayout[1].InputSlot = 0;
+	//polygonLayout[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+	//polygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	//polygonLayout[1].InstanceDataStepRate = 0;
 
-	// Get a count of the elements in the layout.
-	numElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
+	//// Get a count of the elements in the layout.
+	//numElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
 
 	// Create the vertex input layout.
-	result = device->CreateInputLayout(polygonLayout, numElements, vertexShaderBuffer->GetBufferPointer(),
-		vertexShaderBuffer->GetBufferSize(), &m_layout);
+	//result = device->CreateInputLayout(polygonLayout, numElements, vertexShaderBuffer->GetBufferPointer(),
+	//	vertexShaderBuffer->GetBufferSize(), &m_layout);
+	int byteLength = 0;
+	result = CreateInputLayoutFromShader(vertexShaderBuffer, device, &m_layout, &byteLength);
 	if (FAILED(result))
 	{
 		return false;
@@ -248,6 +248,77 @@ void DShader::OutputShaderErrorMessage(ID3D10Blob * errorMessage, WCHAR * shader
 	return;
 }
 
+HRESULT DShader::CreateInputLayoutFromShader(ID3DBlob* pShaderBlob, ID3D11Device* pD3DDevice, ID3D11InputLayout** pInputLayout, int* inputLayoutByteLength)
+{
+	// Reflect shader info
+	ID3D11ShaderReflection* pVertexShaderReflection = nullptr;
+	HRESULT hr = S_OK;
+	if (FAILED(D3DReflect(pShaderBlob->GetBufferPointer(), pShaderBlob->GetBufferSize(), IID_ID3D11ShaderReflection, (void**)&pVertexShaderReflection)))
+	{
+		return S_FALSE;
+	}
+
+	// get shader description
+	D3D11_SHADER_DESC shaderDesc;
+	pVertexShaderReflection->GetDesc(&shaderDesc);
+
+	// Read input layout description from shader info
+	unsigned int byteOffset = 0;
+	std::vector<D3D11_INPUT_ELEMENT_DESC> inputLayoutDesc;
+	for (unsigned int i = 0; i< shaderDesc.InputParameters; ++i)
+	{
+		D3D11_SIGNATURE_PARAMETER_DESC paramDesc;
+		pVertexShaderReflection->GetInputParameterDesc(i, &paramDesc);
+		// create input element desc
+		D3D11_INPUT_ELEMENT_DESC elementDesc;
+		elementDesc.SemanticName = paramDesc.SemanticName;
+		elementDesc.SemanticIndex = paramDesc.SemanticIndex;
+		elementDesc.InputSlot = 0;
+		elementDesc.AlignedByteOffset = byteOffset;
+		elementDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		elementDesc.InstanceDataStepRate = 0;
+		// determine DXGI format
+		if (paramDesc.Mask == 1)
+		{
+			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32_UINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32_SINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32_FLOAT;
+			byteOffset += 4;
+		}
+		else if (paramDesc.Mask <= 3)
+		{
+			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32_UINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32_SINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32_FLOAT;
+			byteOffset += 8;
+		}
+		else if (paramDesc.Mask <= 7)
+		{
+			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_UINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_SINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
+			byteOffset += 12;
+		}
+		else if (paramDesc.Mask <= 15)
+		{
+			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_UINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_SINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+			byteOffset += 16;
+		}
+
+		//save element desc
+		inputLayoutDesc.push_back(elementDesc);
+	}
+	// Try to create Input Layout
+	hr = pD3DDevice->CreateInputLayout(&inputLayoutDesc[0], inputLayoutDesc.size(), pShaderBlob->GetBufferPointer(), pShaderBlob->GetBufferSize(), pInputLayout);
+	//Free allocation shader reflection memory
+	pVertexShaderReflection->Release();
+	//record byte length
+	*inputLayoutByteLength = byteOffset;
+	return hr;
+}
+
 bool DShader::SetShaderParameters(ID3D11DeviceContext *deviceContext, DMatrix4x4 worldMatrix, DMatrix4x4 viewMatrix, DMatrix4x4 projectionMatrix)
 {
 	HRESULT result;
@@ -257,9 +328,9 @@ bool DShader::SetShaderParameters(ID3D11DeviceContext *deviceContext, DMatrix4x4
 
 
 	// Transpose the matrices to prepare them for the shader.
-	D3DXMatrixTranspose(&worldMatrix, &worldMatrix);
-	D3DXMatrixTranspose(&viewMatrix, &viewMatrix);
-	D3DXMatrixTranspose(&projectionMatrix, &projectionMatrix);
+	worldMatrix.Transpose();
+	viewMatrix.Transpose();
+	projectionMatrix.Transpose();
 
 	// Lock the constant buffer so it can be written to.
 	result = deviceContext->Map(m_matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
@@ -506,9 +577,9 @@ bool DTexShader::SetShaderParameters(ID3D11DeviceContext *deviceContext, DMatrix
 
 
 	// Transpose the matrices to prepare them for the shader.
-	D3DXMatrixTranspose(&worldMatrix, &worldMatrix);
-	D3DXMatrixTranspose(&viewMatrix, &viewMatrix);
-	D3DXMatrixTranspose(&projectionMatrix, &projectionMatrix);
+	worldMatrix.Transpose();
+	viewMatrix.Transpose();
+	projectionMatrix.Transpose();
 
 	// Lock the constant buffer so it can be written to.
 	result = deviceContext->Map(m_matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
@@ -539,7 +610,7 @@ bool DTexShader::SetShaderParameters(ID3D11DeviceContext *deviceContext, DMatrix
 	return true;
 }
 
-void DTexShader::RenderShader(ID3D11DeviceContext *deviceContext, int indexCount)
+void DTexShader::RenderShader(ID3D11DeviceContext *deviceContext, int indexCount) 
 {
 	deviceContext->IASetInputLayout(m_layout);
 
@@ -786,9 +857,9 @@ bool DLightShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, DMatr
 
 
 	// Transpose the matrices to prepare them for the shader.
-	D3DXMatrixTranspose(&worldMatrix, &worldMatrix);
-	D3DXMatrixTranspose(&viewMatrix, &viewMatrix);
-	D3DXMatrixTranspose(&projectionMatrix, &projectionMatrix);
+	worldMatrix.Transpose();
+	viewMatrix.Transpose();
+	projectionMatrix.Transpose();
 	
 	// Lock the constant buffer so it can be written to.
 	result = deviceContext->Map(m_matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);

@@ -27,6 +27,7 @@ protected:
 	virtual bool InitializeShader(ID3D11Device*, WCHAR*, WCHAR*);
 	virtual void ShutdownShader();
 	void OutputShaderErrorMessage(ID3D10Blob*, WCHAR*);
+	HRESULT CreateInputLayoutFromShader(ID3DBlob*, ID3D11Device*, ID3D11InputLayout**, int*);
 
 	bool SetShaderParameters(ID3D11DeviceContext*, DMatrix4x4, DMatrix4x4, DMatrix4x4);
 	virtual void RenderShader(ID3D11DeviceContext*, int);

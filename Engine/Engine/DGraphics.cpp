@@ -108,3 +108,18 @@ DGraphicsAPI DGraphics::GetAPI()
 	return m_API;
 }
 
+ID3D11Device * DGraphics::GetDevice()
+{
+	return m_D3D->GetDevice();
+}
+
+ID3D11DeviceContext * DGraphics::GetDeviceContext()
+{
+	return m_D3D->GetDeviceContext();
+}
+
+void DGraphics::DrawMesh(DMesh * mesh)
+{
+	DSystem::GetGraphicsMgr()->GetGLCore()->DrawMesh(mesh->GetBuffer(), mesh->GetDataSize());
+}
+

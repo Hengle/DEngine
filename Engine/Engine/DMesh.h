@@ -1,7 +1,7 @@
 #pragma once
 #include "DMath.h"
 #include "DColor.h"
-#include "DGraphics.h"
+#include "DGLCore.h"
 
 enum DMeshDefine
 {

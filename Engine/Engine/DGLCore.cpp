@@ -423,6 +423,25 @@ DTextureBuffer * D3DCore11::CreateTextureBuffer(WCHAR * fileName)
 	return new DTextureBuffer11(r);
 }
 
+void D3DCore11::DrawMesh(const DMeshBuffer * meshBuffer, int dataSize)
+{
+	unsigned int stride;
+	unsigned int offset;
+
+
+	stride = dataSize;
+	offset = 0;
+
+	ID3D11Buffer* vbuffer = ((DMeshBuffer11*)(meshBuffer))->GetVertexBuffer();
+	ID3D11Buffer* ibuffer = ((DMeshBuffer11*)(meshBuffer))->GetIndexBuffer();
+
+	m_deviceContext->IASetVertexBuffers(0, 1, &vbuffer, &stride, &offset);
+
+	m_deviceContext->IASetIndexBuffer(ibuffer, DXGI_FORMAT_R32_UINT, 0);
+
+	m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+}
+
 void D3DCore11::SetBackBufferRenderTarget()
 {
 	m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
@@ -455,6 +474,16 @@ DMeshBuffer11::DMeshBuffer11(ID3D11Buffer * vertexBuffer, ID3D11Buffer * indexBu
 {
 	m_vertexBuffer = vertexBuffer;
 	m_indexBuffer = indexBuffer;
+}
+
+ID3D11Buffer * DMeshBuffer11::GetVertexBuffer()
+{
+	return m_vertexBuffer;
+}
+
+ID3D11Buffer * DMeshBuffer11::GetIndexBuffer()
+{
+	return m_indexBuffer;
 }
 
 void DMeshBuffer11::Release()

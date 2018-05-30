@@ -1,5 +1,6 @@
 #pragma once
 #include "DGLCore.h"
+#include "DMesh.h"
 //#include "DImGUI.h"
 
 enum DGraphicsAPI
@@ -20,6 +21,10 @@ public:
 	LRESULT CALLBACK MessageHandler(HWND, UINT, WPARAM, LPARAM);
 	void GetResolution(FLOAT&, FLOAT&);
 	DGraphicsAPI GetAPI();
+	ID3D11Device * GetDevice();
+	ID3D11DeviceContext* GetDeviceContext();
+
+	static void DrawMesh(DMesh*);
 
 private:
 	D3DCore11* m_D3D;

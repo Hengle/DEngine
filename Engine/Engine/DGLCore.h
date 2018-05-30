@@ -15,6 +15,8 @@ class DMeshBuffer11 : public DMeshBuffer
 {
 public:
 	DMeshBuffer11(ID3D11Buffer*, ID3D11Buffer*);
+	ID3D11Buffer* GetVertexBuffer();
+	ID3D11Buffer* GetIndexBuffer();
 	virtual void Release();
 
 private:
@@ -50,6 +52,7 @@ public:
 	virtual void EndRender() = 0;
 	virtual DMeshBuffer* CreateMeshBuffer(int vertexCount, int indexCount, int dataSize, const float* vertices, const unsigned long* indices) = 0;
 	virtual DTextureBuffer* CreateTextureBuffer(WCHAR* fileName) = 0;
+	virtual void DrawMesh(const DMeshBuffer*, int) = 0;
 
 	virtual void SetBackBufferRenderTarget() = 0;
 	void GetResolution(FLOAT&, FLOAT&);
@@ -71,6 +74,7 @@ public:
 	virtual void EndRender();
 	virtual DMeshBuffer* CreateMeshBuffer(int vertexCount, int indexCount, int dataSize, const float* vertices, const unsigned long* indices);
 	virtual DTextureBuffer* CreateTextureBuffer(WCHAR* fileName);
+	virtual void DrawMesh(const DMeshBuffer*, int);
 
 	virtual void SetBackBufferRenderTarget();
 

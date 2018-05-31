@@ -1,10 +1,13 @@
 #pragma once
 #include "DGLCore.h"
+#include <map>
+#include <vector>
 
 class DMeshBuffer11 : public DMeshBuffer
 {
 public:
-	DMeshBuffer11(ID3D11Buffer*, ID3D11Buffer*);
+	DMeshBuffer11();
+	void Init(ID3D11Device*, int vertexCount, int indexCount, int dataSize, const float* vertices, const unsigned long* indices);
 	ID3D11Buffer* GetVertexBuffer();
 	ID3D11Buffer* GetIndexBuffer();
 	virtual void Release();
@@ -16,11 +19,35 @@ private:
 class DTextureBuffer11 : public DTextureBuffer
 {
 public:
-	DTextureBuffer11(ID3D11ShaderResourceView*);
+	DTextureBuffer11();
+	void Init(ID3D11Device* device, WCHAR* fileName);
 	virtual void Release();
 
 private:
 	ID3D11ShaderResourceView* m_resourceView;
+};
+
+class DShaderBuffer11 :public DShaderBuffer
+{
+public:
+	DShaderBuffer11();
+	~DShaderBuffer11();
+	void Init(ID3D11Device* device, WCHAR*, WCHAR*);
+	virtual unsigned int GetCBufferCount() const;
+	virtual unsigned int GetCBufferIndex(LPCSTR cbuffername) const;
+	virtual void Release();
+
+private:
+	bool InitShader(ID3D11Device*, WCHAR*, WCHAR*);
+	HRESULT InitShaderParams(ID3DBlob*, ID3D11Device*, ID3D11InputLayout**, int*);
+
+private:
+	ID3D11VertexShader* m_vertexShader;
+	ID3D11PixelShader *m_pixelShader;
+	ID3D11InputLayout* m_layout;
+	int m_cbufferCount;
+	std::map<LPCSTR, unsigned int> m_paramIds;
+	std::vector<ID3D11Buffer*> m_paramBuffers;
 };
 
 class D3D11Core : public DGLCore
@@ -34,6 +61,7 @@ public:
 	virtual void EndRender();
 	virtual DMeshBuffer* CreateMeshBuffer(int vertexCount, int indexCount, int dataSize, const float* vertices, const unsigned long* indices);
 	virtual DTextureBuffer* CreateTextureBuffer(WCHAR* fileName);
+	virtual DShaderBuffer* CreateShaderBuffer(WCHAR* vertexShader, WCHAR* pixelShader);
 	virtual void DrawMesh(const DMeshBuffer*, int);
 
 	virtual void SetBackBufferRenderTarget();

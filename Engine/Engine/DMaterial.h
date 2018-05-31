@@ -4,13 +4,19 @@
 class DMaterial
 {
 public:
-	DMaterial();
+	DMaterial(DShader*);
 	~DMaterial();
-	DShader* GetShader();
-private:
-	DShader* m_Shader;
-	UINT m_stencilId;
-	bool m_zwrite;
+	DShader* GetShader() const;
+	template<class T>
+	void SetCBuffer(LPCSTR buffername, T buffer);
+	bool HasCBuffer(LPCSTR buffername);
 
+private:
+	DShader* m_shader;
+	void** m_cbuffers;
 };
 
+template<class T>
+inline void DMaterial::SetCBuffer(LPCSTR buffername, T buffer)
+{
+}

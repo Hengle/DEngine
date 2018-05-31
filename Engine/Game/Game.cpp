@@ -14,12 +14,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline,
 	frame->Create();
 	frame->Destroy();
 
-	/*D3DXMATRIX proj;
-	D3DXMatrixPerspectiveFovLH(&proj, D_PI / 3.0f, 1.2f, 0.03f, 1000.0f);
-
-	DMatrix4x4 proj2;
-	DMatrix4x4::Perspective(&proj2, D_PI / 3.0f, 1.2f, 0.03f, 1000.0f);*/
-
 	return 0;
 }
 

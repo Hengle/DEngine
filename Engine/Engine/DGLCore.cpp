@@ -1,21 +1,5 @@
 ﻿#include "DGLCore.h"
 
-DMeshBuffer::DMeshBuffer()
-{
-}
-
-DMeshBuffer::~DMeshBuffer()
-{
-}
-
-DTextureBuffer::DTextureBuffer()
-{
-}
-
-DTextureBuffer::~DTextureBuffer()
-{
-}
-
 DGLCore::DGLCore()
 {
 }

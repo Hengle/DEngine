@@ -9,6 +9,7 @@ DSystem::DSystem()
 	m_logMgr = 0;
 	m_inputMgr = 0;
 	m_sceneMgr = 0;
+	m_res = 0;
 	m_hInstance = 0;
 	m_hwnd = 0;
 }
@@ -21,6 +22,9 @@ bool DSystem::Init()
 {
 	int width = D_DEFAULT_WIDTH, height = D_DEFAULT_HEIGHT;
 	InitWindow(width, height, false);
+
+	m_res = new DRes();
+	m_res->Init();
 
 	m_inputMgr = new DInput();
 	if (!m_inputMgr->Init(m_hInstance, m_hwnd, width, height))
@@ -114,6 +118,12 @@ void DSystem::Shutdown()
 		delete m_logMgr;
 	}
 	m_logMgr = NULL;
+	if (m_res != NULL)
+	{
+		m_res->Shutdown();
+		delete m_res;
+	}
+	m_res = NULL;
 
 	m_hwnd = NULL;
 	m_applicationName = NULL;
@@ -214,6 +224,11 @@ DTime * DSystem::GetTimeMgr()
 DInput * DSystem::GetInputMgr()
 {
 	return System->m_inputMgr;
+}
+
+DRes * DSystem::GetResMgr()
+{
+	return System->m_res;
 }
 
 void DSystem::Quit()

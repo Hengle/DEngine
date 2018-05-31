@@ -23,7 +23,7 @@ void DDisplayObject::Render()
 		m_Transform->GetLocalToWorld(world);
 		cur->GetViewMatrix(view);
 		cur->GetProjection(projection);
-		m_shader->Render(DSystem::GetGraphicsMgr()->GetDeviceContext(), m_mesh->GetIndexCount(), world, view, projection);
+		//m_shader->Render(DSystem::GetGraphicsMgr()->GetDeviceContext(), m_mesh->GetIndexCount(), world, view, projection);
 	}
 }
 
@@ -32,7 +32,7 @@ void DDisplayObject::Init()
 	DSceneObject::Init();
 	if (m_shader != NULL)
 	{
-		m_shader->Init(DSystem::GetGraphicsMgr()->GetDevice());
+		//m_shader->Init(DSystem::GetGraphicsMgr()->GetDevice());
 	}
 }
 

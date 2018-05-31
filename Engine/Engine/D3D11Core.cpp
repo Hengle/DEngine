@@ -1,10 +1,52 @@
 ﻿#include "D3D11Core.h"
 #include <D3DX11.h>
+#include <d3dcompiler.h>
 
-DMeshBuffer11::DMeshBuffer11(ID3D11Buffer * vertexBuffer, ID3D11Buffer * indexBuffer) : DMeshBuffer()
+DMeshBuffer11::DMeshBuffer11()
 {
-	m_vertexBuffer = vertexBuffer;
-	m_indexBuffer = indexBuffer;
+	m_vertexBuffer = 0;
+	m_indexBuffer = 0;
+}
+
+void DMeshBuffer11::Init(ID3D11Device* device, int vertexCount, int indexCount, int dataSize, const float* vertices, const unsigned long* indices)
+{
+	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
+	D3D11_SUBRESOURCE_DATA vertexData, indexData;
+	HRESULT result;
+
+	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	vertexBufferDesc.ByteWidth = dataSize * vertexCount;
+	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufferDesc.CPUAccessFlags = 0;
+	vertexBufferDesc.MiscFlags = 0;
+	vertexBufferDesc.StructureByteStride = 0;
+
+	vertexData.pSysMem = vertices;
+	vertexData.SysMemPitch = 0;
+	vertexData.SysMemSlicePitch = 0;
+
+	result = device->CreateBuffer(&vertexBufferDesc, &vertexData, &m_vertexBuffer);
+	if (FAILED(result))
+	{
+		return;
+	}
+
+	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	indexBufferDesc.ByteWidth = sizeof(unsigned long) * indexCount;
+	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	indexBufferDesc.CPUAccessFlags = 0;
+	indexBufferDesc.MiscFlags = 0;
+	indexBufferDesc.StructureByteStride = 0;
+
+	indexData.pSysMem = indices;
+	indexData.SysMemPitch = 0;
+	indexData.SysMemSlicePitch = 0;
+
+	result = device->CreateBuffer(&indexBufferDesc, &indexData, &m_indexBuffer);
+	if (FAILED(result))
+	{
+		return;
+	}
 }
 
 ID3D11Buffer * DMeshBuffer11::GetVertexBuffer()
@@ -31,9 +73,19 @@ void DMeshBuffer11::Release()
 	}
 }
 
-DTextureBuffer11::DTextureBuffer11(ID3D11ShaderResourceView * resourceView) : DTextureBuffer()
+DTextureBuffer11::DTextureBuffer11()
 {
-	m_resourceView = resourceView;
+	m_resourceView = 0;
+}
+
+void DTextureBuffer11::Init(ID3D11Device* device, WCHAR* fileName)
+{
+	HRESULT result;
+	result = D3DX11CreateShaderResourceViewFromFile(device, fileName, NULL, NULL, &m_resourceView, NULL);
+	if (FAILED(result))
+	{
+		return;
+	}
 }
 
 void DTextureBuffer11::Release()
@@ -383,61 +435,23 @@ void D3D11Core::EndRender()
 
 DMeshBuffer * D3D11Core::CreateMeshBuffer(int vertexCount, int indexCount, int dataSize, const float* vertices, const unsigned long* indices)
 {
-
-	ID3D11Buffer* vbuffer, *ibuffer;
-	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
-	D3D11_SUBRESOURCE_DATA vertexData, indexData;
-	HRESULT result;
-
-	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	vertexBufferDesc.ByteWidth = dataSize * vertexCount;
-	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	vertexBufferDesc.CPUAccessFlags = 0;
-	vertexBufferDesc.MiscFlags = 0;
-	vertexBufferDesc.StructureByteStride = 0;
-
-	vertexData.pSysMem = vertices;
-	vertexData.SysMemPitch = 0;
-	vertexData.SysMemSlicePitch = 0;
-
-	result = m_device->CreateBuffer(&vertexBufferDesc, &vertexData, &vbuffer);
-	if (FAILED(result))
-	{
-		return NULL;
-	}
-
-	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	indexBufferDesc.ByteWidth = sizeof(unsigned long) * indexCount;
-	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	indexBufferDesc.CPUAccessFlags = 0;
-	indexBufferDesc.MiscFlags = 0;
-	indexBufferDesc.StructureByteStride = 0;
-
-	indexData.pSysMem = indices;
-	indexData.SysMemPitch = 0;
-	indexData.SysMemSlicePitch = 0;
-
-	result = m_device->CreateBuffer(&indexBufferDesc, &indexData, &ibuffer);
-	if (FAILED(result))
-	{
-		return NULL;
-	}
-
-	DMeshBuffer11* buffer = new DMeshBuffer11(vbuffer, ibuffer);
+	DMeshBuffer11* buffer = new DMeshBuffer11();
+	buffer->Init(m_device, vertexCount, indexCount, dataSize, vertices, indices);
 	return buffer;
 }
 
 DTextureBuffer * D3D11Core::CreateTextureBuffer(WCHAR * fileName)
 {
-	HRESULT result;
-	ID3D11ShaderResourceView* r;
-	result = D3DX11CreateShaderResourceViewFromFile(m_device, fileName, NULL, NULL, &r, NULL);
-	if (FAILED(result))
-	{
-		return NULL;
-	}
+	DTextureBuffer11* buffer = new DTextureBuffer11();
+	buffer->Init(m_device, fileName);
+	return buffer;
+}
 
-	return new DTextureBuffer11(r);
+DShaderBuffer * D3D11Core::CreateShaderBuffer(WCHAR * vertexShader, WCHAR * pixelShader)
+{
+	DShaderBuffer11* sbf = new DShaderBuffer11();
+	sbf->Init(m_device, vertexShader, pixelShader);
+	return sbf;
 }
 
 void D3D11Core::DrawMesh(const DMeshBuffer * meshBuffer, int dataSize)
@@ -477,4 +491,287 @@ ID3D11DeviceContext * D3D11Core::GetDeviceContext()
 ID3D11DepthStencilView * D3D11Core::GetDepthStencilView()
 {
 	return m_depthStencilView;
+}
+
+DShaderBuffer11::DShaderBuffer11()
+{
+	m_vertexShader = 0;
+	m_pixelShader = 0;
+	m_layout = 0;
+}
+
+DShaderBuffer11::~DShaderBuffer11()
+{
+}
+
+void DShaderBuffer11::Init(ID3D11Device* device, WCHAR * vsFilename, WCHAR * psFilename)
+{
+	bool result;
+
+	result = InitShader(device, vsFilename, psFilename);
+}
+
+unsigned int DShaderBuffer11::GetCBufferCount() const
+{
+	return 0;
+}
+
+unsigned int DShaderBuffer11::GetCBufferIndex(LPCSTR cbuffername) const
+{
+	return 0;
+}
+
+void DShaderBuffer11::Release()
+{
+	int i;
+	if (m_paramBuffers.size() > 0)
+	{
+		for (i = 0; i < m_paramBuffers.size(); i++)
+		{
+			ID3D11Buffer* buf = m_paramBuffers.at(i);
+			if (buf != NULL)
+			{
+				buf->Release();
+				buf = NULL;
+			}
+		}
+		m_paramBuffers.clear();
+	}
+	m_paramIds.clear();
+
+	if (m_layout)
+	{
+		m_layout->Release();
+		m_layout = 0;
+	}
+
+	if (m_pixelShader)
+	{
+		m_pixelShader->Release();
+		m_pixelShader = 0;
+	}
+
+	if (m_vertexShader)
+	{
+		m_vertexShader->Release();
+		m_vertexShader = 0;
+	}
+}
+
+bool DShaderBuffer11::InitShader(ID3D11Device * device, WCHAR * vsFilename, WCHAR * psFilename)
+{
+	HRESULT result;
+	ID3D10Blob* errorMessage;
+	ID3D10Blob* vertexShaderBuffer;
+	ID3D10Blob* pixelShaderBuffer;
+
+
+	errorMessage = 0;
+	vertexShaderBuffer = 0;
+	pixelShaderBuffer = 0;
+
+	result = D3DX11CompileFromFile(vsFilename, NULL, NULL, "ColorVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
+		&vertexShaderBuffer, &errorMessage, NULL);
+	if (FAILED(result))
+	{
+		if (errorMessage)
+		{
+			//OutputShaderErrorMessage(errorMessage, vsFilename);
+		}
+		else
+		{
+			/*char s[1024];
+			_bstr_t b(vsFilename);
+			char* fname = b;
+			sprintf_s(s, "Missing Vertex Shader File:%s", fname);
+			DLog::Err(s);*/
+		}
+
+		return false; 
+	}
+
+	result = D3DX11CompileFromFile(psFilename, NULL, NULL, "ColorPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
+		&pixelShaderBuffer, &errorMessage, NULL);
+	if (FAILED(result))
+	{
+		if (errorMessage)
+		{
+			//OutputShaderErrorMessage(errorMessage, psFilename);
+		}
+		else
+		{
+			/*char s[1024];
+			_bstr_t b(psFilename);
+			char* fname = b;
+			sprintf_s(s, "Missing Pixel Shader File:%s", fname);
+			DLog::Err(s);*/
+		}
+
+		return false;
+	}
+
+	result = device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &m_vertexShader);
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	result = device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &m_pixelShader);
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	// Create the vertex input layout.
+
+	int byteLength = 0;
+	result = InitShaderParams(vertexShaderBuffer, device, &m_layout, &byteLength);
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	vertexShaderBuffer->Release();
+	vertexShaderBuffer = 0;
+
+	pixelShaderBuffer->Release();
+	pixelShaderBuffer = 0;
+
+	/*char s[1024];
+	_bstr_t b(vsFilename);
+	char* fname = b;
+	sprintf_s(s, "Shader Load Complie Success! (%s)", fname);
+	DLog::Info(s);*/
+
+	return true;
+}
+
+HRESULT DShaderBuffer11::InitShaderParams(ID3DBlob* pShaderBlob, ID3D11Device* pD3DDevice, ID3D11InputLayout** pInputLayout, int* inputLayoutByteLength)
+{
+	// Reflect shader info
+	ID3D11ShaderReflection* pVertexShaderReflection = nullptr;
+	D3D11_BUFFER_DESC paramBufferDesc;
+	HRESULT hr = S_OK;
+	m_cbufferCount = 0;
+	if (FAILED(D3DReflect(pShaderBlob->GetBufferPointer(), pShaderBlob->GetBufferSize(), IID_ID3D11ShaderReflection, (void**)&pVertexShaderReflection)))
+	{
+		return S_FALSE;
+	}
+
+	// get shader description
+	D3D11_SHADER_DESC shaderDesc;
+	pVertexShaderReflection->GetDesc(&shaderDesc);
+
+	// Read input layout description from shader info
+	unsigned int byteOffset = 0;
+	std::vector<D3D11_INPUT_ELEMENT_DESC> inputLayoutDesc;
+	for (unsigned int i = 0; i< shaderDesc.InputParameters; ++i)
+	{
+		D3D11_SIGNATURE_PARAMETER_DESC paramDesc;
+		pVertexShaderReflection->GetInputParameterDesc(i, &paramDesc);
+		// create input element desc
+		D3D11_INPUT_ELEMENT_DESC elementDesc;
+		elementDesc.SemanticName = paramDesc.SemanticName;
+		elementDesc.SemanticIndex = paramDesc.SemanticIndex;
+		elementDesc.InputSlot = 0;
+		//elementDesc.AlignedByteOffset = byteOffset;
+		elementDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		elementDesc.InstanceDataStepRate = 0;
+
+		LPCSTR sname = paramDesc.SemanticName;
+		if (lstrcmpA(sname, "POSITION") == 0)
+		{
+			elementDesc.AlignedByteOffset = 0;
+			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_UINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_SINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
+			byteOffset += 12;
+		}
+		else if (lstrcmpA(sname, "TEXCOORD") == 0)
+		{
+			elementDesc.AlignedByteOffset = 12;
+			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32_UINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32_SINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32_FLOAT;
+			byteOffset += 8;
+		}
+		else if (lstrcmpA(sname, "NORMAL") == 0)
+		{
+			elementDesc.AlignedByteOffset = 20;
+			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_UINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_SINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
+			byteOffset += 12;
+		}
+		else if (lstrcmpA(sname, "COLOR") == 0)
+		{
+			elementDesc.AlignedByteOffset = 32;
+			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_UINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_SINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+			byteOffset += 16;
+		}
+		//// determine DXGI format
+		//if (paramDesc.Mask == 1)
+		//{
+		//	if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32_UINT;
+		//	else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32_SINT;
+		//	else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32_FLOAT;
+		//	byteOffset += 4;
+		//}
+		//else if (paramDesc.Mask <= 3)
+		//{
+		//	if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32_UINT;
+		//	else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32_SINT;
+		//	else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32_FLOAT;
+		//	byteOffset += 8;
+		//}
+		//else if (paramDesc.Mask <= 7)
+		//{
+		//	if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_UINT;
+		//	else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_SINT;
+		//	else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
+		//	byteOffset += 12;
+		//}
+		//else if (paramDesc.Mask <= 15)
+		//{
+		//	if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_UINT;
+		//	else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_SINT;
+		//	else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		//	byteOffset += 16;
+		//}
+
+		//save element desc
+		inputLayoutDesc.push_back(elementDesc);
+	}
+
+	for (unsigned int i = 0; i < shaderDesc.ConstantBuffers; ++i)
+	{
+		ID3D11ShaderReflectionConstantBuffer* bf = pVertexShaderReflection->GetConstantBufferByIndex(i);
+		D3D11_SHADER_BUFFER_DESC desc;
+		bf->GetDesc(&desc);
+
+		paramBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+		paramBufferDesc.ByteWidth = desc.Size;
+		paramBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		paramBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		paramBufferDesc.MiscFlags = 0;
+		paramBufferDesc.StructureByteStride = 0;
+
+		ID3D11Buffer* buffer;
+
+		pD3DDevice->CreateBuffer(&paramBufferDesc, NULL, &buffer);
+
+		m_paramIds[desc.Name] = m_paramBuffers.size();
+		m_paramBuffers.push_back(buffer);
+
+		m_cbufferCount += 1;
+	}
+	// Try to create Input Layout
+	hr = pD3DDevice->CreateInputLayout(&inputLayoutDesc[0], inputLayoutDesc.size(), pShaderBlob->GetBufferPointer(), pShaderBlob->GetBufferSize(), pInputLayout);
+	//Free allocation shader reflection memory
+	pVertexShaderReflection->Release();
+	//record byte length
+	*inputLayoutByteLength = byteOffset;
+	return hr;
 }

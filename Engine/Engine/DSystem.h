@@ -3,6 +3,7 @@
 #include "DSceneManager.h"
 #include "DLog.h"
 #include "DInput.h"
+#include "DRes.h"
 
 #define D_DEFAULT_FULL_SCREEN    FALSE
 #define D_DEFAULT_WIDTH          1024
@@ -27,6 +28,7 @@ public:
 	static DLog* GetLogMgr();
 	static DTime* GetTimeMgr();
 	static DInput* GetInputMgr();
+	static DRes* GetResMgr();
 
 	static void Quit();
 
@@ -41,6 +43,7 @@ private:
 	DSceneManager* m_sceneMgr;
 	DLog* m_logMgr;
 	DInput* m_inputMgr;
+	DRes* m_res;
 	HINSTANCE m_hInstance;
 	LPCWSTR m_applicationName;
 	LPCWSTR m_title;

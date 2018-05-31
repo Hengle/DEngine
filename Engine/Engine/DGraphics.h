@@ -1,6 +1,8 @@
 #pragma once
 #include "D3D11Core.h"
 #include "DMesh.h"
+#include "DMaterial.h"
+#include "DCamera.h"
 //#include "DImGUI.h"
 
 enum DGraphicsAPI
@@ -34,7 +36,7 @@ public:
 	ID3D11Device * GetDevice();
 	ID3D11DeviceContext* GetDeviceContext();
 
-	static void DrawMesh(DMesh*);
+	static void DrawMesh(const DMesh*, const DMatrix4x4&, const DMaterial*, const DCamera*);
 
 private:
 	D3D11Core* m_D3D;

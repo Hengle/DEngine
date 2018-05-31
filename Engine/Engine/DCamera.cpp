@@ -75,42 +75,42 @@ void DCamera::Destroy()
 	DSceneObject::Destroy();
 }
 
-void DCamera::GetViewMatrix(DMatrix4x4& mOut)
+void DCamera::GetViewMatrix(DMatrix4x4& mOut) const
 {
 	mOut = m_viewMatrix;
 }
 
-void DCamera::GetProjection(DMatrix4x4& mOut)
+void DCamera::GetProjection(DMatrix4x4& mOut)const
 {
 	mOut = m_projection;
 }
 
-float DCamera::GetFieldOfView()
+float DCamera::GetFieldOfView()const
 {
 	return m_fieldOfView;
 }
 
-float DCamera::GetNear()
+float DCamera::GetNear()const
 {
 	return m_near;
 }
 
-float DCamera::GetFar()
+float DCamera::GetFar()const
 {
 	return m_far;
 }
 
-float DCamera::GetAspect()
+float DCamera::GetAspect()const
 {
 	return m_aspect;
 }
 
-float DCamera::GetOrthoSize()
+float DCamera::GetOrthoSize()const
 {
 	return m_orthoSize;
 }
 
-bool DCamera::IsOrthographic()
+bool DCamera::IsOrthographic()const
 {
 	return m_ortho;
 }

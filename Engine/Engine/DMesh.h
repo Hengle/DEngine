@@ -18,22 +18,22 @@ private:
 public:
 	~DMesh();
 	void Destroy();
-	int GetIndexCount();
-	int GetVertexCount();
-	void GetVertex(int index, DVector3* vertex);
-	void GetNormal(int index, DVector3* normal);
-	void GetColor(int index, DColor* color);
-	void GetUV(int index, int channel, DVector2* uv);
+	int GetIndexCount() const;
+	int GetVertexCount() const;
+	void GetVertex(int index, DVector3* vertex) const;
+	void GetNormal(int index, DVector3* normal) const;
+	void GetColor(int index, DColor* color) const;
+	void GetUV(int index, int channel, DVector2* uv) const;
 	void SetVertex(int index, const DVector3&);
 	void SetNormal(int index, const DVector3&);
 	void SetColor(int index, const DColor&);
 	void SetUV(int index, int channel, const DVector3&);
-	void GetIndex(int index, unsigned long& outIndex);
-	bool HasNormal();
-	bool HasColor();
-	bool HasUV(int channel);
-	int GetDataSize();
-	DMeshBuffer* GetBuffer();
+	void GetIndex(int index, unsigned long& outIndex) const;
+	bool HasNormal() const;
+	bool HasColor() const;
+	bool HasUV(int channel) const;
+	int GetDataSize() const;
+	DMeshBuffer* GetBuffer() const;
 
 	static DMesh* Create(DMeshDefine meshDefine);
 	static DMesh*Create(char* fileName);

@@ -42,17 +42,17 @@ void DMesh::Destroy()
 	}
 }
 
-int DMesh::GetIndexCount()
+int DMesh::GetIndexCount() const
 {
 	return m_indexCount;
 }
 
-int DMesh::GetVertexCount()
+int DMesh::GetVertexCount() const
 {
 	return m_vertexCount;
 }
 
-void DMesh::GetVertex(int index, DVector3 * vertex)
+void DMesh::GetVertex(int index, DVector3 * vertex) const
 {
 	float x = m_vertexBuffer[index*m_vertexOffset];
 	float y = m_vertexBuffer[index*m_vertexOffset + 1];
@@ -62,7 +62,7 @@ void DMesh::GetVertex(int index, DVector3 * vertex)
 	vertex->z = z;
 }
 
-void DMesh::GetNormal(int index, DVector3 * normal)
+void DMesh::GetNormal(int index, DVector3 * normal) const
 {
 	if (m_normalOffset <= 0)
 		return;
@@ -74,7 +74,7 @@ void DMesh::GetNormal(int index, DVector3 * normal)
 	normal->z = z;
 }
 
-void DMesh::GetColor(int index, DColor * color)
+void DMesh::GetColor(int index, DColor * color) const
 {
 	if (m_colorOffset <= 0)
 		return;
@@ -88,7 +88,7 @@ void DMesh::GetColor(int index, DColor * color)
 	color->a = a;
 }
 
-void DMesh::GetUV(int index, int channel, DVector2 * uv)
+void DMesh::GetUV(int index, int channel, DVector2 * uv) const
 {
 	if (m_uvOffset <= 0)
 		return;
@@ -136,32 +136,32 @@ void DMesh::SetUV(int index, int channel, const DVector3 & uv)
 	m_vertexChanged = true;
 }
 
-void DMesh::GetIndex(int index, unsigned long & outIndex)
+void DMesh::GetIndex(int index, unsigned long & outIndex) const
 {
 	outIndex = m_indexBuffer[index];
 }
 
-bool DMesh::HasNormal()
+bool DMesh::HasNormal() const
 {
 	return m_normalOffset > 0;
 }
 
-bool DMesh::HasColor()
+bool DMesh::HasColor() const
 {
 	return m_colorOffset > 0;
 }
 
-bool DMesh::HasUV(int channel)
+bool DMesh::HasUV(int channel) const
 {
 	return m_uvOffset > 0;
 }
 
-int DMesh::GetDataSize()
+int DMesh::GetDataSize() const
 {
 	return m_dataSize;
 }
 
-DMeshBuffer * DMesh::GetBuffer()
+DMeshBuffer * DMesh::GetBuffer() const
 {
 	return m_meshBuffer;
 }

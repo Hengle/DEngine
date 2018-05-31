@@ -6,16 +6,20 @@
 class DMeshBuffer
 {
 public:
-	DMeshBuffer();
-	~DMeshBuffer();
 	virtual void Release() = 0;
 };
 
 class DTextureBuffer
 {
 public:
-	DTextureBuffer();
-	~DTextureBuffer();
+	virtual void Release() = 0;
+};
+
+class DShaderBuffer
+{
+public:
+	virtual unsigned int GetCBufferCount() const = 0;
+	virtual unsigned int GetCBufferIndex(LPCSTR cbuffername) const = 0;
 	virtual void Release() = 0;
 };
 
@@ -30,6 +34,7 @@ public:
 	virtual void EndRender() = 0;
 	virtual DMeshBuffer* CreateMeshBuffer(int vertexCount, int indexCount, int dataSize, const float* vertices, const unsigned long* indices) = 0;
 	virtual DTextureBuffer* CreateTextureBuffer(WCHAR* fileName) = 0;
+	virtual DShaderBuffer* CreateShaderBuffer(WCHAR* vertexShader, WCHAR* pixelShader) = 0;
 	virtual void DrawMesh(const DMeshBuffer*, int) = 0;
 
 	virtual void SetBackBufferRenderTarget() = 0;

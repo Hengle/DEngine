@@ -69,69 +69,77 @@ void TestScene::OnGUI()
 
 void TestScene::OnLoad()
 {
-	DCamera* cam = new DCamera();
-	DTransform* transform;
+	DShader* testshader = DShader::Create(L"../Res/ntest.vs", L"../Res/ntest.ps");
+	if (testshader != NULL)
+	{
+		testshader->Destroy();
+		delete testshader;
+		testshader = NULL;
+	}
 
-	transform = cam->GetTransform();
-	transform->SetPosition(-5.700611f, -3.575672f, -3.757332f);
-	transform->SetEuler(20.834f, 11.0f, 0.0f);
-	SetCamera(cam);
+	//DCamera* cam = new DCamera();
+	//DTransform* transform;
 
-	//m_light = new DLight();
-	//m_light->SetColor(1, 1, 1, 1);
-	//transform = m_light->GetTransform();
-	//transform->SetEuler(50, -30, 0);
+	//transform = cam->GetTransform();
+	//transform->SetPosition(-5.700611f, -3.575672f, -3.757332f);
+	//transform->SetEuler(20.834f, 11.0f, 0.0f);
+	//SetCamera(cam);
 
-	DMesh* mesh = DMesh::Create("../Res/eboy.obj");
-	DShader* shader = new DShader(L"../Res/ntest.vs", L"../Res/ntest.ps");
-	//DTexture2D* texture = new DTexture2D(L"../Res/eboy.tif");
-	//DTexture2D* decal = new DTexture2D(L"../Res/decal.jpg");
-	m_obj = new DDisplayObject(mesh, shader);
-	transform = m_obj->GetTransform();
-	transform->SetPosition(-5.226904f, -4.441468f, -1.499356f);
-	transform->SetEuler(40.269f, 83.385f, 41.898f);
-	transform->SetScale(0.5f, 0.5f, 0.5f);
+	////m_light = new DLight();
+	////m_light->SetColor(1, 1, 1, 1);
+	////transform = m_light->GetTransform();
+	////transform->SetEuler(50, -30, 0);
+
+	//DMesh* mesh = DMesh::Create("../Res/eboy.obj");
+	//DShader* shader = new DShader(L"../Res/ntest.vs", L"../Res/ntest.ps");
+	////DTexture2D* texture = new DTexture2D(L"../Res/eboy.tif");
+	////DTexture2D* decal = new DTexture2D(L"../Res/decal.jpg");
+	//m_obj = new DDisplayObject(mesh, shader);
+	//transform = m_obj->GetTransform();
+	//transform->SetPosition(-5.226904f, -4.441468f, -1.499356f);
+	//transform->SetEuler(40.269f, 83.385f, 41.898f);
+	//transform->SetScale(0.5f, 0.5f, 0.5f);
 
 
-	AddDisplayObject(m_obj);
+	//AddDisplayObject(m_obj);
 
-	//DLog::Err(u8"打印个日志测试");
-	//DLog::Warn("Log Test");
+	////DLog::Err(u8"打印个日志测试");
+	////DLog::Warn("Log Test");
 
-	//m_Model = new ModelClass;
-	//
+	////m_Model = new ModelClass;
+	////
 
-	//m_Model->Initialize(DSystem::GetGraphicsCore()->GetDevice());
+	////m_Model->Initialize(DSystem::GetGraphicsCore()->GetDevice());
 
-	//m_ColorShader = new ColorShaderClass;
+	////m_ColorShader = new ColorShaderClass;
 
-	//m_ColorShader->Initialize(DSystem::GetGraphicsCore()->GetDevice(), DSystem::GetHWND());
+	////m_ColorShader->Initialize(DSystem::GetGraphicsCore()->GetDevice(), DSystem::GetHWND());
 
-	//DTransform* trs = new DTransform();
-	////trs->SetEuler(-56.442f, 22.605f, 7.83f);
-	//trs->SetPosition(2.51f, 1.48f, -3.05f);
-	//trs->SetRotation(-0.3052f, 0.3219f, 0.4695f, 0.7634f);
-	//trs->SetScale(0.5f, 1.5f, 1.f);
+	////DTransform* trs = new DTransform();
+	//////trs->SetEuler(-56.442f, 22.605f, 7.83f);
+	////trs->SetPosition(2.51f, 1.48f, -3.05f);
+	////trs->SetRotation(-0.3052f, 0.3219f, 0.4695f, 0.7634f);
+	////trs->SetScale(0.5f, 1.5f, 1.f);
 
-	////D3DXQUATERNION rot;
-	////trs->GetRotation(rot);
-	//D3DXMATRIX ltw;
-	//D3DXVECTOR3 up, forward, right;
-	//trs->GetLocalToWorld(ltw);
-	//trs->GetUp(up);
-	//trs->GetForward(forward);
-	//trs->GetRight(right);
+	//////D3DXQUATERNION rot;
+	//////trs->GetRotation(rot);
+	////D3DXMATRIX ltw;
+	////D3DXVECTOR3 up, forward, right;
+	////trs->GetLocalToWorld(ltw);
+	////trs->GetUp(up);
+	////trs->GetForward(forward);
+	////trs->GetRight(right);
 
-	//delete trs;
-	//trs = NULL;
+	////delete trs;
+	////trs = NULL;
 
-	//DLog::Info("casdfaq");
-	//DLog::Err("xasw");
-	//DLog::Warn("xaasdfaqwerasdfzxcvasdfqwerasdfzxcvxzcvasdfqwerasdfasdfzxcvzxcasdfwqw2");
-	//DLog::Info("4");
-	//DLog::Info("5");
-	//DLog::Info("6");
-	//DLog::Info("7");
+	////DLog::Info("casdfaq");
+	////DLog::Err("xasw");
+	////DLog::Warn("xaasdfaqwerasdfzxcvasdfqwerasdfzxcvxzcvasdfqwerasdfasdfzxcvzxcasdfwqw2");
+	////DLog::Info("4");
+	////DLog::Info("5");
+	////DLog::Info("6");
+	////DLog::Info("7");
 }
 
 void TestScene::OnUnLoad()

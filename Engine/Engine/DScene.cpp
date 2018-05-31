@@ -35,7 +35,8 @@ void DScene::Render()
 		return;
 	if (!m_isLoaded)
 		return;
-	m_camera->BeginRender();
+	if (m_camera != NULL)
+		m_camera->BeginRender();
 	if (m_displayObjects != NULL) {
 		int i, size;
 		size = m_displayObjects->size();
@@ -45,7 +46,8 @@ void DScene::Render()
 		}
 	}
 	OnRender();
-	m_camera->EndRender();
+	if (m_camera != NULL)
+		m_camera->EndRender();
 }
 
 void DScene::Update()
@@ -54,7 +56,8 @@ void DScene::Update()
 		return;
 	if (!m_isLoaded)
 		return;
-	m_camera->Update();
+	if (m_camera != NULL)
+		m_camera->Update();
 	if (m_displayObjects != NULL) {
 		int i, size;
 		size = m_displayObjects->size();
@@ -72,7 +75,8 @@ void DScene::FixedUpdate()
 		return;
 	if (!m_isLoaded)
 		return;
-	m_camera->FixedUpdate();
+	if (m_camera != NULL)
+		m_camera->FixedUpdate();
 	if (m_displayObjects != NULL) {
 		int i, size;
 		size = m_displayObjects->size();

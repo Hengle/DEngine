@@ -118,8 +118,11 @@ ID3D11DeviceContext * DGraphics::GetDeviceContext()
 	return m_D3D->GetDeviceContext();
 }
 
-void DGraphics::DrawMesh(DMesh * mesh)
+void DGraphics::DrawMesh(const DMesh * mesh, const DMatrix4x4 & matrix, const DMaterial * material, const DCamera * camera)
 {
 	DSystem::GetGraphicsMgr()->GetGLCore()->DrawMesh(mesh->GetBuffer(), mesh->GetDataSize());
+	DMatrix4x4 view, proj;
+	camera->GetViewMatrix(view);
+	camera->GetProjection(proj);
 }
 

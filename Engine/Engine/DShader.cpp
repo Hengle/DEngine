@@ -28,3 +28,13 @@ void DShader::Destroy()
 		m_ShaderBuffer = NULL;
 	}
 }
+
+unsigned int DShader::GetCBufferCount() const
+{ 
+	return m_ShaderBuffer->GetCBufferCount();
+}
+
+int DShader::GetCBufferIndex(LPCSTR cbufferName) const
+{
+	return m_ShaderBuffer->GetCBufferIndex(cbufferName);
+}

@@ -513,12 +513,16 @@ void DShaderBuffer11::Init(ID3D11Device* device, WCHAR * vsFilename, WCHAR * psF
 
 unsigned int DShaderBuffer11::GetCBufferCount() const
 {
-	return 0;
+	return m_cbufferCount;
 }
 
-unsigned int DShaderBuffer11::GetCBufferIndex(LPCSTR cbuffername) const
+int DShaderBuffer11::GetCBufferIndex(LPCSTR cbuffername) const
 {
-	return 0;
+	if (m_paramIds.find(cbuffername) != m_paramIds.end()) 
+	{
+		return m_paramIds.at(cbuffername);
+	}
+	return -1;
 }
 
 void DShaderBuffer11::Release()

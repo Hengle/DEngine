@@ -19,7 +19,7 @@ class DShaderBuffer
 {
 public:
 	virtual unsigned int GetCBufferCount() const = 0;
-	virtual unsigned int GetCBufferIndex(LPCSTR cbuffername) const = 0;
+	virtual int GetCBufferIndex(LPCSTR cbuffername) const = 0;
 	virtual void Release() = 0;
 };
 

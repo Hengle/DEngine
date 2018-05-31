@@ -34,7 +34,7 @@ public:
 	~DShaderBuffer11();
 	void Init(ID3D11Device* device, WCHAR*, WCHAR*);
 	virtual unsigned int GetCBufferCount() const;
-	virtual unsigned int GetCBufferIndex(LPCSTR cbuffername) const;
+	virtual int GetCBufferIndex(LPCSTR cbuffername) const;
 	virtual void Release();
 
 private:
@@ -46,7 +46,7 @@ private:
 	ID3D11PixelShader *m_pixelShader;
 	ID3D11InputLayout* m_layout;
 	int m_cbufferCount;
-	std::map<LPCSTR, unsigned int> m_paramIds;
+	std::map<LPCSTR, int> m_paramIds;
 	std::vector<ID3D11Buffer*> m_paramBuffers;
 };
 

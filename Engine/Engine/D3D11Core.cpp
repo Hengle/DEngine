@@ -1,4 +1,5 @@
 ﻿#include "D3D11Core.h"
+#include "DSystem.h"
 #include <D3DX11.h>
 #include <d3dcompiler.h>
 
@@ -523,6 +524,37 @@ int DShaderBuffer11::GetCBufferIndex(LPCSTR cbuffername) const
 		return m_paramIds.at(cbuffername);
 	}
 	return -1;
+}
+
+HRESULT DShaderBuffer11::ApplyParam(void * buffer, int index)
+{
+	void* dataPtr;
+	unsigned int bufferNumber;
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+
+	D3D11Core* core = (D3D11Core*)DSystem::GetGraphicsMgr()->GetGLCore();
+	ID3D11Buffer* pbuffer = m_paramBuffers[index];
+
+	HRESULT result = core->GetDeviceContext()->Map(pbuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	// Get a pointer to the data in the constant buffer.
+	dataPtr = (void*)mappedResource.pData;
+
+	// Copy the matrices into the constant buffer.
+	(&dataPtr) = &buffer;
+
+	// Unlock the constant buffer.
+	core->GetDeviceContext()->Unmap(pbuffer, 0);
+
+	// Set the position of the constant buffer in the vertex shader.
+	bufferNumber = 0;
+
+	// Now set the constant buffer in the vertex shader with the updated values.
+	core->GetDeviceContext()->VSSetConstantBuffers(bufferNumber, 1, &pbuffer);
 }
 
 void DShaderBuffer11::Release()

@@ -14,6 +14,10 @@ public:
 	virtual void Destroy();
 
 private:
+	void SetParams();
+	void RenderShader();
+
+private:
 	DShader* m_shader;
 	void** m_cbuffers;
 };

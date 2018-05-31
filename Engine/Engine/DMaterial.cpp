@@ -24,12 +24,22 @@ bool DMaterial::HasCBuffer(LPCSTR buffername)
 
 void DMaterial::Draw()
 {
+	SetParams();
+	RenderShader();
 }
 
 void DMaterial::Destroy()
 {
 	m_shader = NULL;
 	delete[] m_cbuffers;
+}
+
+void DMaterial::SetParams()
+{
+}
+
+void DMaterial::RenderShader()
+{
 }
 
 DShader * DMaterial::GetShader() const

@@ -35,6 +35,7 @@ public:
 	void Init(ID3D11Device* device, WCHAR*, WCHAR*);
 	virtual unsigned int GetCBufferCount() const;
 	virtual int GetCBufferIndex(LPCSTR cbuffername) const;
+	virtual void ApplyParam(void*);
 	virtual void Release();
 
 private:

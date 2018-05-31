@@ -18,6 +18,7 @@ public:
 	virtual void Destroy();
 	unsigned int GetCBufferCount() const;
 	int GetCBufferIndex(LPCSTR cbufferName) const;
+	void ApplyParam();
 
 	static DShader* Create(WCHAR*, WCHAR*);
 

@@ -2,6 +2,7 @@
 #include "DGLCore.h"
 #include <map>
 #include <vector>
+#include <string>
 
 class DMeshBuffer11 : public DMeshBuffer
 {
@@ -27,16 +28,50 @@ private:
 	ID3D11ShaderResourceView* m_resourceView;
 };
 
+class DShaderParam11 :public DShaderParam
+{
+public:
+	DShaderParam11(int count);
+	void SetParam(ID3D11Device* device, int index, int size);
+	virtual void BeginSetParam(int id, void** value);
+	virtual void EndSetParam(int id);
+	virtual void Release();
+
+private:
+	ID3D11Buffer** m_paramsBuffer;
+	int m_count;
+};
+
 class DShaderBuffer11 :public DShaderBuffer
 {
+private:
+	struct ShaderParam
+	{
+	public:
+		ShaderParam()
+		{
+			index = -1;
+			size = 0;
+		}
+		ShaderParam(int index, int size)
+		{
+			this->index = index;
+			this->size = size;
+		}
+	public:
+		int index, size;
+	};
+
 public:
 	DShaderBuffer11();
 	~DShaderBuffer11();
 	void Init(ID3D11Device* device, WCHAR*, WCHAR*);
 	virtual unsigned int GetCBufferCount() const;
 	virtual int GetCBufferIndex(LPCSTR cbuffername) const;
-	virtual void ApplyParam(void*);
+	virtual void GetCBufferInfo(LPCSTR, int&, int&) const;
+	virtual DShaderParam* GetParams() const;
 	virtual void Release();
+	void Draw(ID3D11DeviceContext*, int indexCount);
 
 private:
 	bool InitShader(ID3D11Device*, WCHAR*, WCHAR*);
@@ -47,8 +82,8 @@ private:
 	ID3D11PixelShader *m_pixelShader;
 	ID3D11InputLayout* m_layout;
 	int m_cbufferCount;
-	std::map<LPCSTR, int> m_paramIds;
-	std::vector<ID3D11Buffer*> m_paramBuffers;
+	std::map<const std::string, ShaderParam> m_params;
+	//std::vector<ID3D11Buffer*> m_paramBuffers;
 };
 
 class D3D11Core : public DGLCore
@@ -63,7 +98,9 @@ public:
 	virtual DMeshBuffer* CreateMeshBuffer(int vertexCount, int indexCount, int dataSize, const float* vertices, const unsigned long* indices);
 	virtual DTextureBuffer* CreateTextureBuffer(WCHAR* fileName);
 	virtual DShaderBuffer* CreateShaderBuffer(WCHAR* vertexShader, WCHAR* pixelShader);
+	virtual void ApplyShaderParams(DShaderBuffer*, int paramId, void* value);
 	virtual void DrawMesh(const DMeshBuffer*, int);
+	virtual void DrawShader(const DShaderBuffer*, int);
 
 	virtual void SetBackBufferRenderTarget();
 
@@ -82,4 +119,3 @@ private:
 	ID3D11RasterizerState* m_rasterState;
 	D3D11_VIEWPORT m_viewPort;
 };
-

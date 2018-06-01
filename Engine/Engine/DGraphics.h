@@ -23,6 +23,13 @@ enum DVertexBufferType
 
 class DGraphics
 {
+private:
+	struct MatrixBufferType
+	{
+		DMatrix4x4 world;
+		DMatrix4x4 view;
+		DMatrix4x4 projection;
+	};
 public:
 	DGraphics();
 	~DGraphics();
@@ -33,8 +40,8 @@ public:
 	LRESULT CALLBACK MessageHandler(HWND, UINT, WPARAM, LPARAM);
 	void GetResolution(FLOAT&, FLOAT&);
 	DGraphicsAPI GetAPI();
-	ID3D11Device * GetDevice();
-	ID3D11DeviceContext* GetDeviceContext();
+	//ID3D11Device * GetDevice();
+	//ID3D11DeviceContext* GetDeviceContext();
 
 	static void DrawMesh(const DMesh*, const DMatrix4x4&, const DMaterial*, const DCamera*);
 

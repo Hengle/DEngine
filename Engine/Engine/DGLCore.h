@@ -15,13 +15,22 @@ public:
 	virtual void Release() = 0;
 };
 
+class DShaderParam
+{
+public:
+	virtual void BeginSetParam(int id, void** value) = 0;
+	virtual void EndSetParam(int id) = 0;
+	virtual void Release() = 0;
+};
+
 class DShaderBuffer
 {
 public:
 	virtual unsigned int GetCBufferCount() const = 0;
-	virtual int GetCBufferIndex(LPCSTR cbuffername) const = 0;
-	virtual void ApplyParam(void*) = 0;
+	virtual int GetCBufferIndex(LPCSTR cbuffername) const = 0; 
+	virtual void GetCBufferInfo(LPCSTR, int&, int&) const = 0;
 	virtual void Release() = 0;
+	virtual DShaderParam* GetParams() const = 0;
 };
 
 class DGLCore
@@ -36,7 +45,9 @@ public:
 	virtual DMeshBuffer* CreateMeshBuffer(int vertexCount, int indexCount, int dataSize, const float* vertices, const unsigned long* indices) = 0;
 	virtual DTextureBuffer* CreateTextureBuffer(WCHAR* fileName) = 0;
 	virtual DShaderBuffer* CreateShaderBuffer(WCHAR* vertexShader, WCHAR* pixelShader) = 0;
+	virtual void ApplyShaderParams(DShaderBuffer*, int paramId, void* value) = 0;
 	virtual void DrawMesh(const DMeshBuffer*, int) = 0;
+	virtual void DrawShader(const DShaderBuffer*, int) = 0;
 
 	virtual void SetBackBufferRenderTarget() = 0;
 	void GetResolution(FLOAT&, FLOAT&);

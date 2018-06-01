@@ -108,15 +108,15 @@ DGraphicsAPI DGraphics::GetAPI()
 	return m_API;
 }
 
-ID3D11Device * DGraphics::GetDevice()
-{
-	return m_D3D->GetDevice();
-}
-
-ID3D11DeviceContext * DGraphics::GetDeviceContext()
-{
-	return m_D3D->GetDeviceContext();
-}
+//ID3D11Device * DGraphics::GetDevice()
+//{
+//	return m_D3D->GetDevice();
+//}
+//
+//ID3D11DeviceContext * DGraphics::GetDeviceContext()
+//{
+//	return m_D3D->GetDeviceContext();
+//}
 
 void DGraphics::DrawMesh(const DMesh * mesh, const DMatrix4x4 & matrix, const DMaterial * material, const DCamera * camera)
 {
@@ -124,5 +124,23 @@ void DGraphics::DrawMesh(const DMesh * mesh, const DMatrix4x4 & matrix, const DM
 	DMatrix4x4 view, proj;
 	camera->GetViewMatrix(view);
 	camera->GetProjection(proj);
+
+	DMatrix4x4 world = matrix;
+	DMatrix4x4 v = view;
+	DMatrix4x4 p = proj;
+	world.Transpose();
+	v.Transpose();
+	p.Transpose();
+
+	MatrixBufferType bf;
+	bf.world = world;
+	bf.view = v;
+	bf.projection = p;
+
+	LPCSTR bname = "MatrixBuffer";
+
+	material->SetCBuffer<MatrixBufferType>(bname, bf);
+
+	DSystem::GetGraphicsMgr()->GetGLCore()->DrawShader(material->GetShader()->GetShaderBuffer(), mesh->GetIndexCount());
 }
 

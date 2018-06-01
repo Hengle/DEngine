@@ -7,28 +7,27 @@ public:
 	DMaterial(DShader*);
 	~DMaterial();
 	DShader* GetShader() const;
-	template<class T>
-	void SetCBuffer(LPCSTR buffername, T buffer);
+	template<typename  T>
+	void SetCBuffer(const LPCSTR buffername, T buffer) const;
 	bool HasCBuffer(LPCSTR buffername);
-	void Draw();
 	virtual void Destroy();
 
-private:
-	void SetParams();
-	void RenderShader();
 
 private:
 	DShader* m_shader;
-	void** m_cbuffers;
+	DShaderParam* m_params;
 };
 
-template<class T>
-inline void DMaterial::SetCBuffer(LPCSTR buffername, T buffer)
+template<typename  T>
+inline void DMaterial::SetCBuffer(const LPCSTR buffername, T buffer) const
 {
 	int cbindex = m_shader->GetCBufferIndex(buffername);
 	if (cbindex >= 0)
 	{
-		T* pbf = (T*)m_cbuffers[cbindex];
-		&pbf = buffer;
+		void* pbf;
+		m_params->BeginSetParam(cbindex, &pbf);
+		T* tbf = (T*)pbf;
+		(*tbf) = buffer;
+		m_params->EndSetParam(cbindex);
 	}
 }

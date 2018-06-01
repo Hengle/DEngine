@@ -1,6 +1,6 @@
 #pragma once
 #include "DSceneObject.h"
-#include "DShader.h"
+#include "DMaterial.h"
 #include "DMesh.h"
 #include "DTexture.h"
 #include "DLight.h"
@@ -8,7 +8,7 @@
 class DDisplayObject : public DSceneObject
 {
 public:
-	DDisplayObject(DMesh*, DShader*);
+	DDisplayObject(DMesh*, DMaterial*);
 	~DDisplayObject();
 	virtual void Render();
 	virtual void Init();
@@ -16,5 +16,5 @@ public:
 
 protected:
 	DMesh* m_mesh;
-	DShader* m_shader;
+	DMaterial* m_material;
 };

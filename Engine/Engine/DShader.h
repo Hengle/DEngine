@@ -18,10 +18,11 @@ public:
 	virtual void Destroy();
 	unsigned int GetCBufferCount() const;
 	int GetCBufferIndex(LPCSTR cbufferName) const;
-	void ApplyParam();
+	DShaderBuffer* GetShaderBuffer();
+	DShaderParam* GetParam();
 
 	static DShader* Create(WCHAR*, WCHAR*);
 
 private:
-	DShaderBuffer* m_ShaderBuffer;
+	DShaderBuffer* m_shaderBuffer;
 };

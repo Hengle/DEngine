@@ -69,39 +69,40 @@ void TestScene::OnGUI()
 
 void TestScene::OnLoad()
 {
-	DShader* testshader = DShader::Create(L"../Res/ntest.vs", L"../Res/ntest.ps");
+	/*DShader* testshader = DShader::Create(L"../Res/ntest.vs", L"../Res/ntest.ps");
 	if (testshader != NULL)
 	{
 		testshader->Destroy();
 		delete testshader;
 		testshader = NULL;
-	}
+	}*/
 
-	//DCamera* cam = new DCamera();
-	//DTransform* transform;
+	DCamera* cam = new DCamera();
+	DTransform* transform;
 
-	//transform = cam->GetTransform();
-	//transform->SetPosition(-5.700611f, -3.575672f, -3.757332f);
-	//transform->SetEuler(20.834f, 11.0f, 0.0f);
-	//SetCamera(cam);
+	transform = cam->GetTransform();
+	transform->SetPosition(-5.700611f, -3.575672f, -3.757332f);
+	transform->SetEuler(20.834f, 11.0f, 0.0f);
+	SetCamera(cam);
 
 	////m_light = new DLight();
 	////m_light->SetColor(1, 1, 1, 1);
 	////transform = m_light->GetTransform();
 	////transform->SetEuler(50, -30, 0);
 
-	//DMesh* mesh = DMesh::Create("../Res/eboy.obj");
-	//DShader* shader = new DShader(L"../Res/ntest.vs", L"../Res/ntest.ps");
+	DMesh* mesh = DMesh::Create("../Res/eboy.obj");
+	DShader* shader = DShader::Create(L"../Res/ntest.vs", L"../Res/ntest.ps");
+	DMaterial* mat = new DMaterial(shader);
 	////DTexture2D* texture = new DTexture2D(L"../Res/eboy.tif");
 	////DTexture2D* decal = new DTexture2D(L"../Res/decal.jpg");
-	//m_obj = new DDisplayObject(mesh, shader);
-	//transform = m_obj->GetTransform();
-	//transform->SetPosition(-5.226904f, -4.441468f, -1.499356f);
-	//transform->SetEuler(40.269f, 83.385f, 41.898f);
-	//transform->SetScale(0.5f, 0.5f, 0.5f);
+	m_obj = new DDisplayObject(mesh, mat);
+	transform = m_obj->GetTransform();
+	transform->SetPosition(-5.226904f, -4.441468f, -1.499356f);
+	transform->SetEuler(40.269f, 83.385f, 41.898f);
+	transform->SetScale(0.5f, 0.5f, 0.5f);
 
 
-	//AddDisplayObject(m_obj);
+	AddDisplayObject(m_obj);
 
 	////DLog::Err(u8"打印个日志测试");
 	////DLog::Warn("Log Test");

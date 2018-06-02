@@ -27,8 +27,8 @@ class DShaderBuffer
 {
 public:
 	virtual unsigned int GetCBufferCount() const = 0;
-	virtual int GetCBufferIndex(LPCSTR cbuffername) const = 0; 
-	virtual void GetCBufferInfo(LPCSTR, int&, int&) const = 0;
+	virtual int GetCBufferIndex(LPCSTR cbuffername, int shaderType) const = 0;
+	virtual void GetCBufferInfo(LPCSTR, int shaderType, int&, int&) const = 0;
 	virtual void Release() = 0;
 	virtual DShaderParam* GetParams() const = 0;
 };

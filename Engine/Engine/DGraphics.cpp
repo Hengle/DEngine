@@ -139,7 +139,7 @@ void DGraphics::DrawMesh(const DMesh * mesh, const DMatrix4x4 & matrix, const DM
 
 	LPCSTR bname = "MatrixBuffer";
 
-	material->SetCBuffer<MatrixBufferType>(bname, bf);
+	material->SetCBuffer<MatrixBufferType>(bname, 0, bf);
 
 	DSystem::GetGraphicsMgr()->GetGLCore()->DrawShader(material->GetShader()->GetShaderBuffer(), mesh->GetIndexCount());
 }

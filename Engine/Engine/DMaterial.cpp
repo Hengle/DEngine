@@ -18,9 +18,9 @@ DShader * DMaterial::GetShader() const
 	return m_shader;
 }
 
-bool DMaterial::HasCBuffer(LPCSTR buffername)
+bool DMaterial::HasCBuffer(LPCSTR buffername, int shaderType)
 {
-	return m_shader->GetCBufferIndex(buffername) >= 0;
+	return m_shader->GetCBufferIndex(buffername, shaderType) >= 0;
 }
 
 void DMaterial::Destroy()

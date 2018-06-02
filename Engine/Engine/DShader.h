@@ -17,7 +17,7 @@ public:
 
 	virtual void Destroy();
 	unsigned int GetCBufferCount() const;
-	int GetCBufferIndex(LPCSTR cbufferName) const;
+	int GetCBufferIndex(LPCSTR cbufferName, int shaderType) const;
 	DShaderBuffer* GetShaderBuffer();
 	DShaderParam* GetParam();
 

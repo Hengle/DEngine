@@ -52,14 +52,17 @@ private:
 		{
 			index = -1;
 			size = 0;
+			shaderType = 0;
 		}
-		ShaderParam(int index, int size)
+		ShaderParam(int index, int size, int shaderType)
 		{
 			this->index = index;
 			this->size = size;
+			this->shaderType = shaderType;
 		}
 	public:
 		int index, size;
+		int shaderType;
 	};
 
 public:
@@ -67,15 +70,16 @@ public:
 	~DShaderBuffer11();
 	void Init(ID3D11Device* device, WCHAR*, WCHAR*);
 	virtual unsigned int GetCBufferCount() const;
-	virtual int GetCBufferIndex(LPCSTR cbuffername) const;
-	virtual void GetCBufferInfo(LPCSTR, int&, int&) const;
+	virtual int GetCBufferIndex(LPCSTR cbuffername, int shaderType) const;
+	virtual void GetCBufferInfo(LPCSTR, int shaderType, int&, int&) const;
 	virtual DShaderParam* GetParams() const;
 	virtual void Release();
 	void Draw(ID3D11DeviceContext*, int indexCount);
 
 private:
 	bool InitShader(ID3D11Device*, WCHAR*, WCHAR*);
-	HRESULT InitShaderParams(ID3DBlob*, ID3D11Device*, ID3D11InputLayout**, int*);
+	HRESULT InitVertexShader(ID3DBlob*, ID3D11Device*, ID3D11InputLayout**, int*);
+	HRESULT InitPixelShader(ID3DBlob*, ID3D11Device*);
 
 private:
 	ID3D11VertexShader* m_vertexShader;

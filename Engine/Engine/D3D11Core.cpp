@@ -528,22 +528,27 @@ unsigned int DShaderBuffer11::GetCBufferCount() const
 	return m_cbufferCount;
 }
 
-void DShaderBuffer11::GetCBufferInfo(LPCSTR cbuffername, int & index, int & size) const
+void DShaderBuffer11::GetCBufferInfo(LPCSTR cbuffername, int shaderType, int & index, int & size) const
 {
 	if (m_params.find(cbuffername) != m_params.end())
 	{
-		index = m_params.at(cbuffername).index;
-		size = m_params.at(cbuffername).size;
+		int stype = m_params.at(cbuffername).shaderType;
+		if (stype == shaderType)
+		{
+			index = m_params.at(cbuffername).index;
+			size = m_params.at(cbuffername).size;
+		}
 	}
 	index = -1;
 	size = 0;
 }
 
-int DShaderBuffer11::GetCBufferIndex(LPCSTR cbuffername) const
+int DShaderBuffer11::GetCBufferIndex(LPCSTR cbuffername, int shaderType) const
 {
 	if (m_params.find(cbuffername) != m_params.end())
 	{
-		return m_params.at(cbuffername).index;
+		if (m_params.at(cbuffername).shaderType == shaderType)
+			return m_params.at(cbuffername).index;
 	}
 	return -1;
 }
@@ -706,7 +711,15 @@ bool DShaderBuffer11::InitShader(ID3D11Device * device, WCHAR * vsFilename, WCHA
 	// Create the vertex input layout.
 
 	int byteLength = 0;
-	result = InitShaderParams(vertexShaderBuffer, device, &m_layout, &byteLength);
+	m_cbufferCount = 0;
+
+	result = InitVertexShader(vertexShaderBuffer, device, &m_layout, &byteLength);
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	result = InitPixelShader(pixelShaderBuffer, device);
 	if (FAILED(result))
 	{
 		return false;
@@ -727,13 +740,13 @@ bool DShaderBuffer11::InitShader(ID3D11Device * device, WCHAR * vsFilename, WCHA
 	return true;
 }
 
-HRESULT DShaderBuffer11::InitShaderParams(ID3DBlob* pShaderBlob, ID3D11Device* pD3DDevice, ID3D11InputLayout** pInputLayout, int* inputLayoutByteLength)
+HRESULT DShaderBuffer11::InitVertexShader(ID3DBlob* pShaderBlob, ID3D11Device* pD3DDevice, ID3D11InputLayout** pInputLayout, int* inputLayoutByteLength)
 {
 	// Reflect shader info
 	ID3D11ShaderReflection* pVertexShaderReflection = nullptr;
 	//D3D11_BUFFER_DESC paramBufferDesc;
 	HRESULT hr = S_OK;
-	m_cbufferCount = 0;
+	
 	if (FAILED(D3DReflect(pShaderBlob->GetBufferPointer(), pShaderBlob->GetBufferSize(), IID_ID3D11ShaderReflection, (void**)&pVertexShaderReflection)))
 	{
 		return S_FALSE;
@@ -845,11 +858,13 @@ HRESULT DShaderBuffer11::InitShaderParams(ID3DBlob* pShaderBlob, ID3D11Device* p
 
 		//m_paramIds[desc.Name] = m_paramBuffers.size();
 		//m_params[desc.Name] = ShaderParam(m_cbufferCount, desc.Size);
-		m_params.insert(std::pair<const LPCSTR, ShaderParam>(desc.Name, ShaderParam(m_cbufferCount, desc.Size)));
+		m_params.insert(std::pair<const LPCSTR, ShaderParam>(desc.Name, ShaderParam(i, desc.Size, 0)));
 		//m_paramBuffers.push_back(buffer);
 
 		m_cbufferCount += 1;
 	}
+
+	
 	// Try to create Input Layout
 	hr = pD3DDevice->CreateInputLayout(&inputLayoutDesc[0], inputLayoutDesc.size(), pShaderBlob->GetBufferPointer(), pShaderBlob->GetBufferSize(), pInputLayout);
 	//Free allocation shader reflection memory
@@ -857,6 +872,35 @@ HRESULT DShaderBuffer11::InitShaderParams(ID3DBlob* pShaderBlob, ID3D11Device* p
 	//record byte length
 	*inputLayoutByteLength = byteOffset;
 	return hr;
+}
+
+HRESULT DShaderBuffer11::InitPixelShader(ID3DBlob* pShaderBlob, ID3D11Device* pD3DDevice)
+{
+	// Reflect shader info
+	ID3D11ShaderReflection* pPixelShaderReflection = nullptr;
+	
+	HRESULT hr = S_OK;
+
+	D3D11_SHADER_DESC shaderDesc;
+
+	if (FAILED(D3DReflect(pShaderBlob->GetBufferPointer(), pShaderBlob->GetBufferSize(), IID_ID3D11ShaderReflection, (void**)&pPixelShaderReflection)))
+	{
+		return S_FALSE;
+	}
+	pPixelShaderReflection->GetDesc(&shaderDesc);
+	
+	for (unsigned int i = 0; i < shaderDesc.ConstantBuffers; ++i)
+	{
+		ID3D11ShaderReflectionConstantBuffer* bf = pPixelShaderReflection->GetConstantBufferByIndex(i);
+		D3D11_SHADER_BUFFER_DESC desc;
+		bf->GetDesc(&desc);
+
+		m_params.insert(std::pair<const LPCSTR, ShaderParam>(desc.Name, ShaderParam(i, desc.Size, 1)));
+
+		m_cbufferCount += 1;
+	}
+
+	pPixelShaderReflection->Release();
 }
 
 DShaderParam11::DShaderParam11(int count)

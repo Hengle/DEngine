@@ -8,8 +8,8 @@ public:
 	~DMaterial();
 	DShader* GetShader() const;
 	template<typename  T>
-	void SetCBuffer(const LPCSTR buffername, T buffer) const;
-	bool HasCBuffer(LPCSTR buffername);
+	void SetCBuffer(const LPCSTR buffername, int shaderType, T buffer) const;
+	bool HasCBuffer(LPCSTR buffername, int shaderType);
 	virtual void Destroy();
 
 
@@ -19,9 +19,9 @@ private:
 };
 
 template<typename  T>
-inline void DMaterial::SetCBuffer(const LPCSTR buffername, T buffer) const
+inline void DMaterial::SetCBuffer(const LPCSTR buffername, int shaderType, T buffer) const
 {
-	int cbindex = m_shader->GetCBufferIndex(buffername);
+	int cbindex = m_shader->GetCBufferIndex(buffername, shaderType);
 	if (cbindex >= 0)
 	{
 		void* pbf;

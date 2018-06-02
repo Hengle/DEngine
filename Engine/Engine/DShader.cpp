@@ -34,9 +34,9 @@ unsigned int DShader::GetCBufferCount() const
 	return m_shaderBuffer->GetCBufferCount();
 }
 
-int DShader::GetCBufferIndex(LPCSTR cbufferName) const
+int DShader::GetCBufferIndex(LPCSTR cbufferName, int shaderType) const
 {
-	return m_shaderBuffer->GetCBufferIndex(cbufferName);
+	return m_shaderBuffer->GetCBufferIndex(cbufferName, shaderType);
 }
 
 DShaderBuffer * DShader::GetShaderBuffer()

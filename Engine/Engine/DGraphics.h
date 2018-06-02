@@ -30,6 +30,13 @@ private:
 		DMatrix4x4 view;
 		DMatrix4x4 projection;
 	};
+
+	struct ViewBufferType
+	{
+		DVector3 camPos;
+		float power;
+		DColor color;
+	};
 public:
 	DGraphics();
 	~DGraphics();

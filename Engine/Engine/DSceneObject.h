@@ -11,7 +11,7 @@ public:
 	virtual void Destroy();
 	virtual void Update();
 	virtual void FixedUpdate();
-	DTransform* GetTransform();
+	DTransform* GetTransform() const;
 
 protected:
 	DTransform* m_Transform;

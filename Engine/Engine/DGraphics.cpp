@@ -128,18 +128,28 @@ void DGraphics::DrawMesh(const DMesh * mesh, const DMatrix4x4 & matrix, const DM
 	DMatrix4x4 world = matrix;
 	DMatrix4x4 v = view;
 	DMatrix4x4 p = proj;
+	DVector3 cpos;
 	world.Transpose();
 	v.Transpose();
 	p.Transpose();
+
+	camera->GetTransform()->GetPosition(cpos);
 
 	MatrixBufferType bf;
 	bf.world = world;
 	bf.view = v;
 	bf.projection = p;
 
+	ViewBufferType vf;
+	vf.camPos = cpos;
+	vf.power = 1.3f;
+	vf.color = DColor(1.0f, 0.0f, 0.0f, 1.0f);
+
 	LPCSTR bname = "MatrixBuffer";
+	LPCSTR cname = "ViewBuffer";
 
 	material->SetCBuffer<MatrixBufferType>(bname, 0, bf);
+	material->SetCBuffer<ViewBufferType>(cname, 0, vf);
 
 	DSystem::GetGraphicsMgr()->GetGLCore()->DrawShader(material->GetShader()->GetShaderBuffer(), mesh->GetIndexCount());
 }

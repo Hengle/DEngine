@@ -13,6 +13,13 @@ cbuffer MatrixBuffer
 	matrix projectionMatrix;
 };
 
+cbuffer ViewBuffer
+{
+	float3 camPos;
+	float power;
+	float4 color;	
+};
+
 
 //////////////
 // TYPEDEFS //
@@ -26,7 +33,7 @@ struct VertexInputType
 struct PixelInputType
 {
     float4 position : SV_POSITION;
-    float3 normal : NORMAL;
+    float4 color : COLOR;
 };
 
 
@@ -44,11 +51,19 @@ PixelInputType ColorVertexShader(VertexInputType input)
 
 	// Calculate the position of the vertex against the world, view, and projection matrices.
     output.position  = mul(vpos , worldMatrix);
+
+    float3 viewDir = normalize(camPos - output.position.xyz);
+
     output.position  = mul(output.position , viewMatrix);
     output.position = mul(output.position , projectionMatrix);
 
 	// Store the input color for the pixel shader to use.
-    output.normal = normalize(input.normal)*0.5f+0.5f;
+    float3 wnormal = mul(input.normal, (float3x3)worldMatrix);
+    wnormal = normalize(wnormal);
+
+    float ndp = 1.0f - pow(saturate(dot(wnormal, viewDir)), power);
+
+    output.color = ndp*color;
 
     return output;
 }

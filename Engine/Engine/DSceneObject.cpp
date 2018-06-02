@@ -32,7 +32,7 @@ void DSceneObject::FixedUpdate()
 {
 }
 
-DTransform * DSceneObject::GetTransform()
+DTransform * DSceneObject::GetTransform() const
 {
 	return m_Transform;
 }

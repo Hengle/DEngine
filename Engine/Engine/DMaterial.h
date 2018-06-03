@@ -3,31 +3,45 @@
 
 class DMaterial : public DResObject
 {
+private:
+	struct MaterialParam
+	{
+	public:
+		MaterialParam(int length, int index, int offset, int shadertype);
+		~MaterialParam();
+		void SetParam(int index, float value);
+		void Release();
+		void GetParams(int& pcount, int&pindex, int&poffset, int&stype, float**params);
+
+	private:
+		float* m_params;
+		int m_shaderType;
+		int m_offset;
+		int m_length;
+		int m_index;
+	};
+
 public:
 	DMaterial(DShader*);
 	~DMaterial();
 	DShader* GetShader() const;
-	template<typename  T>
-	void SetCBuffer(const LPCSTR buffername, int shaderType, T buffer) const;
-	bool HasCBuffer(LPCSTR buffername, int shaderType);
+	void SetMatrix(const LPCSTR cbuffername, const LPCSTR key, DMatrix4x4&);
+	void SetVector4(const LPCSTR cbuffername, const LPCSTR key, DVector4&);
+	void SetVector3(const LPCSTR cbuffername, const LPCSTR key, DVector3&);
+	void SetVector2(const LPCSTR cbuffername, const LPCSTR key, DVector2&);
+	void SetColor(const LPCSTR cbuffername, const LPCSTR key, DColor&);
+	void SetFloat(const LPCSTR cbuffername, const LPCSTR key, float);
+	//void SetTexture(const LPCSTR cbuffername, const LPCSTR key, const DTexture&);
+	bool HasCBuffer(const LPCSTR buffername) const;
+	bool HasProperty(const LPCSTR buffername, const LPCSTR key) const;
+	int GetParamCount() const;
+	void GetParams(int index, int&pcount, int&pindex, int&poffset, int&stype, float**params);
 	virtual void Destroy();
 
 
 private:
 	DShader* m_shader;
-	DShaderParam* m_params;
+	MaterialParam** m_params;
+	unsigned int m_paramCount;
+	//DShaderParam* m_params;
 };
-
-template<typename  T>
-inline void DMaterial::SetCBuffer(const LPCSTR buffername, int shaderType, T buffer) const
-{
-	int cbindex = m_shader->GetCBufferIndex(buffername, shaderType);
-	if (cbindex >= 0)
-	{
-		void* pbf;
-		m_params->BeginSetParam(cbindex, &pbf);
-		T* tbf = (T*)pbf;
-		(*tbf) = buffer;
-		m_params->EndSetParam(cbindex);
-	}
-}

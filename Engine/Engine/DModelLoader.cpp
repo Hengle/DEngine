@@ -143,3 +143,74 @@ bool DModelLoader::LoadObj(const char * file, float** buffer, unsigned long ** i
 
 	return true;
 }
+
+bool DModelLoader::CreateCube(float** buffer, unsigned long ** indexBuffer, int & vertexCount, int & indexCount, int& dataSize)
+{
+	return false;
+}
+
+bool DModelLoader::CreatePlane(float** buffer, unsigned long ** indexBuffer, int & vertexCount, int & indexCount, int& dataSize)
+{
+	dataSize = sizeof(float) * 8;
+
+	float width = 20.0f;
+	float height = 20.0f;
+
+	float bx = -width*0.5f;
+	float bz = -height*0.5f;
+
+	int step = 10;
+
+	float deltax = width / step;
+	float deltaz = height / step;
+
+	int i, j;
+
+	vertexCount = (step + 1)*(step + 1);
+	indexCount = (step)*(step)* 6;
+
+	(*buffer) = new float[vertexCount*8];
+	(*indexBuffer) = new unsigned long[indexCount];
+
+	float x, z, u, v;
+	int index, id;
+	
+	for (i = 0; i <= step; i++)
+	{
+		for (j = 0; j <= step; j++)
+		{
+			x = bx + i*deltax;
+			z = bz + j*deltaz;
+
+			u = ((float)i) / step;
+			v = ((float)j) / step;
+
+			index = i*(step + 1) + j;
+			id = i*step + j;
+
+			(*buffer)[index * 8] = x;
+			(*buffer)[index * 8 + 1] = 0.0f;
+			(*buffer)[index * 8 + 2] = z;
+
+			(*buffer)[index * 8 + 3] = u;
+			(*buffer)[index * 8 + 4] = v;
+
+			(*buffer)[index * 8 + 5] = 0;
+			(*buffer)[index * 8 + 6] = 1.0f;
+			(*buffer)[index * 8 + 7] = 0;
+
+			if (i != step&&j != step)
+			{
+				(*indexBuffer)[id *6] = i*(step + 1) + j;
+				(*indexBuffer)[id *6+1] = i*(step + 1) + j+1;
+				(*indexBuffer)[id *6+2] = (i+1)*(step + 1) + j+1;
+
+				(*indexBuffer)[id *6+3] = i*(step + 1) + j;
+				(*indexBuffer)[id *6+4] = (i+1)*(step + 1) + j+1;
+				(*indexBuffer)[id *6+5] = (i+1)*(step + 1) + j;
+			}
+		}
+	}
+
+	return true;
+}

@@ -17,7 +17,11 @@ protected:
 	virtual void OnUpdate();
 
 private:
+	void TestLoad();
+
+private:
 	//ModelClass* m_Model;
 	//ColorShaderClass* m_ColorShader;
-	DDisplayObject* m_obj;
+	DDisplayObject* m_plane;
+	DDisplayObject* m_obj0;
 };

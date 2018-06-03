@@ -11,7 +11,9 @@ TestScene::TestScene(SCENEID sceneId, char * sceneName) : DScene(sceneId, sceneN
 {
 	//m_Model = 0;
 	//m_ColorShader = 0;
-	m_obj = 0;
+	m_plane = 0;
+	m_camera = 0;
+	m_obj0 = 0;
 	//m_light = 0;
 }
 
@@ -77,32 +79,7 @@ void TestScene::OnLoad()
 		testshader = NULL;
 	}*/
 
-	DCamera* cam = new DCamera();
-	DTransform* transform;
-
-	transform = cam->GetTransform();
-	transform->SetPosition(-5.700611f, -3.575672f, -3.757332f);
-	transform->SetEuler(20.834f, 11.0f, 0.0f);
-	SetCamera(cam);
-
-	////m_light = new DLight();
-	////m_light->SetColor(1, 1, 1, 1);
-	////transform = m_light->GetTransform();
-	////transform->SetEuler(50, -30, 0);
-
-	DMesh* mesh = DMesh::Create("../Res/eboy.obj");
-	DShader* shader = DShader::Create(L"../Res/ntest.vs", L"../Res/ntest.ps");
-	DMaterial* mat = new DMaterial(shader);
-	////DTexture2D* texture = new DTexture2D(L"../Res/eboy.tif");
-	////DTexture2D* decal = new DTexture2D(L"../Res/decal.jpg");
-	m_obj = new DDisplayObject(mesh, mat);
-	transform = m_obj->GetTransform();
-	transform->SetPosition(-5.226904f, -4.441468f, -1.499356f);
-	transform->SetEuler(40.269f, 83.385f, 41.898f);
-	transform->SetScale(0.5f, 0.5f, 0.5f);
-
-
-	AddDisplayObject(m_obj);
+	TestLoad();
 
 	////DLog::Err(u8"打印个日志测试");
 	////DLog::Warn("Log Test");
@@ -141,6 +118,50 @@ void TestScene::OnLoad()
 	////DLog::Info("5");
 	////DLog::Info("6");
 	////DLog::Info("7");
+}
+
+void TestScene::TestLoad()
+{
+	DCamera* cam = new DCamera();
+	DTransform* transform;
+
+	transform = cam->GetTransform();
+	transform->SetEuler(34.996f, -154.423f, 0.0f);
+	transform->SetPosition(3.24f, 6.822f, 7.701f);
+	SetCamera(cam);
+
+	////m_light = new DLight();
+	////m_light->SetColor(1, 1, 1, 1);
+	////transform = m_light->GetTransform();
+	////transform->SetEuler(50, -30, 0);
+
+	//DMesh* mesh = DMesh::Create("../Res/eboy.obj");
+	DMesh* plane = DMesh::Create(DMESH_Plane);
+	DShader* shader = DShader::Create(L"../Res/ntest.vs", L"../Res/ntest.ps");
+	DMaterial* mat = new DMaterial(shader);
+
+	mat->SetFloat("ViewBuffer", "power", 1.3f);
+	mat->SetColor("ViewBuffer", "color", DColor(1.0f, 0.0f, 0.0f, 1.0f));
+
+	////DTexture2D* texture = new DTexture2D(L"../Res/eboy.tif");
+	////DTexture2D* decal = new DTexture2D(L"../Res/decal.jpg");
+	m_plane = new DDisplayObject(plane, mat);
+	transform = m_plane->GetTransform();
+
+
+	AddDisplayObject(m_plane);
+
+	DMesh* mesh = DMesh::Create("../Res/eboy.obj");
+	DMaterial* mat2 = new DMaterial(shader);
+
+	mat2->SetFloat("ViewBuffer", "power", 1.6f);
+	mat2->SetColor("ViewBuffer", "color", DColor(0.0f, 1.0f, 0.0f, 1.0f));
+
+	m_obj0 = new DDisplayObject(mesh, mat2);
+	transform = m_obj0->GetTransform();
+	transform->SetPosition(0.0f, 1.64f, 0.0f);
+
+	AddDisplayObject(m_obj0);
 }
 
 void TestScene::OnUnLoad()
@@ -213,4 +234,18 @@ void TestScene::OnUpdate()
 	euler.y += DTime::GetDeltaTime() * 20;
 
 	transform->SetEuler(euler.x, euler.y, euler.z);*/
+
+	DVector3 euler;
+	DVector3 forward;
+	DVector3 position;
+	m_camera->GetTransform()->GetEuler(euler);
+
+	euler.y += DTime::GetDeltaTime()*20.0f;
+
+	m_camera->GetTransform()->SetEuler(euler);
+
+	m_camera->GetTransform()->GetForward(forward);
+
+	position = forward*-14.0f;
+	m_camera->GetTransform()->SetPosition(position);
 }

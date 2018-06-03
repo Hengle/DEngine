@@ -23,20 +23,6 @@ enum DVertexBufferType
 
 class DGraphics
 {
-private:
-	struct MatrixBufferType
-	{
-		DMatrix4x4 world;
-		DMatrix4x4 view;
-		DMatrix4x4 projection;
-	};
-
-	struct ViewBufferType
-	{
-		DVector3 camPos;
-		float power;
-		DColor color;
-	};
 public:
 	DGraphics();
 	~DGraphics();
@@ -50,7 +36,7 @@ public:
 	//ID3D11Device * GetDevice();
 	//ID3D11DeviceContext* GetDeviceContext();
 
-	static void DrawMesh(const DMesh*, const DMatrix4x4&, const DMaterial*, const DCamera*);
+	static void DrawMesh(const DMesh*, const DMatrix4x4&, DMaterial*, const DCamera*);
 
 private:
 	D3D11Core* m_D3D;

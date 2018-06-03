@@ -1319,8 +1319,8 @@ void DMatrix4x4::TRS(DMatrix4x4 * matrix, DVector3 * forward, DVector3 * up, con
 	forward->z = ri;
 
 	up->x = rd;
-	up->y = rd;
-	up->y = rf;
+	up->y = re;
+	up->z = rf;
 
 	matrix->m00 = scale.x*ra;
 	matrix->m01 = scale.x*rb;

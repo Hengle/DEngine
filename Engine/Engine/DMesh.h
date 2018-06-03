@@ -5,9 +5,9 @@
 
 enum DMeshDefine
 {
-	Cube,
-	Sphere,
-	Plane,
+	DMESH_Cube = 0,
+	DMESH_Sphere = 1,
+	DMESH_Plane = 2,
 };
 
 class DMesh

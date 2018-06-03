@@ -118,12 +118,20 @@ DGraphicsAPI DGraphics::GetAPI()
 //	return m_D3D->GetDeviceContext();
 //}
 
-void DGraphics::DrawMesh(const DMesh * mesh, const DMatrix4x4 & matrix, const DMaterial * material, const DCamera * camera)
+void DGraphics::DrawMesh(const DMesh * mesh, const DMatrix4x4 & matrix, DMaterial * material, const DCamera * camera)
 {
 	DSystem::GetGraphicsMgr()->GetGLCore()->DrawMesh(mesh->GetBuffer(), mesh->GetDataSize());
 	DMatrix4x4 view, proj;
 	camera->GetViewMatrix(view);
 	camera->GetProjection(proj);
+
+	DVector3 f, u, pos, e;
+	DQuaterion rot;
+	camera->GetTransform()->GetForward(f);
+	camera->GetTransform()->GetUp(u);
+	camera->GetTransform()->GetPosition(pos);
+	camera->GetTransform()->GetEuler(e);
+	camera->GetTransform()->GetRotation(rot);
 
 	DMatrix4x4 world = matrix;
 	DMatrix4x4 v = view;
@@ -135,21 +143,34 @@ void DGraphics::DrawMesh(const DMesh * mesh, const DMatrix4x4 & matrix, const DM
 
 	camera->GetTransform()->GetPosition(cpos);
 
-	MatrixBufferType bf;
-	bf.world = world;
-	bf.view = v;
-	bf.projection = p;
+	//MatrixBufferType bf;
+	//bf.world = world;
+	//bf.view = v;
+	//bf.projection = p;
 
-	ViewBufferType vf;
-	vf.camPos = cpos;
-	vf.power = 1.3f;
-	vf.color = DColor(1.0f, 0.0f, 0.0f, 1.0f);
+	//ViewBufferType vf;
+	//vf.camPos = cpos;
+	//vf.power = 1.3f;
+	//vf.color = DColor(1.0f, 0.0f, 0.0f, 1.0f);
 
-	LPCSTR bname = "MatrixBuffer";
-	LPCSTR cname = "ViewBuffer";
+	material->SetMatrix("MatrixBuffer", "worldMatrix", world);
+	material->SetMatrix("MatrixBuffer", "viewMatrix", v);
+	material->SetMatrix("MatrixBuffer", "projectionMatrix", p);
 
-	material->SetCBuffer<MatrixBufferType>(bname, 0, bf);
-	material->SetCBuffer<ViewBufferType>(cname, 0, vf);
+	material->SetVector3("ViewBuffer", "camPos", cpos);
+
+//	material->SetCBuffer<MatrixBufferType>(bname, 0, bf);
+	//material->SetCBuffer<ViewBufferType>(cname, 0, vf);
+
+	int ccount = material->GetParamCount();
+	int i;
+	int pcount, poffset, pindex, stype;
+	float* params;
+	for (i = 0; i < ccount; i++)
+	{
+		material->GetParams(i, pcount, pindex, poffset, stype, &params);
+		DSystem::GetGraphicsMgr()->GetGLCore()->ApplyShaderParams(material->GetShader()->GetShaderBuffer(), pindex, poffset, pcount, stype, params);
+	}
 
 	DSystem::GetGraphicsMgr()->GetGLCore()->DrawShader(material->GetShader()->GetShaderBuffer(), mesh->GetIndexCount());
 }

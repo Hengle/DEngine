@@ -455,10 +455,10 @@ DShaderBuffer * D3D11Core::CreateShaderBuffer(WCHAR * vertexShader, WCHAR * pixe
 	return sbf;
 }
 
-void D3D11Core::ApplyShaderParams(DShaderBuffer * shaderBuffer, int paramId, void * value)
+void D3D11Core::ApplyShaderParams(DShaderBuffer * shaderBuffer, int cindex, int coffset, int csize, int stype, float* params)
 {
 	DShaderBuffer11* bf11 = (DShaderBuffer11*)shaderBuffer;
-	
+	bf11->ApplyBuffer(m_deviceContext, cindex, coffset, csize, stype, params);
 }
 
 void D3D11Core::DrawMesh(const DMeshBuffer * meshBuffer, int dataSize)
@@ -480,9 +480,9 @@ void D3D11Core::DrawMesh(const DMeshBuffer * meshBuffer, int dataSize)
 	m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
-void D3D11Core::DrawShader(const DShaderBuffer * shaderBuffer, int indexCount)
+void D3D11Core::DrawShader(const DShaderBuffer * buffer, int indexCount)
 {
-	((DShaderBuffer11*)shaderBuffer)->Draw(m_deviceContext, indexCount);
+	((DShaderBuffer11*)buffer)->Draw(m_deviceContext, indexCount);
 }
 
 void D3D11Core::SetBackBufferRenderTarget()
@@ -528,60 +528,155 @@ unsigned int DShaderBuffer11::GetCBufferCount() const
 	return m_cbufferCount;
 }
 
-void DShaderBuffer11::GetCBufferInfo(LPCSTR cbuffername, int shaderType, int & index, int & size) const
+unsigned int DShaderBuffer11::GetPropertyCount(LPCSTR cbuffername) const
 {
 	if (m_params.find(cbuffername) != m_params.end())
 	{
-		int stype = m_params.at(cbuffername).shaderType;
-		if (stype == shaderType)
+		return m_params.at(cbuffername).propertyCount;
+	}
+	return 0;
+}
+
+void DShaderBuffer11::GetCBufferInfo(LPCSTR cbuffername, int & index, int & offset, int& length, int& shaderType) const
+{
+	if (m_params.find(cbuffername) != m_params.end())
+	{
+		//if (stype == shaderType)
 		{
-			index = m_params.at(cbuffername).index;
-			size = m_params.at(cbuffername).size;
+			index = m_params.at(cbuffername).bufferIndex;
+			offset = m_params.at(cbuffername).bufferOffset;
+			shaderType = m_params.at(cbuffername).shaderType;
+			length = m_params.at(cbuffername).bufferLength;
+			return;
 		}
 	}
 	index = -1;
-	size = 0;
+	offset = -1;
+	shaderType = 0;
+	length = 0;
 }
 
-int DShaderBuffer11::GetCBufferIndex(LPCSTR cbuffername, int shaderType) const
+int DShaderBuffer11::GetCBufferIndex(LPCSTR cbuffername) const
 {
 	if (m_params.find(cbuffername) != m_params.end())
 	{
-		if (m_params.at(cbuffername).shaderType == shaderType)
-			return m_params.at(cbuffername).index;
+		//if (m_params.at(cbuffername).shaderType == shaderType)
+			return m_params.at(cbuffername).bufferIndex;
 	}
 	return -1;
 }
 
-DShaderParam * DShaderBuffer11::GetParams() const
+int DShaderBuffer11::GetCBufferOffset(LPCSTR cbuffername) const
 {
-	DShaderParam11* param = new DShaderParam11(m_cbufferCount);
-	
-	std::map<const std::string, ShaderParam>::const_iterator it;
-
-	it = m_params.begin();
-
-	int index, size;
-
-	D3D11Core* core = (D3D11Core*)DSystem::GetGraphicsMgr()->GetGLCore();
-
-	while (it != m_params.end())
+	if (m_params.find(cbuffername) != m_params.end())
 	{
-		//it->first;
-		//it->second;
-		index = it->second.index;
-		size = it->second.size;
-		param->SetParam(core->GetDevice(), index, size);
-		it++;
+		//if (m_params.at(cbuffername).shaderType == shaderType)
+		return m_params.at(cbuffername).bufferOffset;
 	}
-
-	return param;
+	return -1;
 }
+
+int DShaderBuffer11::GetCBufferLength(LPCSTR cbuffername) const
+{
+	if (m_params.find(cbuffername) != m_params.end())
+	{
+		//if (m_params.at(cbuffername).shaderType == shaderType)
+		return m_params.at(cbuffername).bufferLength;
+	}
+	return 0;
+}
+
+int DShaderBuffer11::GetCBufferType(LPCSTR cbuffername) const
+{
+	if (m_params.find(cbuffername) != m_params.end())
+	{
+		//if (m_params.at(cbuffername).shaderType == shaderType)
+		return m_params.at(cbuffername).shaderType;
+	}
+	return 0;
+}
+
+int DShaderBuffer11::GetPropertyIndex(const LPCSTR cbuffername, const LPCSTR key) const
+{
+	if (m_params.find(cbuffername) != m_params.end())
+	{
+		ShaderParam pm = m_params.at(cbuffername);
+		if (pm.properties.find(key) != pm.properties.end())
+			return pm.properties.at(key).index;
+	}
+	return -1;
+}
+
+int DShaderBuffer11::GetPropertyOffset(const LPCSTR cbuffername, const LPCSTR key) const
+{
+	if (m_params.find(cbuffername) != m_params.end())
+	{
+		ShaderParam pm = m_params.at(cbuffername);
+		if (pm.properties.find(key) != pm.properties.end())
+			return pm.properties.at(key).offset;
+	}
+	return -1;
+}
+
+int DShaderBuffer11::GetPropertyLength(const LPCSTR cbufferName, const LPCSTR key) const
+{
+	if (m_params.find(cbufferName) != m_params.end())
+	{
+		ShaderParam pm = m_params.at(cbufferName);
+		if (pm.properties.find(key) != pm.properties.end())
+			return pm.properties.at(key).length;
+	}
+	return 0;
+}
+
+void DShaderBuffer11::GetPropertyInfo(const LPCSTR cbufferName, const LPCSTR key, int & index, int & offset, int & length) const
+{
+	if (m_params.find(cbufferName) != m_params.end())
+	{
+		ShaderParam pm = m_params.at(cbufferName);
+		if (pm.properties.find(key) != pm.properties.end())
+		{
+			ShaderProperty pr = pm.properties.at(key);
+			index = pr.index;
+			offset = pr.offset;
+			length = pr.length;
+			return;
+		}
+	}
+	index = -1;
+	offset = -1;
+	length = 0;
+}
+
+//DShaderParam * DShaderBuffer11::GetParams() const
+//{
+//	DShaderParam11* param = new DShaderParam11(m_cbufferCount);
+//	
+//	std::map<const std::string, ShaderParam>::const_iterator it;
+//
+//	it = m_params.begin();
+//
+//	int index, size;
+//
+//	D3D11Core* core = (D3D11Core*)DSystem::GetGraphicsMgr()->GetGLCore();
+//
+//	while (it != m_params.end())
+//	{
+//		//it->first;
+//		//it->second;
+//		index = it->second.index;
+//		size = it->second.size;
+//		param->SetParam(core->GetDevice(), index, size);
+//		it++;
+//	}
+//
+//	return param;
+//}
 
 void DShaderBuffer11::Release()
 {
-	//int i;
-	/*if (m_paramBuffers.size() > 0) 
+	int i;
+	if (m_paramBuffers.size() > 0) 
 	{
 		for (i = 0; i < m_paramBuffers.size(); i++)
 		{
@@ -593,7 +688,7 @@ void DShaderBuffer11::Release()
 			}
 		}
 	}
-	m_paramBuffers.clear();*/
+	m_paramBuffers.clear();
 	m_params.clear();
 
 	if (m_layout)
@@ -615,17 +710,50 @@ void DShaderBuffer11::Release()
 	}
 }
 
+void DShaderBuffer11::ApplyBuffer(ID3D11DeviceContext * deviceContext, int cindex, int coffset, int csize, int stype, float* params)
+{
+	HRESULT result;
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	float* dataPtr;
+	unsigned int bufferNumber = coffset;
+
+	ID3D11Buffer* pbuffer = m_paramBuffers[cindex];
+
+	result = deviceContext->Map(pbuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	if (FAILED(result))
+	{
+		return;
+	}
+
+	dataPtr = (float*)mappedResource.pData;
+
+	int i;
+	for (i = 0; i < csize; i++)
+	{
+		dataPtr[i] = params[i];
+	}
+
+	deviceContext->Unmap(pbuffer, 0);
+
+	if (stype == 0)
+	{
+		deviceContext->VSSetConstantBuffers(bufferNumber, 1, &pbuffer);
+	}
+	else
+	{
+		deviceContext->PSSetConstantBuffers(bufferNumber, 1, &pbuffer);
+	}
+}
+
 void DShaderBuffer11::Draw(ID3D11DeviceContext * deviceContext, int indexCount)
 {
 	deviceContext->IASetInputLayout(m_layout);
 
-	// Set the vertex and pixel shaders that will be used to render this triangle.
 	deviceContext->VSSetShader(m_vertexShader, NULL, 0);
 	deviceContext->PSSetShader(m_pixelShader, NULL, 0);
 
 	//deviceContext->PSSetSamplers(0, 1, &m_samplerState);
 
-	// Render the triangle.
 	deviceContext->DrawIndexed(indexCount, 0, 0);
 }
 
@@ -744,7 +872,7 @@ HRESULT DShaderBuffer11::InitVertexShader(ID3DBlob* pShaderBlob, ID3D11Device* p
 {
 	// Reflect shader info
 	ID3D11ShaderReflection* pVertexShaderReflection = nullptr;
-	//D3D11_BUFFER_DESC paramBufferDesc;
+	D3D11_BUFFER_DESC paramBufferDesc;
 	HRESULT hr = S_OK;
 	
 	if (FAILED(D3DReflect(pShaderBlob->GetBufferPointer(), pShaderBlob->GetBufferSize(), IID_ID3D11ShaderReflection, (void**)&pVertexShaderReflection)))
@@ -754,6 +882,8 @@ HRESULT DShaderBuffer11::InitVertexShader(ID3DBlob* pShaderBlob, ID3D11Device* p
 
 	// get shader description
 	D3D11_SHADER_DESC shaderDesc;
+
+	ShaderParam param;
 	pVertexShaderReflection->GetDesc(&shaderDesc);
 
 	// Read input layout description from shader info
@@ -839,13 +969,16 @@ HRESULT DShaderBuffer11::InitVertexShader(ID3DBlob* pShaderBlob, ID3D11Device* p
 		inputLayoutDesc.push_back(elementDesc);
 	}
 
+	int fsize = sizeof(float);
+	int clength = 0;
+
 	for (unsigned int i = 0; i < shaderDesc.ConstantBuffers; ++i)
 	{
 		ID3D11ShaderReflectionConstantBuffer* bf = pVertexShaderReflection->GetConstantBufferByIndex(i);
 		D3D11_SHADER_BUFFER_DESC desc;
 		bf->GetDesc(&desc);
 
-		/*paramBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+		paramBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 		paramBufferDesc.ByteWidth = desc.Size;
 		paramBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 		paramBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
@@ -854,12 +987,33 @@ HRESULT DShaderBuffer11::InitVertexShader(ID3DBlob* pShaderBlob, ID3D11Device* p
 
 		ID3D11Buffer* buffer;
 
-		pD3DDevice->CreateBuffer(&paramBufferDesc, NULL, &buffer);*/
+		pD3DDevice->CreateBuffer(&paramBufferDesc, NULL, &buffer);
+
+		clength = desc.Size / fsize;
 
 		//m_paramIds[desc.Name] = m_paramBuffers.size();
 		//m_params[desc.Name] = ShaderParam(m_cbufferCount, desc.Size);
-		m_params.insert(std::pair<const LPCSTR, ShaderParam>(desc.Name, ShaderParam(i, desc.Size, 0)));
-		//m_paramBuffers.push_back(buffer);
+
+		param = ShaderParam(m_cbufferCount, i, clength, 0, desc.Variables);
+
+		int offset = 0;
+		int size = 0;
+
+		for (unsigned int j = 0; j < desc.Variables; j++)
+		{
+			ID3D11ShaderReflectionVariable* bv = bf->GetVariableByIndex(j);
+
+			D3D11_SHADER_VARIABLE_DESC vdesc;
+			bv->GetDesc(&vdesc);
+
+			offset = vdesc.StartOffset / fsize;
+			size = vdesc.Size / fsize;
+
+			param.properties.insert(std::pair<const LPCSTR, ShaderProperty>(vdesc.Name, ShaderProperty(j, size, offset)));
+		}
+		
+		m_params.insert(std::pair<const LPCSTR, ShaderParam>(desc.Name, param));
+		m_paramBuffers.push_back(buffer);
 
 		m_cbufferCount += 1;
 	}
@@ -883,11 +1037,19 @@ HRESULT DShaderBuffer11::InitPixelShader(ID3DBlob* pShaderBlob, ID3D11Device* pD
 
 	D3D11_SHADER_DESC shaderDesc;
 
+	D3D11_BUFFER_DESC paramBufferDesc;
+
+	ShaderParam param;
+
 	if (FAILED(D3DReflect(pShaderBlob->GetBufferPointer(), pShaderBlob->GetBufferSize(), IID_ID3D11ShaderReflection, (void**)&pPixelShaderReflection)))
 	{
 		return S_FALSE;
 	}
 	pPixelShaderReflection->GetDesc(&shaderDesc);
+
+	int fsize = sizeof(float);
+
+	int clength = 0;
 	
 	for (unsigned int i = 0; i < shaderDesc.ConstantBuffers; ++i)
 	{
@@ -895,7 +1057,39 @@ HRESULT DShaderBuffer11::InitPixelShader(ID3DBlob* pShaderBlob, ID3D11Device* pD
 		D3D11_SHADER_BUFFER_DESC desc;
 		bf->GetDesc(&desc);
 
-		m_params.insert(std::pair<const LPCSTR, ShaderParam>(desc.Name, ShaderParam(i, desc.Size, 1)));
+		paramBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+		paramBufferDesc.ByteWidth = desc.Size;
+		paramBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		paramBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		paramBufferDesc.MiscFlags = 0;
+		paramBufferDesc.StructureByteStride = 0;
+
+		ID3D11Buffer* buffer;
+
+		pD3DDevice->CreateBuffer(&paramBufferDesc, NULL, &buffer);
+
+		clength = desc.Size / fsize;
+
+		param = ShaderParam(m_cbufferCount, i, clength, 1, desc.Variables);
+
+		int offset = 0;
+		int size = 0;
+
+		for (unsigned int j = 0; j < desc.Variables; j++)
+		{
+			ID3D11ShaderReflectionVariable* bv = bf->GetVariableByIndex(j);
+
+			D3D11_SHADER_VARIABLE_DESC vdesc;
+			bv->GetDesc(&vdesc);
+
+			offset = vdesc.StartOffset / fsize;
+			size = vdesc.Size / fsize;
+
+			param.properties.insert(std::pair<const LPCSTR, ShaderProperty>(vdesc.Name, ShaderProperty(j, size, offset)));
+		}
+
+		m_params.insert(std::pair<const LPCSTR, ShaderParam>(desc.Name, param));
+		m_paramBuffers.push_back(buffer);
 
 		m_cbufferCount += 1;
 	}
@@ -903,73 +1097,74 @@ HRESULT DShaderBuffer11::InitPixelShader(ID3DBlob* pShaderBlob, ID3D11Device* pD
 	pPixelShaderReflection->Release();
 }
 
-DShaderParam11::DShaderParam11(int count)
-{
-	m_count = count;
-	m_paramsBuffer = new ID3D11Buffer*[count];
-}
-
-void DShaderParam11::SetParam(ID3D11Device * device, int index, int size)
-{
-	if (index < 0 || index >= m_count)
-		return;
-	D3D11_BUFFER_DESC paramBufferDesc;
-
-	paramBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	paramBufferDesc.ByteWidth = size;
-	paramBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	paramBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	paramBufferDesc.MiscFlags = 0;
-	paramBufferDesc.StructureByteStride = 0;
-
-	ID3D11Buffer* buffer;
-
-	device->CreateBuffer(&paramBufferDesc, NULL, &buffer);
-
-	m_paramsBuffer[index] = buffer;
-}
-
-void DShaderParam11::BeginSetParam(int id, void ** value)
-{
-	ID3D11Buffer* buffer = m_paramsBuffer[id];
-	HRESULT result;
-	D3D11_MAPPED_SUBRESOURCE mappedResource;
-
-	D3D11Core* core = (D3D11Core*)DSystem::GetGraphicsMgr()->GetGLCore();
-
-	unsigned int bufferNumber;
-
-	result = core->GetDeviceContext()->Map(buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-	if (FAILED(result))
-	{
-		return;
-	}
-
-	(*value) = (void*)mappedResource.pData;
-
-	
-}
-
-void DShaderParam11::EndSetParam(int id)
-{
-	D3D11Core* core = (D3D11Core*)DSystem::GetGraphicsMgr()->GetGLCore();
-	ID3D11Buffer* buffer = m_paramsBuffer[id];
-	core->GetDeviceContext()->Unmap(buffer, 0);
-
-	core->GetDeviceContext()->VSSetConstantBuffers(id, 1, &buffer);
-}
-
-void DShaderParam11::Release()
-{
-	int i;
-	for (i = 0; i < m_count; i++)
-	{
-		if (m_paramsBuffer[i] != NULL)
-		{
-			m_paramsBuffer[i]->Release();
-			m_paramsBuffer[i] = NULL;
-		}
-	}
-	delete[] m_paramsBuffer;
-	m_paramsBuffer = 0;
-}
+//DShaderParam11::DShaderParam11(int count)
+//{
+//	m_count = count;
+//	m_paramsBuffer = new ID3D11Buffer*[count];
+//}
+//
+//void DShaderParam11::SetParam(ID3D11Device * device, int index, int size)
+//{
+//	if (index < 0 || index >= m_count)
+//		return;
+//	D3D11_BUFFER_DESC paramBufferDesc;
+//
+//	paramBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+//	paramBufferDesc.ByteWidth = size;
+//	paramBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+//	paramBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+//	paramBufferDesc.MiscFlags = 0;
+//	paramBufferDesc.StructureByteStride = 0;
+//
+//	ID3D11Buffer* buffer;
+//
+//	device->CreateBuffer(&paramBufferDesc, NULL, &buffer);
+//
+//	m_paramsBuffer[index] = buffer;
+//}
+//
+//void DShaderParam11::BeginSetParam(int id, void ** value)
+//{
+//	ID3D11Buffer* buffer = m_paramsBuffer[id];
+//	HRESULT result;
+//	D3D11_MAPPED_SUBRESOURCE mappedResource;
+//
+//	D3D11Core* core = (D3D11Core*)DSystem::GetGraphicsMgr()->GetGLCore();
+//
+//	unsigned int bufferNumber;
+//
+//	result = core->GetDeviceContext()->Map(buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+//	if (FAILED(result))
+//	{
+//		return;
+//	}
+//
+//	(*value) = (void*)mappedResource.pData;
+//
+//	
+//}
+//
+//void DShaderParam11::EndSetParam(int id)
+//{
+//	D3D11Core* core = (D3D11Core*)DSystem::GetGraphicsMgr()->GetGLCore();
+//	ID3D11Buffer* buffer = m_paramsBuffer[id];
+//	core->GetDeviceContext()->Unmap(buffer, 0);
+//
+//	core->GetDeviceContext()->VSSetConstantBuffers(id, 1, &buffer);
+//
+//}
+//
+//void DShaderParam11::Release()
+//{
+//	int i;
+//	for (i = 0; i < m_count; i++)
+//	{
+//		if (m_paramsBuffer[i] != NULL)
+//		{
+//			m_paramsBuffer[i]->Release();
+//			m_paramsBuffer[i] = NULL;
+//		}
+//	}
+//	delete[] m_paramsBuffer;
+//	m_paramsBuffer = 0;
+//}

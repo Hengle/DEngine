@@ -3,6 +3,7 @@
 #include <map>
 #include <vector>
 #include <string>
+#include "DMaterial.h"
 
 class DMeshBuffer11 : public DMeshBuffer
 {
@@ -28,41 +29,69 @@ private:
 	ID3D11ShaderResourceView* m_resourceView;
 };
 
-class DShaderParam11 :public DShaderParam
-{
-public:
-	DShaderParam11(int count);
-	void SetParam(ID3D11Device* device, int index, int size);
-	virtual void BeginSetParam(int id, void** value);
-	virtual void EndSetParam(int id);
-	virtual void Release();
-
-private:
-	ID3D11Buffer** m_paramsBuffer;
-	int m_count;
-};
+//class DShaderParam11 :public DShaderParam
+//{
+//public:
+//	DShaderParam11(int count);
+//	void SetParam(ID3D11Device* device, int index, int size);
+//	virtual void BeginSetParam(int id, void** value);
+//	virtual void EndSetParam(int id);
+//	virtual void Release();
+//
+//private:
+//	ID3D11Buffer** m_paramsBuffer;
+//	int m_count;
+//};
 
 class DShaderBuffer11 :public DShaderBuffer
 {
 private:
-	struct ShaderParam
+	struct ShaderProperty
+	{
+	public:
+		ShaderProperty()
+		{
+			index = -1;
+			length = 0;
+			offset = 0;
+		}
+
+		ShaderProperty(int index, int length, int offset)
+		{
+			this->index = index;
+			this->length = length;
+			this->offset = offset;
+		}
+
+	public:
+		int index, length, offset;
+	};
+
+	class ShaderParam
 	{
 	public:
 		ShaderParam()
 		{
-			index = -1;
-			size = 0;
+			bufferIndex = -1;
+			bufferOffset = -1;
+			bufferLength = 0;
 			shaderType = 0;
+			propertyCount = 0;
 		}
-		ShaderParam(int index, int size, int shaderType)
+		
+		ShaderParam(int bufferIndex, int bufferOffset, int bufferLength, int shaderType, int propertyCount)
 		{
-			this->index = index;
-			this->size = size;
+			this->bufferIndex = bufferIndex;
+			this->bufferOffset = bufferOffset;
+			this->bufferLength = bufferLength;
 			this->shaderType = shaderType;
+			this->propertyCount = propertyCount;
 		}
 	public:
-		int index, size;
+		int bufferIndex, bufferOffset, bufferLength;
 		int shaderType;
+		int propertyCount;
+		std::map<const std::string, ShaderProperty> properties;
 	};
 
 public:
@@ -70,10 +99,19 @@ public:
 	~DShaderBuffer11();
 	void Init(ID3D11Device* device, WCHAR*, WCHAR*);
 	virtual unsigned int GetCBufferCount() const;
-	virtual int GetCBufferIndex(LPCSTR cbuffername, int shaderType) const;
-	virtual void GetCBufferInfo(LPCSTR, int shaderType, int&, int&) const;
-	virtual DShaderParam* GetParams() const;
+	virtual unsigned int GetPropertyCount(LPCSTR cbuffername) const;
+	virtual int GetCBufferIndex(LPCSTR cbuffername) const;
+	virtual int GetCBufferOffset(LPCSTR cbuffername) const;
+	virtual int GetCBufferLength(LPCSTR cbuffername) const;
+	virtual int GetCBufferType(LPCSTR cbuffername) const;
+	virtual int GetPropertyIndex(const LPCSTR cbufferName, const LPCSTR key) const;
+	virtual int GetPropertyOffset(const LPCSTR cbufferName, const LPCSTR key) const;
+	virtual int GetPropertyLength(const LPCSTR cbufferName, const LPCSTR key) const;
+	virtual void GetPropertyInfo(const LPCSTR cbufferName, const LPCSTR key, int&, int&, int&) const;
+	virtual void GetCBufferInfo(LPCSTR, int&, int&, int&, int&) const;
+	//virtual DShaderParam* GetParams() const;
 	virtual void Release();
+	void ApplyBuffer(ID3D11DeviceContext * deviceContext, int cindex, int coffset, int csize, int stype, float* params);
 	void Draw(ID3D11DeviceContext*, int indexCount);
 
 private:
@@ -87,7 +125,7 @@ private:
 	ID3D11InputLayout* m_layout;
 	int m_cbufferCount;
 	std::map<const std::string, ShaderParam> m_params;
-	//std::vector<ID3D11Buffer*> m_paramBuffers;
+	std::vector<ID3D11Buffer*> m_paramBuffers;
 };
 
 class D3D11Core : public DGLCore
@@ -102,7 +140,7 @@ public:
 	virtual DMeshBuffer* CreateMeshBuffer(int vertexCount, int indexCount, int dataSize, const float* vertices, const unsigned long* indices);
 	virtual DTextureBuffer* CreateTextureBuffer(WCHAR* fileName);
 	virtual DShaderBuffer* CreateShaderBuffer(WCHAR* vertexShader, WCHAR* pixelShader);
-	virtual void ApplyShaderParams(DShaderBuffer*, int paramId, void* value);
+	virtual void ApplyShaderParams(DShaderBuffer * shaderBuffer, int cindex, int coffset, int csize, int stype, float* params);
 	virtual void DrawMesh(const DMeshBuffer*, int);
 	virtual void DrawShader(const DShaderBuffer*, int);
 

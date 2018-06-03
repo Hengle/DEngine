@@ -168,7 +168,28 @@ DMeshBuffer * DMesh::GetBuffer() const
 
 DMesh * DMesh::Create(DMeshDefine meshDefine)
 {
-	return nullptr;
+	float* vertices;
+	unsigned long* indices;
+	int vcount, icount, dsize;
+	if (meshDefine == DMESH_Plane)
+	{
+		DModelLoader::CreatePlane(&vertices, &indices, vcount, icount, dsize);
+	}
+	else
+		return NULL;
+
+	DMesh* mesh = new DMesh();
+	mesh->m_vertexBuffer = vertices;
+	mesh->m_indexBuffer = indices;
+	mesh->m_vertexCount = vcount;
+	mesh->m_indexCount = icount;
+	mesh->m_dataSize = dsize;
+	mesh->m_vertexOffset = 8;
+	mesh->m_uvOffset = 3;
+	mesh->m_normalOffset = 5;
+	mesh->m_meshBuffer = DSystem::GetGraphicsMgr()->GetGLCore()->CreateMeshBuffer(vcount, icount, dsize, vertices, indices);
+
+	return mesh;
 }
 
 DMesh * DMesh::Create(char* fileName)

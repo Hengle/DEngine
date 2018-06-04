@@ -34,50 +34,65 @@ unsigned int DShader::GetCBufferCount() const
 	return m_shaderBuffer->GetCBufferCount();
 }
 
-unsigned int DShader::GetPropertyCount(const LPCSTR cbufferName) const
+unsigned int DShader::GetPropertyCount() const
 {
-	return m_shaderBuffer->GetPropertyCount(cbufferName);
+	return m_shaderBuffer->GetPropertyCount();
 }
 
-int DShader::GetCBufferIndex(LPCSTR cbufferName) const
+void DShader::GetPropertyInfo(const LPCSTR key, int & cindex, int & coffset, int & clength, int & poffset, int & plength, int & stype) const
 {
-	return m_shaderBuffer->GetCBufferIndex(cbufferName);
+	m_shaderBuffer->GetPropertyInfo(key, cindex, coffset, clength, poffset, plength, stype);
 }
 
-int DShader::GetCBufferOffset(LPCSTR cbuffername) const
+bool DShader::HasProperty(const LPCSTR key) const
 {
-	return m_shaderBuffer->GetCBufferOffset(cbuffername);
+	return m_shaderBuffer->HasProperty(key);
 }
 
-int DShader::GetCBufferType(const LPCSTR cbufferName) const
-{
-	return m_shaderBuffer->GetCBufferType(cbufferName);
-}
-
-int DShader::GetPropertyIndex(const LPCSTR cbufferName, const LPCSTR key) const
-{
-	return m_shaderBuffer->GetPropertyIndex(cbufferName, key);
-}
-
-int DShader::GetPropertyOffset(const LPCSTR cbufferName, const LPCSTR key) const
-{
-	return m_shaderBuffer->GetPropertyOffset(cbufferName, key);
-}
-
-int DShader::GetPropertyLength(const LPCSTR cbufferName, const LPCSTR key) const
-{
-	return m_shaderBuffer->GetPropertyLength(cbufferName, key);
-}
-
-void DShader::GetPropertyInfo(const LPCSTR cbufferName, const LPCSTR key, int & index, int & offset, int & size) const
-{
-	m_shaderBuffer->GetPropertyInfo(cbufferName, key, index, offset, size);
-}
-
-void DShader::GetCBufferInfo(LPCSTR cbufferName, int & index, int & offset, int&length, int & shadertype) const
-{
-	m_shaderBuffer->GetCBufferInfo(cbufferName, index, offset, length, shadertype);
-}
+//unsigned int DShader::GetPropertyCount(const LPCSTR cbufferName) const
+//{
+//	return m_shaderBuffer->GetPropertyCount(cbufferName);
+//}
+//
+//int DShader::GetCBufferIndex(LPCSTR cbufferName) const
+//{
+//	return m_shaderBuffer->GetCBufferIndex(cbufferName);
+//}
+//
+//int DShader::GetCBufferOffset(LPCSTR cbuffername) const
+//{
+//	return m_shaderBuffer->GetCBufferOffset(cbuffername);
+//}
+//
+//int DShader::GetCBufferType(const LPCSTR cbufferName) const
+//{
+//	return m_shaderBuffer->GetCBufferType(cbufferName);
+//}
+//
+//int DShader::GetPropertyIndex(const LPCSTR cbufferName, const LPCSTR key) const
+//{
+//	return m_shaderBuffer->GetPropertyIndex(cbufferName, key);
+//}
+//
+//int DShader::GetPropertyOffset(const LPCSTR cbufferName, const LPCSTR key) const
+//{
+//	return m_shaderBuffer->GetPropertyOffset(cbufferName, key);
+//}
+//
+//int DShader::GetPropertyLength(const LPCSTR cbufferName, const LPCSTR key) const
+//{
+//	return m_shaderBuffer->GetPropertyLength(cbufferName, key);
+//}
+//
+//void DShader::GetPropertyInfo(const LPCSTR cbufferName, const LPCSTR key, int & index, int & offset, int & size) const
+//{
+//	m_shaderBuffer->GetPropertyInfo(cbufferName, key, index, offset, size);
+//}
+//
+//void DShader::GetCBufferInfo(LPCSTR cbufferName, int & index, int & offset, int&length, int & shadertype) const
+//{
+//	m_shaderBuffer->GetCBufferInfo(cbufferName, index, offset, length, shadertype);
+//}
 
 DShaderBuffer * DShader::GetShaderBuffer()
 {

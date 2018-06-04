@@ -71,15 +71,15 @@ void TestScene::OnGUI()
 
 void TestScene::OnLoad()
 {
-	/*DShader* testshader = DShader::Create(L"../Res/ntest.vs", L"../Res/ntest.ps");
+	DShader* testshader = DShader::Create(L"../Res/light.vs", L"../Res/light.ps");
 	if (testshader != NULL)
 	{
 		testshader->Destroy();
 		delete testshader;
 		testshader = NULL;
-	}*/
+	}
 
-	TestLoad();
+	//TestLoad();
 
 	////DLog::Err(u8"打印个日志测试");
 	////DLog::Warn("Log Test");
@@ -140,8 +140,8 @@ void TestScene::TestLoad()
 	DShader* shader = DShader::Create(L"../Res/ntest.vs", L"../Res/ntest.ps");
 	DMaterial* mat = new DMaterial(shader);
 
-	mat->SetFloat("ViewBuffer", "power", 1.3f);
-	mat->SetColor("ViewBuffer", "color", DColor(1.0f, 0.0f, 0.0f, 1.0f));
+	mat->SetFloat("power", 1.3f);
+	mat->SetColor("color", DColor(1.0f, 0.0f, 0.0f, 1.0f));
 
 	////DTexture2D* texture = new DTexture2D(L"../Res/eboy.tif");
 	////DTexture2D* decal = new DTexture2D(L"../Res/decal.jpg");
@@ -154,8 +154,8 @@ void TestScene::TestLoad()
 	DMesh* mesh = DMesh::Create("../Res/eboy.obj");
 	DMaterial* mat2 = new DMaterial(shader);
 
-	mat2->SetFloat("ViewBuffer", "power", 1.6f);
-	mat2->SetColor("ViewBuffer", "color", DColor(0.0f, 1.0f, 0.0f, 1.0f));
+	mat2->SetFloat("power", 1.6f);
+	mat2->SetColor("color", DColor(0.0f, 1.0f, 0.0f, 1.0f));
 
 	m_obj0 = new DDisplayObject(mesh, mat2);
 	transform = m_obj0->GetTransform();
@@ -234,6 +234,8 @@ void TestScene::OnUpdate()
 	euler.y += DTime::GetDeltaTime() * 20;
 
 	transform->SetEuler(euler.x, euler.y, euler.z);*/
+
+	return;
 
 	DVector3 euler;
 	DVector3 forward;

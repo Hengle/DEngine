@@ -153,11 +153,11 @@ void DGraphics::DrawMesh(const DMesh * mesh, const DMatrix4x4 & matrix, DMateria
 	//vf.power = 1.3f;
 	//vf.color = DColor(1.0f, 0.0f, 0.0f, 1.0f);
 
-	material->SetMatrix("MatrixBuffer", "worldMatrix", world);
-	material->SetMatrix("MatrixBuffer", "viewMatrix", v);
-	material->SetMatrix("MatrixBuffer", "projectionMatrix", p);
+	material->SetMatrix("worldMatrix", world);
+	material->SetMatrix("viewMatrix", v);
+	material->SetMatrix("projectionMatrix", p);
 
-	material->SetVector3("ViewBuffer", "camPos", cpos);
+	material->SetVector3("camPos", cpos);
 
 //	material->SetCBuffer<MatrixBufferType>(bname, 0, bf);
 	//material->SetCBuffer<ViewBufferType>(cname, 0, vf);

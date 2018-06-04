@@ -27,16 +27,9 @@ class DShaderBuffer
 {
 public:
 	virtual unsigned int GetCBufferCount() const = 0;
-	virtual unsigned int GetPropertyCount(LPCSTR cbuffername) const = 0;
-	virtual int GetCBufferIndex(LPCSTR cbuffername) const = 0;
-	virtual int GetCBufferOffset(LPCSTR cbuffername) const = 0;
-	virtual int GetCBufferLength(LPCSTR cbuffername) const = 0;
-	virtual int GetCBufferType(LPCSTR cbuffername) const = 0;
-	virtual int GetPropertyIndex(const LPCSTR cbufferName, const LPCSTR key) const = 0;
-	virtual int GetPropertyOffset(const LPCSTR cbufferName, const LPCSTR key) const = 0;
-	virtual int GetPropertyLength(const LPCSTR cbufferName, const LPCSTR key) const = 0;
-	virtual void GetPropertyInfo(const LPCSTR cbufferName, const LPCSTR key, int&, int&, int&) const = 0;
-	virtual void GetCBufferInfo(LPCSTR, int&, int&, int&, int&) const = 0;
+	virtual unsigned int GetPropertyCount() const = 0;
+	virtual void GetPropertyInfo(const LPCSTR key, int & cindex, int & coffset, int & clength, int& poffset, int& plength, int& stype) const = 0;
+	virtual bool HasProperty(const LPCSTR key) const = 0;
 	virtual void Release() = 0;
 	//virtual DShaderParam* GetParams() const = 0;
 };
@@ -54,6 +47,7 @@ public:
 	virtual DTextureBuffer* CreateTextureBuffer(WCHAR* fileName) = 0;
 	virtual DShaderBuffer* CreateShaderBuffer(WCHAR* vertexShader, WCHAR* pixelShader) = 0;
 	virtual void ApplyShaderParams(DShaderBuffer * shaderBuffer, int cindex, int coffset, int csize, int stype, float* params) = 0;
+	virtual void ApplyTextureParams(DTextureBuffer* textureBuffer) = 0;
 	virtual void DrawMesh(const DMeshBuffer*, int) = 0;
 	virtual void DrawShader(const DShaderBuffer*, int) = 0;
 

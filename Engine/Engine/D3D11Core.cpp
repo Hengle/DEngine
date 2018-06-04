@@ -461,6 +461,11 @@ void D3D11Core::ApplyShaderParams(DShaderBuffer * shaderBuffer, int cindex, int 
 	bf11->ApplyBuffer(m_deviceContext, cindex, coffset, csize, stype, params);
 }
 
+void D3D11Core::ApplyTextureParams(DTextureBuffer * textureBuffer)
+{
+	//m_deviceContext->PSSetShaderResources()
+}
+
 void D3D11Core::DrawMesh(const DMeshBuffer * meshBuffer, int dataSize)
 {
 	unsigned int stride;
@@ -528,125 +533,164 @@ unsigned int DShaderBuffer11::GetCBufferCount() const
 	return m_cbufferCount;
 }
 
-unsigned int DShaderBuffer11::GetPropertyCount(LPCSTR cbuffername) const
+unsigned int DShaderBuffer11::GetPropertyCount() const
 {
-	if (m_params.find(cbuffername) != m_params.end())
-	{
-		return m_params.at(cbuffername).propertyCount;
-	}
-	return 0;
+	return m_propertyCount;
 }
 
-void DShaderBuffer11::GetCBufferInfo(LPCSTR cbuffername, int & index, int & offset, int& length, int& shaderType) const
+void DShaderBuffer11::GetPropertyInfo(const LPCSTR key, int & cindex, int & coffset, int & clength, int& poffset, int& plength, int& stype) const
 {
-	if (m_params.find(cbuffername) != m_params.end())
+	if (m_params.find(key) != m_params.end())
 	{
-		//if (stype == shaderType)
-		{
-			index = m_params.at(cbuffername).bufferIndex;
-			offset = m_params.at(cbuffername).bufferOffset;
-			shaderType = m_params.at(cbuffername).shaderType;
-			length = m_params.at(cbuffername).bufferLength;
-			return;
-		}
+		ShaderParam pm = m_params.at(key);
+		//if (pm.properties.find(key) != pm.properties.end())
+		//{
+			//ShaderProperty pr = pm.properties.at(key);
+		cindex = pm.bufferIndex;
+		coffset = pm.bufferOffset;
+		clength = pm.bufferLength;
+		poffset = pm.paramOffset;
+		plength = pm.paramLength;
+		stype = pm.shaderType;
+		return;
+		//}
 	}
-	index = -1;
-	offset = -1;
-	shaderType = 0;
-	length = 0;
+	cindex = -1;
+	coffset = -1;
+	clength = 0;
+	poffset = -1;
+	plength = 0;
+	stype = 0;
 }
 
-int DShaderBuffer11::GetCBufferIndex(LPCSTR cbuffername) const
+bool DShaderBuffer11::HasProperty(const LPCSTR key) const
 {
-	if (m_params.find(cbuffername) != m_params.end())
+	if (m_params.find(key) != m_params.end())
 	{
-		//if (m_params.at(cbuffername).shaderType == shaderType)
-			return m_params.at(cbuffername).bufferIndex;
+		return true;
 	}
-	return -1;
+	return false;
 }
 
-int DShaderBuffer11::GetCBufferOffset(LPCSTR cbuffername) const
-{
-	if (m_params.find(cbuffername) != m_params.end())
-	{
-		//if (m_params.at(cbuffername).shaderType == shaderType)
-		return m_params.at(cbuffername).bufferOffset;
-	}
-	return -1;
-}
-
-int DShaderBuffer11::GetCBufferLength(LPCSTR cbuffername) const
-{
-	if (m_params.find(cbuffername) != m_params.end())
-	{
-		//if (m_params.at(cbuffername).shaderType == shaderType)
-		return m_params.at(cbuffername).bufferLength;
-	}
-	return 0;
-}
-
-int DShaderBuffer11::GetCBufferType(LPCSTR cbuffername) const
-{
-	if (m_params.find(cbuffername) != m_params.end())
-	{
-		//if (m_params.at(cbuffername).shaderType == shaderType)
-		return m_params.at(cbuffername).shaderType;
-	}
-	return 0;
-}
-
-int DShaderBuffer11::GetPropertyIndex(const LPCSTR cbuffername, const LPCSTR key) const
-{
-	if (m_params.find(cbuffername) != m_params.end())
-	{
-		ShaderParam pm = m_params.at(cbuffername);
-		if (pm.properties.find(key) != pm.properties.end())
-			return pm.properties.at(key).index;
-	}
-	return -1;
-}
-
-int DShaderBuffer11::GetPropertyOffset(const LPCSTR cbuffername, const LPCSTR key) const
-{
-	if (m_params.find(cbuffername) != m_params.end())
-	{
-		ShaderParam pm = m_params.at(cbuffername);
-		if (pm.properties.find(key) != pm.properties.end())
-			return pm.properties.at(key).offset;
-	}
-	return -1;
-}
-
-int DShaderBuffer11::GetPropertyLength(const LPCSTR cbufferName, const LPCSTR key) const
-{
-	if (m_params.find(cbufferName) != m_params.end())
-	{
-		ShaderParam pm = m_params.at(cbufferName);
-		if (pm.properties.find(key) != pm.properties.end())
-			return pm.properties.at(key).length;
-	}
-	return 0;
-}
-
-void DShaderBuffer11::GetPropertyInfo(const LPCSTR cbufferName, const LPCSTR key, int & index, int & offset, int & length) const
-{
-	if (m_params.find(cbufferName) != m_params.end())
-	{
-		ShaderParam pm = m_params.at(cbufferName);
-		if (pm.properties.find(key) != pm.properties.end())
-		{
-			ShaderProperty pr = pm.properties.at(key);
-			index = pr.index;
-			offset = pr.offset;
-			length = pr.length;
-			return;
-		}
-	}
-	index = -1;
-	offset = -1;
-	length = 0;
-}
+//unsigned int DShaderBuffer11::GetPropertyCount(LPCSTR cbuffername) const
+//{
+//	if (m_params.find(cbuffername) != m_params.end())
+//	{
+//		return m_params.at(cbuffername).propertyCount;
+//	}
+//	return 0;
+//}
+//
+//void DShaderBuffer11::GetCBufferInfo(LPCSTR cbuffername, int & index, int & offset, int& length, int& shaderType) const
+//{
+//	if (m_params.find(cbuffername) != m_params.end())
+//	{
+//		//if (stype == shaderType)
+//		{
+//			index = m_params.at(cbuffername).bufferIndex;
+//			offset = m_params.at(cbuffername).bufferOffset;
+//			shaderType = m_params.at(cbuffername).shaderType;
+//			length = m_params.at(cbuffername).bufferLength;
+//			return;
+//		}
+//	}
+//	index = -1;
+//	offset = -1;
+//	shaderType = 0;
+//	length = 0;
+//}
+//
+//int DShaderBuffer11::GetCBufferIndex(LPCSTR cbuffername) const
+//{
+//	if (m_params.find(cbuffername) != m_params.end())
+//	{
+//		//if (m_params.at(cbuffername).shaderType == shaderType)
+//			return m_params.at(cbuffername).bufferIndex;
+//	}
+//	return -1;
+//}
+//
+//int DShaderBuffer11::GetCBufferOffset(LPCSTR cbuffername) const
+//{
+//	if (m_params.find(cbuffername) != m_params.end())
+//	{
+//		//if (m_params.at(cbuffername).shaderType == shaderType)
+//		return m_params.at(cbuffername).bufferOffset;
+//	}
+//	return -1;
+//}
+//
+//int DShaderBuffer11::GetCBufferLength(LPCSTR cbuffername) const
+//{
+//	if (m_params.find(cbuffername) != m_params.end())
+//	{
+//		//if (m_params.at(cbuffername).shaderType == shaderType)
+//		return m_params.at(cbuffername).bufferLength;
+//	}
+//	return 0;
+//}
+//
+//int DShaderBuffer11::GetCBufferType(LPCSTR cbuffername) const
+//{
+//	if (m_params.find(cbuffername) != m_params.end())
+//	{
+//		//if (m_params.at(cbuffername).shaderType == shaderType)
+//		return m_params.at(cbuffername).shaderType;
+//	}
+//	return 0;
+//}
+//
+//int DShaderBuffer11::GetPropertyIndex(const LPCSTR cbuffername, const LPCSTR key) const
+//{
+//	if (m_params.find(cbuffername) != m_params.end())
+//	{
+//		ShaderParam pm = m_params.at(cbuffername);
+//		if (pm.properties.find(key) != pm.properties.end())
+//			return pm.properties.at(key).index;
+//	}
+//	return -1;
+//}
+//
+//int DShaderBuffer11::GetPropertyOffset(const LPCSTR cbuffername, const LPCSTR key) const
+//{
+//	if (m_params.find(cbuffername) != m_params.end())
+//	{
+//		ShaderParam pm = m_params.at(cbuffername);
+//		if (pm.properties.find(key) != pm.properties.end())
+//			return pm.properties.at(key).offset;
+//	}
+//	return -1;
+//}
+//
+//int DShaderBuffer11::GetPropertyLength(const LPCSTR cbufferName, const LPCSTR key) const
+//{
+//	if (m_params.find(cbufferName) != m_params.end())
+//	{
+//		ShaderParam pm = m_params.at(cbufferName);
+//		if (pm.properties.find(key) != pm.properties.end())
+//			return pm.properties.at(key).length;
+//	}
+//	return 0;
+//}
+//
+//void DShaderBuffer11::GetPropertyInfo(const LPCSTR cbufferName, const LPCSTR key, int & index, int & offset, int & length) const
+//{
+//	if (m_params.find(cbufferName) != m_params.end())
+//	{
+//		ShaderParam pm = m_params.at(cbufferName);
+//		if (pm.properties.find(key) != pm.properties.end())
+//		{
+//			ShaderProperty pr = pm.properties.at(key);
+//			index = pr.index;
+//			offset = pr.offset;
+//			length = pr.length;
+//			return;
+//		}
+//	}
+//	index = -1;
+//	offset = -1;
+//	length = 0;
+//}
 
 //DShaderParam * DShaderBuffer11::GetParams() const
 //{
@@ -840,6 +884,7 @@ bool DShaderBuffer11::InitShader(ID3D11Device * device, WCHAR * vsFilename, WCHA
 
 	int byteLength = 0;
 	m_cbufferCount = 0;
+	m_propertyCount = 0;
 
 	result = InitVertexShader(vertexShaderBuffer, device, &m_layout, &byteLength);
 	if (FAILED(result))
@@ -972,7 +1017,9 @@ HRESULT DShaderBuffer11::InitVertexShader(ID3DBlob* pShaderBlob, ID3D11Device* p
 	int fsize = sizeof(float);
 	int clength = 0;
 
-	for (unsigned int i = 0; i < shaderDesc.ConstantBuffers; ++i)
+	unsigned int i;
+
+	for (i = 0; i < shaderDesc.ConstantBuffers; ++i)
 	{
 		ID3D11ShaderReflectionConstantBuffer* bf = pVertexShaderReflection->GetConstantBufferByIndex(i);
 		D3D11_SHADER_BUFFER_DESC desc;
@@ -994,8 +1041,6 @@ HRESULT DShaderBuffer11::InitVertexShader(ID3DBlob* pShaderBlob, ID3D11Device* p
 		//m_paramIds[desc.Name] = m_paramBuffers.size();
 		//m_params[desc.Name] = ShaderParam(m_cbufferCount, desc.Size);
 
-		param = ShaderParam(m_cbufferCount, i, clength, 0, desc.Variables);
-
 		int offset = 0;
 		int size = 0;
 
@@ -1009,15 +1054,18 @@ HRESULT DShaderBuffer11::InitVertexShader(ID3DBlob* pShaderBlob, ID3D11Device* p
 			offset = vdesc.StartOffset / fsize;
 			size = vdesc.Size / fsize;
 
-			param.properties.insert(std::pair<const LPCSTR, ShaderProperty>(vdesc.Name, ShaderProperty(j, size, offset)));
+			param = ShaderParam(m_cbufferCount, i, clength, offset, size, 0);
+			m_params.insert(std::pair<const LPCSTR, ShaderParam>(vdesc.Name, param));
+
+			//param.properties.insert(std::pair<const LPCSTR, ShaderProperty>(vdesc.Name, ShaderProperty(j, size, offset)));
+
+			m_propertyCount += 1;
 		}
 		
-		m_params.insert(std::pair<const LPCSTR, ShaderParam>(desc.Name, param));
 		m_paramBuffers.push_back(buffer);
 
 		m_cbufferCount += 1;
 	}
-
 	
 	// Try to create Input Layout
 	hr = pD3DDevice->CreateInputLayout(&inputLayoutDesc[0], inputLayoutDesc.size(), pShaderBlob->GetBufferPointer(), pShaderBlob->GetBufferSize(), pInputLayout);
@@ -1050,8 +1098,10 @@ HRESULT DShaderBuffer11::InitPixelShader(ID3DBlob* pShaderBlob, ID3D11Device* pD
 	int fsize = sizeof(float);
 
 	int clength = 0;
+
+	unsigned int i;
 	
-	for (unsigned int i = 0; i < shaderDesc.ConstantBuffers; ++i)
+	for (i = 0; i < shaderDesc.ConstantBuffers; ++i)
 	{
 		ID3D11ShaderReflectionConstantBuffer* bf = pPixelShaderReflection->GetConstantBufferByIndex(i);
 		D3D11_SHADER_BUFFER_DESC desc;
@@ -1070,7 +1120,7 @@ HRESULT DShaderBuffer11::InitPixelShader(ID3DBlob* pShaderBlob, ID3D11Device* pD
 
 		clength = desc.Size / fsize;
 
-		param = ShaderParam(m_cbufferCount, i, clength, 1, desc.Variables);
+		
 
 		int offset = 0;
 		int size = 0;
@@ -1085,10 +1135,16 @@ HRESULT DShaderBuffer11::InitPixelShader(ID3DBlob* pShaderBlob, ID3D11Device* pD
 			offset = vdesc.StartOffset / fsize;
 			size = vdesc.Size / fsize;
 
-			param.properties.insert(std::pair<const LPCSTR, ShaderProperty>(vdesc.Name, ShaderProperty(j, size, offset)));
+			param = ShaderParam(m_cbufferCount, i, clength, offset, size, 1);
+
+			//param.properties.insert(std::pair<const LPCSTR, ShaderProperty>(vdesc.Name, ShaderProperty(j, size, offset)));
+
+			m_params.insert(std::pair<const LPCSTR, ShaderParam>(vdesc.Name, param));
+
+			m_propertyCount += 1;
 		}
 
-		m_params.insert(std::pair<const LPCSTR, ShaderParam>(desc.Name, param));
+		
 		m_paramBuffers.push_back(buffer);
 
 		m_cbufferCount += 1;

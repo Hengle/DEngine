@@ -20,15 +20,15 @@ DShader * DMaterial::GetShader() const
 	return m_shader;
 }
 
-void DMaterial::SetMatrix(const LPCSTR cbuffername, const LPCSTR key, DMatrix4x4 & matrix)
+void DMaterial::SetMatrix(const LPCSTR key, DMatrix4x4 & matrix)
 {
-	int index, offset, length, cindex, coffset, ctype, clength;
-	m_shader->GetCBufferInfo(cbuffername, cindex, coffset, clength, ctype);
-	m_shader->GetPropertyInfo(cbuffername, key, index, offset, length);
+	int offset, length, cindex, coffset, ctype, clength;
+	//m_shader->GetCBufferInfo(cbuffername, cindex, coffset, clength, ctype);
+	m_shader->GetPropertyInfo(key, cindex, coffset, clength, offset, length, ctype);
 
 	int i;
 
-	if (index >= 0 && offset >= 0 && length == 16)
+	if (offset >= 0 && length == 16)
 	{
 		if (m_params[cindex] == NULL)
 		{
@@ -42,15 +42,15 @@ void DMaterial::SetMatrix(const LPCSTR cbuffername, const LPCSTR key, DMatrix4x4
 	}
 }
 
-void DMaterial::SetVector4(const LPCSTR cbuffername, const LPCSTR key, DVector4 & vector)
+void DMaterial::SetVector4(const LPCSTR key, DVector4 & vector)
 {
-	int index, offset, length, cindex, coffset, ctype, clength;
-	m_shader->GetCBufferInfo(cbuffername, cindex, coffset, clength, ctype);
-	m_shader->GetPropertyInfo(cbuffername, key, index, offset, length);
+	int offset, length, cindex, coffset, ctype, clength;
+	//m_shader->GetCBufferInfo(cbuffername, cindex, coffset, clength, ctype);
+	m_shader->GetPropertyInfo(key, cindex, coffset, clength, offset, length, ctype);
 
 	int i;
 
-	if (index >= 0 && offset >= 0 && length == 4)
+	if (offset >= 0 && length == 4)
 	{
 		if (m_params[cindex] == NULL)
 		{
@@ -64,15 +64,15 @@ void DMaterial::SetVector4(const LPCSTR cbuffername, const LPCSTR key, DVector4 
 	}
 }
 
-void DMaterial::SetVector3(const LPCSTR cbuffername, const LPCSTR key, DVector3 & vector)
+void DMaterial::SetVector3(const LPCSTR key, DVector3 & vector)
 {
-	int index, offset, length, cindex, coffset, ctype, clength;
-	m_shader->GetCBufferInfo(cbuffername, cindex, coffset, clength, ctype);
-	m_shader->GetPropertyInfo(cbuffername, key, index, offset, length);
+	int offset, length, cindex, coffset, ctype, clength;
+	//m_shader->GetCBufferInfo(cbuffername, cindex, coffset, clength, ctype);
+	m_shader->GetPropertyInfo(key, cindex, coffset, clength, offset, length, ctype);
 
 	int i;
 
-	if (index >= 0 && offset >= 0 && length == 3)
+	if (offset >= 0 && length == 3)
 	{
 		if (m_params[cindex] == NULL)
 		{
@@ -86,15 +86,15 @@ void DMaterial::SetVector3(const LPCSTR cbuffername, const LPCSTR key, DVector3 
 	}
 }
 
-void DMaterial::SetVector2(const LPCSTR cbuffername, const LPCSTR key, DVector2 & vector)
+void DMaterial::SetVector2(const LPCSTR key, DVector2 & vector)
 {
-	int index, offset, length, cindex, coffset, ctype, clength;
-	m_shader->GetCBufferInfo(cbuffername, cindex, coffset, clength, ctype);
-	m_shader->GetPropertyInfo(cbuffername, key, index, offset, length);
+	int offset, length, cindex, coffset, ctype, clength;
+	//m_shader->GetCBufferInfo(cbuffername, cindex, coffset, clength, ctype);
+	m_shader->GetPropertyInfo(key, cindex, coffset, clength, offset, length, ctype);
 
 	int i;
 
-	if (index >= 0 && offset >= 0 && length == 2)
+	if (offset >= 0 && length == 2)
 	{
 		if (m_params[cindex] == NULL)
 		{
@@ -108,15 +108,15 @@ void DMaterial::SetVector2(const LPCSTR cbuffername, const LPCSTR key, DVector2 
 	}
 }
 
-void DMaterial::SetColor(const LPCSTR cbuffername, const LPCSTR key, DColor & color)
+void DMaterial::SetColor(const LPCSTR key, DColor & color)
 {
-	int index, offset, length, cindex, coffset, ctype, clength;
-	m_shader->GetCBufferInfo(cbuffername, cindex, coffset, clength, ctype);
-	m_shader->GetPropertyInfo(cbuffername, key, index, offset, length);
+	int offset, length, cindex, coffset, ctype, clength;
+	//m_shader->GetCBufferInfo(cbuffername, cindex, coffset, clength, ctype);
+	m_shader->GetPropertyInfo(key, cindex, coffset, clength, offset, length, ctype);
 
 	int i;
 
-	if (index >= 0 && offset >= 0 && length == 4)
+	if (offset >= 0 && length == 4)
 	{
 		if (m_params[cindex] == NULL)
 		{
@@ -130,13 +130,13 @@ void DMaterial::SetColor(const LPCSTR cbuffername, const LPCSTR key, DColor & co
 	}
 }
 
-void DMaterial::SetFloat(const LPCSTR cbuffername, const LPCSTR key, float value)
+void DMaterial::SetFloat(const LPCSTR key, float value)
 {
-	int index, offset, length, cindex, coffset, ctype, clength;
-	m_shader->GetCBufferInfo(cbuffername, cindex, coffset, clength, ctype);
-	m_shader->GetPropertyInfo(cbuffername, key, index, offset, length);
+	int offset, length, cindex, coffset, ctype, clength;
+	//m_shader->GetCBufferInfo(cbuffername, cindex, coffset, clength, ctype);
+	m_shader->GetPropertyInfo(key, cindex, coffset, clength, offset, length, ctype);
 
-	if (index >= 0 && offset >= 0 && length == 1)
+	if (offset >= 0 && length == 1)
 	{
 		if (m_params[cindex] == NULL)
 		{
@@ -151,14 +151,19 @@ void DMaterial::SetFloat(const LPCSTR cbuffername, const LPCSTR key, float value
 //{
 //}
 
-bool DMaterial::HasCBuffer(const LPCSTR buffername) const
-{
-	return m_shader->GetCBufferIndex(buffername) >= 0;
-}
+//bool DMaterial::HasCBuffer(const LPCSTR buffername) const
+//{
+//	return m_shader->GetCBufferIndex(buffername) >= 0;
+//}
+//
+//bool DMaterial::HasProperty(const LPCSTR buffername, const LPCSTR key) const
+//{
+//	return m_shader->GetPropertyIndex(buffername, key) >= 0;
+//}
 
-bool DMaterial::HasProperty(const LPCSTR buffername, const LPCSTR key) const
+bool DMaterial::HasProperty(const LPCSTR key) const
 {
-	return m_shader->GetPropertyIndex(buffername, key) >= 0;
+	return m_shader->HasProperty(key);
 }
 
 int DMaterial::GetParamCount() const

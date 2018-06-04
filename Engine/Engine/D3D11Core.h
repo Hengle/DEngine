@@ -46,7 +46,7 @@ private:
 class DShaderBuffer11 :public DShaderBuffer
 {
 private:
-	struct ShaderProperty
+	/*struct ShaderProperty
 	{
 	public:
 		ShaderProperty()
@@ -65,7 +65,7 @@ private:
 
 	public:
 		int index, length, offset;
-	};
+	};*/
 
 	class ShaderParam
 	{
@@ -76,22 +76,24 @@ private:
 			bufferOffset = -1;
 			bufferLength = 0;
 			shaderType = 0;
-			propertyCount = 0;
+			paramLength = 0;
+			paramOffset = -1;
 		}
 		
-		ShaderParam(int bufferIndex, int bufferOffset, int bufferLength, int shaderType, int propertyCount)
+		ShaderParam(int bufferIndex, int bufferOffset, int bufferLength, int paramOffset, int paramLength, int shaderType)
 		{
 			this->bufferIndex = bufferIndex;
 			this->bufferOffset = bufferOffset;
 			this->bufferLength = bufferLength;
 			this->shaderType = shaderType;
-			this->propertyCount = propertyCount;
+			this->paramOffset = paramOffset;
+			this->paramLength = paramLength;
 		}
 	public:
 		int bufferIndex, bufferOffset, bufferLength;
+		int paramOffset, paramLength;
 		int shaderType;
-		int propertyCount;
-		std::map<const std::string, ShaderProperty> properties;
+		//std::map<const std::string, ShaderProperty> properties;
 	};
 
 public:
@@ -99,16 +101,9 @@ public:
 	~DShaderBuffer11();
 	void Init(ID3D11Device* device, WCHAR*, WCHAR*);
 	virtual unsigned int GetCBufferCount() const;
-	virtual unsigned int GetPropertyCount(LPCSTR cbuffername) const;
-	virtual int GetCBufferIndex(LPCSTR cbuffername) const;
-	virtual int GetCBufferOffset(LPCSTR cbuffername) const;
-	virtual int GetCBufferLength(LPCSTR cbuffername) const;
-	virtual int GetCBufferType(LPCSTR cbuffername) const;
-	virtual int GetPropertyIndex(const LPCSTR cbufferName, const LPCSTR key) const;
-	virtual int GetPropertyOffset(const LPCSTR cbufferName, const LPCSTR key) const;
-	virtual int GetPropertyLength(const LPCSTR cbufferName, const LPCSTR key) const;
-	virtual void GetPropertyInfo(const LPCSTR cbufferName, const LPCSTR key, int&, int&, int&) const;
-	virtual void GetCBufferInfo(LPCSTR, int&, int&, int&, int&) const;
+	virtual unsigned int GetPropertyCount() const;
+	virtual void GetPropertyInfo(const LPCSTR key, int & cindex, int & coffset, int & clength, int& poffset, int& plength, int& stype) const;
+	virtual bool HasProperty(const LPCSTR key) const;
 	//virtual DShaderParam* GetParams() const;
 	virtual void Release();
 	void ApplyBuffer(ID3D11DeviceContext * deviceContext, int cindex, int coffset, int csize, int stype, float* params);
@@ -124,6 +119,7 @@ private:
 	ID3D11PixelShader *m_pixelShader;
 	ID3D11InputLayout* m_layout;
 	int m_cbufferCount;
+	int m_propertyCount;
 	std::map<const std::string, ShaderParam> m_params;
 	std::vector<ID3D11Buffer*> m_paramBuffers;
 };
@@ -141,6 +137,7 @@ public:
 	virtual DTextureBuffer* CreateTextureBuffer(WCHAR* fileName);
 	virtual DShaderBuffer* CreateShaderBuffer(WCHAR* vertexShader, WCHAR* pixelShader);
 	virtual void ApplyShaderParams(DShaderBuffer * shaderBuffer, int cindex, int coffset, int csize, int stype, float* params);
+	virtual void ApplyTextureParams(DTextureBuffer* textureBuffer);
 	virtual void DrawMesh(const DMeshBuffer*, int);
 	virtual void DrawShader(const DShaderBuffer*, int);
 

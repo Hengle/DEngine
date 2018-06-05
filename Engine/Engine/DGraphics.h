@@ -8,6 +8,7 @@ enum DGraphicsAPI
 {
 	DGRAPHICS_API_D3D11 = 0,
 	DGRAPHICS_API_D3D10 = 1,
+	DGRAPHICS_API_D3D9  = 2,
 };
 
 enum DVertexBufferType

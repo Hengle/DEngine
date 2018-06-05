@@ -71,13 +71,13 @@ void TestScene::OnGUI()
 
 void TestScene::OnLoad()
 {
-	DShader* testshader = DShader::Create(L"../Res/light.vs", L"../Res/light.ps");
+	/*DShader* testshader = DShader::Create(L"../Res/light.vs", L"../Res/light.ps");
 	if (testshader != NULL)
 	{
 		testshader->Destroy();
 		delete testshader;
 		testshader = NULL;
-	}
+	}*/
 
 	//TestLoad();
 

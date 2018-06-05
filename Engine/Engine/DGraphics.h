@@ -1,5 +1,4 @@
 #pragma once
-#include "D3D11Core.h"
 #include "DMesh.h"
 #include "DMaterial.h"
 #include "DCamera.h"
@@ -39,7 +38,7 @@ public:
 	static void DrawMesh(const DMesh*, const DMatrix4x4&, DMaterial*, const DCamera*);
 
 private:
-	D3D11Core* m_D3D;
+	DGLCore* m_GL;
 	DGraphicsAPI m_API;
 	//DImGUI* m_GUI;
 };

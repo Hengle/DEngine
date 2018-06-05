@@ -134,6 +134,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="D3D10Core.h" />
     <ClInclude Include="D3D11Core.h" />
     <ClInclude Include="DCamera.h" />
     <ClInclude Include="DColor.h" />
@@ -170,6 +171,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="D3D10Core.cpp" />
     <ClCompile Include="D3D11Core.cpp" />
     <ClCompile Include="DCamera.cpp" />
     <ClCompile Include="DColor.cpp" />

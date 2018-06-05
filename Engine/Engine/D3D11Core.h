@@ -96,6 +96,11 @@ private:
 		//std::map<const std::string, ShaderProperty> properties;
 	};
 
+	class ShaderResourceParam
+	{
+
+	};
+
 public:
 	DShaderBuffer11();
 	~DShaderBuffer11();

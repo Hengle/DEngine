@@ -1,9 +1,11 @@
 #include "DGraphics.h"
 #include "DSystem.h"
+#include "D3D10Core.h"
+#include "D3D11Core.h"
 
 DGraphics::DGraphics()
 {
-	m_D3D = 0;
+	m_GL = 0;
 	//m_GUI = 0;
 }
 
@@ -15,8 +17,11 @@ DGraphics::~DGraphics()
 bool DGraphics::Init(int width, int height, bool fullScreen, HWND hwnd, DGraphicsAPI api)
 {
 	m_API = api;
-	m_D3D = new D3D11Core();
-	if (!m_D3D->Init(width, height, fullScreen, hwnd))
+	if (api == DGRAPHICS_API_D3D11)
+		m_GL = new D3D11Core();
+	else if (api == DGRAPHICS_API_D3D10)
+		m_GL = new D3D10Core();
+	if (!m_GL->Init(width, height, fullScreen, hwnd))
 	{
 		return false;
 	}
@@ -47,12 +52,12 @@ bool DGraphics::Render()
 
 	sceneManager->UpdateScene();
 
-	m_D3D->BeginRender(0, 0, 1, 0.5f);
+	m_GL->BeginRender(0, 0, 1, 0.5f);
 
 	sceneManager->RenderScene();
 
 	//m_GUI->Render();
-	m_D3D->EndRender();
+	m_GL->EndRender();
 
 	time->Wait();
 
@@ -68,17 +73,17 @@ void DGraphics::Shutdown()
 	//}
 	//m_GUI = NULL;
 
-	if (m_D3D != NULL)
+	if (m_GL != NULL)
 	{
-		m_D3D->Destroy();
-		delete m_D3D;
+		m_GL->Destroy();
+		delete m_GL;
 	}
-	m_D3D = NULL;
+	m_GL = NULL;
 
 }
 DGLCore * DGraphics::GetGLCore()
 {
-	return m_D3D;
+	return m_GL;
 }
 //
 //ID3D11Device * DGraphics::GetDevice()
@@ -100,7 +105,7 @@ LRESULT CALLBACK DGraphics::MessageHandler(HWND hwnd, UINT uMsg, WPARAM wparam, 
 
 void DGraphics::GetResolution(FLOAT & width, FLOAT & height)
 {
-	m_D3D->GetResolution(width, height);
+	m_GL->GetResolution(width, height);
 }
 
 DGraphicsAPI DGraphics::GetAPI()

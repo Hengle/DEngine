@@ -67,10 +67,10 @@ private:
 		int index, length, offset;
 	};*/
 
-	class ShaderParam
+	class ShaderParam11
 	{
 	public:
-		ShaderParam()
+		ShaderParam11()
 		{
 			bufferIndex = -1;
 			bufferOffset = -1;
@@ -80,7 +80,7 @@ private:
 			paramOffset = -1;
 		}
 		
-		ShaderParam(int bufferIndex, int bufferOffset, int bufferLength, int paramOffset, int paramLength, int shaderType)
+		ShaderParam11(int bufferIndex, int bufferOffset, int bufferLength, int paramOffset, int paramLength, int shaderType)
 		{
 			this->bufferIndex = bufferIndex;
 			this->bufferOffset = bufferOffset;
@@ -93,7 +93,6 @@ private:
 		int bufferIndex, bufferOffset, bufferLength;
 		int paramOffset, paramLength;
 		int shaderType;
-		//std::map<const std::string, ShaderProperty> properties;
 	};
 
 	class ShaderResourceParam
@@ -125,7 +124,7 @@ private:
 	ID3D11InputLayout* m_layout;
 	int m_cbufferCount;
 	int m_propertyCount;
-	std::map<const std::string, ShaderParam> m_params;
+	std::map<const std::string, ShaderParam11> m_params;
 	std::vector<ID3D11Buffer*> m_paramBuffers;
 };
 

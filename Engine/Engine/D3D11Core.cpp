@@ -524,7 +524,7 @@ void DShaderBuffer11::GetPropertyInfo(const LPCSTR key, int & cindex, int & coff
 {
 	if (m_params.find(key) != m_params.end())
 	{
-		ShaderParam pm = m_params.at(key);
+		ShaderParam11 pm = m_params.at(key);
 		//if (pm.properties.find(key) != pm.properties.end())
 		//{
 			//ShaderProperty pr = pm.properties.at(key);
@@ -910,7 +910,7 @@ HRESULT DShaderBuffer11::InitVertexShader(ID3DBlob* pShaderBlob, ID3D11Device* p
 	// get shader description
 	D3D11_SHADER_DESC shaderDesc;
 
-	ShaderParam param;
+	ShaderParam11 param;
 	pVertexShaderReflection->GetDesc(&shaderDesc);
 
 	// Read input layout description from shader info
@@ -1036,8 +1036,8 @@ HRESULT DShaderBuffer11::InitVertexShader(ID3DBlob* pShaderBlob, ID3D11Device* p
 			offset = vdesc.StartOffset / fsize;
 			size = vdesc.Size / fsize;
 
-			param = ShaderParam(m_cbufferCount, i, clength, offset, size, 0);
-			m_params.insert(std::pair<const LPCSTR, ShaderParam>(vdesc.Name, param));
+			param = ShaderParam11(m_cbufferCount, i, clength, offset, size, 0);
+			m_params.insert(std::pair<const LPCSTR, ShaderParam11>(vdesc.Name, param));
 
 			//param.properties.insert(std::pair<const LPCSTR, ShaderProperty>(vdesc.Name, ShaderProperty(j, size, offset)));
 
@@ -1069,7 +1069,7 @@ HRESULT DShaderBuffer11::InitPixelShader(ID3DBlob* pShaderBlob, ID3D11Device* pD
 
 	D3D11_BUFFER_DESC paramBufferDesc;
 
-	ShaderParam param;
+	ShaderParam11 param;
 
 	if (FAILED(D3DReflect(pShaderBlob->GetBufferPointer(), pShaderBlob->GetBufferSize(), IID_ID3D11ShaderReflection, (void**)&pPixelShaderReflection)))
 	{
@@ -1117,11 +1117,11 @@ HRESULT DShaderBuffer11::InitPixelShader(ID3DBlob* pShaderBlob, ID3D11Device* pD
 			offset = vdesc.StartOffset / fsize;
 			size = vdesc.Size / fsize;
 
-			param = ShaderParam(m_cbufferCount, i, clength, offset, size, 1);
+			param = ShaderParam11(m_cbufferCount, i, clength, offset, size, 1);
 
 			//param.properties.insert(std::pair<const LPCSTR, ShaderProperty>(vdesc.Name, ShaderProperty(j, size, offset)));
 
-			m_params.insert(std::pair<const LPCSTR, ShaderParam>(vdesc.Name, param));
+			m_params.insert(std::pair<const LPCSTR, ShaderParam11>(vdesc.Name, param));
 
 			m_propertyCount += 1;
 		}
@@ -1133,6 +1133,8 @@ HRESULT DShaderBuffer11::InitPixelShader(ID3DBlob* pShaderBlob, ID3D11Device* pD
 	}
 
 	pPixelShaderReflection->Release();
+
+	return hr;
 }
 
 //DShaderParam11::DShaderParam11(int count)

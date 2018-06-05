@@ -146,6 +146,8 @@ void DGraphics::DrawMesh(const DMesh * mesh, const DMatrix4x4 & matrix, DMateria
 	v.Transpose();
 	p.Transpose();
 
+	
+
 	camera->GetTransform()->GetPosition(cpos);
 
 	//MatrixBufferType bf;
@@ -162,7 +164,7 @@ void DGraphics::DrawMesh(const DMesh * mesh, const DMatrix4x4 & matrix, DMateria
 	material->SetMatrix("viewMatrix", v);
 	material->SetMatrix("projectionMatrix", p);
 
-	material->SetVector3("camPos", cpos);
+	//material->SetVector3("camPos", cpos);
 
 //	material->SetCBuffer<MatrixBufferType>(bname, 0, bf);
 	//material->SetCBuffer<ViewBufferType>(cname, 0, vf);

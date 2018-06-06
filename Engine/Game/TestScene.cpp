@@ -71,15 +71,15 @@ void TestScene::OnGUI()
 
 void TestScene::OnLoad()
 {
-	/*DShader* testshader = DShader::Create(L"../Res/color.vs10", L"../Res/color.ps10");
-	if (testshader != NULL)
-	{
-		testshader->Destroy();
-		delete testshader;
-		testshader = NULL;
-	}*/
+	//DShader* testshader = DShader::Create(L"../Res/color.vs9", L"../Res/color.ps9");
+	//if (testshader != NULL)
+	//{
+	//	testshader->Destroy();
+	//	delete testshader;
+	//	testshader = NULL;
+	//}
 
-	//TestLoad();
+	TestLoad();
 
 	////DLog::Err(u8"打印个日志测试");
 	////DLog::Warn("Log Test");
@@ -137,7 +137,7 @@ void TestScene::TestLoad()
 
 	//DMesh* mesh = DMesh::Create("../Res/eboy.obj");
 	DMesh* plane = DMesh::Create(DMESH_Plane);
-	DShader* shader = DShader::Create(L"../Res/color.vs10", L"../Res/color.ps10");
+	DShader* shader = DShader::Create(L"../Res/color.vs9", L"../Res/color.ps9");
 	DMaterial* mat = new DMaterial(shader);
 
 	//mat->SetFloat("power", 1.3f);

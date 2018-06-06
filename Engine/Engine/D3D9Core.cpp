@@ -1,5 +1,5 @@
-#include "D3D9Core.h"
-
+ï»¿#include "D3D9Core.h"
+#include <fstream>
 
 D3D9Core::D3D9Core()
 {
@@ -55,9 +55,16 @@ bool D3D9Core::Init(int width, int height, bool fullScreen, HWND hwnd)
 
 	if (FAILED(result))
 	{
-		MessageBox(hwnd, L"Éè±¸´´½¨Ê§°Ü", L"³õÊ¼»¯Ê§°Ü", MB_ERR_INVALID_CHARS);
+		MessageBox(hwnd, L"è®¾å¤‡åˆ›å»ºå¤±è´¥", L"åˆå§‹åŒ–å¤±è´¥", MB_ERR_INVALID_CHARS);
 		return false;
 	}
+
+	m_viewPort.Width = width;
+	m_viewPort.Height = height;
+	m_viewPort.X = 0.0f;
+	m_viewPort.Y = 0.0f;
+	m_viewPort.MinZ = 0.0f;
+	m_viewPort.MaxZ = 1.0f;
 
 	return true;
 }
@@ -81,6 +88,8 @@ void D3D9Core::BeginRender(float r, float g, float b, float a)
 	m_device->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_COLORVALUE(r, g, b, a), 1.0f, 0);
 
 	m_device->BeginScene();
+
+	m_device->SetViewport(&m_viewPort);
 }
 
 void D3D9Core::EndRender()
@@ -88,12 +97,14 @@ void D3D9Core::EndRender()
 	m_device->EndScene();
 
 	m_device->Present(NULL, NULL, NULL, NULL);
+
+	m_device->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 }
 
-DMeshBuffer * D3D9Core::CreateMeshBuffer(int vertexCount, int indexCount, int dataSize, const float * vertices, const unsigned long * indices)
+DMeshBuffer * D3D9Core::CreateMeshBuffer(int vertexCount, int indexCount, int bufferLength, int dataSize, const float * vertices, const unsigned long * indices)
 {
 	DMeshBuffer9* buffer = new DMeshBuffer9();
-	buffer->Init(m_device, vertexCount, indexCount, dataSize, vertices, indices);
+	buffer->Init(m_device, vertexCount, indexCount, bufferLength, dataSize, vertices, indices);
 	return buffer;
 }
 
@@ -111,18 +122,23 @@ DShaderBuffer * D3D9Core::CreateShaderBuffer(WCHAR * vertexShader, WCHAR * pixel
 
 void D3D9Core::ApplyShaderParams(DShaderBuffer * shaderBuffer, int cindex, int coffset, int csize, int stype, float * params)
 {
+	DShaderBuffer9* bf9 = (DShaderBuffer9*)shaderBuffer;
+	bf9->ApplyBuffer(m_device, cindex, csize, stype, params);
 }
 
 void D3D9Core::ApplyTextureParams(DTextureBuffer * textureBuffer)
 {
 }
 
-void D3D9Core::DrawMesh(const DMeshBuffer *, int)
+void D3D9Core::DrawMesh(const DMeshBuffer * buffer, int)
 {
+	DMeshBuffer9* bf9 = (DMeshBuffer9*)buffer;
+	bf9->Draw(m_device);
 }
 
-void D3D9Core::DrawShader(const DShaderBuffer *, int)
+void D3D9Core::DrawShader(const DShaderBuffer * buffer, int)
 {
+	((DShaderBuffer9*)buffer)->Draw(m_device);
 }
 
 void D3D9Core::SetBackBufferRenderTarget()
@@ -135,11 +151,45 @@ DMeshBuffer9::DMeshBuffer9()
 	m_indexBuffer = 0;
 }
 
-void DMeshBuffer9::Init(LPDIRECT3DDEVICE9 device, int vertexCount, int indexCount, int dataSize, const float* vertices, const unsigned long* indices)
+void DMeshBuffer9::Init(LPDIRECT3DDEVICE9 device, int vertexCount, int indexCount, int bufferLength, int dataSize, const float* vertices, const unsigned long* indices)
 {
-	device->CreateVertexBuffer(dataSize, D3DUSAGE_WRITEONLY, D3DFVF_XYZ | D3DFVF_DIFFUSE, D3DPOOL_MANAGED, &m_vertexBuffer, 0);
+	device->CreateVertexBuffer(dataSize*vertexCount, D3DUSAGE_WRITEONLY, D3DFVF_XYZ | D3DFVF_DIFFUSE, D3DPOOL_MANAGED, &m_vertexBuffer, 0);
+	device->CreateIndexBuffer(sizeof(unsigned long)*indexCount, D3DUSAGE_WRITEONLY, D3DFMT_INDEX16, D3DPOOL_MANAGED, &m_indexBuffer, 0);
 
+	m_dataSize = dataSize;
+	m_vertexCount = vertexCount;
+	m_indexCount = indexCount;
+	m_pimCount = indexCount / 3;
 	//m_vertexBuffer->Lock()
+	float* ves;
+	int i;
+	m_vertexBuffer->Lock(0, 0, (void**)&ves, 0);
+
+	for (i = 0; i < vertexCount*bufferLength; i++)
+	{
+		ves[i] = vertices[i];
+	}
+
+	m_vertexBuffer->Unlock();
+
+	unsigned long* ids = 0;
+	m_indexBuffer->Lock(0, 0, (void**)&ids, 0);
+
+	for (i = 0; i < indexCount; i++)
+	{
+		ids[i] = indices[i];
+	}
+
+	m_indexBuffer->Unlock();
+}
+
+void DMeshBuffer9::Draw(LPDIRECT3DDEVICE9 device)
+{
+	device->SetStreamSource(0, m_vertexBuffer, 0, m_dataSize);
+	device->SetIndices(m_indexBuffer);
+	device->SetFVF(D3DFVF_XYZ | D3DFVF_DIFFUSE);
+
+	device->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, m_vertexCount, 0, m_pimCount);
 }
 
 void DMeshBuffer9::Release()
@@ -162,6 +212,7 @@ DShaderBuffer9::DShaderBuffer9()
 	m_pixelShader = 0;
 	m_vertexConstable = 0;
 	m_pixelConstable = 0;
+	m_propertyCount = 0;
 }
 
 DShaderBuffer9::~DShaderBuffer9()
@@ -176,20 +227,45 @@ void DShaderBuffer9::Init(LPDIRECT3DDEVICE9 device, WCHAR * vertexShader, WCHAR 
 
 unsigned int DShaderBuffer9::GetCBufferCount() const
 {
-	return 0;
+	return m_propertyCount;
 }
 
 unsigned int DShaderBuffer9::GetPropertyCount() const
 {
-	return 0;
+	return m_propertyCount;
 }
 
 void DShaderBuffer9::GetPropertyInfo(const LPCSTR key, int & cindex, int & coffset, int & clength, int & poffset, int & plength, int & stype) const
 {
+	if (m_params.find(key) != m_params.end())
+	{
+		ShaderParam9 pm = m_params.at(key);
+		//if (pm.properties.find(key) != pm.properties.end())
+		//{
+		//ShaderProperty pr = pm.properties.at(key);
+		cindex = pm.bufferIndex;
+		coffset = pm.bufferOffset;
+		clength = pm.bufferLength;
+		poffset = pm.paramOffset;
+		plength = pm.paramLength;
+		stype = pm.shaderType;
+		return;
+		//}
+	}
+	cindex = -1;
+	coffset = -1;
+	clength = 0;
+	poffset = -1;
+	plength = 0;
+	stype = 0;
 }
 
 bool DShaderBuffer9::HasProperty(const LPCSTR key) const
 {
+	if (m_params.find(key) != m_params.end())
+	{
+		return true;
+	}
 	return false;
 }
 
@@ -217,7 +293,7 @@ void DShaderBuffer9::Release()
 	}
 }
 
-bool DShaderBuffer9::InitShader(LPDIRECT3DDEVICE9, WCHAR* vsfile, WCHAR* psfile)
+bool DShaderBuffer9::InitShader(LPDIRECT3DDEVICE9 device, WCHAR* vsfile, WCHAR* psfile)
 {
 	HRESULT hr;
 	ID3DXBuffer* vshader,*pshader = 0;
@@ -227,11 +303,18 @@ bool DShaderBuffer9::InitShader(LPDIRECT3DDEVICE9, WCHAR* vsfile, WCHAR* psfile)
 		0,
 		0,
 		"Main", // entry point function name
-		"vs_1_1",
+		"vs_2_0",
 		D3DXSHADER_DEBUG,
 		&vshader,
 		&errorBuffer,
 		&m_vertexConstable);
+
+	if (errorBuffer)
+	{
+		char* log = (char*)errorBuffer->GetBufferPointer();
+		errorBuffer->Release();
+		errorBuffer = 0;
+	}
 
 	if (FAILED(hr))
 	{
@@ -243,11 +326,42 @@ bool DShaderBuffer9::InitShader(LPDIRECT3DDEVICE9, WCHAR* vsfile, WCHAR* psfile)
 		0,
 		0,
 		"Main",
-		"ps_1_1",
+		"ps_2_0",
 		D3DXSHADER_DEBUG,
 		&pshader,
 		&errorBuffer,
 		&m_pixelConstable);
+
+	if (errorBuffer)
+	{
+		char* compileErrors;
+		unsigned long bufferSize, i;
+		std::ofstream fout;
+
+
+		// Get a pointer to the error message text buffer.
+		compileErrors = (char*)(errorBuffer->GetBufferPointer());
+
+		// Get the length of the message.
+		bufferSize = errorBuffer->GetBufferSize();
+
+		// Open a file to write the error message to.
+		fout.open("shader-error.txt");
+
+		// Write out the error message.
+		for (i = 0; i<bufferSize; i++)
+		{
+			fout << compileErrors[i];
+		}
+
+		// Close the file.
+		fout.close();
+
+		// Release the error message.
+		errorBuffer->Release();
+		errorBuffer = 0;
+		//char* log = (char*)errorBuffer->GetBufferPointer();
+	}
 
 	if (FAILED(hr))
 	{
@@ -255,14 +369,120 @@ bool DShaderBuffer9::InitShader(LPDIRECT3DDEVICE9, WCHAR* vsfile, WCHAR* psfile)
 	}
 
 	
+
+	hr = device->CreateVertexShader((DWORD*)vshader->GetBufferPointer(), &m_vertexShader);
+	if (FAILED(hr))
+	{
+		return false;
+	}
+
+	hr = device->CreatePixelShader((DWORD*)pshader->GetBufferPointer(), &m_pixelShader);
+	if (FAILED(hr))
+	{
+		return false;
+	}
+
+	hr = InitVertexShader();
+	if (FAILED(hr))
+		return false;
+
+	hr = InitPixelShader();
+	if (FAILED(hr))
+		return false;
+
+	if (vshader != NULL)
+		vshader->Release();
+	vshader = 0;
+	if (pshader != NULL)
+		pshader->Release();
+	pshader = 0;
+	return true;
 }
 
-HRESULT DShaderBuffer9::InitVertexShader(ID3DBlob*, LPDIRECT3DDEVICE9, ID3D11InputLayout**, int*)
+HRESULT DShaderBuffer9::InitVertexShader()
 {
+	D3DXCONSTANTTABLE_DESC desc;
+	D3DXCONSTANT_DESC cdesc;
+	D3DXHANDLE handle;
+	HRESULT result;
 
+	result = m_vertexConstable->GetDesc(&desc);
+
+	if (FAILED(result))
+	{
+		return S_FALSE;
+	}
+
+	unsigned int i;
+	unsigned int pcount;
+	int fsize = sizeof(float);
+	int length = 0;
+	for (i = 0; i < desc.Constants; i++)
+	{
+		handle = m_vertexConstable->GetConstant(0, i);
+		m_vertexConstable->GetConstantDesc(handle, &cdesc, &pcount);
+
+		length = cdesc.Bytes / fsize;
+
+		ShaderParam9 param = ShaderParam9(m_propertyCount, m_propertyCount, cdesc.Bytes, m_propertyCount, length, 0);
+
+		m_params.insert(std::pair<std::string, ShaderParam9>(cdesc.Name, param));
+		m_handles.push_back(handle);
+
+		m_propertyCount += 1;
+	}
+
+	return S_OK;
 }
 
-HRESULT DShaderBuffer9::InitPixelShader(ID3DBlob*, LPDIRECT3DDEVICE9)
+HRESULT DShaderBuffer9::InitPixelShader()
 {
+	D3DXCONSTANTTABLE_DESC desc;
+	D3DXCONSTANT_DESC cdesc;
+	D3DXHANDLE handle;
+	HRESULT result;
 
+	result = m_pixelConstable->GetDesc(&desc);
+
+	if (FAILED(result))
+	{
+		return S_FALSE;
+	}
+
+	unsigned int i;
+	unsigned int pcount;
+	int fsize = sizeof(float);
+	int length = 0;
+	for (i = 0; i < desc.Constants; i++)
+	{
+		handle = m_pixelConstable->GetConstant(0, i);
+		m_pixelConstable->GetConstantDesc(handle, &cdesc, &pcount);
+
+		length = cdesc.Bytes / fsize;
+
+		ShaderParam9 param = ShaderParam9(m_propertyCount, m_propertyCount, cdesc.Bytes, m_propertyCount, length, 1);
+
+		m_params.insert(std::pair<std::string, ShaderParam9>(cdesc.Name, param));
+		m_handles.push_back(handle);
+
+
+		m_propertyCount += 1;
+	}
+
+	return S_OK;
+}
+
+void DShaderBuffer9::ApplyBuffer(LPDIRECT3DDEVICE9 device, int cindex, int csize, int stype, float* params)
+{
+	D3DXHANDLE handle = m_handles.at(cindex);
+	if (stype == 0)
+		m_vertexConstable->SetValue(device, handle, params, csize);
+	else
+		m_pixelConstable->SetValue(device, handle, params, csize);
+}
+
+void DShaderBuffer9::Draw(LPDIRECT3DDEVICE9 device)
+{
+	device->SetVertexShader(m_vertexShader);
+	device->SetPixelShader(m_pixelShader);
 }

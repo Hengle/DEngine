@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "DMath.h"
 #include "DColor.h"
 #include "DGLCore.h"
@@ -45,6 +45,7 @@ private:
 	unsigned long *m_indexBuffer;
 	int m_vertexCount, m_indexCount;
 	int m_dataSize;
+	int m_bufferLength;
 	int m_vertexOffset;
 	int m_normalOffset;
 	int m_colorOffset;

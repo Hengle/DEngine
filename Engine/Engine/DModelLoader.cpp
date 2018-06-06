@@ -1,4 +1,4 @@
-#include "DModelLoader.h"
+﻿#include "DModelLoader.h"
 #include "DMath.h"
 #include <string>
 #include <vector>
@@ -7,7 +7,7 @@
 
 using namespace std;
 
-bool DModelLoader::LoadObj(const char * file, float** buffer, unsigned long ** indexBuffer, int & vertexCount, int & indexCount, int& dataSize)
+bool DModelLoader::LoadObj(const char * file, float** buffer, unsigned long ** indexBuffer, int & vertexCount, int & indexCount, int& bufferLength, int& dataSize)
 //bool DObjModelLoader::LoadObj(const char*file)
 {
 	ifstream ifile;
@@ -108,6 +108,7 @@ bool DModelLoader::LoadObj(const char * file, float** buffer, unsigned long ** i
 	indexCount = outindexes.size();
 
 	dataSize = sizeof(float) * 8;
+	bufferLength = 8;
 
 	(*buffer) = new float[vertexCount * 8];
 	(*indexBuffer) = new unsigned long[indexCount];
@@ -144,12 +145,12 @@ bool DModelLoader::LoadObj(const char * file, float** buffer, unsigned long ** i
 	return true;
 }
 
-bool DModelLoader::CreateCube(float** buffer, unsigned long ** indexBuffer, int & vertexCount, int & indexCount, int& dataSize)
+bool DModelLoader::CreateCube(float** buffer, unsigned long ** indexBuffer, int & vertexCount, int & indexCount, int&, int& dataSize)
 {
 	return false;
 }
 
-bool DModelLoader::CreatePlane(float** buffer, unsigned long ** indexBuffer, int & vertexCount, int & indexCount, int& dataSize)
+bool DModelLoader::CreatePlane(float** buffer, unsigned long ** indexBuffer, int & vertexCount, int & indexCount, int& bufferLength, int& dataSize)
 {
 	dataSize = sizeof(float) * 8;
 
@@ -168,6 +169,8 @@ bool DModelLoader::CreatePlane(float** buffer, unsigned long ** indexBuffer, int
 
 	vertexCount = (step + 1)*(step + 1);
 	indexCount = (step)*(step)* 6;
+
+	bufferLength = 8;
 
 	(*buffer) = new float[vertexCount*8];
 	(*indexBuffer) = new unsigned long[indexCount];

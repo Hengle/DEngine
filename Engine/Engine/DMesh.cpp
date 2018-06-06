@@ -1,4 +1,4 @@
-#include "DMesh.h"
+﻿#include "DMesh.h"
 #include "DModelLoader.h"
 #include "DSystem.h"
 
@@ -170,10 +170,10 @@ DMesh * DMesh::Create(DMeshDefine meshDefine)
 {
 	float* vertices;
 	unsigned long* indices;
-	int vcount, icount, dsize;
+	int vcount, icount, dsize, blen;
 	if (meshDefine == DMESH_Plane)
 	{
-		DModelLoader::CreatePlane(&vertices, &indices, vcount, icount, dsize);
+		DModelLoader::CreatePlane(&vertices, &indices, vcount, icount, blen, dsize);
 	}
 	else
 		return NULL;
@@ -184,10 +184,11 @@ DMesh * DMesh::Create(DMeshDefine meshDefine)
 	mesh->m_vertexCount = vcount;
 	mesh->m_indexCount = icount;
 	mesh->m_dataSize = dsize;
+	mesh->m_bufferLength = blen;
 	mesh->m_vertexOffset = 8;
 	mesh->m_uvOffset = 3;
 	mesh->m_normalOffset = 5;
-	mesh->m_meshBuffer = DSystem::GetGraphicsMgr()->GetGLCore()->CreateMeshBuffer(vcount, icount, dsize, vertices, indices);
+	mesh->m_meshBuffer = DSystem::GetGraphicsMgr()->GetGLCore()->CreateMeshBuffer(vcount, icount, blen, dsize, vertices, indices);
 
 	return mesh;
 }
@@ -196,8 +197,8 @@ DMesh * DMesh::Create(char* fileName)
 {
 	float* vertices;
 	unsigned long* indices;
-	int vcount, icount, dsize;
-	DModelLoader::LoadObj(fileName, &vertices, &indices, vcount, icount, dsize);
+	int vcount, icount, dsize, blen;
+	DModelLoader::LoadObj(fileName, &vertices, &indices, vcount, icount, blen, dsize);
 
 	DMesh* mesh = new DMesh();
 	mesh->m_vertexBuffer = vertices;
@@ -205,10 +206,11 @@ DMesh * DMesh::Create(char* fileName)
 	mesh->m_vertexCount = vcount;
 	mesh->m_indexCount = icount;
 	mesh->m_dataSize = dsize;
+	mesh->m_bufferLength = blen;
 	mesh->m_vertexOffset = 8;
 	mesh->m_uvOffset = 3;
 	mesh->m_normalOffset = 5;
-	mesh->m_meshBuffer = DSystem::GetGraphicsMgr()->GetGLCore()->CreateMeshBuffer(vcount, icount, dsize, vertices, indices);
+	mesh->m_meshBuffer = DSystem::GetGraphicsMgr()->GetGLCore()->CreateMeshBuffer(vcount, icount, blen, dsize, vertices, indices);
 
 	return mesh;
 }

@@ -325,7 +325,7 @@ void D3D10Core::EndRender()
 	m_swapChain->Present(0, 0);
 }
 
-DMeshBuffer * D3D10Core::CreateMeshBuffer(int vertexCount, int indexCount, int dataSize, const float * vertices, const unsigned long * indices)
+DMeshBuffer * D3D10Core::CreateMeshBuffer(int vertexCount, int indexCount, int bufferLength, int dataSize, const float * vertices, const unsigned long * indices)
 {
 	DMeshBuffer10* buffer = new DMeshBuffer10();
 	buffer->Init(m_device, vertexCount, indexCount, dataSize, vertices, indices);

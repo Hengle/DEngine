@@ -1,18 +1,26 @@
-#pragma once
+﻿#pragma once
 #include "DGLCore.h"
 #include <d3d9.h>
 #include <d3dx9.h>
+#include <map>
+#include <vector>
+#include <string>
 
 class DMeshBuffer9 : public DMeshBuffer
 {
 public:
 	DMeshBuffer9();
-	void Init(LPDIRECT3DDEVICE9, int vertexCount, int indexCount, int dataSize, const float* vertices, const unsigned long* indices);
+	void Init(LPDIRECT3DDEVICE9, int vertexCount, int indexCount, int bufferLength, int dataSize, const float* vertices, const unsigned long* indices);
+	void Draw(LPDIRECT3DDEVICE9);
 	virtual void Release();
 
 private:
 	IDirect3DVertexBuffer9* m_vertexBuffer;
 	IDirect3DIndexBuffer9* m_indexBuffer;
+	int m_dataSize;
+	int m_vertexCount;
+	int m_indexCount;
+	int m_pimCount;
 };
 
 class DTextureBuffer9 : public DTextureBuffer
@@ -23,6 +31,35 @@ public:
 
 class DShaderBuffer9 : public DShaderBuffer
 {
+private:
+	class ShaderParam9
+	{
+	public:
+		ShaderParam9()
+		{
+			bufferIndex = -1;
+			bufferOffset = -1;
+			bufferLength = 0;
+			shaderType = 0;
+			paramLength = 0;
+			paramOffset = -1;
+		}
+
+		ShaderParam9(int bufferIndex, int bufferOffset, int bufferLength, int paramOffset, int paramLength, int shaderType)
+		{
+			this->bufferIndex = bufferIndex;
+			this->bufferOffset = bufferOffset;
+			this->bufferLength = bufferLength;
+			this->shaderType = shaderType;
+			this->paramOffset = paramOffset;
+			this->paramLength = paramLength;
+		}
+	public:
+		int bufferIndex, bufferOffset, bufferLength;
+		int paramOffset, paramLength;
+		int shaderType;
+	};
+
 public:
 	DShaderBuffer9();
 	~DShaderBuffer9();
@@ -32,17 +69,22 @@ public:
 	virtual void GetPropertyInfo(const LPCSTR key, int & cindex, int & coffset, int & clength, int& poffset, int& plength, int& stype) const;
 	virtual bool HasProperty(const LPCSTR key) const;
 	virtual void Release();
+	void ApplyBuffer(LPDIRECT3DDEVICE9, int cindex, int csize, int stype, float* params);
+	void Draw(LPDIRECT3DDEVICE9);
 
 private:
 	bool InitShader(LPDIRECT3DDEVICE9, WCHAR*, WCHAR*);
-	HRESULT InitVertexShader(ID3DBlob*, LPDIRECT3DDEVICE9, ID3D11InputLayout**, int*);
-	HRESULT InitPixelShader(ID3DBlob*, LPDIRECT3DDEVICE9);
+	HRESULT InitVertexShader();
+	HRESULT InitPixelShader();
 
 private:
 	IDirect3DVertexShader9* m_vertexShader;
 	IDirect3DPixelShader9* m_pixelShader;
 	ID3DXConstantTable* m_vertexConstable;
 	ID3DXConstantTable* m_pixelConstable;
+	int m_propertyCount;
+	std::map<std::string, ShaderParam9> m_params;
+	std::vector<D3DXHANDLE> m_handles;
 };
 
 class D3D9Core : public DGLCore
@@ -55,7 +97,7 @@ public:
 	virtual void Destroy();
 	virtual void BeginRender(float, float, float, float);
 	virtual void EndRender();
-	virtual DMeshBuffer* CreateMeshBuffer(int vertexCount, int indexCount, int dataSize, const float* vertices, const unsigned long* indices);
+	virtual DMeshBuffer* CreateMeshBuffer(int vertexCount, int indexCount, int bufferLength, int dataSize, const float* vertices, const unsigned long* indices);
 	virtual DTextureBuffer* CreateTextureBuffer(WCHAR* fileName);
 	virtual DShaderBuffer* CreateShaderBuffer(WCHAR* vertexShader, WCHAR* pixelShader);
 	virtual void ApplyShaderParams(DShaderBuffer * shaderBuffer, int cindex, int coffset, int csize, int stype, float* params);
@@ -68,5 +110,6 @@ public:
 private:
 	LPDIRECT3D9 m_d3d;
 	LPDIRECT3DDEVICE9 m_device;
+	D3DVIEWPORT9 m_viewPort;
 };
 

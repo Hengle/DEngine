@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "DGLCore.h"
 #include <map>
 #include <vector>
@@ -85,7 +85,7 @@ public:
 	virtual void Destroy();
 	virtual void BeginRender(float, float, float, float);
 	virtual void EndRender();
-	virtual DMeshBuffer* CreateMeshBuffer(int vertexCount, int indexCount, int dataSize, const float* vertices, const unsigned long* indices);
+	virtual DMeshBuffer* CreateMeshBuffer(int vertexCount, int indexCount, int bufferLength, int dataSize, const float* vertices, const unsigned long* indices);
 	virtual DTextureBuffer* CreateTextureBuffer(WCHAR* fileName);
 	virtual DShaderBuffer* CreateShaderBuffer(WCHAR* vertexShader, WCHAR* pixelShader);
 	virtual void ApplyShaderParams(DShaderBuffer * shaderBuffer, int cindex, int coffset, int csize, int stype, float* params);

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <d3d11.h>
 #include <dxgi.h>
 #include <d3dcommon.h>
@@ -43,7 +43,7 @@ public:
 	virtual void Destroy() = 0;
 	virtual void BeginRender(float, float, float, float) = 0;
 	virtual void EndRender() = 0;
-	virtual DMeshBuffer* CreateMeshBuffer(int vertexCount, int indexCount, int dataSize, const float* vertices, const unsigned long* indices) = 0;
+	virtual DMeshBuffer* CreateMeshBuffer(int vertexCount, int indexCount, int bufferLength, int dataSize, const float* vertices, const unsigned long* indices) = 0;
 	virtual DTextureBuffer* CreateTextureBuffer(WCHAR* fileName) = 0;
 	virtual DShaderBuffer* CreateShaderBuffer(WCHAR* vertexShader, WCHAR* pixelShader) = 0;
 	virtual void ApplyShaderParams(DShaderBuffer * shaderBuffer, int cindex, int coffset, int csize, int stype, float* params) = 0;

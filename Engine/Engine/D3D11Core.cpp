@@ -416,7 +416,7 @@ void D3D11Core::EndRender()
 	}
 }
 
-DMeshBuffer * D3D11Core::CreateMeshBuffer(int vertexCount, int indexCount, int dataSize, const float* vertices, const unsigned long* indices)
+DMeshBuffer * D3D11Core::CreateMeshBuffer(int vertexCount, int indexCount, int bufferLength, int dataSize, const float* vertices, const unsigned long* indices)
 {
 	DMeshBuffer11* buffer = new DMeshBuffer11();
 	buffer->Init(m_device, vertexCount, indexCount, dataSize, vertices, indices);

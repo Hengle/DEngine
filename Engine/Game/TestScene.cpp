@@ -79,7 +79,7 @@ void TestScene::OnLoad()
 		testshader = NULL;
 	}*/
 
-	TestLoad();
+	//TestLoad();
 
 	////DLog::Err(u8"打印个日志测试");
 	////DLog::Warn("Log Test");

@@ -111,7 +111,7 @@ bool D3D10Core::Init(int width, int height, bool fullScreen, HWND hwnd)
 	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	sd.SampleDesc.Count = 1;
 	sd.SampleDesc.Quality = 0;
-	sd.Windowed = true;
+	sd.Windowed = !fullScreen;
 	sd.OutputWindow = hwnd;
 
 	sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;

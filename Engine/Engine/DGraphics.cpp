@@ -2,6 +2,7 @@
 #include "DSystem.h"
 #include "D3D10Core.h"
 #include "D3D11Core.h"
+#include "D3D9Core.h"
 
 DGraphics::DGraphics()
 {
@@ -21,6 +22,8 @@ bool DGraphics::Init(int width, int height, bool fullScreen, HWND hwnd, DGraphic
 		m_GL = new D3D11Core();
 	else if (api == DGRAPHICS_API_D3D10)
 		m_GL = new D3D10Core();
+	else if (api == DGRAPHICS_API_D3D9)
+		m_GL = new D3D9Core();
 	if (!m_GL->Init(width, height, fullScreen, hwnd))
 	{
 		return false;

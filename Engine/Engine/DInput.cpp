@@ -51,11 +51,11 @@ bool DInput::Init(HINSTANCE hInstance, HWND hwnd, int screenWidth, int screenHei
 	}
 
 	// Now acquire the keyboard.
-	result = m_keyboard->Acquire();
+	/*result = m_keyboard->Acquire();
 	if (FAILED(result))
 	{
 		return false;
-	}
+	}*/
 
 	// Initialize the direct input interface for the mouse.
 	result = m_directInput->CreateDevice(GUID_SysMouse, &m_mouse, NULL);
@@ -79,11 +79,11 @@ bool DInput::Init(HINSTANCE hInstance, HWND hwnd, int screenWidth, int screenHei
 	}
 
 	// Acquire the mouse.
-	result = m_mouse->Acquire();
+	/*result = m_mouse->Acquire();
 	if (FAILED(result))
 	{
 		return false;
-	}
+	}*/
 
 	return true;
 }

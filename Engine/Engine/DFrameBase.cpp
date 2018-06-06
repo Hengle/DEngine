@@ -20,10 +20,11 @@ void DFrameBase::Create()
 		return;
 	result = system->Init();
 
-	OnInit();
-
 	if (result)
+	{
+		OnInit();
 		system->Run();
+	}
 	system->Shutdown();
 	delete system;
 }

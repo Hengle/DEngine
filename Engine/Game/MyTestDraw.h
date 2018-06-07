@@ -1,5 +1,6 @@
-#pragma once
+﻿#pragma once
 #include <d3dx9.h>
+#include "MyTestShader.h"
 
 class MyTestDraw
 {
@@ -8,8 +9,10 @@ public:
 	~MyTestDraw();
 	void Init();
 	void Render();
+	void Release();
 
 private:
-	ID3DXMesh*m_mesh;
+	IDirect3DVertexBuffer9*m_mesh;
+	MyTestShader* m_shader;
 };
 

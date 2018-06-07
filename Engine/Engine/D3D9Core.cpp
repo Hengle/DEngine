@@ -14,6 +14,8 @@ D3D9Core::~D3D9Core()
 
 bool D3D9Core::Init(int width, int height, bool fullScreen, HWND hwnd)
 {
+	DGLCore::Init(width, height, fullScreen, hwnd);
+
 	HRESULT result;
 
 	m_d3d = Direct3DCreate9(D3D_SDK_VERSION);    // create the Direct3D interface
@@ -85,7 +87,7 @@ void D3D9Core::Destroy()
 
 void D3D9Core::BeginRender(float r, float g, float b, float a)
 {
-	m_device->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_COLORVALUE(r, g, b, a), 1.0f, 0);
+	m_device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_COLORVALUE(r, g, b, a), 1.0f, 0);
 
 	m_device->BeginScene();
 
@@ -96,9 +98,9 @@ void D3D9Core::EndRender()
 {
 	m_device->EndScene();
 
-	m_device->Present(NULL, NULL, NULL, NULL);
+	m_device->Present(0, 0, 0, 0);
 
-	m_device->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+	//m_device->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 }
 
 DMeshBuffer * D3D9Core::CreateMeshBuffer(int vertexCount, int indexCount, int bufferLength, int dataSize, const float * vertices, const unsigned long * indices)

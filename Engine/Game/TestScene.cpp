@@ -79,7 +79,10 @@ void TestScene::OnLoad()
 	//	testshader = NULL;
 	//}
 
-	TestLoad();
+	testd = new MyTestDraw();
+	testd->Init();
+
+	//TestLoad();
 
 	////DLog::Err(u8"打印个日志测试");
 	////DLog::Warn("Log Test");
@@ -166,7 +169,9 @@ void TestScene::TestLoad()
 
 void TestScene::OnUnLoad()
 {
-
+	testd->Release();
+	delete testd;
+	testd = NULL;
 	/*m_Model->Shutdown();
 	delete m_Model;
 	m_Model = 0;
@@ -180,6 +185,7 @@ void TestScene::OnUnLoad()
 
 void TestScene::OnRender()
 {
+	testd->Render();
 	/*DSystem::GetGraphicsCore()->DrawLine(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, 1, 1));
 	DSystem::GetGraphicsCore()->DrawLine(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-1, 1, 1));
 	DSystem::GetGraphicsCore()->DrawLine(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, -1, 1));

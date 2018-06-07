@@ -1,8 +1,9 @@
-#pragma once
+﻿#pragma once
 #include "DScene.h"
 #include "DDisplayObject.h"
 #include "DShader.h"
 #include "DMesh.h"
+#include "MyTestDraw.h"
 
 class TestScene : public DScene
 {
@@ -24,4 +25,5 @@ private:
 	//ColorShaderClass* m_ColorShader;
 	DDisplayObject* m_plane;
 	DDisplayObject* m_obj0;
+	MyTestDraw *testd;
 };

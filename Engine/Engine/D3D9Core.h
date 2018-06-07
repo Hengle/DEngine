@@ -107,6 +107,11 @@ public:
 
 	virtual void SetBackBufferRenderTarget();
 
+	LPDIRECT3DDEVICE9 GetDevice()
+	{
+		return m_device;
+	}
+
 private:
 	LPDIRECT3D9 m_d3d;
 	LPDIRECT3DDEVICE9 m_device;

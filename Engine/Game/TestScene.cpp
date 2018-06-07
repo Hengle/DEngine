@@ -151,17 +151,17 @@ void TestScene::TestLoad()
 
 	AddDisplayObject(m_plane);
 
-	DMesh* mesh = DMesh::Create("../Res/eboy.obj");
-	DMaterial* mat2 = new DMaterial(shader);
+	//DMesh* mesh = DMesh::Create("../Res/eboy.obj");
+	//DMaterial* mat2 = new DMaterial(shader);
 
-	//mat2->SetFloat("power", 1.6f);
-	//mat2->SetColor("color", DColor(0.0f, 1.0f, 0.0f, 1.0f));
+	////mat2->SetFloat("power", 1.6f);
+	////mat2->SetColor("color", DColor(0.0f, 1.0f, 0.0f, 1.0f));
 
-	m_obj0 = new DDisplayObject(mesh, mat2);
-	transform = m_obj0->GetTransform();
-	transform->SetPosition(0.0f, 1.64f, 0.0f);
+	//m_obj0 = new DDisplayObject(mesh, mat2);
+	//transform = m_obj0->GetTransform();
+	//transform->SetPosition(0.0f, 1.64f, 0.0f);
 
-	AddDisplayObject(m_obj0);
+	//AddDisplayObject(m_obj0);
 }
 
 void TestScene::OnUnLoad()

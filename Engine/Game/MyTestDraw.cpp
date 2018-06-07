@@ -36,7 +36,7 @@ void MyTestDraw::Init()
 	
 	
 	D3D9Core* core = (D3D9Core*)DSystem::GetGraphicsMgr()->GetGLCore();
-	core->GetDevice()->CreateVertexBuffer(3 * sizeof(float)*7, D3DUSAGE_WRITEONLY, D3DFVF_XYZ | D3DFVF_XYZW, D3DPOOL_MANAGED, &m_mesh, 0);
+	core->GetDevice()->CreateVertexBuffer(3 * sizeof(float)*7, D3DUSAGE_WRITEONLY, D3DFVF_XYZ | D3DFVF_DIFFUSE, D3DPOOL_MANAGED, &m_mesh, 0);
 
 	m_shader->Init(core->GetDevice(), L"../Res/color.vs9", L"../Res/color.ps9");
 
@@ -58,18 +58,18 @@ void MyTestDraw::Init()
 	v[7] = 0.0f;
 	v[8] = 1.0f;
 	v[9] = 2.0f;
-	v[10] = 1.0f;
+	v[10] = 255.0f;
 	v[11] = 0.0f;
-	v[12] = 1.0f;
+	v[12] = 255.0f;
 	v[13] = 0.0f;
 
 	v[14] = 1.0f;
 	v[15] = 0.0f;
 	v[16] = 2.0f;
-	v[17] = 1.0f;
+	v[17] = 255.0f;
 	v[18] = 0.0f;
 	v[19] = 0.0f;
-	v[20] = 1.0f;
+	v[20] = 255.0f;
 
 
 	m_mesh->Unlock();
@@ -91,7 +91,7 @@ void MyTestDraw::Render()
 
 	LPDIRECT3DDEVICE9 Device = core->GetDevice();
 
-	Device->SetFVF(D3DFVF_XYZ | D3DFVF_XYZW);
+	Device->SetFVF(D3DFVF_XYZ | D3DFVF_DIFFUSE);
 	Device->SetStreamSource(0, m_mesh, 0, sizeof(float)*7);
 
 	// draw the triangle to the left with flat shading

@@ -124,7 +124,26 @@ void MyTestShader::Release()
 
 void MyTestShader::SetWorldMatrix(LPDIRECT3DDEVICE9 device, D3DXMATRIX* matrix)
 {
-	m_vertexConstable->SetMatrix(device, m_worldMatrix, matrix);
+	float m[16];
+	m[0] = matrix->_11;
+	m[1] = matrix->_12;
+	m[2] = matrix->_13;
+	m[3] = matrix->_14;
+	m[4] = matrix->_21;
+	m[5] = matrix->_22;
+	m[6] = matrix->_23;
+	m[7] = matrix->_24;
+	m[8] = matrix->_31;
+	m[9] = matrix->_32;
+	m[10] = matrix->_33;
+	m[11] = matrix->_34;
+	m[12] = matrix->_41;
+	m[13] = matrix->_42;
+	m[14] = matrix->_43;
+	m[15] = matrix->_44;
+	m_vertexConstable->SetValue(device, m_worldMatrix, (void*)m, 64);
+
+	//m_vertexConstable->SetMatrix(device, m_worldMatrix, matrix);
 }
 
 void MyTestShader::SetViewMatrix(LPDIRECT3DDEVICE9 device, D3DXMATRIX* matrix)

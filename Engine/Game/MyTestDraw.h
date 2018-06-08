@@ -12,7 +12,7 @@ public:
 	void Release();
 
 private:
-	IDirect3DVertexBuffer9*m_mesh;
+	ID3DXMesh*m_mesh;
 	MyTestShader* m_shader;
 };
 

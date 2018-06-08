@@ -1,4 +1,4 @@
-#include "DMaterial.h"
+﻿#include "DMaterial.h"
 #include "DSystem.h"
 
 
@@ -32,7 +32,7 @@ void DMaterial::SetMatrix(const LPCSTR key, DMatrix4x4 & matrix)
 	{
 		if (m_params[cindex] == NULL)
 		{
-			m_params[cindex] = new MaterialParam(clength, cindex, coffset, ctype);
+			m_params[cindex] = new MaterialParam(length, cindex, clength, coffset, ctype);
 		}
 		
 		for (i = 0; i < 16; i++)
@@ -54,7 +54,7 @@ void DMaterial::SetVector4(const LPCSTR key, DVector4 & vector)
 	{
 		if (m_params[cindex] == NULL)
 		{
-			m_params[cindex] = new MaterialParam(clength, cindex, coffset, ctype);
+			m_params[cindex] = new MaterialParam(length, cindex, clength, coffset, ctype);
 		}
 
 		for (i = 0; i < 4; i++)
@@ -76,7 +76,7 @@ void DMaterial::SetVector3(const LPCSTR key, DVector3 & vector)
 	{
 		if (m_params[cindex] == NULL)
 		{
-			m_params[cindex] = new MaterialParam(clength, cindex, coffset, ctype);
+			m_params[cindex] = new MaterialParam(length, cindex, clength, coffset, ctype);
 		}
 
 		for (i = 0; i < 3; i++)
@@ -98,7 +98,7 @@ void DMaterial::SetVector2(const LPCSTR key, DVector2 & vector)
 	{
 		if (m_params[cindex] == NULL)
 		{
-			m_params[cindex] = new MaterialParam(clength, cindex, coffset, ctype);
+			m_params[cindex] = new MaterialParam(length, cindex, clength, coffset, ctype);
 		}
 
 		for (i = 0; i < 2; i++)
@@ -120,7 +120,7 @@ void DMaterial::SetColor(const LPCSTR key, DColor & color)
 	{
 		if (m_params[cindex] == NULL)
 		{
-			m_params[cindex] = new MaterialParam(clength, cindex, coffset, ctype);
+			m_params[cindex] = new MaterialParam(length, cindex, clength, coffset, ctype);
 		}
 
 		for (i = 0; i < 4; i++)
@@ -140,7 +140,7 @@ void DMaterial::SetFloat(const LPCSTR key, float value)
 	{
 		if (m_params[cindex] == NULL)
 		{
-			m_params[cindex] = new MaterialParam(clength, cindex, coffset, ctype);
+			m_params[cindex] = new MaterialParam(length, cindex, clength, coffset, ctype);
 		}
 
 		m_params[cindex]->SetParam(offset, value);
@@ -171,9 +171,9 @@ int DMaterial::GetParamCount() const
 	return m_paramCount;
 }
 
-void DMaterial::GetParams(int index, int & pcount, int& pindex, int & poffset, int & stype, float ** params)
+void DMaterial::GetParams(int index, int & pcount, int& pindex, int & poffset, int& psize, int & stype, float ** params)
 {
-	m_params[index]->GetParams(pcount, pindex, poffset, stype, params);
+	m_params[index]->GetParams(pcount, pindex, poffset, psize, stype, params);
 }
 
 void DMaterial::Destroy()
@@ -209,13 +209,14 @@ void DMaterial::Destroy()
 //	}
 //}
 
-DMaterial::MaterialParam::MaterialParam(int length, int index, int offset, int shadertype)
+DMaterial::MaterialParam::MaterialParam(int length, int index, int size, int offset, int shadertype)
 {
 	m_params = new float[length];
 	m_shaderType = shadertype;
 	m_offset = offset;
 	m_length = length;
 	m_index = index;
+	m_size = size;
 }
 
 DMaterial::MaterialParam::~MaterialParam()
@@ -233,11 +234,12 @@ void DMaterial::MaterialParam::Release()
 	m_params = NULL;
 }
 
-void DMaterial::MaterialParam::GetParams(int & pcount, int & pindex, int & poffset, int & stype, float ** params)
+void DMaterial::MaterialParam::GetParams(int & pcount, int & pindex, int & poffset, int & psize, int & stype, float ** params)
 {
 	pcount = m_length;
 	pindex = m_index;
 	poffset = m_offset;
+	psize = m_size;
 	stype = m_shaderType;
 	(*params) = m_params;
 }

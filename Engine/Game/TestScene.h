@@ -26,4 +26,7 @@ private:
 	DDisplayObject* m_plane;
 	DDisplayObject* m_obj0;
 	MyTestDraw *testd;
+	DMesh* plane;
+	DShader* shader;
+	DMaterial* mat;
 };

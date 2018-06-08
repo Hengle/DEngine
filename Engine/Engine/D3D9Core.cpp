@@ -149,59 +149,75 @@ void D3D9Core::SetBackBufferRenderTarget()
 
 DMeshBuffer9::DMeshBuffer9()
 {
-	m_vertexBuffer = 0;
-	m_indexBuffer = 0;
+	m_mesh = 0;
+	/*m_vertexBuffer = 0;
+	m_indexBuffer = 0;*/
 }
 
 void DMeshBuffer9::Init(LPDIRECT3DDEVICE9 device, int vertexCount, int indexCount, int bufferLength, int dataSize, const float* vertices, const unsigned long* indices)
 {
-	device->CreateVertexBuffer(dataSize*vertexCount, D3DUSAGE_WRITEONLY, D3DFVF_XYZ | D3DFVF_DIFFUSE, D3DPOOL_MANAGED, &m_vertexBuffer, 0);
-	device->CreateIndexBuffer(sizeof(unsigned long)*indexCount, D3DUSAGE_WRITEONLY, D3DFMT_INDEX16, D3DPOOL_MANAGED, &m_indexBuffer, 0);
+
+	//device->CreateVertexBuffer(dataSize*vertexCount, D3DUSAGE_WRITEONLY, D3DFVF_XYZ, D3DPOOL_MANAGED, &m_vertexBuffer, 0);
+	//device->CreateIndexBuffer(sizeof(unsigned long)*indexCount, D3DUSAGE_WRITEONLY, D3DFMT_INDEX16, D3DPOOL_MANAGED, &m_indexBuffer, 0);
+	D3DVERTEXELEMENT9 elements[] =
+	{
+		{ 0, 0, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_POSITION, 0 },
+		D3DDECL_END()
+	};
 
 	m_dataSize = dataSize;
 	m_vertexCount = vertexCount;
 	m_indexCount = indexCount;
 	m_pimCount = indexCount / 3;
+	int vlength = vertexCount*bufferLength;
+
+	D3DXCreateMesh(m_pimCount, vertexCount, D3DXMESH_MANAGED, elements, device, &m_mesh);
 	//m_vertexBuffer->Lock()
 	float* ves;
 	int i;
-	m_vertexBuffer->Lock(0, 0, (void**)&ves, 0);
+	m_mesh->LockVertexBuffer(0, (void**)&ves);
 
-	for (i = 0; i < vertexCount*bufferLength; i++)
+	for (i = 0; i < vlength; i++)
 	{
 		ves[i] = vertices[i];
 	}
 
-	m_vertexBuffer->Unlock();
+	m_mesh->UnlockVertexBuffer();
 
-	unsigned long* ids = 0;
-	m_indexBuffer->Lock(0, 0, (void**)&ids, 0);
+	WORD* ids = 0;
+	m_mesh->LockIndexBuffer(0, (void**)&ids);
 
 	for (i = 0; i < indexCount; i++)
 	{
 		ids[i] = indices[i];
 	}
 
-	m_indexBuffer->Unlock();
+	m_mesh->UnlockIndexBuffer();
 }
 
 void DMeshBuffer9::Draw(LPDIRECT3DDEVICE9 device)
 {
-	device->SetStreamSource(0, m_vertexBuffer, 0, m_dataSize);
-	device->SetIndices(m_indexBuffer);
-	device->SetFVF(D3DFVF_XYZ | D3DFVF_DIFFUSE);
+	//device->SetStreamSource(0, m_vertexBuffer, 0, m_dataSize);
+	//device->SetIndices(m_indexBuffer);
+	//device->SetFVF(D3DFVF_XYZ | D3DFVF_DIFFUSE);
 
-	device->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, m_vertexCount, 0, m_pimCount);
+	//device->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, m_vertexCount, 0, m_pimCount);
+	m_mesh->DrawSubset(0);
 }
 
 void DMeshBuffer9::Release()
 {
-	if (m_vertexBuffer != NULL)
+	if (m_mesh != NULL)
+	{
+		m_mesh->Release();
+		m_mesh = NULL;
+	}
+	/*if (m_vertexBuffer != NULL)
 		m_vertexBuffer->Release();
 	m_vertexBuffer = NULL;
 	if (m_indexBuffer != NULL)
 		m_indexBuffer->Release();
-	m_indexBuffer = NULL;
+	m_indexBuffer = NULL;*/
 }
 
 void DTextureBuffer9::Release()
@@ -293,6 +309,38 @@ void DShaderBuffer9::Release()
 		m_pixelConstable->Release();
 		m_pixelConstable = NULL;
 	}
+}
+
+void DShaderBuffer9::SetMatrix(const LPCSTR key, LPDIRECT3DDEVICE9 device, DMatrix4x4 matrix)
+{
+	if (m_params.find(key) != m_params.end())
+	{
+		ShaderParam9 param = m_params.at(key);
+		D3DXHANDLE handle = m_handles.at(param.bufferIndex);
+		/*D3DXMATRIX m = D3DXMATRIX(matrix.m00, matrix.m01, matrix.m02, matrix.m03,
+			matrix.m10, matrix.m11, matrix.m12, matrix.m13,
+			matrix.m20, matrix.m21, matrix.m22, matrix.m23,
+			matrix.m30, matrix.m31, matrix.m32, matrix.m33);*/
+		float v[16];
+		v[0] = matrix.m00;
+		v[1] = matrix.m01;
+		v[2] = matrix.m02;
+		v[3] = matrix.m03;
+		v[4] = matrix.m10;
+		v[5] = matrix.m11;
+		v[6] = matrix.m12;
+		v[7] = matrix.m13;
+		v[8] = matrix.m20;
+		v[9] = matrix.m21;
+		v[10] = matrix.m22;
+		v[11] = matrix.m23;
+		v[12] = matrix.m30;
+		v[13] = matrix.m31;
+		v[14] = matrix.m32;
+		v[15] = matrix.m33;
+		m_vertexConstable->SetValue(device, handle, v, 64);
+	}
+	return;
 }
 
 bool DShaderBuffer9::InitShader(LPDIRECT3DDEVICE9 device, WCHAR* vsfile, WCHAR* psfile)
@@ -426,7 +474,7 @@ HRESULT DShaderBuffer9::InitVertexShader()
 
 		length = cdesc.Bytes / fsize;
 
-		ShaderParam9 param = ShaderParam9(m_propertyCount, m_propertyCount, cdesc.Bytes, m_propertyCount, length, 0);
+		ShaderParam9 param = ShaderParam9(m_propertyCount, m_propertyCount, cdesc.Bytes, 0, length, 0);
 
 		m_params.insert(std::pair<std::string, ShaderParam9>(cdesc.Name, param));
 		m_handles.push_back(handle);
@@ -462,7 +510,7 @@ HRESULT DShaderBuffer9::InitPixelShader()
 
 		length = cdesc.Bytes / fsize;
 
-		ShaderParam9 param = ShaderParam9(m_propertyCount, m_propertyCount, cdesc.Bytes, m_propertyCount, length, 1);
+		ShaderParam9 param = ShaderParam9(m_propertyCount, m_propertyCount, cdesc.Bytes, 0, length, 1);
 
 		m_params.insert(std::pair<std::string, ShaderParam9>(cdesc.Name, param));
 		m_handles.push_back(handle);
@@ -476,6 +524,8 @@ HRESULT DShaderBuffer9::InitPixelShader()
 
 void DShaderBuffer9::ApplyBuffer(LPDIRECT3DDEVICE9 device, int cindex, int csize, int stype, float* params)
 {
+	if (cindex < 0 || cindex >= m_handles.size())
+		return;
 	D3DXHANDLE handle = m_handles.at(cindex);
 	if (stype == 0)
 		m_vertexConstable->SetValue(device, handle, params, csize);

@@ -5,6 +5,7 @@
 #include "DTransform.h"
 #include "DLog.h"
 #include "imgui_impl_dx11.h"
+#include "D3D9Core.h"
 #include <D3DX10math.h>
 
 TestScene::TestScene(SCENEID sceneId, char * sceneName) : DScene(sceneId, sceneName)
@@ -14,6 +15,9 @@ TestScene::TestScene(SCENEID sceneId, char * sceneName) : DScene(sceneId, sceneN
 	m_plane = 0;
 	m_camera = 0;
 	m_obj0 = 0;
+	plane = 0;
+	shader = 0;
+	mat = 0;
 	//m_light = 0;
 }
 
@@ -79,10 +83,13 @@ void TestScene::OnLoad()
 	//	testshader = NULL;
 	//}
 
-	testd = new MyTestDraw();
-	testd->Init();
+	//testd = new MyTestDraw();
+	//testd->Init();
 
-	//TestLoad();
+
+	//core->GetDevice()->CreateVertexBuffer(3 * sizeof(float)*7, D3DUSAGE_WRITEONLY, D3DFVF_XYZ | D3DFVF_DIFFUSE, D3DPOOL_MANAGED, &m_mesh, 0);
+
+	TestLoad();
 
 	////DLog::Err(u8"打印个日志测试");
 	////DLog::Warn("Log Test");
@@ -139,9 +146,9 @@ void TestScene::TestLoad()
 	////transform->SetEuler(50, -30, 0);
 
 	//DMesh* mesh = DMesh::Create("../Res/eboy.obj");
-	DMesh* plane = DMesh::Create(DMESH_Plane);
-	DShader* shader = DShader::Create(L"../Res/color.vs9", L"../Res/color.ps9");
-	DMaterial* mat = new DMaterial(shader);
+	plane = DMesh::Create(DMESH_Plane);
+	shader = DShader::Create(L"../Res/color.vs9", L"../Res/color.ps9");
+	mat = new DMaterial(shader);
 
 	//mat->SetFloat("power", 1.3f);
 	//mat->SetColor("color", DColor(1.0f, 0.0f, 0.0f, 1.0f));
@@ -169,9 +176,18 @@ void TestScene::TestLoad()
 
 void TestScene::OnUnLoad()
 {
-	testd->Release();
-	delete testd;
-	testd = NULL;
+	plane->Destroy();
+	delete plane;
+	plane = 0;
+	shader->Destroy();
+	delete shader;
+	shader = 0;
+	mat->Destroy();
+	delete mat;
+	mat = 0;
+	//testd->Release();
+	//delete testd;
+	//testd = NULL;
 	/*m_Model->Shutdown();
 	delete m_Model;
 	m_Model = 0;
@@ -185,7 +201,7 @@ void TestScene::OnUnLoad()
 
 void TestScene::OnRender()
 {
-	testd->Render();
+	//testd->Render();
 	/*DSystem::GetGraphicsCore()->DrawLine(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, 1, 1));
 	DSystem::GetGraphicsCore()->DrawLine(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-1, 1, 1));
 	DSystem::GetGraphicsCore()->DrawLine(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, -1, 1));

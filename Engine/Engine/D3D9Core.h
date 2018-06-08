@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "DGLCore.h"
+#include "DMath.h"
 #include <d3d9.h>
 #include <d3dx9.h>
 #include <map>
@@ -15,8 +16,9 @@ public:
 	virtual void Release();
 
 private:
-	IDirect3DVertexBuffer9* m_vertexBuffer;
-	IDirect3DIndexBuffer9* m_indexBuffer;
+	/*IDirect3DVertexBuffer9* m_vertexBuffer;
+	IDirect3DIndexBuffer9* m_indexBuffer;*/
+	ID3DXMesh* m_mesh;
 	int m_dataSize;
 	int m_vertexCount;
 	int m_indexCount;
@@ -69,6 +71,7 @@ public:
 	virtual void GetPropertyInfo(const LPCSTR key, int & cindex, int & coffset, int & clength, int& poffset, int& plength, int& stype) const;
 	virtual bool HasProperty(const LPCSTR key) const;
 	virtual void Release();
+	void SetMatrix(const LPCSTR key, LPDIRECT3DDEVICE9 device, DMatrix4x4);
 	void ApplyBuffer(LPDIRECT3DDEVICE9, int cindex, int csize, int stype, float* params);
 	void Draw(LPDIRECT3DDEVICE9);
 

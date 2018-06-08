@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "DShader.h"
 
 class DMaterial : public DResObject
@@ -7,11 +7,11 @@ private:
 	struct MaterialParam
 	{
 	public:
-		MaterialParam(int length, int index, int offset, int shadertype);
+		MaterialParam(int length, int index, int size, int offset, int shadertype);
 		~MaterialParam();
 		void SetParam(int index, float value);
 		void Release();
-		void GetParams(int& pcount, int&pindex, int&poffset, int&stype, float**params);
+		void GetParams(int& pcount, int&pindex, int&poffset, int&psize, int&stype, float**params);
 
 	private:
 		float* m_params;
@@ -19,6 +19,7 @@ private:
 		int m_offset;
 		int m_length;
 		int m_index;
+		int m_size;
 	};
 
 public:
@@ -34,7 +35,7 @@ public:
 	//void SetTexture(const LPCSTR cbuffername, const LPCSTR key, const DTexture&);
 	bool HasProperty(const LPCSTR key) const;
 	int GetParamCount() const;
-	void GetParams(int index, int&pcount, int&pindex, int&poffset, int&stype, float**params);
+	void GetParams(int index, int&pcount, int&pindex, int&poffset, int&psize, int&stype, float**params);
 	virtual void Destroy();
 
 

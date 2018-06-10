@@ -55,7 +55,7 @@ bool DGraphics::Render()
 
 	sceneManager->UpdateScene();
 
-	m_GL->BeginRender(0, 0, 1, 0.5f);
+	m_GL->BeginRender();
 
 	sceneManager->RenderScene();
 
@@ -106,7 +106,7 @@ LRESULT CALLBACK DGraphics::MessageHandler(HWND hwnd, UINT uMsg, WPARAM wparam, 
 	return false;
 }
 
-void DGraphics::GetResolution(FLOAT & width, FLOAT & height)
+void DGraphics::GetResolution(float & width, float & height)
 {
 	m_GL->GetResolution(width, height);
 }
@@ -128,6 +128,8 @@ DGraphicsAPI DGraphics::GetAPI()
 
 void DGraphics::DrawMesh(const DMesh * mesh, const DMatrix4x4 & matrix, DMaterial * material, const DCamera * camera)
 {
+	if (mesh == NULL || material == NULL || camera == NULL)
+		return;
 	DMatrix4x4 view, proj;
 	camera->GetViewMatrix(view);
 	camera->GetProjection(proj);
@@ -144,9 +146,9 @@ void DGraphics::DrawMesh(const DMesh * mesh, const DMatrix4x4 & matrix, DMateria
 	DMatrix4x4 v = view;
 	DMatrix4x4 p = proj;
 	DVector3 cpos;
-	/*world.Transpose();
+	world.Transpose();
 	v.Transpose();
-	p.Transpose();*/
+	p.Transpose();
 
 	
 
@@ -181,7 +183,7 @@ void DGraphics::DrawMesh(const DMesh * mesh, const DMatrix4x4 & matrix, DMateria
 
 	
 
-	int ccount = material->GetParamCount();
+	/*int ccount = material->GetParamCount();
 	int i;
 	int pcount, poffset, pindex, psize, stype;
 	float* params;
@@ -191,7 +193,8 @@ void DGraphics::DrawMesh(const DMesh * mesh, const DMatrix4x4 & matrix, DMateria
 		DSystem::GetGraphicsMgr()->GetGLCore()->ApplyShaderParams(material->GetShader()->GetShaderBuffer(), pindex, poffset, psize, stype, params);
 	}
 
-	DSystem::GetGraphicsMgr()->GetGLCore()->DrawShader(material->GetShader()->GetShaderBuffer(), mesh->GetIndexCount());
+	DSystem::GetGraphicsMgr()->GetGLCore()->DrawShader(material->GetShader()->GetShaderBuffer(), mesh->GetIndexCount());*/
+	material->Apply(mesh->GetIndexCount());
 
 	
 	//core->GetDevice()->SetTransform(D3DTS_VIEW)
@@ -217,7 +220,7 @@ void DGraphics::DrawMesh(const DMesh * mesh, const DMatrix4x4 & matrix, DMateria
 	//core->GetDevice()->SetTransform(D3DTS_VIEW, &viewmatrix);
 	//core->GetDevice()->SetTransform(D3DTS_PROJECTION, &projmatrix);
 	
-
-	DSystem::GetGraphicsMgr()->GetGLCore()->DrawMesh(mesh->GetBuffer(), mesh->GetDataSize());
+	mesh->Draw();
+	//DSystem::GetGraphicsMgr()->GetGLCore()->DrawMesh(mesh->GetBuffer(), mesh->GetDataSize());
 }
 

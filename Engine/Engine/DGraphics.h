@@ -31,7 +31,7 @@ public:
 	void Shutdown();
 	DGLCore* GetGLCore();
 	LRESULT CALLBACK MessageHandler(HWND, UINT, WPARAM, LPARAM);
-	void GetResolution(FLOAT&, FLOAT&);
+	void GetResolution(float&, float&);
 	DGraphicsAPI GetAPI();
 	//ID3D11Device * GetDevice();
 	//ID3D11DeviceContext* GetDeviceContext();

@@ -7,8 +7,8 @@ DMesh::DMesh()
 	m_vertexBuffer = 0;
 	m_indexBuffer = 0;
 	m_dataSize = 0;
-	m_meshBuffer = 0;
-
+	//m_meshBuffer = 0;
+	m_meshRes = 0;
 	m_vertexOffset = 0;
 	m_normalOffset = 0;
 	m_colorOffset = 0;
@@ -24,12 +24,18 @@ DMesh::~DMesh()
 
 void DMesh::Destroy()
 {
-	if (m_meshBuffer != NULL)
+	if (m_meshRes != NULL)
+	{
+		m_meshRes->Release();
+		delete m_meshRes;
+		m_meshRes = NULL;
+	}
+	/*if (m_meshBuffer != NULL)
 	{
 		m_meshBuffer->Release();
 		delete m_meshBuffer;
 		m_meshBuffer = NULL;
-	}
+	}*/
 	if (m_vertexBuffer != NULL)
 	{
 		delete[] m_vertexBuffer;
@@ -156,15 +162,23 @@ bool DMesh::HasUV(int channel) const
 	return m_uvOffset > 0;
 }
 
-int DMesh::GetDataSize() const
+void DMesh::Draw() const
 {
-	return m_dataSize;
+	if (m_meshRes != NULL)
+	{
+		m_meshRes->Draw();
+	}
 }
 
-DMeshBuffer * DMesh::GetBuffer() const
-{
-	return m_meshBuffer;
-}
+//int DMesh::GetDataSize() const
+//{
+//	return m_dataSize;
+//}
+
+//DMeshBuffer * DMesh::GetBuffer() const
+//{
+//	return m_meshBuffer;
+//}
 
 DMesh * DMesh::Create(DMeshDefine meshDefine)
 {
@@ -178,19 +192,15 @@ DMesh * DMesh::Create(DMeshDefine meshDefine)
 	else
 		return NULL;
 
-	DMesh* mesh = new DMesh();
-	mesh->m_vertexBuffer = vertices;
-	mesh->m_indexBuffer = indices;
-	mesh->m_vertexCount = vcount;
-	mesh->m_indexCount = icount;
-	mesh->m_dataSize = dsize;
-	mesh->m_bufferLength = blen;
-	mesh->m_vertexOffset = 8;
-	mesh->m_uvOffset = 3;
-	mesh->m_normalOffset = 5;
-	mesh->m_meshBuffer = DSystem::GetGraphicsMgr()->GetGLCore()->CreateMeshBuffer(vcount, icount, blen, dsize, vertices, indices);
+	DMeshBufferDesc desc;
+	desc.dataCount = blen;
+	desc.dataSize = dsize;
+	desc.indexCount = icount;
+	desc.vertexCount = vcount;
+	desc.indices = indices;
+	desc.vertices = vertices;
 
-	return mesh;
+	return Create(&desc);
 }
 
 DMesh * DMesh::Create(char* fileName)
@@ -200,18 +210,44 @@ DMesh * DMesh::Create(char* fileName)
 	int vcount, icount, dsize, blen;
 	DModelLoader::LoadObj(fileName, &vertices, &indices, vcount, icount, blen, dsize);
 
-	DMesh* mesh = new DMesh();
-	mesh->m_vertexBuffer = vertices;
-	mesh->m_indexBuffer = indices;
-	mesh->m_vertexCount = vcount;
-	mesh->m_indexCount = icount;
-	mesh->m_dataSize = dsize;
-	mesh->m_bufferLength = blen;
-	mesh->m_vertexOffset = 8;
-	mesh->m_uvOffset = 3;
-	mesh->m_normalOffset = 5;
-	mesh->m_meshBuffer = DSystem::GetGraphicsMgr()->GetGLCore()->CreateMeshBuffer(vcount, icount, blen, dsize, vertices, indices);
+	DMeshBufferDesc desc;
+	desc.dataCount = blen;
+	desc.dataSize = dsize;
+	desc.indexCount = icount;
+	desc.vertexCount = vcount;
+	desc.indices = indices;
+	desc.vertices = vertices;
 
-	return mesh;
+	return Create(&desc);
+}
+
+DMesh * DMesh::Create(DMeshBufferDesc * desc)
+{
+	if (desc == NULL)
+		return nullptr;
+	if (desc->dataCount == 0 || desc->dataSize == 0 || desc->indexCount <= 0 || desc->vertexCount <= 0)
+		return nullptr;
+	if (desc->vertices == 0 || desc->indices == 0)
+		return nullptr;
+	DMesh* mesh = new DMesh();
+	mesh->Init(desc);
+	
+	return nullptr;
+}
+
+void DMesh::Init(DMeshBufferDesc* desc)
+{
+	m_vertexBuffer = desc->vertices;
+	m_indexBuffer = desc->indices;
+	m_vertexCount = desc->vertexCount;
+	m_indexCount = desc->indexCount;
+	m_dataSize = desc->dataSize;
+	m_bufferLength = desc->dataCount;
+	m_vertexOffset = 8;
+	m_uvOffset = 3;
+	m_normalOffset = 5;
+
+	m_meshRes = DSystem::GetGraphicsMgr()->GetGLCore()->CreateMeshRes();
+	m_meshRes->Init(desc);
 }
 

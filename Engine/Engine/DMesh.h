@@ -32,14 +32,19 @@ public:
 	bool HasNormal() const;
 	bool HasColor() const;
 	bool HasUV(int channel) const;
-	int GetDataSize() const;
-	DMeshBuffer* GetBuffer() const;
+	void Draw() const;
+	//int GetDataSize() const;
+	//DMeshBuffer* GetBuffer() const;
 
 	static DMesh* Create(DMeshDefine meshDefine);
 	static DMesh*Create(char* fileName);
 
 private:
-	DMeshBuffer* m_meshBuffer;
+	static DMesh* Create(DMeshBufferDesc*);
+	void Init(DMeshBufferDesc*);
+
+private:
+	//DMeshBuffer* m_meshBuffer;
 	bool m_vertexChanged;
 	float* m_vertexBuffer;
 	unsigned long *m_indexBuffer;
@@ -50,4 +55,5 @@ private:
 	int m_normalOffset;
 	int m_colorOffset;
 	int m_uvOffset;
+	DMeshRes* m_meshRes;
 };

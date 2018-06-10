@@ -22,128 +22,151 @@ DShader * DMaterial::GetShader() const
 
 void DMaterial::SetMatrix(const LPCSTR key, DMatrix4x4 & matrix)
 {
-	int offset, length, cindex, coffset, ctype, clength;
+	if (m_shader == NULL)
+		return;
+	DShaderParamDesc desc;
 	//m_shader->GetCBufferInfo(cbuffername, cindex, coffset, clength, ctype);
-	m_shader->GetPropertyInfo(key, cindex, coffset, clength, offset, length, ctype);
+	//m_shader->GetPropertyInfo(key, cindex, coffset, clength, offset, length, ctype);
+	m_shader->GetPropertyInfo(key, &desc);
 
 	int i;
 
-	if (offset >= 0 && length == 16)
+	if (desc.propertyOffset >= 0 && desc.propertySize == 16)
 	{
-		if (m_params[cindex] == NULL)
+		if (m_params[desc.cbufferIndex] == NULL)
 		{
-			m_params[cindex] = new MaterialParam(length, cindex, clength, coffset, ctype);
+			m_params[desc.cbufferIndex] = new MaterialParam(desc.propertySize, desc.cbufferIndex, desc.cbufferLength, desc.cbufferOffset, desc.shaderType);
 		}
 		
 		for (i = 0; i < 16; i++)
 		{
-			m_params[cindex]->SetParam(offset+i, matrix[i]);
+			m_params[desc.cbufferIndex]->SetParam(desc.propertyOffset+i, matrix[i]);
 		}
 	}
 }
 
 void DMaterial::SetVector4(const LPCSTR key, DVector4 & vector)
 {
-	int offset, length, cindex, coffset, ctype, clength;
+	if (m_shader == NULL)
+		return;
+	DShaderParamDesc desc;
+	//int offset, length, cindex, coffset, ctype, clength;
 	//m_shader->GetCBufferInfo(cbuffername, cindex, coffset, clength, ctype);
-	m_shader->GetPropertyInfo(key, cindex, coffset, clength, offset, length, ctype);
+	//m_shader->GetPropertyInfo(key, cindex, coffset, clength, offset, length, ctype);
+	m_shader->GetPropertyInfo(key, &desc);
 
 	int i;
 
-	if (offset >= 0 && length == 4)
+	if (desc.propertyOffset >= 0 && desc.propertySize == 4)
 	{
-		if (m_params[cindex] == NULL)
+		if (m_params[desc.cbufferIndex] == NULL)
 		{
-			m_params[cindex] = new MaterialParam(length, cindex, clength, coffset, ctype);
+			m_params[desc.cbufferIndex] = new MaterialParam(desc.propertySize, desc.cbufferIndex, desc.cbufferLength, desc.cbufferOffset, desc.shaderType);
 		}
 
 		for (i = 0; i < 4; i++)
 		{
-			m_params[cindex]->SetParam(offset + i, vector[i]);
+			m_params[desc.cbufferIndex]->SetParam(desc.propertyOffset + i, vector[i]);
 		}
 	}
 }
 
 void DMaterial::SetVector3(const LPCSTR key, DVector3 & vector)
 {
-	int offset, length, cindex, coffset, ctype, clength;
+	if (m_shader == NULL)
+		return;
+	DShaderParamDesc desc;
+	//int offset, length, cindex, coffset, ctype, clength;
 	//m_shader->GetCBufferInfo(cbuffername, cindex, coffset, clength, ctype);
-	m_shader->GetPropertyInfo(key, cindex, coffset, clength, offset, length, ctype);
+	//m_shader->GetPropertyInfo(key, cindex, coffset, clength, offset, length, ctype);
+	m_shader->GetPropertyInfo(key, &desc);
 
 	int i;
 
-	if (offset >= 0 && length == 3)
+	if (desc.propertyOffset >= 0 && desc.propertySize == 3)
 	{
-		if (m_params[cindex] == NULL)
+		if (m_params[desc.cbufferIndex] == NULL)
 		{
-			m_params[cindex] = new MaterialParam(length, cindex, clength, coffset, ctype);
+			m_params[desc.cbufferIndex] = new MaterialParam(desc.propertySize, desc.cbufferIndex, desc.cbufferLength, desc.cbufferOffset, desc.shaderType);
 		}
 
 		for (i = 0; i < 3; i++)
 		{
-			m_params[cindex]->SetParam(offset + i, vector[i]);
+			m_params[desc.cbufferIndex]->SetParam(desc.propertyOffset + i, vector[i]);
 		}
 	}
 }
 
 void DMaterial::SetVector2(const LPCSTR key, DVector2 & vector)
 {
-	int offset, length, cindex, coffset, ctype, clength;
+	if (m_shader == NULL)
+		return;
+	DShaderParamDesc desc;
+	//int offset, length, cindex, coffset, ctype, clength;
 	//m_shader->GetCBufferInfo(cbuffername, cindex, coffset, clength, ctype);
-	m_shader->GetPropertyInfo(key, cindex, coffset, clength, offset, length, ctype);
+	//m_shader->GetPropertyInfo(key, cindex, coffset, clength, offset, length, ctype);
+	m_shader->GetPropertyInfo(key, &desc);
 
 	int i;
 
-	if (offset >= 0 && length == 2)
+	if (desc.propertyOffset >= 0 && desc.propertySize == 2)
 	{
-		if (m_params[cindex] == NULL)
+		if (m_params[desc.cbufferIndex] == NULL)
 		{
-			m_params[cindex] = new MaterialParam(length, cindex, clength, coffset, ctype);
+			m_params[desc.cbufferIndex] = new MaterialParam(desc.propertySize, desc.cbufferIndex, desc.cbufferLength, desc.cbufferOffset, desc.shaderType);
 		}
 
 		for (i = 0; i < 2; i++)
 		{
-			m_params[cindex]->SetParam(offset + i, vector[i]);
+			m_params[desc.cbufferIndex]->SetParam(desc.propertyOffset + i, vector[i]);
 		}
 	}
 }
 
 void DMaterial::SetColor(const LPCSTR key, DColor & color)
 {
-	int offset, length, cindex, coffset, ctype, clength;
+	if (m_shader == NULL)
+		return;
+	DShaderParamDesc desc;
+	//int offset, length, cindex, coffset, ctype, clength;
 	//m_shader->GetCBufferInfo(cbuffername, cindex, coffset, clength, ctype);
-	m_shader->GetPropertyInfo(key, cindex, coffset, clength, offset, length, ctype);
+	//m_shader->GetPropertyInfo(key, cindex, coffset, clength, offset, length, ctype);
+	m_shader->GetPropertyInfo(key, &desc);
 
 	int i;
 
-	if (offset >= 0 && length == 4)
+	if (desc.propertyOffset >= 0 && desc.propertySize == 4)
 	{
-		if (m_params[cindex] == NULL)
+		if (m_params[desc.cbufferIndex] == NULL)
 		{
-			m_params[cindex] = new MaterialParam(length, cindex, clength, coffset, ctype);
+			m_params[desc.cbufferIndex] = new MaterialParam(desc.propertySize, desc.cbufferIndex, desc.cbufferLength, desc.cbufferOffset, desc.shaderType);
 		}
 
 		for (i = 0; i < 4; i++)
 		{
-			m_params[cindex]->SetParam(offset + i, color[i]);
+			m_params[desc.cbufferIndex]->SetParam(desc.propertyOffset + i, color[i]);
 		}
 	}
 }
 
 void DMaterial::SetFloat(const LPCSTR key, float value)
 {
-	int offset, length, cindex, coffset, ctype, clength;
+	if (m_shader == NULL)
+		return;
+	DShaderParamDesc desc;
+	//int offset, length, cindex, coffset, ctype, clength;
 	//m_shader->GetCBufferInfo(cbuffername, cindex, coffset, clength, ctype);
-	m_shader->GetPropertyInfo(key, cindex, coffset, clength, offset, length, ctype);
+	//m_shader->GetPropertyInfo(key, cindex, coffset, clength, offset, length, ctype);
+	m_shader->GetPropertyInfo(key, &desc);
 
-	if (offset >= 0 && length == 1)
+	if (desc.propertyOffset >= 0 && desc.propertySize == 1)
 	{
-		if (m_params[cindex] == NULL)
+		if (m_params[desc.cbufferIndex] == NULL)
 		{
-			m_params[cindex] = new MaterialParam(length, cindex, clength, coffset, ctype);
+			m_params[desc.cbufferIndex] = new MaterialParam(desc.propertySize, desc.cbufferIndex, desc.cbufferLength, desc.cbufferOffset, desc.shaderType);
 		}
 
-		m_params[cindex]->SetParam(offset, value);
+		m_params[desc.cbufferIndex]->SetParam(desc.propertyOffset, value);
 	}
 }
 
@@ -163,18 +186,39 @@ void DMaterial::SetFloat(const LPCSTR key, float value)
 
 bool DMaterial::HasProperty(const LPCSTR key) const
 {
+	if (m_shader == NULL)
+		return false;
 	return m_shader->HasProperty(key);
 }
 
-int DMaterial::GetParamCount() const
+void DMaterial::Apply(int indexCount)
 {
-	return m_paramCount;
+	if (m_shader == NULL)
+		return;
+	int i = 0;
+	int pcount, poffset, pindex, psize, stype;
+	float* params;
+	for (i = 0; i < m_paramCount; i++)
+	{
+		//material->GetParams(i, pcount, pindex, poffset, psize, stype, &params);
+		m_params[i]->GetParams(pcount, pindex, poffset, psize, stype, &params);
+		m_shader->ApplyParams(pindex, poffset, psize, stype, params);
+		//DSystem::GetGraphicsMgr()->GetGLCore()->ApplyShaderParams(material->GetShader()->GetShaderBuffer(), pindex, poffset, psize, stype, params);
+	}
+
+	m_shader->Draw(indexCount);
+	//DSystem::GetGraphicsMgr()->GetGLCore()->DrawShader(material->GetShader()->GetShaderBuffer(), mesh->GetIndexCount());
 }
 
-void DMaterial::GetParams(int index, int & pcount, int& pindex, int & poffset, int& psize, int & stype, float ** params)
-{
-	m_params[index]->GetParams(pcount, pindex, poffset, psize, stype, params);
-}
+//int DMaterial::GetParamCount() const
+//{
+//	return m_paramCount;
+//}
+//
+//void DMaterial::GetParams(int index, int & pcount, int& pindex, int & poffset, int& psize, int & stype, float ** params)
+//{
+//	m_params[index]->GetParams(pcount, pindex, poffset, psize, stype, params);
+//}
 
 void DMaterial::Destroy()
 {

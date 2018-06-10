@@ -18,13 +18,15 @@ public:
 	virtual void Destroy();
 	unsigned int GetCBufferCount() const;
 	unsigned int GetPropertyCount() const;
-	void GetPropertyInfo(const LPCSTR key, int & cindex, int & coffset, int & clength, int& poffset, int& plength, int& stype) const;
+	void GetPropertyInfo(const LPCSTR key, DShaderParamDesc* desc) const;
 	bool HasProperty(const LPCSTR key) const;
-	DShaderBuffer* GetShaderBuffer();
+	void ApplyParams(int cindex, int coffset, int csize, int stype, float* params) const;
+	void Draw(int indexCount);
+	//DShaderBuffer* GetShaderBuffer();
 	//DShaderParam* GetParam();
 
 	static DShader* Create(WCHAR*, WCHAR*);
 
 private:
-	DShaderBuffer* m_shaderBuffer;
+	DShaderRes* m_shaderRes;
 };

@@ -17,12 +17,12 @@ private:
 public:
 	~DTexture2D();
 	virtual void Destroy();
-	DTextureBuffer* GetTextureBuffer();
+	//DTextureBuffer* GetTextureBuffer();
 
 	static DTexture2D* Create(WCHAR*);
 
-private:
-	DTextureBuffer* m_texture;
+//private:
+//	DTextureBuffer* m_texture;
 };
 
 class DTextureCube : public DTexture

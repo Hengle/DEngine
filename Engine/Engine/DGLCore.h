@@ -1,37 +1,82 @@
 ﻿#pragma once
-#include <d3d11.h>
 #include <dxgi.h>
 #include <d3dcommon.h>
 
-class DMeshBuffer
+typedef struct DShaderParamDesc
+{
+public:
+	DShaderParamDesc()
+	{
+		cbufferIndex = -1;
+		cbufferOffset = -1;
+		cbufferLength = 0;
+		propertyOffset = 0;
+		propertySize = 0;
+		shaderType = 0;
+	}
+
+public:
+	int cbufferIndex, cbufferOffset, cbufferLength,propertyOffset, propertySize,shaderType;
+} DShaderParamDesc;
+
+typedef struct DMeshBufferDesc
+{
+public:
+	DMeshBufferDesc(){}
+public:
+	int vertexCount, indexCount, dataSize, dataCount;
+	float*vertices;
+	unsigned long*indices;
+} DMeshBufferDesc;
+
+//抽象Mesh资源-用于实现不同API下的mesh
+class DMeshRes
+{
+public:
+	DMeshRes();
+	void Init(DMeshBufferDesc* desc);
+	void Draw();
+	virtual void Release() = 0;
+	bool IsInitialized();
+
+protected:
+	virtual bool OnInit(DMeshBufferDesc*) = 0;
+	virtual void OnDraw() = 0;
+
+private:
+	bool m_isInitialized;
+};
+
+//抽象贴图资源-用于实现不同API下的texture
+class DTextureRes
 {
 public:
 	virtual void Release() = 0;
 };
 
-class DTextureBuffer
+//抽象shader资源-用于实现不同API下的shader
+class DShaderRes
 {
 public:
-	virtual void Release() = 0;
-};
-
-//class DShaderParam
-//{
-//public:
-//	virtual void BeginSetParam(int id, void** value) = 0;
-//	virtual void EndSetParam(int id) = 0;
-//	virtual void Release() = 0;
-//};
-
-class DShaderBuffer
-{
-public:
-	virtual unsigned int GetCBufferCount() const = 0;
-	virtual unsigned int GetPropertyCount() const = 0;
-	virtual void GetPropertyInfo(const LPCSTR key, int & cindex, int & coffset, int & clength, int& poffset, int& plength, int& stype) const = 0;
+	DShaderRes();
+	unsigned int GetCBufferCount() const;
+	unsigned int GetPropertyCount() const;
+	void Init(WCHAR* vsfile, WCHAR* psfile);
+	void ApplyParams(int cindex, int coffset, int csize, int stype, float* params);
+	void Draw(int indexCount);
+	bool IsInitialized();
+	virtual void GetPropertyInfo(const LPCSTR key, DShaderParamDesc* desc) const = 0;
 	virtual bool HasProperty(const LPCSTR key) const = 0;
 	virtual void Release() = 0;
-	//virtual DShaderParam* GetParams() const = 0;
+
+protected:
+	virtual bool OnInit(WCHAR*, WCHAR*) = 0;
+	virtual void OnApplyParams(int, int, int, int, float*) = 0;
+	virtual void OnDraw(int) = 0;
+
+protected:
+	unsigned int m_cbufferCount, m_propertyCount;
+	bool m_isInitialized;
 };
 
 class DGLCore
@@ -41,21 +86,21 @@ public:
 	~DGLCore();
 	virtual bool Init(int, int, bool, HWND);
 	virtual void Destroy() = 0;
-	virtual void BeginRender(float, float, float, float) = 0;
+	virtual void BeginRender() = 0;
 	virtual void EndRender() = 0;
-	virtual DMeshBuffer* CreateMeshBuffer(int vertexCount, int indexCount, int bufferLength, int dataSize, const float* vertices, const unsigned long* indices) = 0;
-	virtual DTextureBuffer* CreateTextureBuffer(WCHAR* fileName) = 0;
-	virtual DShaderBuffer* CreateShaderBuffer(WCHAR* vertexShader, WCHAR* pixelShader) = 0;
-	virtual void ApplyShaderParams(DShaderBuffer * shaderBuffer, int cindex, int coffset, int csize, int stype, float* params) = 0;
-	virtual void ApplyTextureParams(DTextureBuffer* textureBuffer) = 0;
-	virtual void DrawMesh(const DMeshBuffer*, int) = 0;
-	virtual void DrawShader(const DShaderBuffer*, int) = 0;
+	virtual DMeshRes* CreateMeshRes() = 0;
+	virtual DTextureRes* CreateTextureRes() = 0;
+	virtual DShaderRes* CreateShaderRes() = 0;
+	//virtual void ApplyShaderParams(DShaderBuffer * shaderBuffer, int cindex, int coffset, int csize, int stype, float* params) = 0;
+	//virtual void ApplyTextureParams(DTextureBuffer* textureBuffer) = 0;
+	//virtual void DrawMesh(const DMeshBuffer*, int) = 0;
+	//virtual void DrawShader(const DShaderBuffer*, int) = 0;
 
-	virtual void SetBackBufferRenderTarget() = 0;
-	void GetResolution(FLOAT&, FLOAT&);
+	//virtual void SetBackBufferRenderTarget() = 0;
+	void GetResolution(float&, float&);
 
 protected:
 
-	FLOAT m_width;
-	FLOAT m_height;
+	float m_width;
+	float m_height;
 };

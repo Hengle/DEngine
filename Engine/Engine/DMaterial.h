@@ -34,8 +34,9 @@ public:
 	void SetFloat(const LPCSTR key, float);
 	//void SetTexture(const LPCSTR cbuffername, const LPCSTR key, const DTexture&);
 	bool HasProperty(const LPCSTR key) const;
-	int GetParamCount() const;
-	void GetParams(int index, int&pcount, int&pindex, int&poffset, int&psize, int&stype, float**params);
+	void Apply(int indexCount);
+	//int GetParamCount() const;
+	//void GetParams(int index, int&pcount, int&pindex, int&poffset, int&psize, int&stype, float**params);
 	virtual void Destroy();
 
 

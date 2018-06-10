@@ -43,6 +43,24 @@
     <Filter Include="源文件\Core\ImGUI">
       <UniqueIdentifier>{268f2863-3abd-4eb2-8750-ae39eb6dc58a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\Core\D3D9Core">
+      <UniqueIdentifier>{65347ef2-8707-48f1-93da-ae0f714b32e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Core\D3D10Core">
+      <UniqueIdentifier>{4d960700-2704-442a-bf9a-06ba95350899}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Core\D3D11Core">
+      <UniqueIdentifier>{51e36890-efe9-4e48-86b7-ea05d2878269}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Core\D3D9Core">
+      <UniqueIdentifier>{e106ce3c-6371-400d-a4eb-80cf07a3a56b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Core\D3D10Core">
+      <UniqueIdentifier>{25368936-df6c-4f16-97c1-ad82db4d3b5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Core\D3D11Core">
+      <UniqueIdentifier>{cfab7024-3b35-4a2e-8b48-0eb006876e8d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -102,34 +120,10 @@
     <ClInclude Include="DScene.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="DObject.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="DSceneObject.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="DDisplayObject.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="DTransform.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="DCamera.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="DFrameBase.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="DMesh.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="DModelLoader.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="DLight.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="DMaterial.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="DShader.h">
@@ -141,17 +135,59 @@
     <ClInclude Include="DResObject.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="D3D11Core.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="DRes.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="D3D9Core.h">
+      <Filter>头文件\Core\D3D9Core</Filter>
     </ClInclude>
     <ClInclude Include="D3D10Core.h">
-      <Filter>头文件</Filter>
+      <Filter>头文件\Core\D3D10Core</Filter>
     </ClInclude>
-    <ClInclude Include="D3D9Core.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="D3D11Core.h">
+      <Filter>头文件\Core\D3D11Core</Filter>
+    </ClInclude>
+    <ClInclude Include="DCamera.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="DDisplayObject.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="DFrameBase.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="DLight.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="DMaterial.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="DMesh.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="DModelLoader.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="DObject.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="DRes.h">
+      <Filter>头文件\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="DMeshRes9.h">
+      <Filter>头文件\Core\D3D9Core</Filter>
+    </ClInclude>
+    <ClInclude Include="DMeshRes10.h">
+      <Filter>头文件\Core\D3D10Core</Filter>
+    </ClInclude>
+    <ClInclude Include="DMeshRes11.h">
+      <Filter>头文件\Core\D3D11Core</Filter>
+    </ClInclude>
+    <ClInclude Include="DShaderRes9.h">
+      <Filter>头文件\Core\D3D9Core</Filter>
+    </ClInclude>
+    <ClInclude Include="DShaderRes10.h">
+      <Filter>头文件\Core\D3D10Core</Filter>
+    </ClInclude>
+    <ClInclude Include="DShaderRes11.h">
+      <Filter>头文件\Core\D3D11Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -194,34 +230,10 @@
     <ClCompile Include="DScene.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="DObject.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="DSceneObject.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="DDisplayObject.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="DTransform.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="DCamera.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="DFrameBase.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="DMesh.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="DModelLoader.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="DLight.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="DMaterial.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="DShader.cpp">
@@ -233,17 +245,59 @@
     <ClCompile Include="DResObject.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="D3D11Core.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="DRes.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="D3D10Core.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="D3D9Core.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\Core\D3D9Core</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D10Core.cpp">
+      <Filter>源文件\Core\D3D10Core</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11Core.cpp">
+      <Filter>源文件\Core\D3D11Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DMeshRes9.cpp">
+      <Filter>源文件\Core\D3D9Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DMeshRes10.cpp">
+      <Filter>源文件\Core\D3D10Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DMeshRes11.cpp">
+      <Filter>源文件\Core\D3D11Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DShaderRes9.cpp">
+      <Filter>源文件\Core\D3D9Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DShaderRes10.cpp">
+      <Filter>源文件\Core\D3D10Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DShaderRes11.cpp">
+      <Filter>源文件\Core\D3D11Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DCamera.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="DDisplayObject.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="DFrameBase.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="DLight.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="DMaterial.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="DMesh.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="DModelLoader.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="DObject.cpp">
+      <Filter>源文件\Engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

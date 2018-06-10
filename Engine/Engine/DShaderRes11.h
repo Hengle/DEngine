@@ -1,5 +1,8 @@
-#pragma once
+﻿#pragma once
 #include "D3D11Core.h"
+#include <map>
+#include <vector>
+#include <string>
 
 class DShaderRes11 : public DShaderRes
 {

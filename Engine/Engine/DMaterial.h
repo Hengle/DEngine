@@ -32,11 +32,8 @@ public:
 	void SetVector2(const LPCSTR key, DVector2&);
 	void SetColor(const LPCSTR key, DColor&);
 	void SetFloat(const LPCSTR key, float);
-	//void SetTexture(const LPCSTR cbuffername, const LPCSTR key, const DTexture&);
 	bool HasProperty(const LPCSTR key) const;
 	void Apply(int indexCount);
-	//int GetParamCount() const;
-	//void GetParams(int index, int&pcount, int&pindex, int&poffset, int&psize, int&stype, float**params);
 	virtual void Destroy();
 
 
@@ -44,5 +41,4 @@ private:
 	DShader* m_shader;
 	MaterialParam** m_params;
 	unsigned int m_paramCount;
-	//DShaderParam* m_params;
 };

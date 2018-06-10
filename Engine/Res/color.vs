@@ -20,7 +20,6 @@ cbuffer MatrixBuffer
 struct VertexInputType
 {
     float3 position : POSITION;
-    float4 color : COLOR;
 };
 
 struct PixelInputType
@@ -48,7 +47,7 @@ PixelInputType ColorVertexShader(VertexInputType input)
     output.position = mul(output.position , projectionMatrix);
 
 	// Store the input color for the pixel shader to use.
-    output.color = input.color;
+    output.color = float4(0.0f,1.0f,1.0f,1.0f);
 
     return output;
 }

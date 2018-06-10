@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include <dxgi.h>
 #include <d3dcommon.h>
 
 typedef struct DShaderParamDesc
@@ -91,12 +90,6 @@ public:
 	virtual DMeshRes* CreateMeshRes() = 0;
 	virtual DTextureRes* CreateTextureRes() = 0;
 	virtual DShaderRes* CreateShaderRes() = 0;
-	//virtual void ApplyShaderParams(DShaderBuffer * shaderBuffer, int cindex, int coffset, int csize, int stype, float* params) = 0;
-	//virtual void ApplyTextureParams(DTextureBuffer* textureBuffer) = 0;
-	//virtual void DrawMesh(const DMeshBuffer*, int) = 0;
-	//virtual void DrawShader(const DShaderBuffer*, int) = 0;
-
-	//virtual void SetBackBufferRenderTarget() = 0;
 	void GetResolution(float&, float&);
 
 protected:

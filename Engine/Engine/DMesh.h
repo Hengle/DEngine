@@ -33,8 +33,6 @@ public:
 	bool HasColor() const;
 	bool HasUV(int channel) const;
 	void Draw() const;
-	//int GetDataSize() const;
-	//DMeshBuffer* GetBuffer() const;
 
 	static DMesh* Create(DMeshDefine meshDefine);
 	static DMesh*Create(char* fileName);
@@ -44,7 +42,6 @@ private:
 	void Init(DMeshBufferDesc*);
 
 private:
-	//DMeshBuffer* m_meshBuffer;
 	bool m_vertexChanged;
 	float* m_vertexBuffer;
 	unsigned long *m_indexBuffer;

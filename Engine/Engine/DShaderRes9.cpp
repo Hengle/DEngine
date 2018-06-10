@@ -1,4 +1,4 @@
-#include "DShaderRes9.h"
+﻿#include "DShaderRes9.h"
 
 DShaderRes9::DShaderRes9(LPDIRECT3DDEVICE9 device) : DShaderRes()
 {
@@ -145,15 +145,26 @@ bool DShaderRes9::OnInit(WCHAR * vsfile, WCHAR * psfile)
 	if (pshader != NULL)
 		pshader->Release();
 	pshader = 0;
+
+	m_cbufferCount = m_propertyCount;
 	return true;
 }
 
 void DShaderRes9::OnDraw(int)
 {
+	m_device->SetVertexShader(m_vertexShader);
+	m_device->SetPixelShader(m_pixelShader);
 }
 
-void DShaderRes9::OnApplyParams(int, int, int, int, float *)
+void DShaderRes9::OnApplyParams(int cindex, int coffset, int csize, int stype, float* params)
 {
+	if (cindex < 0 || cindex >= m_handles.size())
+		return;
+	D3DXHANDLE handle = m_handles.at(cindex);
+	if (stype == 0)
+		m_vertexConstable->SetValue(m_device, handle, params, csize);
+	else
+		m_pixelConstable->SetValue(m_device, handle, params, csize);
 }
 
 HRESULT DShaderRes9::InitVertexShader()

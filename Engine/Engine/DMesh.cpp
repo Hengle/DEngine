@@ -232,7 +232,7 @@ DMesh * DMesh::Create(DMeshBufferDesc * desc)
 	DMesh* mesh = new DMesh();
 	mesh->Init(desc);
 	
-	return nullptr;
+	return mesh;
 }
 
 void DMesh::Init(DMeshBufferDesc* desc)

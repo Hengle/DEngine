@@ -8,7 +8,6 @@ matrix projectionMatrix;
 struct VertexInputType
 {
     float4 position : POSITION;
-    float4 color : COLOR;
 };
 
 struct PixelInputType
@@ -31,7 +30,7 @@ PixelInputType ColorVertexShader(VertexInputType input)
     output.position = mul(output.position, projectionMatrix);
     
     // Store the input color for the pixel shader to use.
-    output.color = input.color;
+    output.color = float4(1.0f,0.0f,1.0f,1.0f);
     
     return output;
 }

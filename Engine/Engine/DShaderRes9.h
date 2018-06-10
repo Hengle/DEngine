@@ -1,5 +1,8 @@
-#pragma once
+﻿#pragma once
 #include "D3D9Core.h"
+#include <string>
+#include <vector>
+#include <map>
 
 class DShaderRes9 : public DShaderRes
 {

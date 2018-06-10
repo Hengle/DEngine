@@ -1,4 +1,5 @@
-#include "DShaderRes11.h"
+﻿#include "DShaderRes11.h"
+#include <d3dcompiler.h>
 
 DShaderRes11::DShaderRes11(ID3D11Device * device, ID3D11DeviceContext * deviceContext) : DShaderRes()
 {
@@ -191,8 +192,39 @@ void DShaderRes11::OnDraw(int indexCount)
 	m_deviceContext->DrawIndexed(indexCount, 0, 0);
 }
 
-void DShaderRes11::OnApplyParams(int, int, int, int, float *)
+void DShaderRes11::OnApplyParams(int cindex, int coffset, int csize, int stype, float* params)
 {
+	HRESULT result;
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	float* dataPtr;
+	unsigned int bufferNumber = coffset;
+
+	ID3D11Buffer* pbuffer = m_paramBuffers[cindex];
+
+	result = m_deviceContext->Map(pbuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	if (FAILED(result))
+	{
+		return;
+	}
+
+	dataPtr = (float*)mappedResource.pData;
+
+	int i;
+	for (i = 0; i < csize; i++)
+	{
+		dataPtr[i] = params[i];
+	}
+
+	m_deviceContext->Unmap(pbuffer, 0);
+
+	if (stype == 0)
+	{
+		m_deviceContext->VSSetConstantBuffers(bufferNumber, 1, &pbuffer);
+	}
+	else
+	{
+		m_deviceContext->PSSetConstantBuffers(bufferNumber, 1, &pbuffer);
+	}
 }
 
 HRESULT DShaderRes11::InitVertexShader(ID3DBlob* pShaderBlob, ID3D11Device* pD3DDevice, ID3D11InputLayout** pInputLayout, int* inputLayoutByteLength)

@@ -1,4 +1,4 @@
-#include "DShaderRes10.h"
+﻿#include "DShaderRes10.h"
 #include <D3DX10.h>
 
 DShaderRes10::DShaderRes10(ID3D10Device * device) : DShaderRes()
@@ -387,10 +387,47 @@ bool DShaderRes10::OnInit(WCHAR * vsFilename, WCHAR * psFilename)
 	return true;
 }
 
-void DShaderRes10::OnDraw(int)
+void DShaderRes10::OnDraw(int indexCount)
 {
+	m_device->IASetInputLayout(m_layout);
+
+	m_device->VSSetShader(m_vertexShader);
+	m_device->PSSetShader(m_pixelShader);
+
+	//deviceContext->PSSetSamplers(0, 1, &m_samplerState);
+
+	m_device->DrawIndexed(indexCount, 0, 0);
 }
 
-void DShaderRes10::OnApplyParams(int, int, int, int, float *)
+void DShaderRes10::OnApplyParams(int cindex, int coffset, int csize, int stype, float* params)
 {
+	HRESULT result;
+
+	float* dataPtr;
+	unsigned int bufferNumber = coffset;
+
+	ID3D10Buffer* pbuffer = m_paramBuffers[cindex];
+
+	result = pbuffer->Map(D3D10_MAP_WRITE_DISCARD, 0, (void**)&dataPtr);
+	if (FAILED(result))
+	{
+		return;
+	}
+
+	int i;
+	for (i = 0; i < csize; i++)
+	{
+		dataPtr[i] = params[i];
+	}
+
+	pbuffer->Unmap();
+
+	if (stype == 0)
+	{
+		m_device->VSSetConstantBuffers(bufferNumber, 1, &pbuffer);
+	}
+	else
+	{
+		m_device->PSSetConstantBuffers(bufferNumber, 1, &pbuffer);
+	}
 }

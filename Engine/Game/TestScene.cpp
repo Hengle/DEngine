@@ -147,7 +147,7 @@ void TestScene::TestLoad()
 
 	//DMesh* mesh = DMesh::Create("../Res/eboy.obj");
 	plane = DMesh::Create(DMESH_Plane);
-	shader = DShader::Create(L"../Res/color.vs9", L"../Res/color.ps9");
+	shader = DShader::Create(L"../Res/color.vs", L"../Res/color.ps");
 	mat = new DMaterial(shader);
 
 	//mat->SetFloat("power", 1.3f);

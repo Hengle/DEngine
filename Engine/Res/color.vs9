@@ -23,7 +23,7 @@ VS_OUTPUT Main(VS_INPUT input)
     output.position = mul(output.position, viewMatrix);
     output.position = mul(output.position, projectionMatrix);
 
-    output.color = float4(1,1,0,1);
+    output.color = float4(1,0,0,1);
     
     return output;
 }

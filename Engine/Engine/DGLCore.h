@@ -62,7 +62,7 @@ public:
 	unsigned int GetPropertyCount() const;
 	void Init(WCHAR* vsfile, WCHAR* psfile);
 	void ApplyParams(int cindex, int coffset, int csize, int stype, float* params);
-	void Draw(int indexCount);
+	void Draw();
 	bool IsInitialized();
 	virtual void GetPropertyInfo(const LPCSTR key, DShaderParamDesc* desc) const = 0;
 	virtual bool HasProperty(const LPCSTR key) const = 0;
@@ -71,7 +71,7 @@ public:
 protected:
 	virtual bool OnInit(WCHAR*, WCHAR*) = 0;
 	virtual void OnApplyParams(int, int, int, int, float*) = 0;
-	virtual void OnDraw(int) = 0;
+	virtual void OnDraw() = 0;
 
 protected:
 	unsigned int m_cbufferCount, m_propertyCount;

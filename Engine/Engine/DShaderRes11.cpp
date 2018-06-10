@@ -180,7 +180,7 @@ bool DShaderRes11::OnInit(WCHAR * vsFilename, WCHAR * psFilename)
 	return true;
 }
 
-void DShaderRes11::OnDraw(int indexCount)
+void DShaderRes11::OnDraw()
 {
 	m_deviceContext->IASetInputLayout(m_layout);
 
@@ -189,7 +189,6 @@ void DShaderRes11::OnDraw(int indexCount)
 
 	//deviceContext->PSSetSamplers(0, 1, &m_samplerState);
 
-	m_deviceContext->DrawIndexed(indexCount, 0, 0);
 }
 
 void DShaderRes11::OnApplyParams(int cindex, int coffset, int csize, int stype, float* params)

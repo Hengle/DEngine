@@ -191,7 +191,7 @@ bool DMaterial::HasProperty(const LPCSTR key) const
 	return m_shader->HasProperty(key);
 }
 
-void DMaterial::Apply(int indexCount)
+void DMaterial::Apply()
 {
 	if (m_shader == NULL)
 		return;
@@ -206,7 +206,7 @@ void DMaterial::Apply(int indexCount)
 		//DSystem::GetGraphicsMgr()->GetGLCore()->ApplyShaderParams(material->GetShader()->GetShaderBuffer(), pindex, poffset, psize, stype, params);
 	}
 
-	m_shader->Draw(indexCount);
+	m_shader->Draw();
 	//DSystem::GetGraphicsMgr()->GetGLCore()->DrawShader(material->GetShader()->GetShaderBuffer(), mesh->GetIndexCount());
 }
 
@@ -255,7 +255,7 @@ void DMaterial::Destroy()
 
 DMaterial::MaterialParam::MaterialParam(int length, int index, int size, int offset, int shadertype)
 {
-	m_params = new float[length];
+	m_params = new float[size];
 	m_shaderType = shadertype;
 	m_offset = offset;
 	m_length = length;

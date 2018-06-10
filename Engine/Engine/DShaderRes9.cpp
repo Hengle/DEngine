@@ -150,7 +150,7 @@ bool DShaderRes9::OnInit(WCHAR * vsfile, WCHAR * psfile)
 	return true;
 }
 
-void DShaderRes9::OnDraw(int)
+void DShaderRes9::OnDraw()
 {
 	m_device->SetVertexShader(m_vertexShader);
 	m_device->SetPixelShader(m_pixelShader);

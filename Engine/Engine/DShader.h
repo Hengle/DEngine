@@ -18,7 +18,7 @@ public:
 	void GetPropertyInfo(const LPCSTR key, DShaderParamDesc* desc) const;
 	bool HasProperty(const LPCSTR key) const;
 	void ApplyParams(int cindex, int coffset, int csize, int stype, float* params) const;
-	void Draw(int indexCount);
+	void Draw();
 
 	static DShader* Create(WCHAR*, WCHAR*);
 

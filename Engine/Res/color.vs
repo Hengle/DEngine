@@ -13,6 +13,11 @@ cbuffer MatrixBuffer
 	matrix projectionMatrix;
 };
 
+cbuffer ColorBuffer
+{
+    float4 vcolor;  
+};
+
 
 //////////////
 // TYPEDEFS //
@@ -51,7 +56,7 @@ PixelInputType ColorVertexShader(VertexInputType input)
     output.position = mul(projectionMatrix, output.position);
 
 	// Store the input color for the pixel shader to use.
-    output.color = float4(0.0f,1.0f,1.0f,1.0f);
+    output.color = vcolor;
 
     return output;
 }

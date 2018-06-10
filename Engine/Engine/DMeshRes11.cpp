@@ -1,4 +1,4 @@
-#include "DMeshRes11.h"
+﻿#include "DMeshRes11.h"
 
 DMeshRes11::DMeshRes11(ID3D11Device* device,ID3D11DeviceContext * deviceContext) : DMeshRes()
 {
@@ -7,6 +7,7 @@ DMeshRes11::DMeshRes11(ID3D11Device* device,ID3D11DeviceContext * deviceContext)
 	m_device = device;
 	m_deviceContext = deviceContext;
 	m_dataSize = 0;
+	m_indexCount = 0;
 }
 
 DMeshRes11::~DMeshRes11()
@@ -55,6 +56,7 @@ bool DMeshRes11::OnInit(DMeshBufferDesc * desc)
 	vertexData.SysMemSlicePitch = 0;
 
 	m_dataSize = desc->dataSize;
+	m_indexCount = desc->indexCount;
 
 	result = m_device->CreateBuffer(&vertexBufferDesc, &vertexData, &m_vertexBuffer);
 	if (FAILED(result))
@@ -98,4 +100,6 @@ void DMeshRes11::OnDraw()
 	m_deviceContext->IASetIndexBuffer(ibuffer, DXGI_FORMAT_R32_UINT, 0);
 
 	m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	m_deviceContext->DrawIndexed(m_indexCount, 0, 0);
 }

@@ -1,4 +1,4 @@
-#include "DShader.h"
+﻿#include "DShader.h"
 #include "DLog.h"
 #include "DSystem.h"
 
@@ -66,10 +66,10 @@ void DShader::ApplyParams(int cindex, int coffset, int csize, int stype, float *
 		m_shaderRes->ApplyParams(cindex, coffset, csize, stype, params);
 }
 
-void DShader::Draw(int indexCount)
+void DShader::Draw()
 {
 	if (m_shaderRes != NULL)
-		m_shaderRes->Draw(indexCount);
+		m_shaderRes->Draw();
 }
 
 //unsigned int DShader::GetPropertyCount(const LPCSTR cbufferName) const

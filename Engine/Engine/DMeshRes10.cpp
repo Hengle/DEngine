@@ -1,4 +1,4 @@
-#include "DMeshRes10.h"
+﻿#include "DMeshRes10.h"
 
 DMeshRes10::DMeshRes10(ID3D10Device * device) : DMeshRes()
 {
@@ -6,6 +6,7 @@ DMeshRes10::DMeshRes10(ID3D10Device * device) : DMeshRes()
 	m_vertexBuffer = 0;
 	m_indexBuffer = 0;
 	m_dataSize = 0;
+	m_indexCount = 0;
 }
 
 DMeshRes10::~DMeshRes10()
@@ -34,6 +35,7 @@ bool DMeshRes10::OnInit(DMeshBufferDesc * desc)
 	HRESULT result;
 
 	m_dataSize = desc->dataSize;
+	m_indexCount = desc->indexCount;
 
 	vertexBufferDesc.Usage = D3D10_USAGE_DEFAULT;
 	vertexBufferDesc.ByteWidth = m_dataSize * desc->vertexCount;
@@ -82,4 +84,6 @@ void DMeshRes10::OnDraw()
 	m_device->IASetIndexBuffer(ibuffer, DXGI_FORMAT_R32_UINT, 0);
 
 	m_device->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	m_device->DrawIndexed(m_indexCount, 0, 0);
 }

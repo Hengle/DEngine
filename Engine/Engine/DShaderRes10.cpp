@@ -387,7 +387,7 @@ bool DShaderRes10::OnInit(WCHAR * vsFilename, WCHAR * psFilename)
 	return true;
 }
 
-void DShaderRes10::OnDraw(int indexCount)
+void DShaderRes10::OnDraw()
 {
 	m_device->IASetInputLayout(m_layout);
 
@@ -395,8 +395,6 @@ void DShaderRes10::OnDraw(int indexCount)
 	m_device->PSSetShader(m_pixelShader);
 
 	//deviceContext->PSSetSamplers(0, 1, &m_samplerState);
-
-	m_device->DrawIndexed(indexCount, 0, 0);
 }
 
 void DShaderRes10::OnApplyParams(int cindex, int coffset, int csize, int stype, float* params)

@@ -49,10 +49,10 @@ void DShaderRes::ApplyParams(int cindex, int coffset, int csize, int stype, floa
 		OnApplyParams(cindex, coffset, csize, stype, params);
 }
 
-void DShaderRes::Draw(int indexCount)
+void DShaderRes::Draw()
 {
 	if (m_isInitialized)
-		OnDraw(indexCount);
+		OnDraw();
 }
 
 bool DShaderRes::IsInitialized()

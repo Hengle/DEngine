@@ -33,7 +33,7 @@ public:
 	void SetColor(const LPCSTR key, DColor&);
 	void SetFloat(const LPCSTR key, float);
 	bool HasProperty(const LPCSTR key) const;
-	void Apply(int indexCount);
+	void Apply();
 	virtual void Destroy();
 
 

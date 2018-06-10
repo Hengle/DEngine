@@ -19,7 +19,7 @@ private:
 
 protected:
 	virtual bool OnInit(WCHAR*, WCHAR*);
-	virtual void OnDraw(int);
+	virtual void OnDraw();
 	virtual void OnApplyParams(int, int, int, int, float*);
 
 private:

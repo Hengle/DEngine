@@ -138,7 +138,9 @@ void DGraphics::DrawMesh(const DMesh * mesh, const DMatrix4x4 & matrix, DMateria
 	material->SetMatrix("viewMatrix", v);
 	material->SetMatrix("projectionMatrix", p);
 
-	material->Apply(mesh->GetIndexCount());
+	material->Apply();
+
 	mesh->Draw();
+	
 }
 

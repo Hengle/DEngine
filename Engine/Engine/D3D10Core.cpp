@@ -341,6 +341,11 @@ DShaderRes * D3D10Core::CreateShaderRes()
 	return new DShaderRes10(m_device);
 }
 
+ID3D10Device * D3D10Core::GetDevice() const
+{
+	return m_device;
+}
+
 //DMeshBuffer * D3D10Core::CreateMeshBuffer(int vertexCount, int indexCount, int bufferLength, int dataSize, const float * vertices, const unsigned long * indices)
 //{
 //	DMeshBuffer10* buffer = new DMeshBuffer10();

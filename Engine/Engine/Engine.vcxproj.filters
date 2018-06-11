@@ -37,12 +37,6 @@
     <Filter Include="库\ImGUI">
       <UniqueIdentifier>{7dc9357b-44fc-4f9d-9480-e5c91f19c3de}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\Core\ImGUI">
-      <UniqueIdentifier>{0619e12e-5c4d-4ad8-ae92-9ab3500a7d4e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="源文件\Core\ImGUI">
-      <UniqueIdentifier>{268f2863-3abd-4eb2-8750-ae39eb6dc58a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="源文件\Core\D3D9Core">
       <UniqueIdentifier>{65347ef2-8707-48f1-93da-ae0f714b32e9}</UniqueIdentifier>
     </Filter>
@@ -71,15 +65,6 @@
     </ClInclude>
     <ClInclude Include="DColor.h">
       <Filter>头文件\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="DTime.h">
-      <Filter>头文件\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="DInput.h">
-      <Filter>头文件\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="DLog.h">
-      <Filter>头文件\Core</Filter>
     </ClInclude>
     <ClInclude Include="DSystem.h">
       <Filter>头文件\Core</Filter>
@@ -111,30 +96,6 @@
     <ClInclude Include="DGraphics.h">
       <Filter>头文件\Core</Filter>
     </ClInclude>
-    <ClInclude Include="DGUI.h">
-      <Filter>头文件\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="DSceneManager.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="DScene.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="DSceneObject.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="DTransform.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="DShader.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="DTexture.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="DResObject.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="D3D9Core.h">
       <Filter>头文件\Core\D3D9Core</Filter>
     </ClInclude>
@@ -148,9 +109,6 @@
       <Filter>头文件\Engine</Filter>
     </ClInclude>
     <ClInclude Include="DDisplayObject.h">
-      <Filter>头文件\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="DFrameBase.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
     <ClInclude Include="DLight.h">
@@ -167,9 +125,6 @@
     </ClInclude>
     <ClInclude Include="DObject.h">
       <Filter>头文件\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="DRes.h">
-      <Filter>头文件\Core</Filter>
     </ClInclude>
     <ClInclude Include="DMeshRes9.h">
       <Filter>头文件\Core\D3D9Core</Filter>
@@ -189,6 +144,57 @@
     <ClInclude Include="DShaderRes11.h">
       <Filter>头文件\Core\D3D11Core</Filter>
     </ClInclude>
+    <ClInclude Include="DGUI.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="DInput.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="DLog.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="DRes.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="DTime.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="DFrameBase.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DResObject.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="DScene.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="DSceneManager.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="DSceneObject.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="DShader.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="DTexture.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="DTransform.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="DImGUICore.h">
+      <Filter>头文件\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="DImGUICore9.h">
+      <Filter>头文件\Core\D3D9Core</Filter>
+    </ClInclude>
+    <ClInclude Include="DImGUICore10.h">
+      <Filter>头文件\Core\D3D10Core</Filter>
+    </ClInclude>
+    <ClInclude Include="DImGUICore11.h">
+      <Filter>头文件\Core\D3D11Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DMath.cpp">
@@ -197,16 +203,7 @@
     <ClCompile Include="DColor.cpp">
       <Filter>源文件\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="DInput.cpp">
-      <Filter>源文件\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="DLog.cpp">
-      <Filter>源文件\Core</Filter>
-    </ClCompile>
     <ClCompile Include="DSystem.cpp">
-      <Filter>源文件\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="DTime.cpp">
       <Filter>源文件\Core</Filter>
     </ClCompile>
     <ClCompile Include="DGLCore.cpp">
@@ -220,33 +217,6 @@
     </ClCompile>
     <ClCompile Include="DGraphics.cpp">
       <Filter>源文件\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="DGUI.cpp">
-      <Filter>源文件\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="DSceneManager.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="DScene.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="DSceneObject.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="DTransform.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="DShader.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="DTexture.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="DResObject.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="DRes.cpp">
-      <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="D3D9Core.cpp">
       <Filter>源文件\Core\D3D9Core</Filter>
@@ -281,9 +251,6 @@
     <ClCompile Include="DDisplayObject.cpp">
       <Filter>源文件\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="DFrameBase.cpp">
-      <Filter>源文件\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="DLight.cpp">
       <Filter>源文件\Engine</Filter>
     </ClCompile>
@@ -298,6 +265,57 @@
     </ClCompile>
     <ClCompile Include="DObject.cpp">
       <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="DGUI.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="DInput.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="DLog.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="DTime.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="DRes.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="DResObject.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="DScene.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="DSceneManager.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="DSceneObject.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="DShader.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="DTexture.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="DTransform.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="DFrameBase.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DImGUICore.cpp">
+      <Filter>源文件\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DImGUICore9.cpp">
+      <Filter>源文件\Core\D3D9Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DImGUICore10.cpp">
+      <Filter>源文件\Core\D3D10Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DImGUICore11.cpp">
+      <Filter>源文件\Core\D3D11Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

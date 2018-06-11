@@ -338,3 +338,13 @@ DShaderRes * D3D11Core::CreateShaderRes()
 {
 	return new DShaderRes11(m_device, m_deviceContext);
 }
+
+ID3D11Device * D3D11Core::GetDevice() const
+{
+	return m_device;
+}
+
+ID3D11DeviceContext * D3D11Core::GetDeviceContext() const
+{
+	return m_deviceContext;
+}

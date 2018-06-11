@@ -1,11 +1,19 @@
-#include "DGUI.h"
+﻿#include "DGUI.h"
+#include "DSystem.h"
+#include "imgui.h"
 
-
-DGUI::DGUI()
+void DGUI::BeginWindow(const char * windowName)
 {
 }
 
-
-DGUI::~DGUI()
+void DGUI::EndWindow()
 {
+}
+
+void DGUI::Label(const char * text, ...)
+{
+	va_list args;
+	va_start(args, text);
+	ImGui::TextV(text, args);
+	va_end(args);
 }

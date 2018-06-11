@@ -4,7 +4,7 @@
 #include "DSystem.h"
 #include "DTransform.h"
 #include "DLog.h"
-#include "imgui_impl_dx11.h"
+#include "DGUI.h"
 #include "D3D9Core.h"
 #include <D3DX10math.h>
 
@@ -23,28 +23,28 @@ TestScene::TestScene(SCENEID sceneId, char * sceneName) : DScene(sceneId, sceneN
 
 void TestScene::OnGUI()
 {
-	/*ImGui::Text(u8"森哥的引擎：中文utf-8测试");
-	ImGui::Text("DeltaTime:%lf", DTime::GetDeltaTime());
-	ImGui::Text("FixedDeltaTime:%lf", DTime::GetFixedDeltaTime());
-	ImGui::Text("Timer:%lf", DTime::GetTimer());
-	ImGui::Text("FPS:%d", DTime::GetFPS());
+	DGUI::Label(u8"森哥的引擎：中文utf-8测试");
+	DGUI::Label("DeltaTime:%lf", DTime::GetDeltaTime());
+	DGUI::Label("FixedDeltaTime:%lf", DTime::GetFixedDeltaTime());
+	DGUI::Label("Timer:%lf", DTime::GetTimer());
+	DGUI::Label("FPS:%d", DTime::GetFPS());
 	int x, y;
 	DInput::GetMousePosition(x, y);
-	ImGui::Text("Mouse:%d,%d", x, y);
-	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+	DGUI::Label("Mouse:%d,%d", x, y);
+	//DGUI::Label("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
-	D3DXVECTOR3 euler;
+	/*D3DXVECTOR3 euler;
 	DTransform* transform;
 	transform = m_obj->GetTransform();
 	transform->GetEuler(euler);
 
 	ImGui::SliderFloat("Pitch", &euler.x, 0.0f, 360.0f);
 	ImGui::SliderFloat("Yall", &euler.y, 0.0f, 360.0f);
-	ImGui::SliderFloat("Roll", &euler.z, 0.0f, 360.0f);
+	ImGui::SliderFloat("Roll", &euler.z, 0.0f, 360.0f);*/
 
 	if (DInput::IsMousePress(0)) 
 	{
-		ImGui::Text("Mouse Down");
+		DGUI::Label("Mouse Down");
 	}
 	if (DInput::IsMouseDown(0))
 	{
@@ -52,14 +52,14 @@ void TestScene::OnGUI()
 	}
 	if (DInput::IsKeyPress(DIK_A))
 	{
-		ImGui::Text("Key A Down");
+		DGUI::Label("Key A Down");
 	}
 	if (DInput::IsKeyDown(DIK_A))
 	{
 		DLog::Info("Key A Click");
 	}
 
-	transform->SetEuler(euler.x, euler.y, euler.z);
+	/*transform->SetEuler(euler.x, euler.y, euler.z);
 
 	transform = m_light->GetTransform();
 	transform->GetEuler(euler);
@@ -147,7 +147,7 @@ void TestScene::TestLoad()
 
 	//DMesh* mesh = DMesh::Create("../Res/eboy.obj");
 	plane = DMesh::Create(DMESH_Plane);
-	shader = DShader::Create(L"../Res/color.vs", L"../Res/color.ps");
+	shader = DShader::Create(L"../Res/color.vs9", L"../Res/color.ps9");
 	mat = new DMaterial(shader);
 
 	//mat->SetFloat("power", 1.3f);

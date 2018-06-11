@@ -16,6 +16,8 @@ public:
 	virtual DMeshRes* CreateMeshRes();
 	virtual DTextureRes* CreateTextureRes();
 	virtual DShaderRes* CreateShaderRes();
+	ID3D11Device* GetDevice() const;
+	ID3D11DeviceContext* GetDeviceContext() const;
 
 private:
 	IDXGISwapChain* m_swapChain;

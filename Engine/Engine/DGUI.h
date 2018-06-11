@@ -1,29 +1,11 @@
-#pragma once
-#include "DGraphics.h"
-#include <Windows.h>
+﻿#pragma once
 
-class DImGUIBase
-{
-
-};
-
-class DGUI
+static class DGUI
 {
 public:
-	DGUI();
-	~DGUI();
-	void Init(HWND);
-	void ShutDown();
-	void NewFrame();
+	static void BeginWindow(const char* windowName);
+	static void EndWindow();
+	static void Label(const char* text, ...);
 
-	void BeginWindow(const char* windowName);
-	void EndWindow();
-	void Label(const char* text);
-
-	void Render();
-	LRESULT CALLBACK GUIMessageHandler(HWND, UINT, WPARAM, LPARAM);
-
-private:
-	DImGUIBase* m_ImGUI;
 };
 

@@ -1,8 +1,8 @@
-#pragma once
+﻿#pragma once
 #include "DMesh.h"
 #include "DMaterial.h"
 #include "DCamera.h"
-//#include "DImGUI.h"
+#include "DImGUICore.h"
 
 enum DGraphicsAPI
 {
@@ -30,17 +30,16 @@ public:
 	bool Render();
 	void Shutdown();
 	DGLCore* GetGLCore();
+	DImGUICore* GetGUICore();
 	LRESULT CALLBACK MessageHandler(HWND, UINT, WPARAM, LPARAM);
 	void GetResolution(float&, float&);
 	DGraphicsAPI GetAPI();
-	//ID3D11Device * GetDevice();
-	//ID3D11DeviceContext* GetDeviceContext();
 
 	static void DrawMesh(const DMesh*, const DMatrix4x4&, DMaterial*, const DCamera*);
 
 private:
 	DGLCore* m_GL;
 	DGraphicsAPI m_API;
-	//DImGUI* m_GUI;
+	DImGUICore* m_GUI;
 };
 

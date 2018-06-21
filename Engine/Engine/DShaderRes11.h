@@ -21,6 +21,7 @@ protected:
 	virtual bool OnInit(WCHAR*, WCHAR*);
 	virtual void OnDraw();
 	virtual void OnApplyParams(int, int, int, int, float*);
+	virtual void OnApplyRes(DTextureRes*);
 
 private:
 	ID3D11Device* m_device;

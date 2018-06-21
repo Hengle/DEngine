@@ -107,25 +107,25 @@ bool DModelLoader::LoadObj(const char * file, float** buffer, unsigned long ** i
 	vertexCount = cindex;
 	indexCount = outindexes.size();
 
-	dataSize = sizeof(float) * 3;
-	bufferLength = 3;
+	dataSize = sizeof(float) * 5;
+	bufferLength = 5;
 
-	(*buffer) = new float[vertexCount * 3];
+	(*buffer) = new float[vertexCount * 5];
 	(*indexBuffer) = new unsigned long[indexCount];
 
 	int i, j, k;
 	for (i = 0, j = 0, k = 0; i < vertexCount; i++, j += 3, k += 2)
 	{
-		(*buffer)[i * 3] = outvertexes[j];
-		(*buffer)[i * 3 + 1] = outvertexes[j + 1];
-		(*buffer)[i * 3 + 2] = outvertexes[j + 2];
+		(*buffer)[i * 5] = outvertexes[j];
+		(*buffer)[i * 5 + 1] = outvertexes[j + 1];
+		(*buffer)[i * 5 + 2] = outvertexes[j + 2];
 
-		/*(*buffer)[i * 8 + 3] = outuvs[k];
-		(*buffer)[i * 8 + 4] = outuvs[k + 1];
+		(*buffer)[i * 5 + 3] = outuvs[k];
+		(*buffer)[i * 5 + 4] = outuvs[k + 1];
 
-		(*buffer)[i * 8 + 5] = outnormals[j];
-		(*buffer)[i * 8 + 6] = outnormals[j + 1];
-		(*buffer)[i * 8 + 7] = outnormals[j + 2];*/
+		//(*buffer)[i * 8 + 5] = outnormals[j];
+		//(*buffer)[i * 8 + 6] = outnormals[j + 1];
+		//(*buffer)[i * 8 + 7] = outnormals[j + 2];
 	}
 	for (i = 0; i < indexCount; i++) {
 		(*indexBuffer)[i] = outindexes[i];
@@ -161,7 +161,7 @@ bool DModelLoader::CreateCube(float** buffer, unsigned long ** indexBuffer, int 
 
 bool DModelLoader::CreatePlane(float** buffer, unsigned long ** indexBuffer, int & vertexCount, int & indexCount, int& bufferLength, int& dataSize)
 {
-	dataSize = sizeof(float) * 3;
+	dataSize = sizeof(float) * 5;
 
 	float width = 20.0f;
 	float height = 20.0f;
@@ -179,9 +179,9 @@ bool DModelLoader::CreatePlane(float** buffer, unsigned long ** indexBuffer, int
 	vertexCount = (step + 1)*(step + 1);
 	indexCount = (step)*(step)* 6;
 
-	bufferLength = 3;
+	bufferLength = 5;
 
-	(*buffer) = new float[vertexCount*3];
+	(*buffer) = new float[vertexCount*5];
 	(*indexBuffer) = new unsigned long[indexCount];
 
 	float x, z, u, v;
@@ -200,14 +200,14 @@ bool DModelLoader::CreatePlane(float** buffer, unsigned long ** indexBuffer, int
 			index = i*(step + 1) + j;
 			id = i*step + j;
 
-			(*buffer)[index * 3] = x;
-			(*buffer)[index * 3 + 1] = 0.0f;
-			(*buffer)[index * 3 + 2] = z;
+			(*buffer)[index * 5] = x;
+			(*buffer)[index * 5 + 1] = 0.0f;
+			(*buffer)[index * 5 + 2] = z;
 
-			/*(*buffer)[index * 8 + 3] = u;
-			(*buffer)[index * 8 + 4] = v;
+			(*buffer)[index * 5 + 3] = u;
+			(*buffer)[index * 5 + 4] = v;
 
-			(*buffer)[index * 8 + 5] = 0;
+			/*(*buffer)[index * 8 + 5] = 0;
 			(*buffer)[index * 8 + 6] = 1.0f;
 			(*buffer)[index * 8 + 7] = 0;*/
 

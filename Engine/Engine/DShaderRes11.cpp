@@ -1,4 +1,5 @@
 ﻿#include "DShaderRes11.h"
+#include "DTextureRes11.h"
 #include <d3dcompiler.h>
 
 DShaderRes11::DShaderRes11(ID3D11Device * device, ID3D11DeviceContext * deviceContext) : DShaderRes()
@@ -95,7 +96,7 @@ bool DShaderRes11::OnInit(WCHAR * vsFilename, WCHAR * psFilename)
 	vertexShaderBuffer = 0;
 	pixelShaderBuffer = 0;
 
-	result = D3DX11CompileFromFile(vsFilename, NULL, NULL, "ColorVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
+	result = D3DX11CompileFromFile(vsFilename, NULL, NULL, "TextureVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
 		&vertexShaderBuffer, &errorMessage, NULL);
 	if (FAILED(result))
 	{
@@ -115,7 +116,7 @@ bool DShaderRes11::OnInit(WCHAR * vsFilename, WCHAR * psFilename)
 		return false;
 	}
 
-	result = D3DX11CompileFromFile(psFilename, NULL, NULL, "ColorPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
+	result = D3DX11CompileFromFile(psFilename, NULL, NULL, "TexturePixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
 		&pixelShaderBuffer, &errorMessage, NULL);
 	if (FAILED(result))
 	{
@@ -224,6 +225,12 @@ void DShaderRes11::OnApplyParams(int cindex, int coffset, int csize, int stype, 
 	{
 		m_deviceContext->PSSetConstantBuffers(bufferNumber, 1, &pbuffer);
 	}
+}
+
+void DShaderRes11::OnApplyRes(DTextureRes * res)
+{
+	DTextureRes11* texres = (DTextureRes11*)res;
+	//m_deviceContext->PSSetShaderResources()
 }
 
 HRESULT DShaderRes11::InitVertexShader(ID3DBlob* pShaderBlob, ID3D11Device* pD3DDevice, ID3D11InputLayout** pInputLayout, int* inputLayoutByteLength)
@@ -473,6 +480,14 @@ HRESULT DShaderRes11::InitPixelShader(ID3DBlob* pShaderBlob, ID3D11Device* pD3DD
 		m_paramBuffers.push_back(buffer);
 
 		m_cbufferCount += 1;
+	}
+
+	for (i = 0; i < shaderDesc.BoundResources; i++)
+	{
+		D3D11_SHADER_INPUT_BIND_DESC rdesc;
+		pPixelShaderReflection->GetResourceBindingDesc(i, &rdesc);
+
+		LPCSTR n = rdesc.Name;
 	}
 
 	pPixelShaderReflection->Release();

@@ -8,7 +8,8 @@
 /////////////
 Texture2D floor : register(t0);
 Texture2D decal : register(t1);
-SamplerState SampleType;
+SamplerState floorSampleType;
+SamplerState decalSampleType;
 
 cbuffer LightBuffer
 {
@@ -41,9 +42,9 @@ float4 ColorPixelShader(PixelInputType input) : SV_TARGET
 
 
 	// Sample the pixel color from the texture using the sampler at this texture coordinate location.
-	textureColor = floor.Sample(SampleType, input.tex);
+	textureColor = floor.Sample(floorSampleType, input.tex);
 
-    float4 dec = decal.Sample(SampleType, input.tex);
+    float4 dec = decal.Sample(decalSampleType, input.tex);
 
 	// Invert the light direction for calculations.
     lightDir = -lightDirection;

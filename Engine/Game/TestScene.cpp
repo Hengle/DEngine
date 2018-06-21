@@ -58,6 +58,16 @@ void TestScene::OnGUI()
 	{
 		DLog::Info("Key A Click");
 	}
+	
+	ImGui::Begin("xa", 0, ImGuiWindowFlags_NoTitleBar|ImGuiWindowFlags_NoResize|ImGuiWindowFlags_NoInputs);
+	if (ImGui::Button("Pitch"))
+	{
+		DLog::Info("xas");
+	}
+	ImGui::Text("xas");
+	ImGui::End();
+
+
 
 	/*transform->SetEuler(euler.x, euler.y, euler.z);
 
@@ -147,7 +157,7 @@ void TestScene::TestLoad()
 
 	//DMesh* mesh = DMesh::Create("../Res/eboy.obj");
 	plane = DMesh::Create(DMESH_Plane);
-	shader = DShader::Create(L"../Res/color.vs9", L"../Res/color.ps9");
+	shader = DShader::Create(L"../Res/texture.vs", L"../Res/texture.ps");
 	mat = new DMaterial(shader);
 
 	//mat->SetFloat("power", 1.3f);

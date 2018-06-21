@@ -1,6 +1,18 @@
 ﻿#pragma once
 #include <d3dcommon.h>
 
+typedef struct DShaderResDesc
+{
+public:
+	DShaderResDesc()
+	{
+
+	}
+	
+public:
+
+} DShaderResDesc;
+
 typedef struct DShaderParamDesc
 {
 public:
@@ -62,6 +74,7 @@ public:
 	unsigned int GetPropertyCount() const;
 	void Init(WCHAR* vsfile, WCHAR* psfile);
 	void ApplyParams(int cindex, int coffset, int csize, int stype, float* params);
+	void ApplyRes(DTextureRes*);
 	void Draw();
 	bool IsInitialized();
 	virtual void GetPropertyInfo(const LPCSTR key, DShaderParamDesc* desc) const = 0;
@@ -71,6 +84,7 @@ public:
 protected:
 	virtual bool OnInit(WCHAR*, WCHAR*) = 0;
 	virtual void OnApplyParams(int, int, int, int, float*) = 0;
+	virtual void OnApplyRes(DTextureRes*) = 0;
 	virtual void OnDraw() = 0;
 
 protected:

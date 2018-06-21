@@ -49,6 +49,12 @@ void DShaderRes::ApplyParams(int cindex, int coffset, int csize, int stype, floa
 		OnApplyParams(cindex, coffset, csize, stype, params);
 }
 
+void DShaderRes::ApplyRes(DTextureRes * res)
+{
+	if (m_isInitialized)
+		OnApplyRes(res);
+}
+
 void DShaderRes::Draw()
 {
 	if (m_isInitialized)

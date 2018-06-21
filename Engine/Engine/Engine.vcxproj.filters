@@ -195,6 +195,9 @@
     <ClInclude Include="DImGUICore11.h">
       <Filter>头文件\Core\D3D11Core</Filter>
     </ClInclude>
+    <ClInclude Include="DTextureRes11.h">
+      <Filter>头文件\Core\D3D11Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DMath.cpp">
@@ -315,6 +318,9 @@
       <Filter>源文件\Core\D3D10Core</Filter>
     </ClCompile>
     <ClCompile Include="DImGUICore11.cpp">
+      <Filter>源文件\Core\D3D11Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DTextureRes11.cpp">
       <Filter>源文件\Core\D3D11Core</Filter>
     </ClCompile>
   </ItemGroup>

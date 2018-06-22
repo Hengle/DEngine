@@ -66,6 +66,18 @@ void DShader::ApplyParams(int cindex, int coffset, int csize, int stype, float *
 		m_shaderRes->ApplyParams(cindex, coffset, csize, stype, params);
 }
 
+void DShader::ApplyRes(const LPCSTR key, DTexture *texture) const
+{
+	if (m_shaderRes != NULL && texture != NULL)
+	{
+		UINT offset = m_shaderRes->GetResOffset(key);
+		if (offset != NAN)
+		{
+			texture->Apply(offset);
+		}
+	}
+}
+
 void DShader::Draw()
 {
 	if (m_shaderRes != NULL)

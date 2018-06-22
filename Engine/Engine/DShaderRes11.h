@@ -10,6 +10,7 @@ public:
 	DShaderRes11(ID3D11Device* device, ID3D11DeviceContext* deviceContext);
 	~DShaderRes11();
 	virtual void GetPropertyInfo(const LPCSTR key, DShaderParamDesc* desc) const;
+	virtual UINT GetResOffset(const LPCSTR key) const;
 	virtual bool HasProperty(const LPCSTR key) const;
 	virtual void Release();
 
@@ -21,7 +22,6 @@ protected:
 	virtual bool OnInit(WCHAR*, WCHAR*);
 	virtual void OnDraw();
 	virtual void OnApplyParams(int, int, int, int, float*);
-	virtual void OnApplyRes(DTextureRes*);
 
 private:
 	ID3D11Device* m_device;
@@ -30,6 +30,7 @@ private:
 	ID3D11PixelShader *m_pixelShader;
 	ID3D11InputLayout* m_layout;
 	std::map<const std::string, DShaderParamDesc> m_params;
+	std::map<const std::string, UINT> m_resParams;
 	std::vector<ID3D11Buffer*> m_paramBuffers;
 };
 

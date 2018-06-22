@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "DShader.h"
+#include <map>
 
 class DMaterial : public DResObject
 {
@@ -32,6 +33,7 @@ public:
 	void SetVector2(const LPCSTR key, DVector2&);
 	void SetColor(const LPCSTR key, DColor&);
 	void SetFloat(const LPCSTR key, float);
+	void SetTexture(const LPCSTR key, DTexture*);
 	bool HasProperty(const LPCSTR key) const;
 	void Apply();
 	virtual void Destroy();
@@ -40,5 +42,6 @@ public:
 private:
 	DShader* m_shader;
 	MaterialParam** m_params;
+	std::map<std::string, DTexture*> m_textures;
 	unsigned int m_paramCount;
 };

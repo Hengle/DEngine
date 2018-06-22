@@ -10,6 +10,7 @@ public:
 	DShaderRes10(ID3D10Device* device);
 	~DShaderRes10();
 	virtual void GetPropertyInfo(const LPCSTR key, DShaderParamDesc* desc) const;
+	virtual UINT GetResOffset(const LPCSTR key) const;
 	virtual bool HasProperty(const LPCSTR key) const;
 	virtual void Release();
 

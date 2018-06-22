@@ -36,6 +36,13 @@ void DShaderRes11::GetPropertyInfo(const LPCSTR key, DShaderParamDesc * desc) co
 	desc->shaderType = 0;
 }
 
+UINT DShaderRes11::GetResOffset(const LPCSTR key) const
+{
+	if (m_resParams.find(key) != m_resParams.end())
+		return m_resParams.at(key);
+	return NAN;
+}
+
 bool DShaderRes11::HasProperty(const LPCSTR key) const
 {
 	if (m_params.find(key) != m_params.end())
@@ -62,6 +69,7 @@ void DShaderRes11::Release()
 	}
 	m_paramBuffers.clear();
 	m_params.clear();
+	m_resParams.clear();
 
 	if (m_layout)
 	{
@@ -225,12 +233,6 @@ void DShaderRes11::OnApplyParams(int cindex, int coffset, int csize, int stype, 
 	{
 		m_deviceContext->PSSetConstantBuffers(bufferNumber, 1, &pbuffer);
 	}
-}
-
-void DShaderRes11::OnApplyRes(DTextureRes * res)
-{
-	DTextureRes11* texres = (DTextureRes11*)res;
-	//m_deviceContext->PSSetShaderResources()
 }
 
 HRESULT DShaderRes11::InitVertexShader(ID3DBlob* pShaderBlob, ID3D11Device* pD3DDevice, ID3D11InputLayout** pInputLayout, int* inputLayoutByteLength)
@@ -487,7 +489,7 @@ HRESULT DShaderRes11::InitPixelShader(ID3DBlob* pShaderBlob, ID3D11Device* pD3DD
 		D3D11_SHADER_INPUT_BIND_DESC rdesc;
 		pPixelShaderReflection->GetResourceBindingDesc(i, &rdesc);
 
-		LPCSTR n = rdesc.Name;
+		m_resParams.insert(std::pair<std::string, UINT>(rdesc.Name, rdesc.BindPoint));
 	}
 
 	pPixelShaderReflection->Release();

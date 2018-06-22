@@ -15,8 +15,9 @@ public:
 	virtual void BeginRender();
 	virtual void EndRender();
 	virtual DMeshRes* CreateMeshRes();
-	virtual DTextureRes* CreateTextureRes();
+	virtual DTextureRes* CreateTextureRes(WCHAR*);
 	virtual DShaderRes* CreateShaderRes();
+	virtual void ApplySamplerState(UINT, DWarpMode);
 
 	LPDIRECT3DDEVICE9 GetDevice()
 	{

@@ -158,10 +158,13 @@ void TestScene::TestLoad()
 	//DMesh* mesh = DMesh::Create("../Res/eboy.obj");
 	plane = DMesh::Create(DMESH_Plane);
 	shader = DShader::Create(L"../Res/texture.vs", L"../Res/texture.ps");
+	floor = DTexture2D::Create(L"../Res/decal.jpg");
+	map = DTexture2D::Create(L"../Res/eboy.tif");
 	mat = new DMaterial(shader);
 
 	//mat->SetFloat("power", 1.3f);
-	mat->SetColor("vcolor", DColor(1.0f, 0.0f, 0.0f, 1.0f));
+	//mat->SetColor("vcolor", DColor(1.0f, 0.0f, 0.0f, 1.0f));
+	mat->SetTexture("shaderTexture", floor);
 
 	////DTexture2D* texture = new DTexture2D(L"../Res/eboy.tif");
 	////DTexture2D* decal = new DTexture2D(L"../Res/decal.jpg");
@@ -175,7 +178,8 @@ void TestScene::TestLoad()
 	DMaterial* mat2 = new DMaterial(shader);
 
 	//mat2->SetFloat("power", 1.6f);
-	mat2->SetColor("vcolor", DColor(0.0f, 1.0f, 0.0f, 1.0f));
+	//mat2->SetColor("vcolor", DColor(0.0f, 1.0f, 0.0f, 1.0f));
+	mat2->SetTexture("shaderTexture", map);
 
 	m_obj0 = new DDisplayObject(mesh, mat2);
 	transform = m_obj0->GetTransform();
@@ -195,6 +199,12 @@ void TestScene::OnUnLoad()
 	mat->Destroy();
 	delete mat;
 	mat = 0;
+	map->Destroy();
+	delete map;
+	map = 0;
+	floor->Destroy();
+	delete floor;
+	floor = 0;
 	//testd->Release();
 	//delete testd;
 	//testd = NULL;

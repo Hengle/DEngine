@@ -109,7 +109,7 @@ DMeshRes * D3D9Core::CreateMeshRes()
 	return res;
 }
 
-DTextureRes * D3D9Core::CreateTextureRes()
+DTextureRes * D3D9Core::CreateTextureRes(WCHAR*)
 {
 	return nullptr;
 }
@@ -117,4 +117,8 @@ DTextureRes * D3D9Core::CreateTextureRes()
 DShaderRes * D3D9Core::CreateShaderRes()
 {
 	return new DShaderRes9(m_device);
+}
+
+void D3D9Core::ApplySamplerState(UINT, DWarpMode)
+{
 }

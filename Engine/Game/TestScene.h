@@ -29,4 +29,6 @@ private:
 	DMesh* plane;
 	DShader* shader;
 	DMaterial* mat;
+	DTexture* floor;
+	DTexture* map;
 };

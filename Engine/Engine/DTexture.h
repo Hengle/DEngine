@@ -1,13 +1,14 @@
-#pragma once
-#include "DResObject.h"
-#include "DGraphics.h"
+﻿#pragma once
 #include <windows.h>
+#include "DGLCore.h"
+#include "DResObject.h"
 
 class DTexture : public DResObject
 {
 public:
 	DTexture();
 	~DTexture();
+	virtual void Apply(UINT);
 };
 
 class DTexture2D : public DTexture 
@@ -17,6 +18,7 @@ private:
 public:
 	~DTexture2D();
 	virtual void Destroy();
+	virtual void Apply(UINT);
 	DWarpMode GetWarpMode();
 	//DTextureBuffer* GetTextureBuffer();
 

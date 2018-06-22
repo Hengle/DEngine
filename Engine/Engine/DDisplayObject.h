@@ -1,8 +1,7 @@
-#pragma once
+﻿#pragma once
 #include "DSceneObject.h"
 #include "DMaterial.h"
 #include "DMesh.h"
-#include "DTexture.h"
 #include "DLight.h"
 
 class DDisplayObject : public DSceneObject

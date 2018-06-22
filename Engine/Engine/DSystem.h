@@ -1,4 +1,5 @@
-﻿#include "DTime.h"
+﻿#pragma once
+#include "DTime.h"
 #include "DGraphics.h"
 #include "DSceneManager.h"
 #include "DLog.h"

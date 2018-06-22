@@ -170,6 +170,20 @@ void DMaterial::SetFloat(const LPCSTR key, float value)
 	}
 }
 
+void DMaterial::SetTexture(const LPCSTR key, DTexture * texture)
+{
+	if (m_shader == NULL)
+		return;
+	if (m_textures.find(key) == m_textures.end())
+	{
+		m_textures.insert(std::pair<std::string, DTexture*>(key, texture));
+	}
+	else
+	{
+		m_textures[key] = texture;
+	}
+}
+
 //void DMaterial::SetTexture(const LPCSTR cbuffername, const LPCSTR key, const DTexture &)
 //{
 //}
@@ -206,6 +220,16 @@ void DMaterial::Apply()
 		//DSystem::GetGraphicsMgr()->GetGLCore()->ApplyShaderParams(material->GetShader()->GetShaderBuffer(), pindex, poffset, psize, stype, params);
 	}
 
+	std::map<std::string, DTexture*>::iterator  iter;
+	for (iter = m_textures.begin(); iter != m_textures.end(); iter++)
+	{
+		if (iter->second != NULL)
+		{
+			LPCSTR key = iter->first.c_str();
+			m_shader->ApplyRes(key, iter->second);
+		}
+	}
+
 	m_shader->Draw();
 	//DSystem::GetGraphicsMgr()->GetGLCore()->DrawShader(material->GetShader()->GetShaderBuffer(), mesh->GetIndexCount());
 }
@@ -238,6 +262,18 @@ void DMaterial::Destroy()
 		m_params[i] = NULL;
 	}
 	delete[] m_params;
+
+	std::map<std::string, DTexture*>::iterator  iter;
+	for (iter = m_textures.begin(); iter != m_textures.end(); iter++)
+	{
+		if (iter->second != NULL)
+		{
+			iter->second->Destroy();
+			delete iter->second;
+		}
+	}
+
+	m_textures.clear();
 
 	m_params = NULL;
 }

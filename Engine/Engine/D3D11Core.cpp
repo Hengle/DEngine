@@ -399,9 +399,9 @@ ID3D11SamplerState* D3D11Core::CreateSamplerState(D3D11_TEXTURE_ADDRESS_MODE mod
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
 	HRESULT result;
-	ID3D11SamplerState* state;
+	ID3D11SamplerState* state = 0;
 	result = m_device->CreateSamplerState(&samplerDesc, &state);
-	if (!FAILED(result))
+	if (FAILED(result))
 		return NULL;
 	return state;
 }

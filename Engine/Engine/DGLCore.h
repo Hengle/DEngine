@@ -3,8 +3,8 @@
 
 enum DWarpMode
 {
-	DWarpMode_Repeat,
-	DWarpMode_Clamp,
+	DWarpMode_Repeat = 0,
+	DWarpMode_Clamp = 1,
 };
 
 typedef struct DShaderResDesc
@@ -82,17 +82,16 @@ public:
 	unsigned int GetPropertyCount() const;
 	void Init(WCHAR* vsfile, WCHAR* psfile);
 	void ApplyParams(int cindex, int coffset, int csize, int stype, float* params);
-	void ApplyRes(DTextureRes*);
 	void Draw();
 	bool IsInitialized();
 	virtual void GetPropertyInfo(const LPCSTR key, DShaderParamDesc* desc) const = 0;
+	virtual UINT GetResOffset(const LPCSTR key) const = 0;
 	virtual bool HasProperty(const LPCSTR key) const = 0;
 	virtual void Release() = 0;
 
 protected:
 	virtual bool OnInit(WCHAR*, WCHAR*) = 0;
 	virtual void OnApplyParams(int, int, int, int, float*) = 0;
-	virtual void OnApplyRes(DTextureRes*) = 0;
 	virtual void OnDraw() = 0;
 
 protected:

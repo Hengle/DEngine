@@ -1,4 +1,4 @@
-#include "DTexture.h"
+﻿#include "DTexture.h"
 #include "DSystem.h"
 
 DTexture::DTexture()
@@ -6,6 +6,10 @@ DTexture::DTexture()
 }
 
 DTexture::~DTexture()
+{
+}
+
+void DTexture::Apply(UINT)
 {
 }
 
@@ -30,6 +34,13 @@ void DTexture2D::Destroy()
 	return;
 }
 
+void DTexture2D::Apply(UINT offset)
+{
+	DTexture::Apply(offset);
+	
+	m_textureRes->Apply(offset, 0, m_warpMode);
+}
+
 DWarpMode DTexture2D::GetWarpMode()
 {
 	return m_warpMode;
@@ -40,6 +51,7 @@ DTexture2D * DTexture2D::Create(WCHAR *filename)
 	DTexture2D* tex = new DTexture2D();
 	tex->m_textureRes = DSystem::GetGraphicsMgr()->GetGLCore()->CreateTextureRes(filename);
 	tex->m_warpMode = DWarpMode_Repeat;
+	return tex;
 }
 
 DTexture2D * DTexture2D::Create(WCHAR *filename, DWarpMode warpmode)
@@ -47,6 +59,7 @@ DTexture2D * DTexture2D::Create(WCHAR *filename, DWarpMode warpmode)
 	DTexture2D* tex = new DTexture2D();
 	tex->m_textureRes = DSystem::GetGraphicsMgr()->GetGLCore()->CreateTextureRes(filename);
 	tex->m_warpMode = warpmode;
+	return tex;
 }
 
 //DTextureBuffer * DTexture2D::GetTextureBuffer()

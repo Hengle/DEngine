@@ -331,7 +331,7 @@ DMeshRes * D3D10Core::CreateMeshRes()
 	return new DMeshRes10(m_device);
 }
 
-DTextureRes * D3D10Core::CreateTextureRes()
+DTextureRes * D3D10Core::CreateTextureRes(WCHAR*)
 {
 	return nullptr;
 }
@@ -339,6 +339,10 @@ DTextureRes * D3D10Core::CreateTextureRes()
 DShaderRes * D3D10Core::CreateShaderRes()
 {
 	return new DShaderRes10(m_device);
+}
+
+void D3D10Core::ApplySamplerState(UINT, DWarpMode)
+{
 }
 
 ID3D10Device * D3D10Core::GetDevice() const

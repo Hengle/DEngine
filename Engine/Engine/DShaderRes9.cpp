@@ -35,6 +35,11 @@ void DShaderRes9::GetPropertyInfo(const LPCSTR key, DShaderParamDesc * desc) con
 	desc->shaderType = 0;
 }
 
+UINT DShaderRes9::GetResOffset(const LPCSTR key) const
+{
+	return 0;
+}
+
 bool DShaderRes9::HasProperty(const LPCSTR key) const
 {
 	if (m_params.find(key) != m_params.end())

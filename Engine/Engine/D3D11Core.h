@@ -3,6 +3,7 @@
 #include <dxgi.h>
 #include <D3D11.h>
 #include <D3DX11.h>
+#include <map>
 
 class D3D11Core : public DGLCore
 {
@@ -14,10 +15,15 @@ public:
 	virtual void BeginRender();
 	virtual void EndRender();
 	virtual DMeshRes* CreateMeshRes();
-	virtual DTextureRes* CreateTextureRes();
+	virtual DTextureRes* CreateTextureRes(WCHAR*);
 	virtual DShaderRes* CreateShaderRes();
+	virtual void ApplySamplerState(UINT, DWarpMode);
 	ID3D11Device* GetDevice() const;
 	ID3D11DeviceContext* GetDeviceContext() const;
+
+private:
+	void InitSamplerStates();
+	ID3D11SamplerState* CreateSamplerState(D3D11_TEXTURE_ADDRESS_MODE);
 
 private:
 	IDXGISwapChain* m_swapChain;
@@ -29,4 +35,5 @@ private:
 	ID3D11DepthStencilView* m_depthStencilView;
 	ID3D11RasterizerState* m_rasterState;
 	D3D11_VIEWPORT m_viewPort;
+	std::map<DWarpMode, ID3D11SamplerState*> m_samplerStates;
 };

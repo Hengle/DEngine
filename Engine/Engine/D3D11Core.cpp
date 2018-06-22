@@ -2,6 +2,7 @@
 #include "DSystem.h"
 #include "DMeshRes11.h"
 #include "DShaderRes11.h"
+#include "DTextureRes11.h"
 #include <D3DX11.h>
 #include <d3dcompiler.h>
 
@@ -252,6 +253,8 @@ bool D3D11Core::Init(int width, int height, bool fullScreen, HWND hwnd)
 	m_viewPort.TopLeftX = 0.0f;
 	m_viewPort.TopLeftY = 0.0f;
 
+	InitSamplerStates();
+
 	return true;
 }
 
@@ -299,6 +302,15 @@ void D3D11Core::Destroy()
 		m_depthStencilBuffer->Release();
 		m_depthStencilBuffer = 0;
 	}
+	std::map<DWarpMode, ID3D11SamplerState*>::iterator  iter;
+	for (iter = m_samplerStates.begin(); iter != m_samplerStates.end(); iter++)
+	{
+		if (iter->second != NULL)
+		{
+			iter->second->Release();
+		}
+	}
+	m_samplerStates.clear();
 }
 
 void D3D11Core::BeginRender()
@@ -329,14 +341,23 @@ DMeshRes * D3D11Core::CreateMeshRes()
 	return res;
 }
 
-DTextureRes * D3D11Core::CreateTextureRes()
+DTextureRes * D3D11Core::CreateTextureRes(WCHAR* filename)
 {
-	return nullptr;
+	return new DTextureRes11(m_device, m_deviceContext, filename);
 }
 
 DShaderRes * D3D11Core::CreateShaderRes()
 {
 	return new DShaderRes11(m_device, m_deviceContext);
+}
+
+void D3D11Core::ApplySamplerState(UINT startSlot, DWarpMode mode)
+{
+	ID3D11SamplerState* state = m_samplerStates.at(mode);
+	if (state != NULL)
+	{
+		m_deviceContext->PSSetSamplers(startSlot, 1, &state);
+	}
 }
 
 ID3D11Device * D3D11Core::GetDevice() const
@@ -347,4 +368,40 @@ ID3D11Device * D3D11Core::GetDevice() const
 ID3D11DeviceContext * D3D11Core::GetDeviceContext() const
 {
 	return m_deviceContext;
+}
+
+void D3D11Core::InitSamplerStates()
+{
+	ID3D11SamplerState* state = CreateSamplerState(D3D11_TEXTURE_ADDRESS_WRAP);
+	if (state != NULL)
+		m_samplerStates.insert(std::pair<DWarpMode, ID3D11SamplerState*>(DWarpMode_Repeat, state));
+
+	state = CreateSamplerState(D3D11_TEXTURE_ADDRESS_CLAMP);
+	if (state != NULL)
+		m_samplerStates.insert(std::pair<DWarpMode, ID3D11SamplerState*>(DWarpMode_Clamp, state));
+}
+
+ID3D11SamplerState* D3D11Core::CreateSamplerState(D3D11_TEXTURE_ADDRESS_MODE mode)
+{
+	D3D11_SAMPLER_DESC samplerDesc;
+	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	samplerDesc.AddressU = mode;
+	samplerDesc.AddressV = mode;
+	samplerDesc.AddressW = mode;
+	samplerDesc.MipLODBias = 0.0f;
+	samplerDesc.MaxAnisotropy = 1;
+	samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+	samplerDesc.BorderColor[0] = 0;
+	samplerDesc.BorderColor[1] = 0;
+	samplerDesc.BorderColor[2] = 0;
+	samplerDesc.BorderColor[3] = 0;
+	samplerDesc.MinLOD = 0;
+	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+	HRESULT result;
+	ID3D11SamplerState* state;
+	result = m_device->CreateSamplerState(&samplerDesc, &state);
+	if (!FAILED(result))
+		return NULL;
+	return state;
 }

@@ -30,6 +30,25 @@ void DTexture2D::Destroy()
 	return;
 }
 
+DWarpMode DTexture2D::GetWarpMode()
+{
+	return m_warpMode;
+}
+
+DTexture2D * DTexture2D::Create(WCHAR *filename)
+{
+	DTexture2D* tex = new DTexture2D();
+	tex->m_textureRes = DSystem::GetGraphicsMgr()->GetGLCore()->CreateTextureRes(filename);
+	tex->m_warpMode = DWarpMode_Repeat;
+}
+
+DTexture2D * DTexture2D::Create(WCHAR *filename, DWarpMode warpmode)
+{
+	DTexture2D* tex = new DTexture2D();
+	tex->m_textureRes = DSystem::GetGraphicsMgr()->GetGLCore()->CreateTextureRes(filename);
+	tex->m_warpMode = warpmode;
+}
+
 //DTextureBuffer * DTexture2D::GetTextureBuffer()
 //{
 //	return m_texture;

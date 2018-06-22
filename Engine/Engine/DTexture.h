@@ -17,12 +17,15 @@ private:
 public:
 	~DTexture2D();
 	virtual void Destroy();
+	DWarpMode GetWarpMode();
 	//DTextureBuffer* GetTextureBuffer();
 
 	static DTexture2D* Create(WCHAR*);
+	static DTexture2D* Create(WCHAR*, DWarpMode);
 
-//private:
-//	DTextureBuffer* m_texture;
+private:
+	DTextureRes* m_textureRes;
+	DWarpMode m_warpMode;
 };
 
 class DTextureCube : public DTexture

@@ -1,6 +1,12 @@
 ﻿#pragma once
 #include <d3dcommon.h>
 
+enum DWarpMode
+{
+	DWarpMode_Repeat,
+	DWarpMode_Clamp,
+};
+
 typedef struct DShaderResDesc
 {
 public:
@@ -58,11 +64,13 @@ private:
 	bool m_isInitialized;
 };
 
+
 //抽象贴图资源-用于实现不同API下的texture
 class DTextureRes
 {
 public:
 	virtual void Release() = 0;
+	virtual void Apply(UINT, UINT, DWarpMode) = 0;
 };
 
 //抽象shader资源-用于实现不同API下的shader
@@ -102,8 +110,9 @@ public:
 	virtual void BeginRender() = 0;
 	virtual void EndRender() = 0;
 	virtual DMeshRes* CreateMeshRes() = 0;
-	virtual DTextureRes* CreateTextureRes() = 0;
+	virtual DTextureRes* CreateTextureRes(WCHAR*) = 0;
 	virtual DShaderRes* CreateShaderRes() = 0;
+	virtual void ApplySamplerState(UINT, DWarpMode) = 0;
 	void GetResolution(float&, float&);
 
 protected:

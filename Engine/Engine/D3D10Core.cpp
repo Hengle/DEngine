@@ -1,6 +1,7 @@
 ﻿#include "D3D10Core.h"
 #include "DMeshRes10.h"
 #include "DShaderRes10.h"
+#include "DTextureRes10.h"
 #include <d3dcompiler.h>
 #include <D3DX10.h>
 
@@ -331,9 +332,9 @@ DMeshRes * D3D10Core::CreateMeshRes()
 	return new DMeshRes10(m_device);
 }
 
-DTextureRes * D3D10Core::CreateTextureRes(WCHAR*)
+DTextureRes * D3D10Core::CreateTextureRes(WCHAR* filename)
 {
-	return nullptr;
+	return new DTextureRes10(m_device, filename);;
 }
 
 DShaderRes * D3D10Core::CreateShaderRes()

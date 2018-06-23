@@ -37,7 +37,11 @@ void DShaderRes9::GetPropertyInfo(const LPCSTR key, DShaderParamDesc * desc) con
 
 UINT DShaderRes9::GetResOffset(const LPCSTR key) const
 {
-	return 0;
+	if (m_resParams.find(key) != m_resParams.end())
+	{
+		return m_resParams.at(key).RegisterIndex;
+	}
+	return NAN;
 }
 
 bool DShaderRes9::HasProperty(const LPCSTR key) const
@@ -71,6 +75,9 @@ void DShaderRes9::Release()
 		m_pixelConstable->Release();
 		m_pixelConstable = NULL;
 	}
+	m_resParams.clear();
+	m_handles.clear();
+	m_params.clear();
 }
 
 bool DShaderRes9::OnInit(WCHAR * vsfile, WCHAR * psfile)
@@ -150,8 +157,6 @@ bool DShaderRes9::OnInit(WCHAR * vsfile, WCHAR * psfile)
 	if (pshader != NULL)
 		pshader->Release();
 	pshader = 0;
-
-	m_cbufferCount = m_propertyCount;
 	return true;
 }
 
@@ -209,7 +214,10 @@ HRESULT DShaderRes9::InitVertexShader()
 		m_handles.push_back(handle);
 
 		m_propertyCount += 1;
+		m_cbufferCount += 1;
 	}
+
+	m_vertexConstable->SetDefaults(m_device);
 
 	return S_OK;
 }
@@ -239,20 +247,32 @@ HRESULT DShaderRes9::InitPixelShader()
 
 		length = cdesc.Bytes / fsize;
 
-		DShaderParamDesc param;
-		param.cbufferIndex = m_propertyCount;
-		param.cbufferOffset = m_propertyCount;
-		param.cbufferLength = cdesc.Bytes;
-		param.propertyOffset = 0;
-		param.propertySize = length;
-		param.shaderType = 1;
+		if (cdesc.Class == D3DXPC_OBJECT)
+		{
+			m_resParams.insert(std::pair<std::string, D3DXCONSTANT_DESC>(cdesc.Name, cdesc));
 
-		m_params.insert(std::pair<std::string, DShaderParamDesc>(cdesc.Name, param));
-		m_handles.push_back(handle);
+			m_propertyCount += 1;
+		}
+		else
+		{
 
+			DShaderParamDesc param;
+			param.cbufferIndex = m_propertyCount;
+			param.cbufferOffset = m_propertyCount;
+			param.cbufferLength = cdesc.Bytes;
+			param.propertyOffset = cdesc.RegisterIndex;
+			param.propertySize = length;
+			param.shaderType = 1;
 
-		m_propertyCount += 1;
+			m_params.insert(std::pair<std::string, DShaderParamDesc>(cdesc.Name, param));
+			m_handles.push_back(handle);
+
+			m_propertyCount += 1;
+			m_cbufferCount += 1;
+		}
 	}
+
+	m_pixelConstable->SetDefaults(m_device);
 
 	return S_OK;
 }

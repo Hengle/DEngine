@@ -15,7 +15,7 @@ void DTexture::Apply(UINT)
 
 DTexture2D::DTexture2D() : DTexture()
 {
-	//m_texture = 0;
+	m_textureRes = 0;
 }
 
 DTexture2D::~DTexture2D()
@@ -24,12 +24,12 @@ DTexture2D::~DTexture2D()
 
 void DTexture2D::Destroy()
 {
-	/*if (m_texture)
+	if (m_textureRes != NULL)
 	{
-		m_texture->Release();
-		delete m_texture;
-		m_texture = NULL;
-	}*/
+		m_textureRes->Release();
+		delete m_textureRes;
+		m_textureRes = NULL;
+	}
 
 	return;
 }
@@ -38,7 +38,7 @@ void DTexture2D::Apply(UINT offset)
 {
 	DTexture::Apply(offset);
 	
-	m_textureRes->Apply(offset, 0, m_warpMode);
+	m_textureRes->Apply(offset, m_warpMode);
 }
 
 DWarpMode DTexture2D::GetWarpMode()

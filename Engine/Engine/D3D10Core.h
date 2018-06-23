@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "DGLCore.h"
 #include <d3d10.h>
+#include <map>
 
 class D3D10Core : public DGLCore
 {
@@ -19,6 +20,10 @@ public:
 	ID3D10Device* GetDevice() const;
 
 private:
+	void InitSamplerStates();
+	ID3D10SamplerState* CreateSamplerState(D3D10_TEXTURE_ADDRESS_MODE);
+
+private:
 	IDXGISwapChain* m_swapChain;
 	ID3D10Device* m_device;
 	ID3D10RenderTargetView*m_renderTargetView;
@@ -27,5 +32,6 @@ private:
 	ID3D10DepthStencilView* m_depthStencilView;
 	ID3D10RasterizerState* m_rasterState;
 	D3D10_VIEWPORT m_viewPort;
+	std::map<DWarpMode, ID3D10SamplerState*> m_samplerStates;
 };
 

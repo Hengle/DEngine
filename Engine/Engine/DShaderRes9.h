@@ -30,6 +30,7 @@ private:
 	ID3DXConstantTable* m_vertexConstable;
 	ID3DXConstantTable* m_pixelConstable;
 	std::map<std::string, DShaderParamDesc> m_params;
+	std::map<std::string, D3DXCONSTANT_DESC> m_resParams;
 	std::vector<D3DXHANDLE> m_handles;
 };
 

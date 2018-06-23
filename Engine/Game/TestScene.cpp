@@ -157,9 +157,9 @@ void TestScene::TestLoad()
 
 	//DMesh* mesh = DMesh::Create("../Res/eboy.obj");
 	plane = DMesh::Create(DMESH_Plane);
-	shader = DShader::Create(L"../Res/texture.vs", L"../Res/texture.ps");
+	shader = DShader::Create(L"../Res/texture.vs9", L"../Res/texture.ps9");
 	floor = DTexture2D::Create(L"../Res/decal.jpg");
-	map = DTexture2D::Create(L"../Res/eboy.tif");
+	map = DTexture2D::Create(L"../Res/eboy.jpg");
 	mat = new DMaterial(shader);
 
 	//mat->SetFloat("power", 1.3f);

@@ -21,12 +21,12 @@ DTextureRes11::~DTextureRes11()
 {
 }
 
-void DTextureRes11::Apply(UINT textureOffset, UINT samplerOffset, DWarpMode mode)
+void DTextureRes11::Apply(UINT textureOffset, DWarpMode mode)
 {
 	if (m_isSuccess)
 	{
 		m_deviceContext->PSSetShaderResources(textureOffset, 1, &m_texture);
-		DSystem::GetGraphicsMgr()->GetGLCore()->ApplySamplerState(samplerOffset, mode);
+		DSystem::GetGraphicsMgr()->GetGLCore()->ApplySamplerState(textureOffset, mode);
 	}
 }
 

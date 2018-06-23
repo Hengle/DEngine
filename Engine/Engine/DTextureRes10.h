@@ -6,7 +6,7 @@ class DTextureRes10 : public DTextureRes
 public:
 	DTextureRes10(ID3D10Device* device, WCHAR* filename);
 	~DTextureRes10();
-	virtual void Apply(UINT, UINT, DWarpMode);
+	virtual void Apply(UINT, DWarpMode);
 	virtual void Release();
 
 private:

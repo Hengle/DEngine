@@ -36,7 +36,11 @@ void DShaderRes10::GetPropertyInfo(const LPCSTR key, DShaderParamDesc * desc) co
 
 UINT DShaderRes10::GetResOffset(const LPCSTR key) const
 {
-	return 0;
+	if (m_resParams.find(key) != m_resParams.end())
+	{
+		return m_resParams.at(key);
+	}
+	return NAN;
 }
 
 bool DShaderRes10::HasProperty(const LPCSTR key) const
@@ -290,6 +294,14 @@ HRESULT DShaderRes10::InitPixelShader(ID3DBlob * pShaderBlob, ID3D10Device * pD3
 		m_cbufferCount += 1;
 	}
 
+	for (i = 0; i < shaderDesc.BoundResources; i++)
+	{
+		D3D10_SHADER_INPUT_BIND_DESC rdesc;
+		pPixelShaderReflection->GetResourceBindingDesc(i, &rdesc);
+
+		m_resParams.insert(std::pair<std::string, UINT>(rdesc.Name, rdesc.BindPoint));
+	}
+
 	pPixelShaderReflection->Release();
 
 	return hr;
@@ -307,7 +319,7 @@ bool DShaderRes10::OnInit(WCHAR * vsFilename, WCHAR * psFilename)
 	vertexShaderBuffer = 0;
 	pixelShaderBuffer = 0;
 
-	result = D3DX10CompileFromFile(vsFilename, NULL, NULL, "ColorVertexShader", "vs_4_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
+	result = D3DX10CompileFromFile(vsFilename, NULL, NULL, "TextureVertexShader", "vs_4_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
 		&vertexShaderBuffer, &errorMessage, NULL);
 	if (FAILED(result))
 	{
@@ -327,7 +339,7 @@ bool DShaderRes10::OnInit(WCHAR * vsFilename, WCHAR * psFilename)
 		return false;
 	}
 
-	result = D3DX10CompileFromFile(psFilename, NULL, NULL, "ColorPixelShader", "ps_4_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
+	result = D3DX10CompileFromFile(psFilename, NULL, NULL, "TexturePixelShader", "ps_4_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
 		&pixelShaderBuffer, &errorMessage, NULL);
 	if (FAILED(result))
 	{

@@ -198,6 +198,12 @@
     <ClInclude Include="DTextureRes11.h">
       <Filter>头文件\Core\D3D11Core</Filter>
     </ClInclude>
+    <ClInclude Include="DTextureRes10.h">
+      <Filter>头文件\Core\D3D10Core</Filter>
+    </ClInclude>
+    <ClInclude Include="DTextureRes9.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DMath.cpp">
@@ -322,6 +328,12 @@
     </ClCompile>
     <ClCompile Include="DTextureRes11.cpp">
       <Filter>源文件\Core\D3D11Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DTextureRes10.cpp">
+      <Filter>源文件\Core\D3D10Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DTextureRes9.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

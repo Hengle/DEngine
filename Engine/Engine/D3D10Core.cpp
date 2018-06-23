@@ -252,6 +252,10 @@ bool D3D10Core::Init(int width, int height, bool fullScreen, HWND hwnd)
 	m_viewPort.MinDepth = 0.0f;
 	m_viewPort.TopLeftX = 0.0f;
 	m_viewPort.TopLeftY = 0.0f;
+
+	InitSamplerStates();
+
+	return true;
 }
 
 void D3D10Core::Destroy()
@@ -303,6 +307,15 @@ void D3D10Core::Destroy()
 		m_device->Release();
 		m_device = 0;
 	}
+	std::map<DWarpMode, ID3D10SamplerState*>::iterator  iter;
+	for (iter = m_samplerStates.begin(); iter != m_samplerStates.end(); iter++)
+	{
+		if (iter->second != NULL)
+		{
+			iter->second->Release();
+		}
+	}
+	m_samplerStates.clear();
 
 	return;
 }
@@ -342,13 +355,54 @@ DShaderRes * D3D10Core::CreateShaderRes()
 	return new DShaderRes10(m_device);
 }
 
-void D3D10Core::ApplySamplerState(UINT, DWarpMode)
+void D3D10Core::ApplySamplerState(UINT startSlot, DWarpMode warpmode)
 {
+	ID3D10SamplerState* state = m_samplerStates.at(warpmode);
+	if (state != NULL)
+	{
+		m_device->PSSetSamplers(startSlot, 1, &state);
+	}
 }
 
 ID3D10Device * D3D10Core::GetDevice() const
 {
 	return m_device;
+}
+
+void D3D10Core::InitSamplerStates()
+{
+	ID3D10SamplerState* state = CreateSamplerState(D3D10_TEXTURE_ADDRESS_WRAP);
+	if (state != NULL)
+		m_samplerStates.insert(std::pair<DWarpMode, ID3D10SamplerState*>(DWarpMode_Repeat, state));
+
+	state = CreateSamplerState(D3D10_TEXTURE_ADDRESS_CLAMP);
+	if (state != NULL)
+		m_samplerStates.insert(std::pair<DWarpMode, ID3D10SamplerState*>(DWarpMode_Clamp, state));
+}
+
+ID3D10SamplerState * D3D10Core::CreateSamplerState(D3D10_TEXTURE_ADDRESS_MODE mode)
+{
+	D3D10_SAMPLER_DESC samplerDesc;
+	samplerDesc.Filter = D3D10_FILTER_MIN_MAG_MIP_LINEAR;
+	samplerDesc.AddressU = mode;
+	samplerDesc.AddressV = mode;
+	samplerDesc.AddressW = mode;
+	samplerDesc.MipLODBias = 0.0f;
+	samplerDesc.MaxAnisotropy = 1;
+	samplerDesc.ComparisonFunc = D3D10_COMPARISON_ALWAYS;
+	samplerDesc.BorderColor[0] = 0;
+	samplerDesc.BorderColor[1] = 0;
+	samplerDesc.BorderColor[2] = 0;
+	samplerDesc.BorderColor[3] = 0;
+	samplerDesc.MinLOD = 0;
+	samplerDesc.MaxLOD = D3D10_FLOAT32_MAX;
+
+	HRESULT result;
+	ID3D10SamplerState* state = 0;
+	result = m_device->CreateSamplerState(&samplerDesc, &state);
+	if (FAILED(result))
+		return NULL;
+	return state;
 }
 
 //DMeshBuffer * D3D10Core::CreateMeshBuffer(int vertexCount, int indexCount, int bufferLength, int dataSize, const float * vertices, const unsigned long * indices)

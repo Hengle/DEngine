@@ -212,6 +212,7 @@ void DMaterial::Apply()
 	int i = 0;
 	int pcount, poffset, pindex, psize, stype;
 	float* params;
+
 	for (i = 0; i < m_paramCount; i++)
 	{
 		//material->GetParams(i, pcount, pindex, poffset, psize, stype, &params);

@@ -70,7 +70,7 @@ class DTextureRes
 {
 public:
 	virtual void Release() = 0;
-	virtual void Apply(UINT, UINT, DWarpMode) = 0;
+	virtual void Apply(UINT, DWarpMode) = 0;
 };
 
 //抽象shader资源-用于实现不同API下的shader

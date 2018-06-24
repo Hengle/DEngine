@@ -30,7 +30,7 @@ private:
 	ID3D10Device* m_device;
 	ID3D10RenderTargetView*m_renderTargetView;
 	ID3D10Texture2D* m_depthStencilBuffer;
-	ID3D10DepthStencilState* m_depthStencilState;
+	//ID3D10DepthStencilState* m_depthStencilState;
 	ID3D10DepthStencilView* m_depthStencilView;
 	DRenderStateMgr* m_renderStateMgr;
 	D3D10_VIEWPORT m_viewPort;

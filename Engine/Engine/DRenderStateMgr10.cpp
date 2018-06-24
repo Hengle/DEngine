@@ -16,6 +16,12 @@ void DRenderStateMgr10::Init()
 	InitRasterizerStates();
 
 	ChangeCullMode(DCullMode_Back);
+
+	m_currentDepthStencilState.ztest = DRSCompareFunc_LEqual;
+	m_currentDepthStencilState.zwrite = true;
+	m_currentDepthStencilState.stencilId = 1;
+
+	RefreshDepthStencilState();
 }
 
 void DRenderStateMgr10::Release()
@@ -30,6 +36,16 @@ void DRenderStateMgr10::Release()
 		}
 	}
 	m_rasterizerStates.clear();
+
+	std::map<unsigned long, ID3D10DepthStencilState*>::iterator  diter;
+	for (diter = m_depthStencilStates.begin(); diter != m_depthStencilStates.end(); diter++)
+	{
+		if (diter->second != NULL)
+		{
+			diter->second->Release();
+		}
+	}
+	m_depthStencilStates.clear();
 }
 
 void DRenderStateMgr10::SetCullMode(DCullMode cullMode)
@@ -41,12 +57,24 @@ void DRenderStateMgr10::SetCullMode(DCullMode cullMode)
 	ChangeCullMode(cullMode);
 }
 
-void DRenderStateMgr10::SetZWriteEnable(bool)
+void DRenderStateMgr10::SetZWriteEnable(bool zwrite)
 {
+	if (m_device == NULL)
+		return;
+	if (m_currentDepthStencilState.zwrite == zwrite)
+		return;
+	m_currentDepthStencilState.zwrite = zwrite;
+	RefreshDepthStencilState();
 }
 
-void DRenderStateMgr10::SetZTestFunc(DRSCompareFunc)
+void DRenderStateMgr10::SetZTestFunc(DRSCompareFunc ztest)
 {
+	if (m_device == NULL)
+		return;
+	if (m_currentDepthStencilState.ztest == ztest)
+		return;
+	m_currentDepthStencilState.ztest = ztest;
+	RefreshDepthStencilState();
 }
 
 void DRenderStateMgr10::ChangeCullMode(DCullMode cullMode)
@@ -57,6 +85,26 @@ void DRenderStateMgr10::ChangeCullMode(DCullMode cullMode)
 		m_device->RSSetState(state);
 
 		m_currentMode = cullMode;
+	}
+}
+
+void DRenderStateMgr10::RefreshDepthStencilState()
+{
+	unsigned long key = m_currentDepthStencilState.GetKey();
+	if (m_depthStencilStates.find(key) != m_depthStencilStates.end())
+	{
+		ID3D10DepthStencilState* state = m_depthStencilStates.at(key);
+		m_device->OMSetDepthStencilState(state, m_currentDepthStencilState.stencilId);
+	}
+	else
+	{
+		ID3D10DepthStencilState* state;
+		HRESULT result = CreateDepthStencilState(m_currentDepthStencilState, &state);
+		if (!FAILED(result))
+		{
+			m_depthStencilStates.insert(std::pair<unsigned long, ID3D10DepthStencilState*>(key, state));
+			m_device->OMSetDepthStencilState(state, m_currentDepthStencilState.stencilId);
+		}
 	}
 }
 
@@ -103,4 +151,74 @@ HRESULT DRenderStateMgr10::CreateRasterizerState(D3D10_CULL_MODE cullmode, ID3D1
 
 	HRESULT result = m_device->CreateRasterizerState(&desc, out);
 	return result;
+}
+
+HRESULT DRenderStateMgr10::CreateDepthStencilState(DepthStencilState10 desc, ID3D10DepthStencilState ** state)
+{
+	D3D10_DEPTH_STENCIL_DESC depthStencilDesc;
+	ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
+
+	depthStencilDesc.DepthEnable = true;
+	if (desc.zwrite)
+		depthStencilDesc.DepthWriteMask = D3D10_DEPTH_WRITE_MASK_ALL;
+	else
+		depthStencilDesc.DepthWriteMask = D3D10_DEPTH_WRITE_MASK_ZERO;
+
+	switch (desc.ztest)
+	{
+	case DRSCompareFunc_Always:
+		depthStencilDesc.DepthFunc = D3D10_COMPARISON_ALWAYS;
+		break;
+	case DRSCompareFunc_Equal:
+		depthStencilDesc.DepthFunc = D3D10_COMPARISON_EQUAL;
+		break;
+	case DRSCompareFunc_GEqual:
+		depthStencilDesc.DepthFunc = D3D10_COMPARISON_GREATER_EQUAL;
+		break;
+	case DRSCompareFunc_Greater:
+		depthStencilDesc.DepthFunc = D3D10_COMPARISON_GREATER;
+		break;
+	case DRSCompareFunc_LEqual:
+		depthStencilDesc.DepthFunc = D3D10_COMPARISON_LESS_EQUAL;
+		break;
+	case DRSCompareFunc_Less:
+		depthStencilDesc.DepthFunc = D3D10_COMPARISON_LESS;
+		break;
+	case DRSCompareFunc_Never:
+		depthStencilDesc.DepthFunc = D3D10_COMPARISON_NEVER;
+		break;
+	case DRSCompareFunc_NotEqual:
+		depthStencilDesc.DepthFunc = D3D10_COMPARISON_NOT_EQUAL;
+		break;
+	default:
+		break;
+	}
+
+	depthStencilDesc.StencilEnable = true;
+	depthStencilDesc.StencilReadMask = 0xFF;
+	depthStencilDesc.StencilWriteMask = 0xFF;
+
+	depthStencilDesc.FrontFace.StencilFailOp = D3D10_STENCIL_OP_KEEP;
+	depthStencilDesc.FrontFace.StencilDepthFailOp = D3D10_STENCIL_OP_INCR;
+	depthStencilDesc.FrontFace.StencilPassOp = D3D10_STENCIL_OP_KEEP;
+	depthStencilDesc.FrontFace.StencilFunc = D3D10_COMPARISON_ALWAYS;
+
+	depthStencilDesc.BackFace.StencilFailOp = D3D10_STENCIL_OP_KEEP;
+	depthStencilDesc.BackFace.StencilDepthFailOp = D3D10_STENCIL_OP_DECR;
+	depthStencilDesc.BackFace.StencilPassOp = D3D10_STENCIL_OP_KEEP;
+	depthStencilDesc.BackFace.StencilFunc = D3D10_COMPARISON_ALWAYS;
+
+	HRESULT result = m_device->CreateDepthStencilState(&depthStencilDesc, state);
+	return result;
+}
+
+unsigned long DRenderStateMgr10::DepthStencilState10::GetKey()
+{
+	unsigned long key = 0;
+	if (zwrite)
+		key = 1L << 4;
+	unsigned long func = (unsigned long)ztest;
+	key = key | func;
+
+	return key;
 }

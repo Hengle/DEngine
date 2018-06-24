@@ -135,6 +135,31 @@ void DRenderStateMgr11::InitRasterizerStates()
 	}
 }
 
+D3D11_COMPARISON_FUNC DRenderStateMgr11::GetComparisonFunc(DRSCompareFunc func)
+{
+	switch (func)
+	{
+	case DRSCompareFunc_Always:
+		return D3D11_COMPARISON_ALWAYS;
+	case DRSCompareFunc_Equal:
+		return D3D11_COMPARISON_EQUAL;
+	case DRSCompareFunc_GEqual:
+		return D3D11_COMPARISON_GREATER_EQUAL;
+	case DRSCompareFunc_Greater:
+		return D3D11_COMPARISON_GREATER;
+	case DRSCompareFunc_LEqual:
+		return D3D11_COMPARISON_LESS_EQUAL;
+	case DRSCompareFunc_Less:
+		return D3D11_COMPARISON_LESS;
+	case DRSCompareFunc_Never:
+		return D3D11_COMPARISON_NEVER;
+	case DRSCompareFunc_NotEqual:
+		return D3D11_COMPARISON_NOT_EQUAL;
+	default:
+		return D3D11_COMPARISON_LESS_EQUAL;
+	}
+}
+
 HRESULT DRenderStateMgr11::CreateRasterizerState(D3D11_CULL_MODE cullmode, ID3D11RasterizerState ** out)
 {
 	D3D11_RASTERIZER_DESC desc;
@@ -166,35 +191,7 @@ HRESULT DRenderStateMgr11::CreateDepthStencilState(DepthStencilState11 desc, ID3
 	else
 		depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
 
-	switch (desc.ztest)
-	{
-	case DRSCompareFunc_Always:
-		depthStencilDesc.DepthFunc = D3D11_COMPARISON_ALWAYS;
-		break;
-	case DRSCompareFunc_Equal:
-		depthStencilDesc.DepthFunc = D3D11_COMPARISON_EQUAL;
-		break;
-	case DRSCompareFunc_GEqual:
-		depthStencilDesc.DepthFunc = D3D11_COMPARISON_GREATER_EQUAL;
-		break;
-	case DRSCompareFunc_Greater:
-		depthStencilDesc.DepthFunc = D3D11_COMPARISON_GREATER;
-		break;
-	case DRSCompareFunc_LEqual:
-		depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
-		break;
-	case DRSCompareFunc_Less:
-		depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
-		break;
-	case DRSCompareFunc_Never:
-		depthStencilDesc.DepthFunc = D3D11_COMPARISON_NEVER;
-		break;
-	case DRSCompareFunc_NotEqual:
-		depthStencilDesc.DepthFunc = D3D11_COMPARISON_NOT_EQUAL;
-		break;
-	default:
-		break;
-	}
+	depthStencilDesc.DepthFunc = GetComparisonFunc(desc.ztest);
 
 	depthStencilDesc.StencilEnable = true;
 	depthStencilDesc.StencilReadMask = 0xFF;

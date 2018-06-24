@@ -30,6 +30,7 @@ private:
 	void ChangeCullMode(DCullMode);
 	void RefreshDepthStencilState();
 	void InitRasterizerStates();
+	D3D11_COMPARISON_FUNC GetComparisonFunc(DRSCompareFunc);
 	HRESULT CreateRasterizerState(D3D11_CULL_MODE, ID3D11RasterizerState**);
 	HRESULT CreateDepthStencilState(DepthStencilState11, ID3D11DepthStencilState**);
 

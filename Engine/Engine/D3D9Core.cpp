@@ -3,11 +3,13 @@
 #include "DMeshRes9.h"
 #include "DShaderRes9.h"
 #include "DTextureRes9.h"
+#include "DRenderStateMgr9.h"
 
 D3D9Core::D3D9Core()
 {
 	m_d3d = 0;
 	m_device = 0;
+	m_renderStateMgr = 0;
 }
 
 
@@ -71,6 +73,8 @@ bool D3D9Core::Init(int width, int height, bool fullScreen, HWND hwnd)
 	m_viewPort.MinZ = 0.0f;
 	m_viewPort.MaxZ = 1.0f;
 
+	InitRenderStateMgr();
+
 	return true;
 }
 
@@ -85,6 +89,12 @@ void D3D9Core::Destroy()
 	{
 		m_device->Release();
 		m_device = 0;
+	}
+	if (m_renderStateMgr != NULL)
+	{
+		m_renderStateMgr->Release();
+		delete m_renderStateMgr;
+		m_renderStateMgr = 0;
 	}
 }
 
@@ -120,23 +130,34 @@ DShaderRes * D3D9Core::CreateShaderRes()
 	return new DShaderRes9(m_device);
 }
 
-void D3D9Core::ApplySamplerState(UINT index, DWarpMode warpmode)
+void D3D9Core::ApplySamplerState(UINT index, DWrapMode warpmode)
 {
 	DWORD rindex = index;
 	m_device->SetSamplerState(rindex, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
 	m_device->SetSamplerState(rindex, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
 	m_device->SetSamplerState(rindex, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
-	if (warpmode == DWarpMode_Clamp)
+	if (warpmode == DWrapMode_Clamp)
 	{
 		m_device->SetSamplerState(rindex, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP);
 		m_device->SetSamplerState(rindex, D3DSAMP_ADDRESSV, D3DTADDRESS_CLAMP);
 		m_device->SetSamplerState(rindex, D3DSAMP_ADDRESSW, D3DTADDRESS_CLAMP);
 	}
-	else if(warpmode == DWarpMode_Repeat)
+	else if(warpmode == DWrapMode_Repeat)
 	{
 		m_device->SetSamplerState(rindex, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);
 		m_device->SetSamplerState(rindex, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);
 		m_device->SetSamplerState(rindex, D3DSAMP_ADDRESSW, D3DTADDRESS_WRAP);
 	}
 	
+}
+
+DRenderStateMgr * D3D9Core::GetRenderStateMgr()
+{
+	return m_renderStateMgr;
+}
+
+void D3D9Core::InitRenderStateMgr()
+{
+	m_renderStateMgr = new DRenderStateMgr9(m_device);
+	m_renderStateMgr->Init();
 }

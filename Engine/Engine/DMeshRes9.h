@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "D3D9Core.h"
 
 class DMeshRes9 : public DMeshRes
@@ -10,7 +10,7 @@ public:
 
 protected:
 	virtual bool OnInit(DMeshBufferDesc*);
-	virtual void OnDraw();
+	virtual void OnDraw(DMeshTopology);
 
 private:
 	LPDIRECT3DDEVICE9 m_device;

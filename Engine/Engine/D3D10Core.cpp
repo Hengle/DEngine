@@ -2,6 +2,7 @@
 #include "DMeshRes10.h"
 #include "DShaderRes10.h"
 #include "DTextureRes10.h"
+#include "DRenderStateMgr10.h"
 #include <d3dcompiler.h>
 #include <D3DX10.h>
 
@@ -13,7 +14,7 @@ D3D10Core::D3D10Core()
 	m_depthStencilBuffer = 0;
 	m_depthStencilState = 0;
 	m_depthStencilView = 0;
-	m_rasterState = 0;
+	m_renderStateMgr = 0;
 }
 
 
@@ -36,7 +37,6 @@ bool D3D10Core::Init(int width, int height, bool fullScreen, HWND hwnd)
 	D3D10_TEXTURE2D_DESC  depthBufferDesc;
 	D3D10_DEPTH_STENCIL_DESC depthStencilDesc;
 	D3D10_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
-	D3D10_RASTERIZER_DESC rasterDesc;
 
 	int i, numerator, denominator;
 
@@ -224,28 +224,6 @@ bool D3D10Core::Init(int width, int height, bool fullScreen, HWND hwnd)
 
 	m_device->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
 
-	// Setup the raster description which will determine how and what polygons will be drawn.
-	rasterDesc.AntialiasedLineEnable = false;
-	rasterDesc.CullMode = D3D10_CULL_BACK;
-	rasterDesc.DepthBias = 0;
-	rasterDesc.DepthBiasClamp = 0.0f;
-	rasterDesc.DepthClipEnable = true;
-	rasterDesc.FillMode = D3D10_FILL_SOLID;
-	rasterDesc.FrontCounterClockwise = false;
-	rasterDesc.MultisampleEnable = false;
-	rasterDesc.ScissorEnable = false;
-	rasterDesc.SlopeScaledDepthBias = 0.0f;
-
-	// Create the rasterizer state from the description we just filled out.
-	result = m_device->CreateRasterizerState(&rasterDesc, &m_rasterState);
-	if (FAILED(result))
-	{
-		return false;
-	}
-
-	// Now set the rasterizer state.
-	m_device->RSSetState(m_rasterState);
-
 	m_viewPort.Width = width;
 	m_viewPort.Height = height;
 	m_viewPort.MaxDepth = 1.0f;
@@ -254,6 +232,7 @@ bool D3D10Core::Init(int width, int height, bool fullScreen, HWND hwnd)
 	m_viewPort.TopLeftY = 0.0f;
 
 	InitSamplerStates();
+	InitRenderStateMgr();
 
 	return true;
 }
@@ -263,13 +242,6 @@ void D3D10Core::Destroy()
 	if (m_swapChain)
 	{
 		m_swapChain->SetFullscreenState(false, NULL);
-	}
-
-
-	if (m_rasterState)
-	{
-		m_rasterState->Release();
-		m_rasterState = 0;
 	}
 
 	if (m_depthStencilView)
@@ -307,7 +279,13 @@ void D3D10Core::Destroy()
 		m_device->Release();
 		m_device = 0;
 	}
-	std::map<DWarpMode, ID3D10SamplerState*>::iterator  iter;
+	if (m_renderStateMgr)
+	{
+		m_renderStateMgr->Release();
+		delete m_renderStateMgr;
+		m_renderStateMgr = 0;
+	}
+	std::map<DWrapMode, ID3D10SamplerState*>::iterator  iter;
 	for (iter = m_samplerStates.begin(); iter != m_samplerStates.end(); iter++)
 	{
 		if (iter->second != NULL)
@@ -355,13 +333,18 @@ DShaderRes * D3D10Core::CreateShaderRes()
 	return new DShaderRes10(m_device);
 }
 
-void D3D10Core::ApplySamplerState(UINT startSlot, DWarpMode warpmode)
+void D3D10Core::ApplySamplerState(UINT startSlot, DWrapMode warpmode)
 {
 	ID3D10SamplerState* state = m_samplerStates.at(warpmode);
 	if (state != NULL)
 	{
 		m_device->PSSetSamplers(startSlot, 1, &state);
 	}
+}
+
+DRenderStateMgr * D3D10Core::GetRenderStateMgr()
+{
+	return m_renderStateMgr;
 }
 
 ID3D10Device * D3D10Core::GetDevice() const
@@ -373,11 +356,17 @@ void D3D10Core::InitSamplerStates()
 {
 	ID3D10SamplerState* state = CreateSamplerState(D3D10_TEXTURE_ADDRESS_WRAP);
 	if (state != NULL)
-		m_samplerStates.insert(std::pair<DWarpMode, ID3D10SamplerState*>(DWarpMode_Repeat, state));
+		m_samplerStates.insert(std::pair<DWrapMode, ID3D10SamplerState*>(DWrapMode_Repeat, state));
 
 	state = CreateSamplerState(D3D10_TEXTURE_ADDRESS_CLAMP);
 	if (state != NULL)
-		m_samplerStates.insert(std::pair<DWarpMode, ID3D10SamplerState*>(DWarpMode_Clamp, state));
+		m_samplerStates.insert(std::pair<DWrapMode, ID3D10SamplerState*>(DWrapMode_Clamp, state));
+}
+
+void D3D10Core::InitRenderStateMgr()
+{
+	m_renderStateMgr = new DRenderStateMgr10(m_device);
+	m_renderStateMgr->Init();
 }
 
 ID3D10SamplerState * D3D10Core::CreateSamplerState(D3D10_TEXTURE_ADDRESS_MODE mode)
@@ -404,561 +393,3 @@ ID3D10SamplerState * D3D10Core::CreateSamplerState(D3D10_TEXTURE_ADDRESS_MODE mo
 		return NULL;
 	return state;
 }
-
-//DMeshBuffer * D3D10Core::CreateMeshBuffer(int vertexCount, int indexCount, int bufferLength, int dataSize, const float * vertices, const unsigned long * indices)
-//{
-//	DMeshBuffer10* buffer = new DMeshBuffer10();
-//	buffer->Init(m_device, vertexCount, indexCount, dataSize, vertices, indices);
-//	return buffer;
-//}
-//
-//DTextureBuffer * D3D10Core::CreateTextureBuffer(WCHAR * fileName)
-//{
-//	return nullptr;
-//}
-//
-//DShaderBuffer * D3D10Core::CreateShaderBuffer(WCHAR * vertexShader, WCHAR * pixelShader)
-//{
-//	DShaderBuffer10* sbf = new DShaderBuffer10();
-//	sbf->Init(m_device, vertexShader, pixelShader);
-//	return sbf;
-//}
-//
-//void D3D10Core::ApplyShaderParams(DShaderBuffer * shaderBuffer, int cindex, int coffset, int csize, int stype, float * params)
-//{
-//	DShaderBuffer10* bf10 = (DShaderBuffer10*)shaderBuffer;
-//	bf10->ApplyBuffer(m_device, cindex, coffset, csize, stype, params);
-//}
-//
-//void D3D10Core::ApplyTextureParams(DTextureBuffer * textureBuffer)
-//{
-//}
-//
-//void D3D10Core::DrawMesh(const DMeshBuffer * meshBuffer, int dataSize)
-//{
-//	unsigned int stride;
-//	unsigned int offset;
-//
-//
-//	stride = dataSize;
-//	offset = 0;
-//
-//	ID3D10Buffer* vbuffer = ((DMeshBuffer10*)(meshBuffer))->GetVertexBuffer();
-//	ID3D10Buffer* ibuffer = ((DMeshBuffer10*)(meshBuffer))->GetIndexBuffer();
-//
-//	m_device->IASetVertexBuffers(0, 1, &vbuffer, &stride, &offset);
-//
-//	m_device->IASetIndexBuffer(ibuffer, DXGI_FORMAT_R32_UINT, 0);
-//
-//	m_device->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-//}
-//
-//void D3D10Core::DrawShader(const DShaderBuffer * buffer, int indexCount)
-//{
-//	((DShaderBuffer10*)buffer)->Draw(m_device, indexCount);
-//}
-//
-//void D3D10Core::SetBackBufferRenderTarget()
-//{
-//}
-//
-//DMeshBuffer10::DMeshBuffer10()
-//{
-//	m_vertexBuffer = 0;
-//	m_indexBuffer = 0;
-//}
-//
-//void DMeshBuffer10::Init(ID3D10Device * device, int vertexCount, int indexCount, int dataSize, const float * vertices, const unsigned long * indices)
-//{
-//	D3D10_BUFFER_DESC  vertexBufferDesc, indexBufferDesc;
-//	D3D10_SUBRESOURCE_DATA vertexData, indexData;
-//	HRESULT result;
-//
-//	vertexBufferDesc.Usage = D3D10_USAGE_DEFAULT;
-//	vertexBufferDesc.ByteWidth = dataSize * vertexCount;
-//	vertexBufferDesc.BindFlags = D3D10_BIND_VERTEX_BUFFER;
-//	vertexBufferDesc.CPUAccessFlags = 0;
-//	vertexBufferDesc.MiscFlags = 0;
-//
-//	vertexData.pSysMem = vertices;
-//
-//	result = device->CreateBuffer(&vertexBufferDesc, &vertexData, &m_vertexBuffer);
-//	if (FAILED(result))
-//	{
-//		return;
-//	}
-//
-//	indexBufferDesc.Usage = D3D10_USAGE_DEFAULT;
-//	indexBufferDesc.ByteWidth = sizeof(unsigned long) * indexCount;
-//	indexBufferDesc.BindFlags = D3D10_BIND_INDEX_BUFFER;
-//	indexBufferDesc.CPUAccessFlags = 0;
-//	indexBufferDesc.MiscFlags = 0;
-//
-//	indexData.pSysMem = indices;
-//
-//	result = device->CreateBuffer(&indexBufferDesc, &indexData, &m_indexBuffer);
-//	if (FAILED(result))
-//	{
-//		return;
-//	}
-//}
-//
-//ID3D10Buffer * DMeshBuffer10::GetVertexBuffer()
-//{
-//	return m_vertexBuffer;
-//}
-//
-//ID3D10Buffer * DMeshBuffer10::GetIndexBuffer()
-//{
-//	return m_indexBuffer;
-//}
-//
-//void DMeshBuffer10::Release()
-//{
-//	if (m_vertexBuffer != NULL)
-//	{
-//		m_vertexBuffer->Release();
-//		m_vertexBuffer = NULL;
-//	}
-//	if (m_indexBuffer != NULL)
-//	{
-//		m_indexBuffer->Release();
-//		m_indexBuffer = NULL;
-//	}
-//}
-//
-//DShaderBuffer10::DShaderBuffer10()
-//{
-//	m_vertexShader = 0;
-//	m_pixelShader = 0;
-//	m_layout = 0;
-//}
-//
-//DShaderBuffer10::~DShaderBuffer10()
-//{
-//}
-//
-//void DShaderBuffer10::Init(ID3D10Device * device, WCHAR * vertexshader, WCHAR * pixelshader)
-//{
-//	InitShader(device, vertexshader, pixelshader);
-//}
-//
-//unsigned int DShaderBuffer10::GetCBufferCount() const
-//{
-//	return m_cbufferCount;
-//}
-//
-//unsigned int DShaderBuffer10::GetPropertyCount() const
-//{
-//	return m_propertyCount;
-//}
-//
-//void DShaderBuffer10::GetPropertyInfo(const LPCSTR key, int & cindex, int & coffset, int & clength, int & poffset, int & plength, int & stype) const
-//{
-//	if (m_params.find(key) != m_params.end())
-//	{
-//		ShaderParam10 pm = m_params.at(key);
-//		//if (pm.properties.find(key) != pm.properties.end())
-//		//{
-//		//ShaderProperty pr = pm.properties.at(key);
-//		cindex = pm.bufferIndex;
-//		coffset = pm.bufferOffset;
-//		clength = pm.bufferLength;
-//		poffset = pm.paramOffset;
-//		plength = pm.paramLength;
-//		stype = pm.shaderType;
-//		return;
-//		//}
-//	}
-//	cindex = -1;
-//	coffset = -1;
-//	clength = 0;
-//	poffset = -1;
-//	plength = 0;
-//	stype = 0;
-//}
-//
-//bool DShaderBuffer10::HasProperty(const LPCSTR key) const
-//{
-//	if (m_params.find(key) != m_params.end())
-//	{
-//		return true;
-//	}
-//	return false;
-//}
-//
-//void DShaderBuffer10::Release()
-//{
-//	if (m_layout)
-//	{
-//		m_layout->Release();
-//		m_layout = 0;
-//	}
-//
-//	if (m_pixelShader)
-//	{
-//		m_pixelShader->Release();
-//		m_pixelShader = 0;
-//	}
-//
-//	if (m_vertexShader)
-//	{
-//		m_vertexShader->Release();
-//		m_vertexShader = 0;
-//	}
-//}
-//
-//void DShaderBuffer10::ApplyBuffer(ID3D10Device * device, int cindex, int coffset, int csize, int stype, float * params)
-//{
-//	HRESULT result;
-//
-//	float* dataPtr;
-//	unsigned int bufferNumber = coffset;
-//
-//	ID3D10Buffer* pbuffer = m_paramBuffers[cindex];
-//
-//	result = pbuffer->Map(D3D10_MAP_WRITE_DISCARD, 0, (void**)&dataPtr);
-//	if (FAILED(result))
-//	{
-//		return;
-//	}
-//
-//	int i;
-//	for (i = 0; i < csize; i++)
-//	{
-//		dataPtr[i] = params[i];
-//	}
-//
-//	pbuffer->Unmap();
-//
-//	if (stype == 0)
-//	{
-//		device->VSSetConstantBuffers(bufferNumber, 1, &pbuffer);
-//	}
-//	else
-//	{
-//		device->PSSetConstantBuffers(bufferNumber, 1, &pbuffer);
-//	}
-//}
-//
-//void DShaderBuffer10::Draw(ID3D10Device *device, int indexCount)
-//{
-//	device->IASetInputLayout(m_layout);
-//
-//	device->VSSetShader(m_vertexShader);
-//	device->PSSetShader(m_pixelShader);
-//
-//	//deviceContext->PSSetSamplers(0, 1, &m_samplerState);
-//
-//	device->DrawIndexed(indexCount, 0, 0);
-//}
-//
-//bool DShaderBuffer10::InitShader(ID3D10Device * device, WCHAR * vsFilename, WCHAR * psFilename)
-//{
-//	HRESULT result;
-//	ID3D10Blob* errorMessage;
-//	ID3D10Blob* vertexShaderBuffer;
-//	ID3D10Blob* pixelShaderBuffer;
-//
-//
-//	errorMessage = 0;
-//	vertexShaderBuffer = 0;
-//	pixelShaderBuffer = 0;
-//
-//	result = D3DX10CompileFromFile(vsFilename, NULL, NULL, "ColorVertexShader", "vs_4_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
-//		&vertexShaderBuffer, &errorMessage, NULL);
-//	if (FAILED(result))
-//	{
-//		if (errorMessage)
-//		{
-//			//OutputShaderErrorMessage(errorMessage, vsFilename);
-//		}
-//		else
-//		{
-//			/*char s[1024];
-//			_bstr_t b(vsFilename);
-//			char* fname = b;
-//			sprintf_s(s, "Missing Vertex Shader File:%s", fname);
-//			DLog::Err(s);*/
-//		}
-//
-//		return false;
-//	}
-//
-//	result = D3DX10CompileFromFile(psFilename, NULL, NULL, "ColorPixelShader", "ps_4_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
-//		&pixelShaderBuffer, &errorMessage, NULL);
-//	if (FAILED(result))
-//	{
-//		if (errorMessage)
-//		{
-//			//OutputShaderErrorMessage(errorMessage, psFilename);
-//		}
-//		else
-//		{
-//			/*char s[1024];
-//			_bstr_t b(psFilename);
-//			char* fname = b;
-//			sprintf_s(s, "Missing Pixel Shader File:%s", fname);
-//			DLog::Err(s);*/
-//		}
-//
-//		return false;
-//	}
-//
-//	result = device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), &m_vertexShader);
-//	if (FAILED(result))
-//	{
-//		return false;
-//	}
-//
-//	result = device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), &m_pixelShader);
-//	if (FAILED(result))
-//	{
-//		return false;
-//	}
-//
-//	// Create the vertex input layout.
-//
-//	int byteLength = 0;
-//	m_cbufferCount = 0;
-//	m_propertyCount = 0;
-//
-//	result = InitVertexShader(vertexShaderBuffer, device, &m_layout, &byteLength);
-//	if (FAILED(result))
-//	{
-//		return false;
-//	}
-//
-//	result = InitPixelShader(pixelShaderBuffer, device);
-//	if (FAILED(result))
-//	{
-//		return false;
-//	}
-//
-//	vertexShaderBuffer->Release();
-//	vertexShaderBuffer = 0;
-//
-//	pixelShaderBuffer->Release();
-//	pixelShaderBuffer = 0;
-//
-//	/*char s[1024];
-//	_bstr_t b(vsFilename);
-//	char* fname = b;
-//	sprintf_s(s, "Shader Load Complie Success! (%s)", fname);
-//	DLog::Info(s);*/
-//
-//	return true;
-//}
-//
-//HRESULT DShaderBuffer10::InitVertexShader(ID3DBlob * pShaderBlob, ID3D10Device *pD3DDevice, ID3D10InputLayout **pInputLayout, int * inputLayoutByteLength)
-//{
-//	ID3D10ShaderReflection* pVertexShaderReflection = nullptr;
-//	D3D10_BUFFER_DESC paramBufferDesc;
-//	HRESULT hr = S_OK;
-//
-//
-//	if (FAILED(D3D10ReflectShader(pShaderBlob->GetBufferPointer(), pShaderBlob->GetBufferSize(), &pVertexShaderReflection)))
-//	{
-//		return S_FALSE;
-//	}
-//
-//	// get shader description
-//	D3D10_SHADER_DESC shaderDesc;
-//
-//	ShaderParam10 param;
-//
-//	//ShaderParam param;
-//	pVertexShaderReflection->GetDesc(&shaderDesc);
-//
-//	// Read input layout description from shader info
-//	unsigned int byteOffset = 0;
-//	std::vector<D3D10_INPUT_ELEMENT_DESC> inputLayoutDesc;
-//	for (unsigned int i = 0; i< shaderDesc.InputParameters; ++i)
-//	{
-//		D3D10_SIGNATURE_PARAMETER_DESC paramDesc;
-//		pVertexShaderReflection->GetInputParameterDesc(i, &paramDesc);
-//		// create input element desc
-//		D3D10_INPUT_ELEMENT_DESC elementDesc;
-//		elementDesc.SemanticName = paramDesc.SemanticName;
-//		elementDesc.SemanticIndex = paramDesc.SemanticIndex;
-//		elementDesc.InputSlot = 0;
-//		//elementDesc.AlignedByteOffset = byteOffset;
-//		elementDesc.InputSlotClass = D3D10_INPUT_PER_VERTEX_DATA;
-//		elementDesc.InstanceDataStepRate = 0;
-//
-//		LPCSTR sname = paramDesc.SemanticName;
-//		if (lstrcmpA(sname, "POSITION") == 0)
-//		{
-//			elementDesc.AlignedByteOffset = 0;
-//			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_UINT;
-//			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_SINT;
-//			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
-//			byteOffset += 12;
-//		}
-//		else if (lstrcmpA(sname, "TEXCOORD") == 0)
-//		{
-//			elementDesc.AlignedByteOffset = 12;
-//			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32_UINT;
-//			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32_SINT;
-//			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32_FLOAT;
-//			byteOffset += 8;
-//		}
-//		else if (lstrcmpA(sname, "NORMAL") == 0)
-//		{
-//			elementDesc.AlignedByteOffset = 20;
-//			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_UINT;
-//			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_SINT;
-//			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
-//			byteOffset += 12;
-//		}
-//		else if (lstrcmpA(sname, "COLOR") == 0)
-//		{
-//			elementDesc.AlignedByteOffset = 32;
-//			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_UINT;
-//			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_SINT;
-//			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-//			byteOffset += 16;
-//		}
-//
-//		//save element desc
-//		inputLayoutDesc.push_back(elementDesc);
-//	}
-//
-//	int fsize = sizeof(float);
-//	int clength = 0;
-//
-//	unsigned int i;
-//
-//	for (i = 0; i < shaderDesc.ConstantBuffers; ++i)
-//	{
-//		ID3D10ShaderReflectionConstantBuffer* bf = pVertexShaderReflection->GetConstantBufferByIndex(i);
-//		D3D10_SHADER_BUFFER_DESC desc;
-//		bf->GetDesc(&desc);
-//
-//		paramBufferDesc.Usage = D3D10_USAGE_DYNAMIC;
-//		paramBufferDesc.ByteWidth = desc.Size;
-//		paramBufferDesc.BindFlags = D3D10_BIND_CONSTANT_BUFFER;
-//		paramBufferDesc.CPUAccessFlags = D3D10_CPU_ACCESS_WRITE;
-//		paramBufferDesc.MiscFlags = 0;
-//
-//		ID3D10Buffer* buffer;
-//
-//		pD3DDevice->CreateBuffer(&paramBufferDesc, NULL, &buffer);
-//
-//		clength = desc.Size / fsize;
-//
-//		//m_paramIds[desc.Name] = m_paramBuffers.size();
-//		//m_params[desc.Name] = ShaderParam(m_cbufferCount, desc.Size);
-//
-//		int offset = 0;
-//		int size = 0;
-//
-//		for (unsigned int j = 0; j < desc.Variables; j++)
-//		{
-//			ID3D10ShaderReflectionVariable* bv = bf->GetVariableByIndex(j);
-//
-//			D3D10_SHADER_VARIABLE_DESC vdesc;
-//			bv->GetDesc(&vdesc);
-//
-//			offset = vdesc.StartOffset / fsize;
-//			size = vdesc.Size / fsize;
-//
-//			param = ShaderParam10(m_cbufferCount, i, clength, offset, size, 0);
-//			m_params.insert(std::pair<const LPCSTR, ShaderParam10>(vdesc.Name, param));
-//
-//			//param.properties.insert(std::pair<const LPCSTR, ShaderProperty>(vdesc.Name, ShaderProperty(j, size, offset)));
-//
-//			m_propertyCount += 1;
-//		}
-//
-//		m_paramBuffers.push_back(buffer);
-//
-//		m_cbufferCount += 1;
-//	}
-//
-//	// Try to create Input Layout
-//	hr = pD3DDevice->CreateInputLayout(&inputLayoutDesc[0], inputLayoutDesc.size(), pShaderBlob->GetBufferPointer(), pShaderBlob->GetBufferSize(), pInputLayout);
-//	//Free allocation shader reflection memory
-//	pVertexShaderReflection->Release();
-//	//record byte length
-//	*inputLayoutByteLength = byteOffset;
-//	return hr;
-//}
-//
-//HRESULT DShaderBuffer10::InitPixelShader(ID3DBlob * pShaderBlob, ID3D10Device * pD3DDevice)
-//{
-//	// Reflect shader info
-//	ID3D10ShaderReflection* pPixelShaderReflection = nullptr;
-//
-//	HRESULT hr = S_OK;
-//
-//	D3D10_SHADER_DESC shaderDesc;
-//
-//	D3D10_BUFFER_DESC paramBufferDesc;
-//
-//	ShaderParam10 param;
-//
-//	if (FAILED(D3D10ReflectShader(pShaderBlob->GetBufferPointer(), pShaderBlob->GetBufferSize(), &pPixelShaderReflection)))
-//	{
-//		return S_FALSE;
-//	}
-//	pPixelShaderReflection->GetDesc(&shaderDesc);
-//
-//	int fsize = sizeof(float);
-//
-//	int clength = 0;
-//
-//	unsigned int i;
-//
-//	for (i = 0; i < shaderDesc.ConstantBuffers; ++i)
-//	{
-//		ID3D10ShaderReflectionConstantBuffer* bf = pPixelShaderReflection->GetConstantBufferByIndex(i);
-//		D3D10_SHADER_BUFFER_DESC desc;
-//		bf->GetDesc(&desc);
-//
-//		paramBufferDesc.Usage = D3D10_USAGE_DYNAMIC;
-//		paramBufferDesc.ByteWidth = desc.Size;
-//		paramBufferDesc.BindFlags = D3D10_BIND_CONSTANT_BUFFER;
-//		paramBufferDesc.CPUAccessFlags = D3D10_CPU_ACCESS_WRITE;
-//		paramBufferDesc.MiscFlags = 0;
-//
-//		ID3D10Buffer* buffer;
-//
-//		pD3DDevice->CreateBuffer(&paramBufferDesc, NULL, &buffer);
-//
-//		clength = desc.Size / fsize;
-//
-//
-//
-//		int offset = 0;
-//		int size = 0;
-//
-//		for (unsigned int j = 0; j < desc.Variables; j++)
-//		{
-//			ID3D10ShaderReflectionVariable* bv = bf->GetVariableByIndex(j);
-//
-//			D3D10_SHADER_VARIABLE_DESC vdesc;
-//			bv->GetDesc(&vdesc);
-//
-//			offset = vdesc.StartOffset / fsize;
-//			size = vdesc.Size / fsize;
-//
-//			param = ShaderParam10(m_cbufferCount, i, clength, offset, size, 1);
-//
-//			//param.properties.insert(std::pair<const LPCSTR, ShaderProperty>(vdesc.Name, ShaderProperty(j, size, offset)));
-//
-//			m_params.insert(std::pair<const LPCSTR, ShaderParam10>(vdesc.Name, param));
-//
-//			m_propertyCount += 1;
-//		}
-//
-//
-//		m_paramBuffers.push_back(buffer);
-//
-//		m_cbufferCount += 1;
-//	}
-//
-//	pPixelShaderReflection->Release();
-//
-//	return hr;
-//}

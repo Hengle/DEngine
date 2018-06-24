@@ -1,4 +1,4 @@
-#include "DTextureRes9.h"
+﻿#include "DTextureRes9.h"
 #include "DSystem.h"
 
 DTextureRes9::DTextureRes9(LPDIRECT3DDEVICE9 device, WCHAR * filename)
@@ -18,7 +18,7 @@ DTextureRes9::~DTextureRes9()
 {
 }
 
-void DTextureRes9::Apply(UINT textureOffset, DWarpMode mode)
+void DTextureRes9::Apply(UINT textureOffset, DWrapMode mode)
 {
 	if (m_isSuccess)
 	{

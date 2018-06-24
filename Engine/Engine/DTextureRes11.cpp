@@ -21,7 +21,7 @@ DTextureRes11::~DTextureRes11()
 {
 }
 
-void DTextureRes11::Apply(UINT textureOffset, DWarpMode mode)
+void DTextureRes11::Apply(UINT textureOffset, DWrapMode mode)
 {
 	if (m_isSuccess)
 	{

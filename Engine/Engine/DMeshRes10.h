@@ -10,7 +10,7 @@ public:
 
 protected:
 	virtual bool OnInit(DMeshBufferDesc*);
-	virtual void OnDraw();
+	virtual void OnDraw(DMeshTopology);
 
 private:
 	ID3D10Device* m_device;

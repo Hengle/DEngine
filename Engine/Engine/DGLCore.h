@@ -1,10 +1,49 @@
 ﻿#pragma once
 #include <d3dcommon.h>
 
-enum DWarpMode
+enum DWrapMode
 {
-	DWarpMode_Repeat = 0,
-	DWarpMode_Clamp = 1,
+	DWrapMode_Repeat = 0,
+	DWrapMode_Clamp = 1,
+};
+
+enum DMeshTopology
+{
+	DMeshTopology_PointList,
+	DMeshTopology_LineStrip,
+	DMeshTopology_LineList,
+	DMeshTopology_TriangleStrip,
+	DMeshTopology_TriangleList,
+};
+
+enum DCullMode
+{
+	DCullMode_Back,
+	DCullMode_Front,
+	DCullMode_Off,
+};
+
+enum DRSCompareFunc
+{
+	DRSCompareFunc_Never = 0,
+	DRSCompareFunc_Less = 1,
+	DRSCompareFunc_Equal = 2,
+	DRSCompareFunc_LEqual = 3,
+	DRSCompareFunc_Greater = 4,
+	DRSCompareFunc_NotEqual = 5,
+	DRSCompareFunc_GEqual = 6,
+	DRSCompareFunc_Always = 7,
+};
+
+enum DRSStencilOp
+{
+	Keep = 0,
+	Zero = 1,
+	Replace = 2,
+	IncrementSaturate = 3,
+	DecrementSaturate = 4,
+	Invert = 5,
+	IncrementWrap = 6,
 };
 
 typedef struct DShaderResDesc
@@ -52,13 +91,13 @@ class DMeshRes
 public:
 	DMeshRes();
 	void Init(DMeshBufferDesc* desc);
-	void Draw();
+	void Draw(DMeshTopology);
 	virtual void Release() = 0;
 	bool IsInitialized();
 
 protected:
 	virtual bool OnInit(DMeshBufferDesc*) = 0;
-	virtual void OnDraw() = 0;
+	virtual void OnDraw(DMeshTopology) = 0;
 
 private:
 	bool m_isInitialized;
@@ -70,7 +109,7 @@ class DTextureRes
 {
 public:
 	virtual void Release() = 0;
-	virtual void Apply(UINT, DWarpMode) = 0;
+	virtual void Apply(UINT, DWrapMode) = 0;
 };
 
 //抽象shader资源-用于实现不同API下的shader
@@ -99,6 +138,26 @@ protected:
 	bool m_isInitialized;
 };
 
+class DGLDrawer
+{
+//public:
+//	virtual void glBegin() = 0;
+//	virtual void glEnd() = 0;
+//	virtual void glVector3(DVector3*) = 0;
+//	virtual void glColor(DColor*) = 0;
+//
+};
+
+class DRenderStateMgr
+{
+public:
+	virtual void Init() = 0;
+	virtual void Release() = 0;
+	virtual void SetCullMode(DCullMode) = 0;
+	virtual void SetZWriteEnable(bool) = 0;
+	virtual void SetZTestFunc(DRSCompareFunc) = 0;
+};
+
 class DGLCore
 {
 public:
@@ -111,7 +170,9 @@ public:
 	virtual DMeshRes* CreateMeshRes() = 0;
 	virtual DTextureRes* CreateTextureRes(WCHAR*) = 0;
 	virtual DShaderRes* CreateShaderRes() = 0;
-	virtual void ApplySamplerState(UINT, DWarpMode) = 0;
+	virtual void ApplySamplerState(UINT, DWrapMode) = 0;
+	virtual DRenderStateMgr* GetRenderStateMgr() = 0;
+	//virtual void 
 	void GetResolution(float&, float&);
 
 protected:

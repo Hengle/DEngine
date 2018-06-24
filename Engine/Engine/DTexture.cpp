@@ -38,27 +38,27 @@ void DTexture2D::Apply(UINT offset)
 {
 	DTexture::Apply(offset);
 	
-	m_textureRes->Apply(offset, m_warpMode);
+	m_textureRes->Apply(offset, m_wrapMode);
 }
 
-DWarpMode DTexture2D::GetWarpMode()
+DWrapMode DTexture2D::GetWrapMode()
 {
-	return m_warpMode;
+	return m_wrapMode;
 }
 
 DTexture2D * DTexture2D::Create(WCHAR *filename)
 {
 	DTexture2D* tex = new DTexture2D();
 	tex->m_textureRes = DSystem::GetGraphicsMgr()->GetGLCore()->CreateTextureRes(filename);
-	tex->m_warpMode = DWarpMode_Repeat;
+	tex->m_wrapMode = DWrapMode_Repeat;
 	return tex;
 }
 
-DTexture2D * DTexture2D::Create(WCHAR *filename, DWarpMode warpmode)
+DTexture2D * DTexture2D::Create(WCHAR *filename, DWrapMode wrapmode)
 {
 	DTexture2D* tex = new DTexture2D();
 	tex->m_textureRes = DSystem::GetGraphicsMgr()->GetGLCore()->CreateTextureRes(filename);
-	tex->m_warpMode = warpmode;
+	tex->m_wrapMode = wrapmode;
 	return tex;
 }
 

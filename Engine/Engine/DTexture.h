@@ -19,15 +19,15 @@ public:
 	~DTexture2D();
 	virtual void Destroy();
 	virtual void Apply(UINT);
-	DWarpMode GetWarpMode();
+	DWrapMode GetWrapMode();
 	//DTextureBuffer* GetTextureBuffer();
 
 	static DTexture2D* Create(WCHAR*);
-	static DTexture2D* Create(WCHAR*, DWarpMode);
+	static DTexture2D* Create(WCHAR*, DWrapMode);
 
 private:
 	DTextureRes* m_textureRes;
-	DWarpMode m_warpMode;
+	DWrapMode m_wrapMode;
 };
 
 class DTextureCube : public DTexture

@@ -175,3 +175,28 @@ void DGraphics::DrawMesh(const DMesh * mesh, const DMatrix4x4 & matrix, DMateria
 	
 }
 
+void DGraphics::SetCullMode(DCullMode cullMode)
+{
+	DRenderStateMgr* mgr = DSystem::GetGraphicsMgr()->GetGLCore()->GetRenderStateMgr();
+	if (mgr != NULL)
+	{
+		mgr->SetCullMode(cullMode);
+	}
+}
+
+void DGraphics::GlBegin()
+{
+}
+
+void DGraphics::GlEnd()
+{
+}
+
+void DGraphics::Vector3(DVector3 &)
+{
+}
+
+void DGraphics::Color(DColor &)
+{
+}
+

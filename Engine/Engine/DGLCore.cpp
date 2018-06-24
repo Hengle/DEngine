@@ -10,10 +10,10 @@ void DMeshRes::Init(DMeshBufferDesc * desc)
 	m_isInitialized = OnInit(desc);
 }
 
-void DMeshRes::Draw()
+void DMeshRes::Draw(DMeshTopology topology)
 {
 	if (m_isInitialized)
-		OnDraw();
+		OnDraw(topology);
 }
 
 bool DMeshRes::IsInitialized()

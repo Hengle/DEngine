@@ -184,6 +184,11 @@ void DMaterial::SetTexture(const LPCSTR key, DTexture * texture)
 	}
 }
 
+void DMaterial::SetCullMode(DCullMode cullMode)
+{
+	m_cullMode = cullMode;
+}
+
 //void DMaterial::SetTexture(const LPCSTR cbuffername, const LPCSTR key, const DTexture &)
 //{
 //}
@@ -212,6 +217,8 @@ void DMaterial::Apply()
 	int i = 0;
 	int pcount, poffset, pindex, psize, stype;
 	float* params;
+
+	DGraphics::SetCullMode(m_cullMode);
 
 	for (i = 0; i < m_paramCount; i++)
 	{

@@ -17,7 +17,8 @@ public:
 	virtual DMeshRes* CreateMeshRes();
 	virtual DTextureRes* CreateTextureRes(WCHAR*);
 	virtual DShaderRes* CreateShaderRes();
-	virtual void ApplySamplerState(UINT, DWarpMode);
+	virtual void ApplySamplerState(UINT, DWrapMode);
+	virtual DRenderStateMgr* GetRenderStateMgr();
 
 	LPDIRECT3DDEVICE9 GetDevice()
 	{
@@ -25,8 +26,12 @@ public:
 	}
 
 private:
+	void InitRenderStateMgr();
+
+private:
 	LPDIRECT3D9 m_d3d;
 	LPDIRECT3DDEVICE9 m_device;
 	D3DVIEWPORT9 m_viewPort;
+	DRenderStateMgr* m_renderStateMgr;
 };
 

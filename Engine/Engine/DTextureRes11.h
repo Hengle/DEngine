@@ -6,7 +6,7 @@ class DTextureRes11 : public DTextureRes
 public:
 	DTextureRes11(ID3D11Device* device, ID3D11DeviceContext * deviceContext, WCHAR* filename);
 	~DTextureRes11();
-	virtual void Apply(UINT, DWarpMode);
+	virtual void Apply(UINT, DWrapMode);
 	virtual void Release();
 
 private:

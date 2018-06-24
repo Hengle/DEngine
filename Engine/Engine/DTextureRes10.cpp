@@ -22,7 +22,7 @@ DTextureRes10::~DTextureRes10()
 {
 }
 
-void DTextureRes10::Apply(UINT textureOffset, DWarpMode mode)
+void DTextureRes10::Apply(UINT textureOffset, DWrapMode mode)
 {
 	if (m_isSuccess)
 	{

@@ -3,6 +3,7 @@
 #include "DMeshRes11.h"
 #include "DShaderRes11.h"
 #include "DTextureRes11.h"
+#include "DRenderStateMgr11.h"
 #include <D3DX11.h>
 #include <d3dcompiler.h>
 
@@ -15,7 +16,7 @@ D3D11Core::D3D11Core() : DGLCore()
 	m_depthStencilBuffer = 0;
 	m_depthStencilState = 0;
 	m_depthStencilView = 0;
-	m_rasterState = 0;
+	m_renderStateMgr = 0;
 }
 
 D3D11Core::~D3D11Core()
@@ -37,7 +38,6 @@ bool D3D11Core::Init(int width, int height, bool fullScreen, HWND hwnd)
 	D3D11_TEXTURE2D_DESC depthBufferDesc;
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
-	D3D11_RASTERIZER_DESC rasterDesc;
 
 	D3D11_DEPTH_STENCIL_DESC depthDisabledStencilDesc;
 
@@ -224,28 +224,6 @@ bool D3D11Core::Init(int width, int height, bool fullScreen, HWND hwnd)
 
 	m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
 
-	// Setup the raster description which will determine how and what polygons will be drawn.
-	rasterDesc.AntialiasedLineEnable = false;
-	rasterDesc.CullMode = D3D11_CULL_BACK;
-	rasterDesc.DepthBias = 0;
-	rasterDesc.DepthBiasClamp = 0.0f;
-	rasterDesc.DepthClipEnable = true;
-	rasterDesc.FillMode = D3D11_FILL_SOLID;
-	rasterDesc.FrontCounterClockwise = false;
-	rasterDesc.MultisampleEnable = false;
-	rasterDesc.ScissorEnable = false;
-	rasterDesc.SlopeScaledDepthBias = 0.0f;
-
-	// Create the rasterizer state from the description we just filled out.
-	result = m_device->CreateRasterizerState(&rasterDesc, &m_rasterState);
-	if (FAILED(result))
-	{
-		return false;
-	}
-
-	// Now set the rasterizer state.
-	m_deviceContext->RSSetState(m_rasterState);
-
 	m_viewPort.Width = width;
 	m_viewPort.Height = height;
 	m_viewPort.MaxDepth = 1.0f;
@@ -254,17 +232,13 @@ bool D3D11Core::Init(int width, int height, bool fullScreen, HWND hwnd)
 	m_viewPort.TopLeftY = 0.0f;
 
 	InitSamplerStates();
+	InitRenderStateMgr();
 
 	return true;
 }
 
 void D3D11Core::Destroy()
 {
-	if (m_rasterState != NULL)
-	{
-		m_rasterState->Release();
-		m_rasterState = 0;
-	}
 	if (m_device != NULL)
 	{
 		m_device->Release();
@@ -302,7 +276,13 @@ void D3D11Core::Destroy()
 		m_depthStencilBuffer->Release();
 		m_depthStencilBuffer = 0;
 	}
-	std::map<DWarpMode, ID3D11SamplerState*>::iterator  iter;
+	if (m_renderStateMgr)
+	{
+		m_renderStateMgr->Release();
+		delete m_renderStateMgr;
+		m_renderStateMgr = 0;
+	}
+	std::map<DWrapMode, ID3D11SamplerState*>::iterator  iter;
 	for (iter = m_samplerStates.begin(); iter != m_samplerStates.end(); iter++)
 	{
 		if (iter->second != NULL)
@@ -348,16 +328,22 @@ DTextureRes * D3D11Core::CreateTextureRes(WCHAR* filename)
 
 DShaderRes * D3D11Core::CreateShaderRes()
 {
+	
 	return new DShaderRes11(m_device, m_deviceContext);
 }
 
-void D3D11Core::ApplySamplerState(UINT startSlot, DWarpMode mode)
+void D3D11Core::ApplySamplerState(UINT startSlot, DWrapMode mode)
 {
 	ID3D11SamplerState* state = m_samplerStates.at(mode);
 	if (state != NULL)
 	{
 		m_deviceContext->PSSetSamplers(startSlot, 1, &state);
 	}
+}
+
+DRenderStateMgr * D3D11Core::GetRenderStateMgr()
+{
+	return m_renderStateMgr;
 }
 
 ID3D11Device * D3D11Core::GetDevice() const
@@ -374,11 +360,17 @@ void D3D11Core::InitSamplerStates()
 {
 	ID3D11SamplerState* state = CreateSamplerState(D3D11_TEXTURE_ADDRESS_WRAP);
 	if (state != NULL)
-		m_samplerStates.insert(std::pair<DWarpMode, ID3D11SamplerState*>(DWarpMode_Repeat, state));
+		m_samplerStates.insert(std::pair<DWrapMode, ID3D11SamplerState*>(DWrapMode_Repeat, state));
 
 	state = CreateSamplerState(D3D11_TEXTURE_ADDRESS_CLAMP);
 	if (state != NULL)
-		m_samplerStates.insert(std::pair<DWarpMode, ID3D11SamplerState*>(DWarpMode_Clamp, state));
+		m_samplerStates.insert(std::pair<DWrapMode, ID3D11SamplerState*>(DWrapMode_Clamp, state));
+}
+
+void D3D11Core::InitRenderStateMgr()
+{
+	m_renderStateMgr = new DRenderStateMgr11(m_device, m_deviceContext);
+	m_renderStateMgr->Init();
 }
 
 ID3D11SamplerState* D3D11Core::CreateSamplerState(D3D11_TEXTURE_ADDRESS_MODE mode)

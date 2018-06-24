@@ -17,10 +17,12 @@ public:
 	virtual DTextureRes* CreateTextureRes(WCHAR*);
 	virtual DShaderRes* CreateShaderRes();
 	virtual void ApplySamplerState(UINT, DWarpMode);
+	virtual DRenderStateMgr* GetRenderStateMgr();
 	ID3D10Device* GetDevice() const;
 
 private:
 	void InitSamplerStates();
+	void InitRenderStateMgr();
 	ID3D10SamplerState* CreateSamplerState(D3D10_TEXTURE_ADDRESS_MODE);
 
 private:
@@ -30,8 +32,8 @@ private:
 	ID3D10Texture2D* m_depthStencilBuffer;
 	ID3D10DepthStencilState* m_depthStencilState;
 	ID3D10DepthStencilView* m_depthStencilView;
-	ID3D10RasterizerState* m_rasterState;
+	DRenderStateMgr* m_renderStateMgr;
 	D3D10_VIEWPORT m_viewPort;
-	std::map<DWarpMode, ID3D10SamplerState*> m_samplerStates;
+	std::map<DWrapMode, ID3D10SamplerState*> m_samplerStates;
 };
 

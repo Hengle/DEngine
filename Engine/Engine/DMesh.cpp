@@ -15,6 +15,8 @@ DMesh::DMesh()
 	m_uvOffset = 0;
 
 	m_vertexChanged = false;
+
+	m_topology = DMeshTopology_TriangleList;
 }
 
 
@@ -104,6 +106,11 @@ void DMesh::GetUV(int index, int channel, DVector2 * uv) const
 	uv->y = y;
 }
 
+DMeshTopology DMesh::GetTopology()
+{
+	return m_topology;
+}
+
 void DMesh::SetVertex(int index, const DVector3 & vertex)
 {
 	m_vertexBuffer[index*m_vertexOffset] = vertex.x;
@@ -142,6 +149,11 @@ void DMesh::SetUV(int index, int channel, const DVector3 & uv)
 	m_vertexChanged = true;
 }
 
+void DMesh::SetTopology(DMeshTopology topology)
+{
+	m_topology = topology;
+}
+
 void DMesh::GetIndex(int index, unsigned long & outIndex) const
 {
 	outIndex = m_indexBuffer[index];
@@ -166,7 +178,7 @@ void DMesh::Draw() const
 {
 	if (m_meshRes != NULL)
 	{
-		m_meshRes->Draw();
+		m_meshRes->Draw(m_topology);
 	}
 }
 

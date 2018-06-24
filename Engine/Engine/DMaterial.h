@@ -34,6 +34,7 @@ public:
 	void SetColor(const LPCSTR key, DColor&);
 	void SetFloat(const LPCSTR key, float);
 	void SetTexture(const LPCSTR key, DTexture*);
+	void SetCullMode(DCullMode);
 	bool HasProperty(const LPCSTR key) const;
 	void Apply();
 	virtual void Destroy();
@@ -44,4 +45,5 @@ private:
 	MaterialParam** m_params;
 	std::map<std::string, DTexture*> m_textures;
 	unsigned int m_paramCount;
+	DCullMode m_cullMode;
 };

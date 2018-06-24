@@ -36,8 +36,15 @@ public:
 	DGraphicsAPI GetAPI();
 
 	static void DrawMesh(const DMesh*, const DMatrix4x4&, DMaterial*, const DCamera*);
+	static void SetCullMode(DCullMode);
+	static void GlBegin();
+	static void GlEnd();
+	static void Vector3(DVector3&);
+	static void Color(DColor&);
 
 private:
+	float* m_glVertices;
+	unsigned int* m_glIndices;
 	DGLCore* m_GL;
 	DGraphicsAPI m_API;
 	DImGUICore* m_GUI;

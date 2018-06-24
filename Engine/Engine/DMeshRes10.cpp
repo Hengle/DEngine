@@ -67,7 +67,7 @@ bool DMeshRes10::OnInit(DMeshBufferDesc * desc)
 	return true;
 }
 
-void DMeshRes10::OnDraw()
+void DMeshRes10::OnDraw(DMeshTopology topology)
 {
 	unsigned int stride;
 	unsigned int offset;
@@ -83,7 +83,16 @@ void DMeshRes10::OnDraw()
 
 	m_device->IASetIndexBuffer(ibuffer, DXGI_FORMAT_R32_UINT, 0);
 
-	m_device->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	if (topology == DMeshTopology_LineList)
+		m_device->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_LINELIST);
+	else if (topology == DMeshTopology_LineStrip)
+		m_device->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_LINESTRIP);
+	else if (topology == DMeshTopology_PointList)
+		m_device->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_POINTLIST);
+	else if (topology == DMeshTopology_TriangleList)
+		m_device->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	else if (topology == DMeshTopology_TriangleStrip)
+		m_device->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
 	m_device->DrawIndexed(m_indexCount, 0, 0);
 }

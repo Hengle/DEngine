@@ -157,7 +157,7 @@ void TestScene::TestLoad()
 
 	//DMesh* mesh = DMesh::Create("../Res/eboy.obj");
 	plane = DMesh::Create(DMESH_Plane);
-	shader = DShader::Create(L"../Res/texture.vs9", L"../Res/texture.ps9");
+	shader = DShader::Create(L"../Res/texture.vs", L"../Res/texture.ps");
 	floor = DTexture2D::Create(L"../Res/decal.jpg");
 	map = DTexture2D::Create(L"../Res/eboy.jpg");
 	mat = new DMaterial(shader);
@@ -176,6 +176,7 @@ void TestScene::TestLoad()
 
 	DMesh* mesh = DMesh::Create("../Res/eboy.obj");
 	DMaterial* mat2 = new DMaterial(shader);
+	mat2->SetCullMode(DCullMode_Front);
 
 	//mat2->SetFloat("power", 1.6f);
 	//mat2->SetColor("vcolor", DColor(0.0f, 1.0f, 0.0f, 1.0f));

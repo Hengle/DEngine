@@ -58,7 +58,7 @@ bool DMeshRes9::OnInit(DMeshBufferDesc * desc)
 	return true;
 }
 
-void DMeshRes9::OnDraw()
+void DMeshRes9::OnDraw(DMeshTopology)
 {
 	m_mesh->DrawSubset(0);
 }

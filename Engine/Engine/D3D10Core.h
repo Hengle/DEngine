@@ -16,7 +16,7 @@ public:
 	virtual DMeshRes* CreateMeshRes();
 	virtual DTextureRes* CreateTextureRes(WCHAR*);
 	virtual DShaderRes* CreateShaderRes();
-	virtual void ApplySamplerState(UINT, DWarpMode);
+	virtual void ApplySamplerState(UINT, DWrapMode);
 	virtual DRenderStateMgr* GetRenderStateMgr();
 	ID3D10Device* GetDevice() const;
 

@@ -11,6 +11,8 @@ public:
 	virtual void Init();
 	virtual void Release();
 	virtual void SetCullMode(DCullMode);
+	virtual void SetZWriteEnable(bool);
+	virtual void SetZTestFunc(DRSCompareFunc);
 
 private:
 	void ChangeCullMode(DCullMode);

@@ -41,6 +41,14 @@ void DRenderStateMgr10::SetCullMode(DCullMode cullMode)
 	ChangeCullMode(cullMode);
 }
 
+void DRenderStateMgr10::SetZWriteEnable(bool)
+{
+}
+
+void DRenderStateMgr10::SetZTestFunc(DRSCompareFunc)
+{
+}
+
 void DRenderStateMgr10::ChangeCullMode(DCullMode cullMode)
 {
 	if (m_rasterizerStates.find(cullMode) != m_rasterizerStates.end())

@@ -29,6 +29,14 @@ void DRenderStateMgr9::SetCullMode(DCullMode cullMode)
 	ChangeCullMode(cullMode);
 }
 
+void DRenderStateMgr9::SetZWriteEnable(bool)
+{
+}
+
+void DRenderStateMgr9::SetZTestFunc(DRSCompareFunc)
+{
+}
+
 void DRenderStateMgr9::ChangeCullMode(DCullMode cullMode)
 {
 	if (cullMode == DCullMode_Back)

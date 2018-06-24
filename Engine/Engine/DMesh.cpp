@@ -201,6 +201,10 @@ DMesh * DMesh::Create(DMeshDefine meshDefine)
 	{
 		DModelLoader::CreatePlane(&vertices, &indices, vcount, icount, blen, dsize);
 	}
+	else if (meshDefine == DMESH_Cube)
+	{
+		DModelLoader::CreateCube(&vertices, &indices, vcount, icount, blen, dsize);
+	}
 	else
 		return NULL;
 

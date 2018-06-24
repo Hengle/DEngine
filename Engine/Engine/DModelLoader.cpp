@@ -147,16 +147,57 @@ bool DModelLoader::LoadObj(const char * file, float** buffer, unsigned long ** i
 
 bool DModelLoader::CreateCube(float** buffer, unsigned long ** indexBuffer, int & vertexCount, int & indexCount, int&, int& dataSize)
 {
-	dataSize = sizeof(float) * 8;
+	dataSize = sizeof(float) * 5;
 	vertexCount = 24;
 	indexCount = 36;
 
-	(*buffer) = new float[vertexCount * 8];
+	(*buffer) = new float[vertexCount * 5];
 	(*indexBuffer) = new unsigned long[indexCount];
 
-	(*buffer)[0] = -0.5f; (*buffer)[0] = -0.5f; (*buffer)[0] = -0.5f; (*buffer)[0] = -0.5f; (*buffer)[0] = -0.5f; (*buffer)[0] = -0.5f; (*buffer)[0] = -0.5f; (*buffer)[0] = -0.5f;
+	(*buffer)[0] = -0.5f; (*buffer)[1] = -0.5f; (*buffer)[2] = -0.5f; (*buffer)[3] = 0; (*buffer)[4] = 0;
+	(*buffer)[5] = -0.5f; (*buffer)[6] = 0.5f; (*buffer)[7] = -0.5f; (*buffer)[8] = 0; (*buffer)[9] = 1;
+	(*buffer)[10] = 0.5f; (*buffer)[11] = 0.5f; (*buffer)[12] = -0.5f; (*buffer)[13] = 1; (*buffer)[14] = 1;
+	(*buffer)[15] = 0.5f; (*buffer)[16] = -0.5f; (*buffer)[17] = -0.5f; (*buffer)[18] = 1; (*buffer)[19] = 0;
 
-	return false;
+	(*buffer)[20] = -0.5f; (*buffer)[21] = 0.5f; (*buffer)[22] = -0.5f; (*buffer)[23] = 0; (*buffer)[24] = 0;
+	(*buffer)[25] = -0.5f; (*buffer)[26] = 0.5f; (*buffer)[27] = 0.5f; (*buffer)[28] = 0; (*buffer)[29] = 1;
+	(*buffer)[30] = 0.5f; (*buffer)[31] = 0.5f; (*buffer)[32] = 0.5f; (*buffer)[33] = 1; (*buffer)[34] = 1;
+	(*buffer)[35] = 0.5f; (*buffer)[36] = 0.5f; (*buffer)[37] = -0.5f; (*buffer)[38] = 1; (*buffer)[39] = 0;
+
+	(*buffer)[40] = -0.5f; (*buffer)[41] = 0.5f; (*buffer)[42] = 0.5f; (*buffer)[43] = 0; (*buffer)[44] = 1;
+	(*buffer)[45] = -0.5f; (*buffer)[46] = -0.5f; (*buffer)[47] = 0.5f; (*buffer)[48] = 0; (*buffer)[49] = 0;
+	(*buffer)[50] = 0.5f; (*buffer)[51] = -0.5f; (*buffer)[52] = 0.5f; (*buffer)[53] = 1; (*buffer)[54] = 0;
+	(*buffer)[55] = 0.5f; (*buffer)[56] = 0.5f; (*buffer)[57] = 0.5f; (*buffer)[58] = 1; (*buffer)[59] = 1;
+
+	(*buffer)[60] = -0.5f; (*buffer)[61] = -0.5f; (*buffer)[62] = 0.5f; (*buffer)[63] = 0; (*buffer)[64] = 1;
+	(*buffer)[65] = -0.5f; (*buffer)[66] = -0.5f; (*buffer)[67] = -0.5f; (*buffer)[68] = 0; (*buffer)[69] = 0;
+	(*buffer)[70] = 0.5f; (*buffer)[71] = -0.5f; (*buffer)[72] = -0.5f; (*buffer)[73] = 1; (*buffer)[74] = 0;
+	(*buffer)[75] = 0.5f; (*buffer)[76] = -0.5f; (*buffer)[77] = 0.5f; (*buffer)[78] = 1; (*buffer)[79] = 1;
+
+	(*buffer)[80] = 0.5f; (*buffer)[81] = -0.5f; (*buffer)[82] = -0.5f; (*buffer)[83] = 0; (*buffer)[84] = 0;
+	(*buffer)[85] = 0.5f; (*buffer)[86] = 0.5f; (*buffer)[87] = -0.5f; (*buffer)[88] = 0; (*buffer)[89] = 1;
+	(*buffer)[90] = 0.5f; (*buffer)[91] = 0.5f; (*buffer)[92] = 0.5f; (*buffer)[93] = 1; (*buffer)[94] = 1;
+	(*buffer)[95] = 0.5f; (*buffer)[96] = -0.5f; (*buffer)[97] = 0.5f; (*buffer)[98] = 1; (*buffer)[99] = 0;
+
+	(*buffer)[100] = -0.5f; (*buffer)[101] = -0.5f; (*buffer)[102] = 0.5f; (*buffer)[103] = 0; (*buffer)[104] = 0;
+	(*buffer)[105] = -0.5f; (*buffer)[106] = 0.5f; (*buffer)[107] = 0.5f; (*buffer)[108] = 0; (*buffer)[109] = 1;
+	(*buffer)[110] = -0.5f; (*buffer)[111] = 0.5f; (*buffer)[112] = -0.5f; (*buffer)[113] = 1; (*buffer)[114] = 1;
+	(*buffer)[115] = -0.5f; (*buffer)[116] = -0.5f; (*buffer)[117] = -0.5f; (*buffer)[118] = 1; (*buffer)[119] = 0;
+
+	(*indexBuffer)[0] = 0; (*indexBuffer)[1] = 1; (*indexBuffer)[2] = 2;
+	(*indexBuffer)[3] = 0; (*indexBuffer)[4] = 2; (*indexBuffer)[5] = 3;
+	(*indexBuffer)[6] = 4; (*indexBuffer)[7] = 5; (*indexBuffer)[8] = 6;
+	(*indexBuffer)[9] = 4; (*indexBuffer)[10] = 6; (*indexBuffer)[11] = 7;
+	(*indexBuffer)[12] = 8; (*indexBuffer)[13] = 9; (*indexBuffer)[14] = 10;
+	(*indexBuffer)[15] = 8; (*indexBuffer)[16] = 10; (*indexBuffer)[17] = 11;
+	(*indexBuffer)[18] = 12; (*indexBuffer)[19] = 13; (*indexBuffer)[20] = 14;
+	(*indexBuffer)[21] = 12; (*indexBuffer)[22] = 14; (*indexBuffer)[23] = 15;
+	(*indexBuffer)[24] = 16; (*indexBuffer)[25] = 17; (*indexBuffer)[26] = 18;
+	(*indexBuffer)[27] = 16; (*indexBuffer)[38] = 18; (*indexBuffer)[29] = 19;
+	(*indexBuffer)[30] = 20; (*indexBuffer)[31] = 21; (*indexBuffer)[32] = 22;
+	(*indexBuffer)[33] = 20; (*indexBuffer)[34] = 22; (*indexBuffer)[35] = 23;
+
+	return true;
 }
 
 bool DModelLoader::CreatePlane(float** buffer, unsigned long ** indexBuffer, int & vertexCount, int & indexCount, int& bufferLength, int& dataSize)

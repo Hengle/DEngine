@@ -209,6 +209,9 @@ HRESULT DRenderStateMgr11::CreateDepthStencilState(DepthStencilState11 desc, ID3
 	depthStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
 	depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
 	depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+	HRESULT result = m_device->CreateDepthStencilState(&depthStencilDesc, state);
+	return result;
 }
 
 unsigned long DRenderStateMgr11::DepthStencilState11::GetKey()

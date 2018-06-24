@@ -8,6 +8,9 @@ DMaterial::DMaterial(DShader * shader)
 	//m_params = m_shader->GetParam();
 	m_params = new MaterialParam*[m_shader->GetCBufferCount()]{ NULL };
 	m_paramCount = m_shader->GetCBufferCount();
+	m_cullMode = DCullMode_Back;
+	m_ztest = DRSCompareFunc_LEqual;
+	m_zwrite = true;
 	//m_cbuffers = new void*[m_shader->GetCBufferCount()];
 }
 
@@ -189,6 +192,16 @@ void DMaterial::SetCullMode(DCullMode cullMode)
 	m_cullMode = cullMode;
 }
 
+void DMaterial::SetZWrite(bool zwrite)
+{
+	m_zwrite = zwrite;
+}
+
+void DMaterial::SetZTest(DRSCompareFunc ztest)
+{
+	m_ztest = ztest;
+}
+
 //void DMaterial::SetTexture(const LPCSTR cbuffername, const LPCSTR key, const DTexture &)
 //{
 //}
@@ -219,6 +232,8 @@ void DMaterial::Apply()
 	float* params;
 
 	DGraphics::SetCullMode(m_cullMode);
+	DGraphics::SetZTestFunc(m_ztest);
+	DGraphics::SetZWriteEnable(m_zwrite);
 
 	for (i = 0; i < m_paramCount; i++)
 	{

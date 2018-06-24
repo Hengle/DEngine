@@ -184,6 +184,24 @@ void DGraphics::SetCullMode(DCullMode cullMode)
 	}
 }
 
+void DGraphics::SetZWriteEnable(bool zwrite)
+{
+	DRenderStateMgr* mgr = DSystem::GetGraphicsMgr()->GetGLCore()->GetRenderStateMgr();
+	if (mgr != NULL)
+	{
+		mgr->SetZWriteEnable(zwrite);
+	}
+}
+
+void DGraphics::SetZTestFunc(DRSCompareFunc ztest)
+{
+	DRenderStateMgr* mgr = DSystem::GetGraphicsMgr()->GetGLCore()->GetRenderStateMgr();
+	if (mgr != NULL)
+	{
+		mgr->SetZTestFunc(ztest);
+	}
+}
+
 void DGraphics::GlBegin()
 {
 }

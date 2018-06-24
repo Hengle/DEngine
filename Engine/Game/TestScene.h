@@ -25,10 +25,15 @@ private:
 	//ColorShaderClass* m_ColorShader;
 	DDisplayObject* m_plane;
 	DDisplayObject* m_obj0;
-	MyTestDraw *testd;
+	DDisplayObject* m_cube;
 	DMesh* plane;
+	DMesh* cube;
+	DMesh* obj;
 	DShader* shader;
 	DMaterial* mat;
+	DMaterial* mat2;
+	DMaterial* mat3;
 	DTexture* floor;
 	DTexture* map;
+	DTexture* cb;
 };

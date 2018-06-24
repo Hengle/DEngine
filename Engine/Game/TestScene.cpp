@@ -13,24 +13,30 @@ TestScene::TestScene(SCENEID sceneId, char * sceneName) : DScene(sceneId, sceneN
 	//m_Model = 0;
 	//m_ColorShader = 0;
 	m_plane = 0;
+	m_cube = 0;
 	m_camera = 0;
 	m_obj0 = 0;
 	plane = 0;
 	shader = 0;
 	mat = 0;
+	mat2 = 0;
+	mat3 = 0;
+	cube = 0;
+	obj = 0;
+
 	//m_light = 0;
 }
 
 void TestScene::OnGUI()
 {
-	DGUI::Label(u8"森哥的引擎：中文utf-8测试");
+	/*DGUI::Label(u8"森哥的引擎：中文utf-8测试");
 	DGUI::Label("DeltaTime:%lf", DTime::GetDeltaTime());
 	DGUI::Label("FixedDeltaTime:%lf", DTime::GetFixedDeltaTime());
 	DGUI::Label("Timer:%lf", DTime::GetTimer());
 	DGUI::Label("FPS:%d", DTime::GetFPS());
 	int x, y;
 	DInput::GetMousePosition(x, y);
-	DGUI::Label("Mouse:%d,%d", x, y);
+	DGUI::Label("Mouse:%d,%d", x, y);*/
 	//DGUI::Label("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
 	/*D3DXVECTOR3 euler;
@@ -42,7 +48,7 @@ void TestScene::OnGUI()
 	ImGui::SliderFloat("Yall", &euler.y, 0.0f, 360.0f);
 	ImGui::SliderFloat("Roll", &euler.z, 0.0f, 360.0f);*/
 
-	if (DInput::IsMousePress(0)) 
+	/*if (DInput::IsMousePress(0)) 
 	{
 		DGUI::Label("Mouse Down");
 	}
@@ -57,15 +63,15 @@ void TestScene::OnGUI()
 	if (DInput::IsKeyDown(DIK_A))
 	{
 		DLog::Info("Key A Click");
-	}
+	}*/
 	
-	ImGui::Begin("xa", 0, ImGuiWindowFlags_NoTitleBar|ImGuiWindowFlags_NoResize|ImGuiWindowFlags_NoInputs);
+	/*ImGui::Begin("xa", 0, ImGuiWindowFlags_NoTitleBar|ImGuiWindowFlags_NoResize|ImGuiWindowFlags_NoInputs);
 	if (ImGui::Button("Pitch"))
 	{
 		DLog::Info("xas");
 	}
 	ImGui::Text("xas");
-	ImGui::End();
+	ImGui::End();*/
 
 
 
@@ -160,6 +166,7 @@ void TestScene::TestLoad()
 	shader = DShader::Create(L"../Res/texture.vs", L"../Res/texture.ps");
 	floor = DTexture2D::Create(L"../Res/decal.jpg");
 	map = DTexture2D::Create(L"../Res/eboy.jpg");
+	cb = DTexture2D::Create(L"../Res/ground_12.jpg");
 	mat = new DMaterial(shader);
 
 	//mat->SetFloat("power", 1.3f);
@@ -174,19 +181,29 @@ void TestScene::TestLoad()
 
 	AddDisplayObject(m_plane);
 
-	DMesh* mesh = DMesh::Create("../Res/eboy.obj");
-	DMaterial* mat2 = new DMaterial(shader);
+	obj = DMesh::Create("../Res/eboy.obj");
+	mat2 = new DMaterial(shader);
 	mat2->SetCullMode(DCullMode_Front);
 
 	//mat2->SetFloat("power", 1.6f);
 	//mat2->SetColor("vcolor", DColor(0.0f, 1.0f, 0.0f, 1.0f));
 	mat2->SetTexture("shaderTexture", map);
 
-	m_obj0 = new DDisplayObject(mesh, mat2);
+	m_obj0 = new DDisplayObject(obj, mat2);
 	transform = m_obj0->GetTransform();
 	transform->SetPosition(0.0f, 1.64f, 0.0f);
 
 	AddDisplayObject(m_obj0);
+
+
+	cube = DMesh::Create("../Res/eboy.obj");
+	mat3 = new DMaterial(shader);
+	mat3->SetTexture("shaderTexture", cb);
+	mat3->SetZTest(DRSCompareFunc_Greater);
+	m_cube = new DDisplayObject(cube, mat3);
+	transform = m_cube->GetTransform();
+	transform->SetPosition(2.64f, 2.61f, 0.0f);
+	AddDisplayObject(m_cube);
 }
 
 void TestScene::OnUnLoad()
@@ -194,18 +211,33 @@ void TestScene::OnUnLoad()
 	plane->Destroy();
 	delete plane;
 	plane = 0;
+	cube->Destroy();
+	delete cube;
+	cube = 0;
+	obj->Destroy();
+	delete obj;
+	obj = 0;
 	shader->Destroy();
 	delete shader;
 	shader = 0;
 	mat->Destroy();
 	delete mat;
 	mat = 0;
+	mat2->Destroy();
+	delete mat2;
+	mat2 = 0;
+	mat3->Destroy();
+	delete mat3;
+	mat3 = 0;
 	map->Destroy();
 	delete map;
 	map = 0;
 	floor->Destroy();
 	delete floor;
 	floor = 0;
+	cb->Destroy();
+	delete cb;
+	cb = 0;
 	//testd->Release();
 	//delete testd;
 	//testd = NULL;

@@ -35,6 +35,8 @@ public:
 	void SetFloat(const LPCSTR key, float);
 	void SetTexture(const LPCSTR key, DTexture*);
 	void SetCullMode(DCullMode);
+	void SetZWrite(bool);
+	void SetZTest(DRSCompareFunc);
 	bool HasProperty(const LPCSTR key) const;
 	void Apply();
 	virtual void Destroy();
@@ -46,4 +48,6 @@ private:
 	std::map<std::string, DTexture*> m_textures;
 	unsigned int m_paramCount;
 	DCullMode m_cullMode;
+	bool m_zwrite;
+	DRSCompareFunc m_ztest;
 };

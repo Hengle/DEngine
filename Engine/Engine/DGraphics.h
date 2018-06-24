@@ -37,6 +37,8 @@ public:
 
 	static void DrawMesh(const DMesh*, const DMatrix4x4&, DMaterial*, const DCamera*);
 	static void SetCullMode(DCullMode);
+	static void SetZWriteEnable(bool);
+	static void SetZTestFunc(DRSCompareFunc);
 	static void GlBegin();
 	static void GlEnd();
 	static void Vector3(DVector3&);

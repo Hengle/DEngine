@@ -219,7 +219,7 @@
     <ClInclude Include="DCameraFilter.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="DRenderTarget11.h">
+    <ClInclude Include="DRenderBuffer11.h">
       <Filter>头文件\Core\D3D11Core</Filter>
     </ClInclude>
   </ItemGroup>
@@ -368,7 +368,7 @@
     <ClCompile Include="DCameraFilter.cpp">
       <Filter>源文件\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="DRenderTarget11.cpp">
+    <ClCompile Include="DRenderBuffer11.cpp">
       <Filter>源文件\Core\D3D11Core</Filter>
     </ClCompile>
   </ItemGroup>

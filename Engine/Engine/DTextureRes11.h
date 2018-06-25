@@ -15,7 +15,7 @@ private:
 	ID3D11DeviceContext* m_deviceContext;
 };
 
-class DRenderTextureViewRes : public DRenderTextureViewRes
+class DRenderTextureViewRes11 : public DRenderTextureViewRes
 {
 
 };

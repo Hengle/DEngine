@@ -122,6 +122,11 @@ public:
 	virtual void Apply(UINT, DWrapMode) = 0;
 };
 
+class DRenderBuffer
+{
+
+};
+
 class DRenderTextureViewRes
 {
 public:

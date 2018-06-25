@@ -183,7 +183,7 @@ void TestScene::TestLoad()
 
 	obj = DMesh::Create("../Res/eboy.obj");
 	mat2 = new DMaterial(shader);
-	mat2->SetCullMode(DCullMode_Front);
+	//mat2->SetCullMode(DCullMode_Front);
 
 	//mat2->SetFloat("power", 1.6f);
 	//mat2->SetColor("vcolor", DColor(0.0f, 1.0f, 0.0f, 1.0f));
@@ -199,7 +199,7 @@ void TestScene::TestLoad()
 	cube = DMesh::Create("../Res/eboy.obj");
 	mat3 = new DMaterial(shader);
 	mat3->SetTexture("shaderTexture", cb);
-	mat3->SetZTest(DRSCompareFunc_Greater);
+	//mat3->SetZTest(DRSCompareFunc_Greater);
 	m_cube = new DDisplayObject(cube, mat3);
 	transform = m_cube->GetTransform();
 	transform->SetPosition(2.64f, 2.61f, 0.0f);

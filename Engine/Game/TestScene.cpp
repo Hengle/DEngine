@@ -149,8 +149,6 @@ void TestScene::OnLoad()
 void TestScene::TestLoad()
 {
 	DCamera* cam = new DCamera();
-	m_filter = new DCameraFilter();
-	cam->SetFilter(m_filter);
 	DTransform* transform;
 
 	transform = cam->GetTransform();
@@ -240,9 +238,6 @@ void TestScene::OnUnLoad()
 	cb->Destroy();
 	delete cb;
 	cb = 0;
-	m_filter->Release();
-	delete m_filter;
-	m_filter = 0;
 	//testd->Release();
 	//delete testd;
 	//testd = NULL;

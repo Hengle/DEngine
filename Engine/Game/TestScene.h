@@ -36,5 +36,4 @@ private:
 	DTexture* floor;
 	DTexture* map;
 	DTexture* cb;
-	DCameraFilter* m_filter;
 };

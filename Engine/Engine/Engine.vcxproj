@@ -164,6 +164,7 @@
     <ClInclude Include="DRenderStateMgr10.h" />
     <ClInclude Include="DRenderStateMgr11.h" />
     <ClInclude Include="DRenderStateMgr9.h" />
+    <ClInclude Include="DRenderTarget11.h" />
     <ClInclude Include="DRes.h" />
     <ClInclude Include="DResObject.h" />
     <ClInclude Include="DScene.h" />
@@ -220,6 +221,7 @@
     <ClCompile Include="DRenderStateMgr10.cpp" />
     <ClCompile Include="DRenderStateMgr11.cpp" />
     <ClCompile Include="DRenderStateMgr9.cpp" />
+    <ClCompile Include="DRenderTarget11.cpp" />
     <ClCompile Include="DRes.cpp" />
     <ClCompile Include="DResObject.cpp" />
     <ClCompile Include="DScene.cpp" />

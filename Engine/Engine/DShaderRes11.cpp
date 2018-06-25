@@ -9,6 +9,7 @@ DShaderRes11::DShaderRes11(ID3D11Device * device, ID3D11DeviceContext * deviceCo
 	m_vertexShader = 0;
 	m_pixelShader = 0;
 	m_layout = 0;
+	m_vertexStructure = DVertexStructure_NONE;
 }
 
 DShaderRes11::~DShaderRes11()
@@ -277,60 +278,93 @@ HRESULT DShaderRes11::InitVertexShader(ID3DBlob* pShaderBlob, ID3D11Device* pD3D
 			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_SINT;
 			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
 			byteOffset += 12;
+			m_vertexStructure |= DVertexStructure_POSITION;
 		}
 		else if (lstrcmpA(sname, "TEXCOORD") == 0)
 		{
-			elementDesc.AlignedByteOffset = 12;
+			elementDesc.AlignedByteOffset = byteOffset;
+			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32_UINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32_SINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32_FLOAT;
+			byteOffset += 8;
+			if (paramDesc.SemanticIndex == 0)
+				m_vertexStructure |= DVertexStructure_TEXCOORD0;
+			else if (paramDesc.SemanticIndex == 1)
+				m_vertexStructure |= DVertexStructure_TEXCOORD1;
+			else if (paramDesc.SemanticIndex == 2)
+				m_vertexStructure |= DVertexStructure_TEXCOORD2;
+			else if (paramDesc.SemanticIndex == 3)
+				m_vertexStructure |= DVertexStructure_TEXCOORD3;
+		}
+		else if (lstrcmpA(sname, "NORMAL") == 0)
+		{
+			elementDesc.AlignedByteOffset = byteOffset;
+			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_UINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_SINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
+			byteOffset += 12;
+			m_vertexStructure |= DVertexStructure_NORMAL;
+		}
+		else if (lstrcmpA(sname, "COLOR") == 0)
+		{
+			elementDesc.AlignedByteOffset = byteOffset;
+			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_UINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_SINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+			byteOffset += 16;
+			m_vertexStructure |= DVertexStructure_COLOR;
+		}
+		else if (lstrcmpA(sname, "TANGENT") == 0)
+		{
+			elementDesc.AlignedByteOffset = byteOffset;
+			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_UINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_SINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+			byteOffset += 16;
+			m_vertexStructure |= DVertexStructure_TANGENT;
+		}
+		else if (lstrcmpA(sname, "BINORMAL") == 0)
+		{
+			elementDesc.AlignedByteOffset = byteOffset;
+			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_UINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_SINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
+			byteOffset += 12;
+			m_vertexStructure |= DVertexStructure_BINORMAL;
+		}
+		//// determine DXGI format
+		/*else if (paramDesc.Mask == 1)
+		{
+			elementDesc.AlignedByteOffset = byteOffset;
+			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32_UINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32_SINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32_FLOAT;
+			byteOffset += 4;
+		}
+		else if (paramDesc.Mask <= 3)
+		{
+			elementDesc.AlignedByteOffset = byteOffset;
 			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32_UINT;
 			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32_SINT;
 			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32_FLOAT;
 			byteOffset += 8;
 		}
-		else if (lstrcmpA(sname, "NORMAL") == 0)
+		else if (paramDesc.Mask <= 7)
 		{
-			elementDesc.AlignedByteOffset = 20;
+			elementDesc.AlignedByteOffset = byteOffset;
 			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_UINT;
 			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_SINT;
 			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
 			byteOffset += 12;
 		}
-		else if (lstrcmpA(sname, "COLOR") == 0)
+		else if (paramDesc.Mask <= 15)
 		{
-			elementDesc.AlignedByteOffset = 32;
+			elementDesc.AlignedByteOffset = byteOffset;
 			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_UINT;
 			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_SINT;
 			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 			byteOffset += 16;
-		}
-		//// determine DXGI format
-		//if (paramDesc.Mask == 1)
-		//{
-		//	if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32_UINT;
-		//	else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32_SINT;
-		//	else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32_FLOAT;
-		//	byteOffset += 4;
-		//}
-		//else if (paramDesc.Mask <= 3)
-		//{
-		//	if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32_UINT;
-		//	else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32_SINT;
-		//	else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32_FLOAT;
-		//	byteOffset += 8;
-		//}
-		//else if (paramDesc.Mask <= 7)
-		//{
-		//	if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_UINT;
-		//	else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_SINT;
-		//	else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
-		//	byteOffset += 12;
-		//}
-		//else if (paramDesc.Mask <= 15)
-		//{
-		//	if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_UINT;
-		//	else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_SINT;
-		//	else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-		//	byteOffset += 16;
-		//}
+		}*/
 
 		//save element desc
 		inputLayoutDesc.push_back(elementDesc);

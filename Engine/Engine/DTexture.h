@@ -35,3 +35,8 @@ class DTextureCube : public DTexture
 
 };
 
+class DRenderTexture : public DTexture
+{
+
+};
+

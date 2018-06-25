@@ -36,6 +36,7 @@ public:
 	DGraphicsAPI GetAPI();
 
 	static void DrawMesh(const DMesh*, const DMatrix4x4&, DMaterial*, const DCamera*);
+	//static void Blit()
 	static void SetCullMode(DCullMode);
 	static void SetZWriteEnable(bool);
 	static void SetZTestFunc(DRSCompareFunc);

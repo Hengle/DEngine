@@ -1,6 +1,17 @@
 ﻿#pragma once
 #include <d3dcommon.h>
 
+#define	DVertexStructure_NONE        0
+#define	DVertexStructure_POSITION    1
+#define	DVertexStructure_TEXCOORD0   2
+#define	DVertexStructure_TEXCOORD1   4
+#define	DVertexStructure_TEXCOORD2   8
+#define	DVertexStructure_TEXCOORD3   16
+#define	DVertexStructure_COLOR       32
+#define	DVertexStructure_NORMAL      64
+#define	DVertexStructure_TANGENT     128
+#define	DVertexStructure_BINORMAL    256
+
 enum DWrapMode
 {
 	DWrapMode_Repeat = 0,
@@ -103,9 +114,15 @@ private:
 	bool m_isInitialized;
 };
 
-
 //抽象贴图资源-用于实现不同API下的texture
 class DTextureRes
+{
+public:
+	virtual void Release() = 0;
+	virtual void Apply(UINT, DWrapMode) = 0;
+};
+
+class DRenderTextureViewRes
 {
 public:
 	virtual void Release() = 0;
@@ -136,6 +153,7 @@ protected:
 protected:
 	unsigned int m_cbufferCount, m_propertyCount;
 	bool m_isInitialized;
+	int m_vertexStructure;
 };
 
 class DGLDrawer

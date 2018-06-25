@@ -124,7 +124,8 @@ public:
 
 class DRenderBuffer
 {
-
+public:
+	virtual void Release() = 0;
 };
 
 class DRenderTextureViewRes

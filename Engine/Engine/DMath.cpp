@@ -1090,7 +1090,23 @@ void DMatrix4x4::Perspective(DMatrix4x4 * matrix, float fov, float aspect, float
 
 void DMatrix4x4::Ortho(DMatrix4x4 * matrix, float width, float height, float nearplane, float farplane)
 {
-
+	float fn = 1.0f / (farplane - nearplane);
+	matrix->m00 = 2.0f / width;
+	matrix->m01 = 0.0f;
+	matrix->m02 = 0.0f;
+	matrix->m03 = 0.0f;
+	matrix->m10 = 0.0f;
+	matrix->m11 = 2.0f / height;
+	matrix->m12 = 0.0f;
+	matrix->m13 = 0.0f;
+	matrix->m20 = 0.0f;
+	matrix->m21 = 0.0f;
+	matrix->m22 = fn;
+	matrix->m23 = 0.0f;
+	matrix->m30 = 0.0f;
+	matrix->m31 = 0.0f;
+	matrix->m32 = -nearplane*fn;
+	matrix->m33 = 1.0f;
 }
 
 void DMatrix4x4::Identity(DMatrix4x4 * matrix)

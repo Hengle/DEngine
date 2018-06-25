@@ -265,5 +265,11 @@ void DMesh::Init(DMeshBufferDesc* desc)
 
 	m_meshRes = DSystem::GetGraphicsMgr()->GetGLCore()->CreateMeshRes();
 	m_meshRes->Init(desc);
+
+	delete[] desc->indices;
+	delete[] desc->vertices;
+
+	desc->indices = 0;
+	desc->vertices = 0;
 }
 

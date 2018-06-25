@@ -1,5 +1,6 @@
 #pragma once
 #include "DSceneObject.h"
+#include "DCameraFilter.h"
 
 class DCamera : public DSceneObject
 {
@@ -8,6 +9,7 @@ public:
 	~DCamera();
 	void BeginRender();
 	void EndRender();
+	void RenderFilter();
 	virtual void Init();
 	virtual void Destroy();
 	void GetViewMatrix(DMatrix4x4&) const;
@@ -24,6 +26,8 @@ public:
 	void SetAspect(float);
 	void SetOrthographic(bool);
 	void SetOrthoSize(float);
+	void SetFilter(DCameraFilter*);
+	void ClearFilter();
 
 	static void GetCurrentCamera(DCamera** cam);
 
@@ -37,7 +41,7 @@ private:
 	DMatrix4x4 m_viewMatrix;
 	DMatrix4x4 m_projection;
 	bool m_isProjectionChanged;
-
+	DCameraFilter* m_filter;
 };
 
 static DCamera* sCurrent;

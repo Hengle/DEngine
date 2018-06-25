@@ -38,9 +38,9 @@ public:
 
 	static DMesh* Create(DMeshDefine meshDefine);
 	static DMesh*Create(char* fileName);
+	static DMesh* Create(DMeshBufferDesc*);
 
 private:
-	static DMesh* Create(DMeshBufferDesc*);
 	void Init(DMeshBufferDesc*);
 
 private:

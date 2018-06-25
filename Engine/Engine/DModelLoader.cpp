@@ -145,11 +145,12 @@ bool DModelLoader::LoadObj(const char * file, float** buffer, unsigned long ** i
 	return true;
 }
 
-bool DModelLoader::CreateCube(float** buffer, unsigned long ** indexBuffer, int & vertexCount, int & indexCount, int&, int& dataSize)
+bool DModelLoader::CreateCube(float** buffer, unsigned long ** indexBuffer, int & vertexCount, int & indexCount, int& bufferLength, int& dataSize)
 {
 	dataSize = sizeof(float) * 5;
 	vertexCount = 24;
 	indexCount = 36;
+	bufferLength = 5;
 
 	(*buffer) = new float[vertexCount * 5];
 	(*indexBuffer) = new unsigned long[indexCount];

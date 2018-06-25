@@ -149,6 +149,8 @@ void TestScene::OnLoad()
 void TestScene::TestLoad()
 {
 	DCamera* cam = new DCamera();
+	m_filter = new DCameraFilter();
+	cam->SetFilter(m_filter);
 	DTransform* transform;
 
 	transform = cam->GetTransform();
@@ -163,7 +165,7 @@ void TestScene::TestLoad()
 
 	//DMesh* mesh = DMesh::Create("../Res/eboy.obj");
 	plane = DMesh::Create(DMESH_Plane);
-	shader = DShader::Create(L"../Res/texture.vs9", L"../Res/texture.ps9");
+	shader = DShader::Create(L"../Res/texture.vs", L"../Res/texture.ps");
 	floor = DTexture2D::Create(L"../Res/decal.jpg");
 	map = DTexture2D::Create(L"../Res/eboy.jpg");
 	cb = DTexture2D::Create(L"../Res/ground_12.jpg");
@@ -238,6 +240,9 @@ void TestScene::OnUnLoad()
 	cb->Destroy();
 	delete cb;
 	cb = 0;
+	m_filter->Release();
+	delete m_filter;
+	m_filter = 0;
 	//testd->Release();
 	//delete testd;
 	//testd = NULL;

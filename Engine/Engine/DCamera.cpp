@@ -3,7 +3,7 @@
 
 DCamera::DCamera()
 {
-
+	m_filter = 0;
 	m_fieldOfView = D_PI / 3.0f;;
 	m_near = 0.3f;
 	m_far = 1000.0f;
@@ -62,6 +62,17 @@ void DCamera::BeginRender()
 void DCamera::EndRender()
 {
 	sCurrent = NULL;
+}
+
+void DCamera::RenderFilter()
+{
+	if (m_filter != NULL)
+	{
+		FLOAT width, height;
+
+		DSystem::GetGraphicsMgr()->GetResolution(width, height);
+		m_filter->Render(width, height);
+	}
 }
 
 void DCamera::Init()
@@ -169,6 +180,16 @@ void DCamera::SetOrthoSize(float size)
 		if (m_ortho)
 			m_isProjectionChanged = true;
 	}
+}
+
+void DCamera::SetFilter(DCameraFilter * filter)
+{
+	m_filter = filter;
+}
+
+void DCamera::ClearFilter()
+{
+	m_filter = NULL;
 }
 
 void DCamera::GetCurrentCamera(DCamera ** cam)

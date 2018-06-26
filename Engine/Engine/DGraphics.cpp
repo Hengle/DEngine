@@ -142,28 +142,69 @@ DGraphicsAPI DGraphics::GetAPI()
 	return m_API;
 }
 
-void DGraphics::Clear(bool clearDepth, bool clearStencil, DColor & color)
+void DGraphics::BeginScene(bool clearDepth, bool clearStencil, DColor & color, DRenderTexture * renderTexture)
 {
-	DSystem::GetGraphicsMgr()->GetGLCore()->Clear(clearDepth, clearStencil, color);
+	if (renderTexture != NULL)
+	{
+		
+		SetRenderTarget(renderTexture);
+		Clear(clearDepth, clearStencil, color, renderTexture);
+	}
+	else
+	{
+		SetRenderTarget();
+		Clear(clearDepth, clearStencil, color);
+	}
 }
 
-void DGraphics::ClearRenderTarget(DRenderTexture * res, bool clearDepth, bool clearStencil, DColor & color)
+void DGraphics::EndScene(DRenderTexture * renderTexture)
 {
-	if (res == NULL)
-		return;
-	DSystem::GetGraphicsMgr()->GetGLCore()->ClearRenderTarget(res->GetTextureRes(), clearDepth, clearStencil, color);
+	if (renderTexture != NULL)
+	{
+		EndSetRenderTarget(renderTexture);
+	}
+	else
+	{
+		EndSetRenderTarget();
+	}
 }
 
-void DGraphics::SetDefaultRenderTarget()
+void DGraphics::Clear(bool clearDepth, bool clearStencil, DColor & color, DRenderTexture * renderTexture)
 {
-	DSystem::GetGraphicsMgr()->GetGLCore()->SetDefaultRenderTarget();
+	if (renderTexture != NULL)
+	{
+		DRenderTextureViewRes* res = renderTexture->GetTextureRes();
+		if(res != NULL)
+			DSystem::GetGraphicsMgr()->GetGLCore()->Clear(clearDepth, clearStencil, color, res);
+	}
+	else
+	{
+		DSystem::GetGraphicsMgr()->GetGLCore()->Clear(clearDepth, clearStencil, color);
+	}
 }
 
 void DGraphics::SetRenderTarget(DRenderTexture * res)
 {
-	if (res == NULL)
-		return;
-	DSystem::GetGraphicsMgr()->GetGLCore()->SetRenderTarget(res->GetTextureRes());
+	if (res != NULL)
+	{
+		DSystem::GetGraphicsMgr()->GetGLCore()->SetRenderTarget(res->GetTextureRes());
+	}
+	else
+	{
+		DSystem::GetGraphicsMgr()->GetGLCore()->SetRenderTarget();
+	}
+}
+
+void DGraphics::EndSetRenderTarget(DRenderTexture * res)
+{
+	if (res != NULL)
+	{
+		DSystem::GetGraphicsMgr()->GetGLCore()->EndSetRenderTarget(res->GetTextureRes());
+	}
+	else
+	{
+		DSystem::GetGraphicsMgr()->GetGLCore()->EndSetRenderTarget();
+	}
 }
 
 void DGraphics::DrawMesh(const DMesh * mesh, const DMatrix4x4 & matrix, DMaterial * material, const DCamera * camera)

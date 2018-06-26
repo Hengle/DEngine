@@ -237,7 +237,7 @@ bool D3D11Core::Init(int width, int height, bool fullScreen, HWND hwnd)
 	}
 
 	//m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
-	SetDefaultRenderTarget();
+	SetRenderTarget();
 
 	m_viewPort.Width = width;
 	m_viewPort.Height = height;
@@ -342,7 +342,7 @@ void D3D11Core::EndRender()
 	}
 }
 
-void D3D11Core::Clear(bool clearDepth, bool clearStencil, DColor & color)
+void D3D11Core::Clear(bool clearDepth, bool clearStencil, DColor & color, DRenderTextureViewRes * res)
 {
 	int flag = 0;
 	if (clearDepth && clearStencil)
@@ -357,53 +357,43 @@ void D3D11Core::Clear(bool clearDepth, bool clearStencil, DColor & color)
 	c[2] = color.b;
 	c[3] = color.a;
 
-	if (flag != 0)
-		m_deviceContext->ClearDepthStencilView(((DDepthBuffer11*)m_depthBuffer)->GetView(), flag, 1.0f, 0);
-	m_deviceContext->ClearRenderTargetView(((DColorBuffer11*)m_colorBuffer)->GetView(), c);
-}
-
-void D3D11Core::ClearRenderTarget(DRenderTextureViewRes * res, bool clearDepth, bool clearStencil, DColor & color)
-{
-	if (res == NULL)
-		return;
-	DColorBuffer11*cb = (DColorBuffer11*)(res->GetColorBuffer());
-	DDepthBuffer11*db = (DDepthBuffer11*)(res->GetDepthBuffer());
-
-	int flag = 0;
-	if (clearDepth && clearStencil)
-		flag = D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL;
-	else if (clearDepth && !clearStencil)
-		flag = D3D11_CLEAR_DEPTH;
-	else if (!clearDepth && clearStencil)
-		flag = D3D11_CLEAR_STENCIL;
-	float c[4];
-	c[0] = color.r;
-	c[1] = color.g;
-	c[2] = color.b;
-	c[3] = color.a;
-
-	if (flag != 0)
-		m_deviceContext->ClearDepthStencilView(db->GetView(), flag, 1.0f, 0);
-	m_deviceContext->ClearRenderTargetView(cb->GetView(), c);
-}
-
-void D3D11Core::SetDefaultRenderTarget()
-{
-	ID3D11RenderTargetView* rv = ((DColorBuffer11*)m_colorBuffer)->GetView();
-	ID3D11DepthStencilView* dv = ((DDepthBuffer11*)m_depthBuffer)->GetView();
-	m_deviceContext->OMSetRenderTargets(1, &rv, dv);
+	if (res != NULL)
+	{
+		DColorBuffer11*cb = (DColorBuffer11*)(res->GetColorBuffer());
+		DDepthBuffer11*db = (DDepthBuffer11*)(res->GetDepthBuffer());
+		if (flag != 0)
+			m_deviceContext->ClearDepthStencilView(db->GetView(), flag, 1.0f, 0);
+		m_deviceContext->ClearRenderTargetView(cb->GetView(), c);
+	}
+	else
+	{
+		if (flag != 0)
+			m_deviceContext->ClearDepthStencilView(((DDepthBuffer11*)m_depthBuffer)->GetView(), flag, 1.0f, 0);
+		m_deviceContext->ClearRenderTargetView(((DColorBuffer11*)m_colorBuffer)->GetView(), c);
+	}
 }
 
 void D3D11Core::SetRenderTarget(DRenderTextureViewRes * res)
 {
-	if (res == NULL)
-		return;
+	if (res != NULL)
+	{
+		DColorBuffer11*cb = (DColorBuffer11*)(res->GetColorBuffer());
+		DDepthBuffer11*db = (DDepthBuffer11*)(res->GetDepthBuffer());
+		ID3D11RenderTargetView* rv = cb->GetView();
+		ID3D11DepthStencilView* dv = db->GetView();
+		m_deviceContext->OMSetRenderTargets(1, &rv, dv);
+	}
+	else
+	{
+		ID3D11RenderTargetView* rv = ((DColorBuffer11*)m_colorBuffer)->GetView();
+		ID3D11DepthStencilView* dv = ((DDepthBuffer11*)m_depthBuffer)->GetView();
+		m_deviceContext->OMSetRenderTargets(1, &rv, dv);
+	}
+}
 
-	DColorBuffer11*cb = (DColorBuffer11*)(res->GetColorBuffer());
-	DDepthBuffer11*db = (DDepthBuffer11*)(res->GetDepthBuffer());
-	ID3D11RenderTargetView* rv = cb->GetView();
-	ID3D11DepthStencilView* dv = db->GetView();
-	m_deviceContext->OMSetRenderTargets(1, &rv, dv);
+void D3D11Core::EndSetRenderTarget(DRenderTextureViewRes *)
+{
+
 }
 
 DMeshRes * D3D11Core::CreateMeshRes()

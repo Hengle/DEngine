@@ -100,34 +100,59 @@ void D3D9Core::Destroy()
 
 void D3D9Core::BeginRender()
 {
-	m_device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_COLORVALUE(0.0f, 0.0f, 1.0f, 1.0f), 1.0f, 0);
+	//m_device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_COLORVALUE(0.0f, 0.0f, 1.0f, 1.0f), 1.0f, 0);
 
-	m_device->BeginScene();
+	//m_device->BeginScene();
 
 	m_device->SetViewport(&m_viewPort);
 }
 
 void D3D9Core::EndRender()
 {
-	m_device->EndScene();
+	//m_device->EndScene();
 
 	m_device->Present(0, 0, 0, 0);
 }
 
-void D3D9Core::Clear(bool, bool, DColor &)
+void D3D9Core::Clear(bool clearDepth, bool clearStencil, DColor & color, DRenderTextureViewRes * res)
+{
+	DWORD flag = D3DCLEAR_TARGET;
+	if (clearDepth)
+		flag |= D3DCLEAR_ZBUFFER;
+	if (clearStencil)
+		flag |= D3DCLEAR_STENCIL;
+	D3DCOLOR c = D3DCOLOR_COLORVALUE(color.r, color.g, color.b, color.a);
+
+	if (res != NULL)
+	{
+		DRenderTextureViewRes9* r = (DRenderTextureViewRes9*)res;
+		LPD3DXRENDERTOSURFACE isurface = r->GetInterface();
+		isurface->BeginScene(r->GetSurface(), &m_viewPort);
+		m_device->Clear(0, NULL, flag, c, 1.0f, 0);
+	}
+	else
+	{
+		m_device->Clear(0, NULL, flag, c, 1.0f, 0);
+		m_device->BeginScene();
+	}
+}
+
+void D3D9Core::SetRenderTarget(DRenderTextureViewRes * res)
 {
 }
 
-void D3D9Core::ClearRenderTarget(DRenderTextureViewRes *, bool, bool, DColor &)
+void D3D9Core::EndSetRenderTarget(DRenderTextureViewRes * res)
 {
-}
-
-void D3D9Core::SetDefaultRenderTarget()
-{
-}
-
-void D3D9Core::SetRenderTarget(DRenderTextureViewRes *)
-{
+	if (res != NULL)
+	{
+		DRenderTextureViewRes9* r = (DRenderTextureViewRes9*)res;
+		LPD3DXRENDERTOSURFACE isurface = r->GetInterface();
+		isurface->EndScene(0);
+	}
+	else
+	{
+		m_device->EndScene();
+	}
 }
 
 DMeshRes * D3D9Core::CreateMeshRes()
@@ -141,9 +166,9 @@ DTextureRes * D3D9Core::CreateTextureRes(WCHAR* filename)
 	return new DTextureRes9(m_device, filename);
 }
 
-DRenderTextureViewRes * D3D9Core::CreateRenderTextureRes(float, float)
+DRenderTextureViewRes * D3D9Core::CreateRenderTextureRes(float width, float height)
 {
-	return nullptr;
+	return new DRenderTextureViewRes9(m_device, width, height);
 }
 
 DShaderRes * D3D9Core::CreateShaderRes()

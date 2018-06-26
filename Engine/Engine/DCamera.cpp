@@ -1,4 +1,4 @@
-#include "DCamera.h"
+﻿#include "DCamera.h"
 #include "DSystem.h"
 
 DCamera::DCamera()
@@ -60,18 +60,28 @@ void DCamera::BeginRender()
 
 	if (m_renderTexture != NULL)
 	{
-		DGraphics::SetRenderTarget(m_renderTexture);
-		DGraphics::ClearRenderTarget(m_renderTexture, true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f));
+		DGraphics::BeginScene(true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f), m_renderTexture);
+		//DGraphics::SetRenderTarget(m_renderTexture);
+		//DGraphics::ClearRenderTarget(m_renderTexture, true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f));
 	}
 	else
 	{
-		DGraphics::SetDefaultRenderTarget();
-		DGraphics::Clear(true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f));
+		DGraphics::BeginScene(true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f));
+		//DGraphics::SetDefaultRenderTarget();
+		//DGraphics::Clear(true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f));
 	}
 }
 
 void DCamera::EndRender()
 {
+	if (m_renderTexture != NULL)
+	{
+		DGraphics::EndScene(m_renderTexture);
+	}
+	else
+	{
+		DGraphics::EndScene();
+	}
 	sCurrent = NULL;
 }
 
@@ -81,10 +91,11 @@ void DCamera::RenderFilter()
 	{
 		FLOAT width, height;
 
-		DGraphics::SetDefaultRenderTarget();
-		DGraphics::Clear(true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f));
+		DGraphics::BeginScene(true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f));
+		//DGraphics::Clear(true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f));
 		DSystem::GetGraphicsMgr()->GetResolution(width, height);
 		m_filter->Render(m_renderTexture);
+		DGraphics::EndScene();
 	}
 }
 

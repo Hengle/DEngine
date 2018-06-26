@@ -220,7 +220,7 @@
       <Filter>头文件\Core\D3D11Core</Filter>
     </ClInclude>
     <ClInclude Include="DRenderBuffer10.h">
-      <Filter>头文件</Filter>
+      <Filter>头文件\Core\D3D10Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -369,7 +369,7 @@
       <Filter>源文件\Core\D3D11Core</Filter>
     </ClCompile>
     <ClCompile Include="DRenderBuffer10.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\Core\D3D10Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

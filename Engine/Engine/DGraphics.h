@@ -35,10 +35,11 @@ public:
 	void GetResolution(float&, float&);
 	DGraphicsAPI GetAPI();
 
-	static void Clear(bool, bool, DColor&);
-	static void ClearRenderTarget(DRenderTexture*, bool, bool, DColor&);
-	static void SetDefaultRenderTarget();
-	static void SetRenderTarget(DRenderTexture*);
+	static void BeginScene(bool, bool, DColor&, DRenderTexture* = NULL);
+	static void EndScene(DRenderTexture* = NULL);
+	static void Clear(bool, bool, DColor&, DRenderTexture* = NULL);
+	static void SetRenderTarget(DRenderTexture* = NULL);
+	static void EndSetRenderTarget(DRenderTexture* = NULL);
 
 	static void DrawMesh(const DMesh*, const DMatrix4x4&, DMaterial*, const DCamera*);
 	static void DrawTexture(DTexture*, DMaterial*);

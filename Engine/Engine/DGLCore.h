@@ -195,10 +195,9 @@ public:
 	virtual void Destroy() = 0;
 	virtual void BeginRender() = 0;
 	virtual void EndRender() = 0;
-	virtual void Clear(bool, bool, DColor&) = 0;
-	virtual void ClearRenderTarget(DRenderTextureViewRes*, bool, bool, DColor&) = 0;
-	virtual void SetDefaultRenderTarget() = 0;
-	virtual void SetRenderTarget(DRenderTextureViewRes*) = 0;
+	virtual void Clear(bool, bool, DColor&, DRenderTextureViewRes* = NULL) = 0;
+	virtual void SetRenderTarget(DRenderTextureViewRes* = NULL) = 0;
+	virtual void EndSetRenderTarget(DRenderTextureViewRes* = NULL) = 0;
 	virtual DMeshRes* CreateMeshRes() = 0;
 	virtual DTextureRes* CreateTextureRes(WCHAR*) = 0;
 	virtual DRenderTextureViewRes* CreateRenderTextureRes(float, float) = 0;

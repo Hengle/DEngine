@@ -220,7 +220,7 @@ HRESULT DShaderRes9::InitVertexShader(ID3DXBuffer*vertexShaderBuffer)
 
 	m_vertexConstable->SetDefaults(m_device);
 
-	DWORD* vfunc = (DWORD*)vertexShaderBuffer->GetBufferPointer();
+	/*DWORD* vfunc = (DWORD*)vertexShaderBuffer->GetBufferPointer();
 	UINT scount = 0;
 
 	result = D3DXGetShaderInputSemantics(vfunc, NULL, &scount);
@@ -245,7 +245,7 @@ HRESULT DShaderRes9::InitVertexShader(ID3DXBuffer*vertexShaderBuffer)
 		
 	}
 
-	delete[] semantics;
+	delete[] semantics;*/
 
 	return S_OK;
 }

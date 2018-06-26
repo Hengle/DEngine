@@ -236,7 +236,7 @@ bool D3D10Core::Init(int width, int height, bool fullScreen, HWND hwnd)
 		return false;
 	}
 
-	SetDefaultRenderTarget();
+	SetRenderTarget();
 	//m_device->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
 
 	m_viewPort.Width = width;
@@ -347,7 +347,7 @@ void D3D10Core::EndRender()
 		m_swapChain->Present(0, 0);
 }
 
-void D3D10Core::Clear(bool clearDepth, bool clearStencil, DColor & color)
+void D3D10Core::Clear(bool clearDepth, bool clearStencil, DColor & color, DRenderTextureViewRes * res)
 {
 	int flag = 0;
 	if (clearDepth && clearStencil)
@@ -362,53 +362,42 @@ void D3D10Core::Clear(bool clearDepth, bool clearStencil, DColor & color)
 	c[2] = color.b;
 	c[3] = color.a;
 
-	if (flag != 0)
-		m_device->ClearDepthStencilView(((DDepthBuffer10*)m_depthBuffer)->GetView(), flag, 1.0f, 0);
-	m_device->ClearRenderTargetView(((DColorBuffer10*)m_colorBuffer)->GetView(), c);
-}
-
-void D3D10Core::ClearRenderTarget(DRenderTextureViewRes * res, bool clearDepth, bool clearStencil, DColor & color)
-{
-	if (res == NULL)
-		return;
-	DColorBuffer10*cb = (DColorBuffer10*)(res->GetColorBuffer());
-	DDepthBuffer10*db = (DDepthBuffer10*)(res->GetDepthBuffer());
-
-	int flag = 0;
-	if (clearDepth && clearStencil)
-		flag = D3D10_CLEAR_DEPTH | D3D10_CLEAR_STENCIL;
-	else if (clearDepth && !clearStencil)
-		flag = D3D10_CLEAR_DEPTH;
-	else if (!clearDepth && clearStencil)
-		flag = D3D10_CLEAR_STENCIL;
-	float c[4];
-	c[0] = color.r;
-	c[1] = color.g;
-	c[2] = color.b;
-	c[3] = color.a;
-
-	if (flag != 0)
-		m_device->ClearDepthStencilView(db->GetView(), flag, 1.0f, 0);
-	m_device->ClearRenderTargetView(cb->GetView(), c);
-}
-
-void D3D10Core::SetDefaultRenderTarget()
-{
-	ID3D10RenderTargetView* rv = ((DColorBuffer10*)m_colorBuffer)->GetView();
-	ID3D10DepthStencilView* dv = ((DDepthBuffer10*)m_depthBuffer)->GetView();
-	m_device->OMSetRenderTargets(1, &rv, dv);
+	if (res != NULL)
+	{
+		DColorBuffer10*cb = (DColorBuffer10*)(res->GetColorBuffer());
+		DDepthBuffer10*db = (DDepthBuffer10*)(res->GetDepthBuffer());
+		if (flag != 0)
+			m_device->ClearDepthStencilView(db->GetView(), flag, 1.0f, 0);
+		m_device->ClearRenderTargetView(cb->GetView(), c);
+	}
+	else
+	{
+		if (flag != 0)
+			m_device->ClearDepthStencilView(((DDepthBuffer10*)m_depthBuffer)->GetView(), flag, 1.0f, 0);
+		m_device->ClearRenderTargetView(((DColorBuffer10*)m_colorBuffer)->GetView(), c);
+	}
 }
 
 void D3D10Core::SetRenderTarget(DRenderTextureViewRes *res)
 {
-	if (res == NULL)
-		return;
+	if (res != NULL)
+	{
+		DColorBuffer10*cb = (DColorBuffer10*)(res->GetColorBuffer());
+		DDepthBuffer10*db = (DDepthBuffer10*)(res->GetDepthBuffer());
+		ID3D10RenderTargetView* rv = cb->GetView();
+		ID3D10DepthStencilView* dv = db->GetView();
+		m_device->OMSetRenderTargets(1, &rv, dv);
+	}
+	else
+	{
+		ID3D10RenderTargetView* rv = ((DColorBuffer10*)m_colorBuffer)->GetView();
+		ID3D10DepthStencilView* dv = ((DDepthBuffer10*)m_depthBuffer)->GetView();
+		m_device->OMSetRenderTargets(1, &rv, dv);
+	}
+}
 
-	DColorBuffer10*cb = (DColorBuffer10*)(res->GetColorBuffer());
-	DDepthBuffer10*db = (DDepthBuffer10*)(res->GetDepthBuffer());
-	ID3D10RenderTargetView* rv = cb->GetView();
-	ID3D10DepthStencilView* dv = db->GetView();
-	m_device->OMSetRenderTargets(1, &rv, dv);
+void D3D10Core::EndSetRenderTarget(DRenderTextureViewRes *)
+{
 }
 
 DMeshRes * D3D10Core::CreateMeshRes()

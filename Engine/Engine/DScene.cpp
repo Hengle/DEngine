@@ -1,4 +1,4 @@
-#include "DScene.h"
+﻿#include "DScene.h"
 
 
 
@@ -48,8 +48,8 @@ void DScene::Render()
 	OnRender();
 	if (m_camera != NULL)
 	{
-		m_camera->RenderFilter();
 		m_camera->EndRender();
+		m_camera->RenderFilter();
 	}
 }
 

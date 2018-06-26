@@ -20,7 +20,7 @@ protected:
 	virtual void OnApplyParams(int, int, int, int, float*);
 
 private:
-	HRESULT InitVertexShader();
+	HRESULT InitVertexShader(ID3DXBuffer*);
 	HRESULT InitPixelShader();
 
 private:

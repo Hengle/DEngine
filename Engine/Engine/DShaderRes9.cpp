@@ -85,6 +85,7 @@ bool DShaderRes9::OnInit(WCHAR * vsfile, WCHAR * psfile)
 	HRESULT hr;
 	ID3DXBuffer* vshader, *pshader = 0;
 	ID3DXBuffer* errorBuffer = 0;
+
 	hr = D3DXCompileShaderFromFile(
 		vsfile,
 		0,
@@ -143,7 +144,7 @@ bool DShaderRes9::OnInit(WCHAR * vsfile, WCHAR * psfile)
 		return false;
 	}
 
-	hr = InitVertexShader();
+	hr = InitVertexShader(vshader);
 	if (FAILED(hr))
 		return false;
 
@@ -177,7 +178,7 @@ void DShaderRes9::OnApplyParams(int cindex, int coffset, int csize, int stype, f
 		m_pixelConstable->SetValue(m_device, handle, params, csize);
 }
 
-HRESULT DShaderRes9::InitVertexShader()
+HRESULT DShaderRes9::InitVertexShader(ID3DXBuffer*vertexShaderBuffer)
 {
 	D3DXCONSTANTTABLE_DESC desc;
 	D3DXCONSTANT_DESC cdesc;
@@ -218,6 +219,33 @@ HRESULT DShaderRes9::InitVertexShader()
 	}
 
 	m_vertexConstable->SetDefaults(m_device);
+
+	DWORD* vfunc = (DWORD*)vertexShaderBuffer->GetBufferPointer();
+	UINT scount = 0;
+
+	result = D3DXGetShaderInputSemantics(vfunc, NULL, &scount);
+
+	if (FAILED(result))
+		return S_FALSE;
+
+	D3DXSEMANTIC* semantics = new D3DXSEMANTIC[scount];
+
+	result = D3DXGetShaderInputSemantics(vfunc, semantics, &scount);
+
+	if (FAILED(result))
+	{
+		delete[] semantics;
+		return S_FALSE;
+	}
+
+	unsigned int i = 0;
+	for (i = 0; i < scount; i++)
+	{
+		D3DXSEMANTIC d = semantics[i];
+		
+	}
+
+	delete[] semantics;
 
 	return S_OK;
 }

@@ -143,6 +143,8 @@ void DRenderTextureViewRes11::Release()
 		m_depthBuffer = NULL;
 	}
 	m_texture = NULL;
+	m_depthTexture = NULL;
+	m_renderTexture = NULL;
 	m_deviceContext = NULL;
 }
 

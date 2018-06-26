@@ -219,6 +219,9 @@
     <ClInclude Include="DRenderBuffer11.h">
       <Filter>头文件\Core\D3D11Core</Filter>
     </ClInclude>
+    <ClInclude Include="DRenderBuffer10.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DMath.cpp">
@@ -364,6 +367,9 @@
     </ClCompile>
     <ClCompile Include="DRenderBuffer11.cpp">
       <Filter>源文件\Core\D3D11Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DRenderBuffer10.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

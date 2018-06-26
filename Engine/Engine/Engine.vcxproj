@@ -160,6 +160,7 @@
     <ClInclude Include="DMeshRes9.h" />
     <ClInclude Include="DModelLoader.h" />
     <ClInclude Include="DObject.h" />
+    <ClInclude Include="DRenderBuffer10.h" />
     <ClInclude Include="DRenderBuffer11.h" />
     <ClInclude Include="DRenderStateMgr10.h" />
     <ClInclude Include="DRenderStateMgr11.h" />
@@ -216,6 +217,7 @@
     <ClCompile Include="DMeshRes9.cpp" />
     <ClCompile Include="DModelLoader.cpp" />
     <ClCompile Include="DObject.cpp" />
+    <ClCompile Include="DRenderBuffer10.cpp" />
     <ClCompile Include="DRenderBuffer11.cpp" />
     <ClCompile Include="DRenderStateMgr10.cpp" />
     <ClCompile Include="DRenderStateMgr11.cpp" />

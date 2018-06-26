@@ -137,6 +137,30 @@ DGraphicsAPI DGraphics::GetAPI()
 	return m_API;
 }
 
+void DGraphics::Clear(bool clearDepth, bool clearStencil, DColor & color)
+{
+	DSystem::GetGraphicsMgr()->GetGLCore()->Clear(clearDepth, clearStencil, color);
+}
+
+void DGraphics::ClearRenderTarget(DRenderTexture * res, bool clearDepth, bool clearStencil, DColor & color)
+{
+	if (res == NULL)
+		return;
+	DSystem::GetGraphicsMgr()->GetGLCore()->ClearRenderTarget(res->GetTextureRes(), clearDepth, clearStencil, color);
+}
+
+void DGraphics::SetDefaultRenderTarget()
+{
+	DSystem::GetGraphicsMgr()->GetGLCore()->SetDefaultRenderTarget();
+}
+
+void DGraphics::SetRenderTarget(DRenderTexture * res)
+{
+	if (res == NULL)
+		return;
+	DSystem::GetGraphicsMgr()->GetGLCore()->SetRenderTarget(res->GetTextureRes());
+}
+
 void DGraphics::DrawMesh(const DMesh * mesh, const DMatrix4x4 & matrix, DMaterial * material, const DCamera * camera)
 {
 	if (mesh == NULL || material == NULL || camera == NULL)

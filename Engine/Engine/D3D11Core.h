@@ -14,8 +14,13 @@ public:
 	virtual void Destroy();
 	virtual void BeginRender();
 	virtual void EndRender();
+	virtual void Clear(bool, bool, DColor&);
+	virtual void ClearRenderTarget(DRenderTextureViewRes*, bool, bool, DColor&);
+	virtual void SetDefaultRenderTarget();
+	virtual void SetRenderTarget(DRenderTextureViewRes*);
 	virtual DMeshRes* CreateMeshRes();
 	virtual DTextureRes* CreateTextureRes(WCHAR*);
+	virtual DRenderTextureViewRes* CreateRenderTextureRes(float, float);
 	virtual DShaderRes* CreateShaderRes();
 	virtual void ApplySamplerState(UINT, DWrapMode);
 	virtual DRenderStateMgr* GetRenderStateMgr();
@@ -31,10 +36,12 @@ private:
 	IDXGISwapChain* m_swapChain;
 	ID3D11Device* m_device;
 	ID3D11DeviceContext* m_deviceContext;
-	ID3D11RenderTargetView*m_renderTargetView;
+	//ID3D11RenderTargetView*m_renderTargetView;
 	ID3D11Texture2D* m_depthStencilBuffer;
 	//ID3D11DepthStencilState* m_depthStencilState;
-	ID3D11DepthStencilView* m_depthStencilView;
+	//ID3D11DepthStencilView* m_depthStencilView;
+	DRenderBuffer* m_colorBuffer;
+	DRenderBuffer* m_depthBuffer;
 	DRenderStateMgr* m_renderStateMgr;
 	D3D11_VIEWPORT m_viewPort;
 	std::map<DWrapMode, ID3D11SamplerState*> m_samplerStates;

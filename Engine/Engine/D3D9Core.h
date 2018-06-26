@@ -14,8 +14,13 @@ public:
 	virtual void Destroy();
 	virtual void BeginRender();
 	virtual void EndRender();
+	virtual void Clear(bool, bool, DColor&);
+	virtual void ClearRenderTarget(DRenderTextureViewRes*, bool, bool, DColor&);
+	virtual void SetDefaultRenderTarget();
+	virtual void SetRenderTarget(DRenderTextureViewRes*);
 	virtual DMeshRes* CreateMeshRes();
 	virtual DTextureRes* CreateTextureRes(WCHAR*);
+	virtual DRenderTextureViewRes* CreateRenderTextureRes(float, float);
 	virtual DShaderRes* CreateShaderRes();
 	virtual void ApplySamplerState(UINT, DWrapMode);
 	virtual DRenderStateMgr* GetRenderStateMgr();

@@ -38,7 +38,7 @@ void DCamera::BeginRender()
 	{
 		if (m_ortho)
 		{
-			//d3dxmatrixor
+			DMatrix4x4::Ortho(&m_projection, m_aspect*m_orthoSize, m_orthoSize, m_near, m_far);
 		}
 		else
 		{
@@ -57,6 +57,17 @@ void DCamera::BeginRender()
 
 		DMatrix4x4::LookAt(&m_viewMatrix, position, lookAt, up);
 	}
+
+	if (m_renderTexture != NULL)
+	{
+		DGraphics::SetRenderTarget(m_renderTexture);
+		DGraphics::ClearRenderTarget(m_renderTexture, true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f));
+	}
+	else
+	{
+		DGraphics::SetDefaultRenderTarget();
+		DGraphics::Clear(true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f));
+	}
 }
 
 void DCamera::EndRender()
@@ -66,10 +77,12 @@ void DCamera::EndRender()
 
 void DCamera::RenderFilter()
 {
-	if (m_filter != NULL)
+	if (m_filter != NULL &&& m_renderTexture != NULL)
 	{
 		FLOAT width, height;
 
+		DGraphics::SetDefaultRenderTarget();
+		DGraphics::Clear(true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f));
 		DSystem::GetGraphicsMgr()->GetResolution(width, height);
 		m_filter->Render(width, height);
 	}
@@ -190,6 +203,16 @@ void DCamera::SetFilter(DCameraFilter * filter)
 void DCamera::ClearFilter()
 {
 	m_filter = NULL;
+}
+
+DRenderTexture * DCamera::GetRenderTexture()
+{
+	return m_renderTexture;
+}
+
+void DCamera::SetRenderTexture(DRenderTexture * renderTexture)
+{
+	m_renderTexture = renderTexture;
 }
 
 void DCamera::GetCurrentCamera(DCamera ** cam)

@@ -37,6 +37,21 @@ class DTextureCube : public DTexture
 
 class DRenderTexture : public DTexture
 {
+private:
+	DRenderTexture();
+public:
+	~DRenderTexture();
+	virtual void Destroy();
+	virtual void Apply(UINT);
+	DWrapMode GetWrapMode();
+	DRenderTextureViewRes* GetTextureRes();
 
+	static DRenderTexture* Create(float, float);
+	static DRenderTexture* Create(float, float, DWrapMode);
+
+
+private:
+	DRenderTextureViewRes* m_renderTextureRes;
+	DWrapMode m_wrapMode;
 };
 

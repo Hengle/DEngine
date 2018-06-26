@@ -114,6 +114,22 @@ void D3D9Core::EndRender()
 	m_device->Present(0, 0, 0, 0);
 }
 
+void D3D9Core::Clear(bool, bool, DColor &)
+{
+}
+
+void D3D9Core::ClearRenderTarget(DRenderTextureViewRes *, bool, bool, DColor &)
+{
+}
+
+void D3D9Core::SetDefaultRenderTarget()
+{
+}
+
+void D3D9Core::SetRenderTarget(DRenderTextureViewRes *)
+{
+}
+
 DMeshRes * D3D9Core::CreateMeshRes()
 {
 	DMeshRes9* res = new DMeshRes9(m_device);
@@ -123,6 +139,11 @@ DMeshRes * D3D9Core::CreateMeshRes()
 DTextureRes * D3D9Core::CreateTextureRes(WCHAR* filename)
 {
 	return new DTextureRes9(m_device, filename);
+}
+
+DRenderTextureViewRes * D3D9Core::CreateRenderTextureRes(float, float)
+{
+	return nullptr;
 }
 
 DShaderRes * D3D9Core::CreateShaderRes()

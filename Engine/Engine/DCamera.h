@@ -28,6 +28,8 @@ public:
 	void SetOrthoSize(float);
 	void SetFilter(DCameraFilter*);
 	void ClearFilter();
+	DRenderTexture* GetRenderTexture();
+	void SetRenderTexture(DRenderTexture*);
 
 	static void GetCurrentCamera(DCamera** cam);
 
@@ -42,6 +44,7 @@ private:
 	DMatrix4x4 m_projection;
 	bool m_isProjectionChanged;
 	DCameraFilter* m_filter;
+	DRenderTexture* m_renderTexture;
 };
 
 static DCamera* sCurrent;

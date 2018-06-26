@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "DColor.h"
 #include <d3dcommon.h>
 
 #define	DVertexStructure_NONE        0
@@ -133,6 +134,9 @@ class DRenderTextureViewRes
 public:
 	virtual void Release() = 0;
 	virtual void Apply(UINT, DWrapMode) = 0;
+
+	virtual DRenderBuffer* GetColorBuffer() = 0;
+	virtual DRenderBuffer* GetDepthBuffer() = 0;
 };
 
 //抽象shader资源-用于实现不同API下的shader
@@ -191,8 +195,13 @@ public:
 	virtual void Destroy() = 0;
 	virtual void BeginRender() = 0;
 	virtual void EndRender() = 0;
+	virtual void Clear(bool, bool, DColor&) = 0;
+	virtual void ClearRenderTarget(DRenderTextureViewRes*, bool, bool, DColor&) = 0;
+	virtual void SetDefaultRenderTarget() = 0;
+	virtual void SetRenderTarget(DRenderTextureViewRes*) = 0;
 	virtual DMeshRes* CreateMeshRes() = 0;
 	virtual DTextureRes* CreateTextureRes(WCHAR*) = 0;
+	virtual DRenderTextureViewRes* CreateRenderTextureRes(float, float) = 0;
 	virtual DShaderRes* CreateShaderRes() = 0;
 	virtual void ApplySamplerState(UINT, DWrapMode) = 0;
 	virtual DRenderStateMgr* GetRenderStateMgr() = 0;

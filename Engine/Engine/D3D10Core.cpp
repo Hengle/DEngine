@@ -318,6 +318,22 @@ void D3D10Core::EndRender()
 	m_swapChain->Present(0, 0);
 }
 
+void D3D10Core::Clear(bool, bool, DColor &)
+{
+}
+
+void D3D10Core::ClearRenderTarget(DRenderTextureViewRes *, bool, bool, DColor &)
+{
+}
+
+void D3D10Core::SetDefaultRenderTarget()
+{
+}
+
+void D3D10Core::SetRenderTarget(DRenderTextureViewRes *)
+{
+}
+
 DMeshRes * D3D10Core::CreateMeshRes()
 {
 	return new DMeshRes10(m_device);
@@ -326,6 +342,11 @@ DMeshRes * D3D10Core::CreateMeshRes()
 DTextureRes * D3D10Core::CreateTextureRes(WCHAR* filename)
 {
 	return new DTextureRes10(m_device, filename);;
+}
+
+DRenderTextureViewRes * D3D10Core::CreateRenderTextureRes(float, float)
+{
+	return nullptr;
 }
 
 DShaderRes * D3D10Core::CreateShaderRes()

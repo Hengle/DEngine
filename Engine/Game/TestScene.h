@@ -4,6 +4,7 @@
 #include "DShader.h"
 #include "DMesh.h"
 #include "MyTestDraw.h"
+#include "TestFilter.h"
 
 class TestScene : public DScene
 {
@@ -23,6 +24,7 @@ private:
 private:
 	//ModelClass* m_Model;
 	//ColorShaderClass* m_ColorShader;
+	TestFilter* m_filter;
 	DDisplayObject* m_plane;
 	DDisplayObject* m_obj0;
 	DDisplayObject* m_cube;
@@ -36,4 +38,5 @@ private:
 	DTexture* floor;
 	DTexture* map;
 	DTexture* cb;
+	DRenderTexture* m_rt;
 };

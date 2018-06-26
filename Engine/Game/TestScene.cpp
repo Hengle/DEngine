@@ -151,6 +151,14 @@ void TestScene::TestLoad()
 	DCamera* cam = new DCamera();
 	DTransform* transform;
 
+	float w, h;
+	DSystem::GetGraphicsMgr()->GetResolution(w, h);
+	m_rt = DRenderTexture::Create(w,h);
+	cam->SetRenderTexture(m_rt);
+
+	m_filter = new TestFilter();
+	cam->SetFilter(m_filter);
+
 	transform = cam->GetTransform();
 	transform->SetEuler(34.996f, -154.423f, 0.0f);
 	transform->SetPosition(3.24f, 6.822f, 7.701f);
@@ -238,6 +246,12 @@ void TestScene::OnUnLoad()
 	cb->Destroy();
 	delete cb;
 	cb = 0;
+	m_filter->Release();
+	delete m_filter;
+	m_filter = 0;
+	m_rt->Destroy();
+	delete m_rt;
+	m_rt = 0;
 	//testd->Release();
 	//delete testd;
 	//testd = NULL;

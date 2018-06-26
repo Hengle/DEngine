@@ -1,6 +1,13 @@
 #pragma once
 #include "DSceneObject.h"
-#include "DCameraFilter.h"
+#include "DTexture.h"
+
+class DCameraFilter
+{
+public:
+	virtual void Render(DRenderTexture* screenTexture) = 0;
+	virtual void Release() = 0;
+};
 
 class DCamera : public DSceneObject
 {

@@ -105,6 +105,7 @@ DRenderTextureViewRes11::DRenderTextureViewRes11(ID3D11Device * device, ID3D11De
 	if (FAILED(result))
 		return;
 
+	m_deviceContext = deviceContext;
 	m_isSuccess = true;
 }
 

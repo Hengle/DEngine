@@ -138,7 +138,6 @@
     <ClInclude Include="D3D11Core.h" />
     <ClInclude Include="D3D9Core.h" />
     <ClInclude Include="DCamera.h" />
-    <ClInclude Include="DCameraFilter.h" />
     <ClInclude Include="DColor.h" />
     <ClInclude Include="DDisplayObject.h" />
     <ClInclude Include="DFrameBase.h" />
@@ -195,7 +194,6 @@
     <ClCompile Include="D3D11Core.cpp" />
     <ClCompile Include="D3D9Core.cpp" />
     <ClCompile Include="DCamera.cpp" />
-    <ClCompile Include="DCameraFilter.cpp" />
     <ClCompile Include="DColor.cpp" />
     <ClCompile Include="DDisplayObject.cpp" />
     <ClCompile Include="DFrameBase.cpp" />

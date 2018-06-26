@@ -41,6 +41,7 @@ public:
 	static void SetRenderTarget(DRenderTexture*);
 
 	static void DrawMesh(const DMesh*, const DMatrix4x4&, DMaterial*, const DCamera*);
+	static void DrawTexture(DTexture*, DMaterial*);
 	//static void Blit()
 	static void SetCullMode(DCullMode);
 	static void SetZWriteEnable(bool);
@@ -51,10 +52,14 @@ public:
 	static void Color(DColor&);
 
 private:
+	void InitScreenPlane();
+
+private:
 	float* m_glVertices;
 	unsigned int* m_glIndices;
 	DGLCore* m_GL;
 	DGraphicsAPI m_API;
 	DImGUICore* m_GUI;
+	DMesh* m_screenPlane;
 };
 

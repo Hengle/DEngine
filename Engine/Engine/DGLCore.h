@@ -2,16 +2,18 @@
 #include "DColor.h"
 #include <d3dcommon.h>
 
-#define	DVertexStructure_NONE        0
-#define	DVertexStructure_POSITION    1
-#define	DVertexStructure_TEXCOORD0   2
-#define	DVertexStructure_TEXCOORD1   4
-#define	DVertexStructure_TEXCOORD2   8
-#define	DVertexStructure_TEXCOORD3   16
-#define	DVertexStructure_COLOR       32
-#define	DVertexStructure_NORMAL      64
-#define	DVertexStructure_TANGENT     128
-#define	DVertexStructure_BINORMAL    256
+enum DVertexUsage
+{
+	DVertexUsage_POSITION     = 0,
+	DVertexUsage_TEXCOORD0    = 1,
+	DVertexUsage_TEXCOORD1    = 2,
+	DVertexUsage_TEXCOORD2    = 3,
+	DVertexUsage_TEXCOORD3    = 4,
+	DVertexUsage_COLOR        = 5,
+	DVertexUsage_NORMAL       = 6,
+	DVertexUsage_TANGENT      = 7,
+	DVertexUsage_BINORMAL     = 8,
+};
 
 enum DWrapMode
 {
@@ -163,7 +165,7 @@ protected:
 protected:
 	unsigned int m_cbufferCount, m_propertyCount;
 	bool m_isInitialized;
-	int m_vertexStructure;
+	int m_vertexUsage;
 };
 
 class DGLDrawer

@@ -9,7 +9,6 @@ DShaderRes11::DShaderRes11(ID3D11Device * device, ID3D11DeviceContext * deviceCo
 	m_vertexShader = 0;
 	m_pixelShader = 0;
 	m_layout = 0;
-	m_vertexStructure = DVertexStructure_NONE;
 }
 
 DShaderRes11::~DShaderRes11()
@@ -273,12 +272,12 @@ HRESULT DShaderRes11::InitVertexShader(ID3DBlob* pShaderBlob, ID3D11Device* pD3D
 		LPCSTR sname = paramDesc.SemanticName;
 		if (lstrcmpA(sname, "POSITION") == 0)
 		{
-			elementDesc.AlignedByteOffset = 0;
+			elementDesc.AlignedByteOffset = byteOffset;
 			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_UINT;
 			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_SINT;
 			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
 			byteOffset += 12;
-			m_vertexStructure |= DVertexStructure_POSITION;
+			m_vertexUsage |= 1UL << DVertexUsage_POSITION;
 		}
 		else if (lstrcmpA(sname, "TEXCOORD") == 0)
 		{
@@ -288,13 +287,13 @@ HRESULT DShaderRes11::InitVertexShader(ID3DBlob* pShaderBlob, ID3D11Device* pD3D
 			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32_FLOAT;
 			byteOffset += 8;
 			if (paramDesc.SemanticIndex == 0)
-				m_vertexStructure |= DVertexStructure_TEXCOORD0;
+				m_vertexUsage |= 1UL << DVertexUsage_TEXCOORD0;
 			else if (paramDesc.SemanticIndex == 1)
-				m_vertexStructure |= DVertexStructure_TEXCOORD1;
+				m_vertexUsage |= 1UL << DVertexUsage_TEXCOORD1;
 			else if (paramDesc.SemanticIndex == 2)
-				m_vertexStructure |= DVertexStructure_TEXCOORD2;
+				m_vertexUsage |= 1UL << DVertexUsage_TEXCOORD2;
 			else if (paramDesc.SemanticIndex == 3)
-				m_vertexStructure |= DVertexStructure_TEXCOORD3;
+				m_vertexUsage |= 1UL << DVertexUsage_TEXCOORD3;
 		}
 		else if (lstrcmpA(sname, "NORMAL") == 0)
 		{
@@ -303,7 +302,7 @@ HRESULT DShaderRes11::InitVertexShader(ID3DBlob* pShaderBlob, ID3D11Device* pD3D
 			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_SINT;
 			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
 			byteOffset += 12;
-			m_vertexStructure |= DVertexStructure_NORMAL;
+			m_vertexUsage |= 1UL << DVertexUsage_NORMAL;
 		}
 		else if (lstrcmpA(sname, "COLOR") == 0)
 		{
@@ -312,7 +311,7 @@ HRESULT DShaderRes11::InitVertexShader(ID3DBlob* pShaderBlob, ID3D11Device* pD3D
 			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_SINT;
 			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 			byteOffset += 16;
-			m_vertexStructure |= DVertexStructure_COLOR;
+			m_vertexUsage |= 1UL << DVertexUsage_COLOR;
 		}
 		else if (lstrcmpA(sname, "TANGENT") == 0)
 		{
@@ -321,7 +320,7 @@ HRESULT DShaderRes11::InitVertexShader(ID3DBlob* pShaderBlob, ID3D11Device* pD3D
 			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_SINT;
 			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 			byteOffset += 16;
-			m_vertexStructure |= DVertexStructure_TANGENT;
+			m_vertexUsage |= 1UL << DVertexUsage_TANGENT;
 		}
 		else if (lstrcmpA(sname, "BINORMAL") == 0)
 		{
@@ -330,7 +329,7 @@ HRESULT DShaderRes11::InitVertexShader(ID3DBlob* pShaderBlob, ID3D11Device* pD3D
 			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_SINT;
 			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
 			byteOffset += 12;
-			m_vertexStructure |= DVertexStructure_BINORMAL;
+			m_vertexUsage |= 1UL << DVertexUsage_BINORMAL;
 		}
 		//// determine DXGI format
 		/*else if (paramDesc.Mask == 1)

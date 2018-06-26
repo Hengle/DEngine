@@ -220,7 +220,7 @@ HRESULT DShaderRes9::InitVertexShader(ID3DXBuffer*vertexShaderBuffer)
 
 	m_vertexConstable->SetDefaults(m_device);
 
-	/*DWORD* vfunc = (DWORD*)vertexShaderBuffer->GetBufferPointer();
+	DWORD* vfunc = (DWORD*)vertexShaderBuffer->GetBufferPointer();
 	UINT scount = 0;
 
 	result = D3DXGetShaderInputSemantics(vfunc, NULL, &scount);
@@ -238,14 +238,42 @@ HRESULT DShaderRes9::InitVertexShader(ID3DXBuffer*vertexShaderBuffer)
 		return S_FALSE;
 	}
 
-	unsigned int i = 0;
 	for (i = 0; i < scount; i++)
 	{
 		D3DXSEMANTIC d = semantics[i];
-		
+		switch (d.Usage)
+		{
+		case D3DDECLUSAGE_POSITION:
+			m_vertexUsage |= 1UL << DVertexUsage_POSITION;
+			break;
+		case D3DDECLUSAGE_TEXCOORD:
+			if(d.UsageIndex == 0)
+				m_vertexUsage |= 1UL << DVertexUsage_TEXCOORD0;
+			else if (d.UsageIndex == 1)
+				m_vertexUsage |= 1UL << DVertexUsage_TEXCOORD1;
+			else if (d.UsageIndex == 2)
+				m_vertexUsage |= 1UL << DVertexUsage_TEXCOORD2;
+			else if (d.UsageIndex == 3)
+				m_vertexUsage |= 1UL << DVertexUsage_TEXCOORD3;
+			break;
+		case D3DDECLUSAGE_COLOR:
+			m_vertexUsage |= 1UL << DVertexUsage_COLOR;
+			break;
+		case D3DDECLUSAGE_NORMAL:
+			m_vertexUsage |= 1UL << DVertexUsage_NORMAL;
+			break;
+		case D3DDECLUSAGE_TANGENT:
+			m_vertexUsage |= 1UL << DVertexUsage_TANGENT;
+			break;
+		case D3DDECLUSAGE_BINORMAL:
+			m_vertexUsage |= 1UL << DVertexUsage_BINORMAL;
+			break;
+		default:
+			break;
+		}
 	}
 
-	delete[] semantics;*/
+	delete[] semantics;
 
 	return S_OK;
 }

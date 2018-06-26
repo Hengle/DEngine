@@ -148,6 +148,11 @@ void TestScene::OnLoad()
 
 void TestScene::TestLoad()
 {
+	DShader* aoshader = DShader::Create(L"../Res/testv9.v9", L"../Res/texture.ps9");
+	aoshader->Destroy();
+	delete aoshader;
+	aoshader = NULL;
+
 	DCamera* cam = new DCamera();
 	DTransform* transform;
 

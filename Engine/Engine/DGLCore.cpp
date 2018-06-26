@@ -26,6 +26,7 @@ DShaderRes::DShaderRes()
 	m_isInitialized = false;
 	m_cbufferCount = 0;
 	m_propertyCount = 0;
+	m_vertexUsage = 0;
 }
 
 unsigned int DShaderRes::GetCBufferCount() const

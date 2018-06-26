@@ -113,35 +113,64 @@ HRESULT DShaderRes10::InitVertexShader(ID3DBlob * pShaderBlob, ID3D10Device *pD3
 		LPCSTR sname = paramDesc.SemanticName;
 		if (lstrcmpA(sname, "POSITION") == 0)
 		{
-			elementDesc.AlignedByteOffset = 0;
+			elementDesc.AlignedByteOffset = byteOffset;
 			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_UINT;
 			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_SINT;
 			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
 			byteOffset += 12;
+			m_vertexUsage |= 1UL << DVertexUsage_POSITION;
 		}
 		else if (lstrcmpA(sname, "TEXCOORD") == 0)
 		{
-			elementDesc.AlignedByteOffset = 12;
+			elementDesc.AlignedByteOffset = byteOffset;
 			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32_UINT;
 			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32_SINT;
 			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32_FLOAT;
 			byteOffset += 8;
+			if (paramDesc.SemanticIndex == 0)
+				m_vertexUsage |= 1UL << DVertexUsage_TEXCOORD0;
+			else if (paramDesc.SemanticIndex == 1)
+				m_vertexUsage |= 1UL << DVertexUsage_TEXCOORD1;
+			else if (paramDesc.SemanticIndex == 2)
+				m_vertexUsage |= 1UL << DVertexUsage_TEXCOORD2;
+			else if (paramDesc.SemanticIndex == 3)
+				m_vertexUsage |= 1UL << DVertexUsage_TEXCOORD3;
 		}
 		else if (lstrcmpA(sname, "NORMAL") == 0)
 		{
-			elementDesc.AlignedByteOffset = 20;
+			elementDesc.AlignedByteOffset = byteOffset;
 			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_UINT;
 			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_SINT;
 			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
 			byteOffset += 12;
+			m_vertexUsage |= 1UL << DVertexUsage_NORMAL;
 		}
 		else if (lstrcmpA(sname, "COLOR") == 0)
 		{
-			elementDesc.AlignedByteOffset = 32;
+			elementDesc.AlignedByteOffset = byteOffset;
 			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_UINT;
 			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_SINT;
 			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 			byteOffset += 16;
+			m_vertexUsage |= 1UL << DVertexUsage_COLOR;
+		}
+		else if (lstrcmpA(sname, "TANGENT") == 0)
+		{
+			elementDesc.AlignedByteOffset = byteOffset;
+			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_UINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_SINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+			byteOffset += 16;
+			m_vertexUsage |= 1UL << DVertexUsage_TANGENT;
+		}
+		else if (lstrcmpA(sname, "BINORMAL") == 0)
+		{
+			elementDesc.AlignedByteOffset = byteOffset;
+			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_UINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_SINT;
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
+			byteOffset += 12;
+			m_vertexUsage |= 1UL << DVertexUsage_BINORMAL;
 		}
 
 		//save element desc

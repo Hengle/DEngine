@@ -3,6 +3,7 @@
 #include "DMaterial.h"
 #include "DCamera.h"
 #include "DImGUICore.h"
+#include "DGLDrawer.h"
 
 enum DGraphicsAPI
 {
@@ -47,10 +48,15 @@ public:
 	static void SetCullMode(DCullMode);
 	static void SetZWriteEnable(bool);
 	static void SetZTestFunc(DRSCompareFunc);
+
 	static void GlBegin();
 	static void GlEnd();
-	static void Vector3(DVector3&);
-	static void Color(DColor&);
+	static void GLVector3(DVector3&);
+	static void GLVector(float, float, float);
+	static void GLColor(DColor&);
+	static void GLPushMatrix();
+	static void GLPopMatrix();
+	static void GLLoadIndentity();
 
 private:
 	void InitScreenPlane();
@@ -61,6 +67,7 @@ private:
 	DGLCore* m_GL;
 	DGraphicsAPI m_API;
 	DImGUICore* m_GUI;
+	DGLDrawer* m_glDrawer;
 	DMesh* m_screenPlane;
 };
 

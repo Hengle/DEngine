@@ -38,4 +38,10 @@ private:
 	DTexture* map;
 	DTexture* cb;
 	DRenderTexture* m_rt;
+
+
+	DShader* testcolorshader;
+	DMaterial* testcolormat;
+	DMesh* testcolormesh;
+	DDisplayObject* testcolorobj;
 };

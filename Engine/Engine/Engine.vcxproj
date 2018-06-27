@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>e:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>e:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>c:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>c:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>E:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
@@ -142,7 +142,7 @@
     <ClInclude Include="DDisplayObject.h" />
     <ClInclude Include="DFrameBase.h" />
     <ClInclude Include="DGLCore.h" />
-    <ClInclude Include="DGLDrawer11.h" />
+    <ClInclude Include="DGLDrawer.h" />
     <ClInclude Include="DGraphics.h" />
     <ClInclude Include="DGUI.h" />
     <ClInclude Include="DImGUICore.h" />
@@ -199,7 +199,7 @@
     <ClCompile Include="DDisplayObject.cpp" />
     <ClCompile Include="DFrameBase.cpp" />
     <ClCompile Include="DGLCore.cpp" />
-    <ClCompile Include="DGLDrawer11.cpp" />
+    <ClCompile Include="DGLDrawer.cpp" />
     <ClCompile Include="DGraphics.cpp" />
     <ClCompile Include="DGUI.cpp" />
     <ClCompile Include="DImGUICore.cpp" />

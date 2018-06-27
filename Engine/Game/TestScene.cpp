@@ -148,6 +148,28 @@ void TestScene::OnLoad()
 
 void TestScene::TestLoad()
 {
+	testcolorshader = DShader::Create(L"../Res/color.vs", L"../Res/color.ps");
+	testcolormat = new DMaterial(testcolorshader);
+	testcolormesh = new DMesh();
+	float* vs = new float[12];
+	unsigned long* is = new unsigned long[4];
+
+	vs[0] = 0.0f; vs[1] = 0.0f; vs[2] = 0.0f;
+	vs[3] = 3.0f; vs[4] = 3.0f; vs[5] = 3.0f;
+	vs[6] = 3.0f; vs[7] = 3.0f; vs[8] = 3.0f;
+	vs[9] = 0.0f; vs[10] = 6.0f; vs[11] = 4.1f;
+
+	is[0] = 0; is[1] = 1;
+	is[2] = 2; is[3] = 3;
+
+	testcolormesh->SetVertices(vs, 4);
+	testcolormesh->SetIndices(is, 4);
+	testcolormesh->SetTopology(DMeshTopology_LineStrip);
+
+	testcolorobj = new DDisplayObject(testcolormesh, testcolormat);
+	AddDisplayObject(testcolorobj);
+
+
 	/*DShader* aoshader = DShader::Create(L"../Res/testv9.v9", L"../Res/texture.ps9");
 	aoshader->Destroy();
 	delete aoshader;
@@ -159,10 +181,10 @@ void TestScene::TestLoad()
 	float w, h;
 	DSystem::GetGraphicsMgr()->GetResolution(w, h);
 	m_rt = DRenderTexture::Create(w,h);
-	cam->SetRenderTexture(m_rt);
+	//cam->SetRenderTexture(m_rt);
 
 	m_filter = new TestFilter();
-	cam->SetFilter(m_filter);
+	//cam->SetFilter(m_filter);
 
 	transform = cam->GetTransform();
 	transform->SetEuler(34.996f, -154.423f, 0.0f);
@@ -269,10 +291,35 @@ void TestScene::OnUnLoad()
 	/*m_obj->Destroy();
 	delete m_obj;
 	m_obj = NULL;*/
+	testcolorshader->Destroy();
+	delete testcolorshader;
+	testcolorshader = 0;
+	testcolormat->Destroy();
+	delete testcolormat;
+	testcolormat = 0;
+	testcolormesh->Destroy();
+	delete testcolormesh;
+	testcolormesh = 0;
 }
 
 void TestScene::OnRender()
 {
+	DGraphics::GLPushMatrix();
+	DGraphics::GLLoadIndentity();
+
+	DGraphics::GlBegin();
+
+	DGraphics::GLVector(0.0f, 0.0f, 0.0f);
+	DGraphics::GLVector(3.2f, 3.78f, 2.3f);
+
+	DGraphics::GLVector(3.2f, 3.78f, 2.3f);
+	DGraphics::GLVector(3.2f, 7.0f, 2.3f);
+
+	DGraphics::GlEnd();
+
+	DGraphics::GLPopMatrix();
+
+
 	//testd->Render();
 	/*DSystem::GetGraphicsCore()->DrawLine(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, 1, 1));
 	DSystem::GetGraphicsCore()->DrawLine(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(-1, 1, 1));

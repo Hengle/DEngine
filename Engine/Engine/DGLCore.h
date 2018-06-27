@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "DColor.h"
+#include "DMath.h"
 #include <d3dcommon.h>
 
 enum DVertexUsage
@@ -111,21 +112,34 @@ public:
 	DMeshRes(int);
 	//void Init(DMeshBufferDesc* desc);
 	void Refresh(DMeshBufferDesc* desc);
+	void Refresh(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount);
 	void Draw(DMeshTopology);
 	virtual void Release() = 0;
 	bool IsInitialized();
 
 protected:
-	virtual void OnRefresh(DMeshBufferDesc*) = 0;
-	virtual bool OnInit(DMeshBufferDesc*) = 0;
+	virtual void OnRefresh(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount) = 0;
+	virtual bool OnInit(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount) = 0;
 	virtual void OnDraw(DMeshTopology) = 0;
 
 protected:
 	int m_vertexUsage;
+	bool m_hasUV;
+	bool m_hasUV1;
+	bool m_hasUV2;
+	bool m_hasUV3;
+	bool m_hasColor;
+	bool m_hasNormal;
+	bool m_hasTangent;
+	bool m_hasBinormal;
+	int m_vertexCount;
+	int m_indexCount;
+	int m_dataCount;
 
 private:
 	bool m_isInitialized;
 	bool m_isSupported;
+
 };
 
 //抽象贴图资源-用于实现不同API下的texture
@@ -178,18 +192,6 @@ protected:
 	unsigned int m_cbufferCount, m_propertyCount;
 	bool m_isInitialized;
 	int m_vertexUsage;
-};
-
-class DGLDrawer
-{
-public:
-	virtual void glBegin() = 0;
-	virtual void glEnd() = 0;
-	virtual void glVector3(DVector3*) = 0;
-	virtual void glColor(DColor*) = 0;
-	virtual void glPushMatrix() = 0;
-	virtual void glPopMatrix() = 0;
-	virtual void glLoadIdentity() = 0;
 };
 
 class DRenderStateMgr

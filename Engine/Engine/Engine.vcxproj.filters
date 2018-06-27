@@ -201,9 +201,6 @@
     <ClInclude Include="DTextureRes10.h">
       <Filter>头文件\Core\D3D10Core</Filter>
     </ClInclude>
-    <ClInclude Include="DGLDrawer11.h">
-      <Filter>头文件\Core\D3D11Core</Filter>
-    </ClInclude>
     <ClInclude Include="DTextureRes9.h">
       <Filter>头文件\Core\D3D9Core</Filter>
     </ClInclude>
@@ -221,6 +218,9 @@
     </ClInclude>
     <ClInclude Include="DRenderBuffer10.h">
       <Filter>头文件\Core\D3D10Core</Filter>
+    </ClInclude>
+    <ClInclude Include="DGLDrawer.h">
+      <Filter>头文件\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -350,9 +350,6 @@
     <ClCompile Include="DTextureRes10.cpp">
       <Filter>源文件\Core\D3D10Core</Filter>
     </ClCompile>
-    <ClCompile Include="DGLDrawer11.cpp">
-      <Filter>源文件\Core\D3D11Core</Filter>
-    </ClCompile>
     <ClCompile Include="DTextureRes9.cpp">
       <Filter>源文件\Core\D3D9Core</Filter>
     </ClCompile>
@@ -370,6 +367,9 @@
     </ClCompile>
     <ClCompile Include="DRenderBuffer10.cpp">
       <Filter>源文件\Core\D3D10Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DGLDrawer.cpp">
+      <Filter>源文件\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

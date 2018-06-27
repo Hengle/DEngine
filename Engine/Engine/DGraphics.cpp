@@ -11,6 +11,7 @@ DGraphics::DGraphics()
 {
 	m_GL = 0;
 	m_GUI = 0;
+	m_glDrawer = 0;
 }
 
 
@@ -54,6 +55,8 @@ bool DGraphics::Init(int width, int height, bool fullScreen, HWND hwnd, DGraphic
 		((DImGUICore9*)m_GUI)->Init(hwnd, gl->GetDevice());
 		m_GL = gl;
 	}
+
+	m_glDrawer = new DGLDrawer();
 
 	return true;
 }
@@ -114,6 +117,12 @@ void DGraphics::Shutdown()
 		delete m_screenPlane;
 		m_screenPlane = NULL;
 	}
+	if (m_glDrawer != NULL)
+	{
+		m_glDrawer->Release();
+		delete m_glDrawer;
+		m_glDrawer = NULL;
+	}
 }
 DGLCore * DGraphics::GetGLCore()
 {
@@ -159,6 +168,10 @@ void DGraphics::BeginScene(bool clearDepth, bool clearStencil, DColor & color, D
 
 void DGraphics::EndScene(DRenderTexture * renderTexture)
 {
+	if (DSystem::GetGraphicsMgr()->m_glDrawer != NULL)
+	{
+		DSystem::GetGraphicsMgr()->m_glDrawer->PostGL();
+	}
 	if (renderTexture != NULL)
 	{
 		EndSetRenderTarget(renderTexture);
@@ -302,18 +315,74 @@ void DGraphics::SetZTestFunc(DRSCompareFunc ztest)
 
 void DGraphics::GlBegin()
 {
+	DGLDrawer* drawer = DSystem::GetGraphicsMgr()->m_glDrawer;
+	if (drawer != NULL)
+	{
+		drawer->GlBegin();
+	}
 }
 
 void DGraphics::GlEnd()
 {
+	DGLDrawer* drawer = DSystem::GetGraphicsMgr()->m_glDrawer;
+	if (drawer != NULL)
+	{
+		drawer->GlEnd();
+	}
 }
 
-void DGraphics::Vector3(DVector3 &)
+void DGraphics::GLVector3(DVector3 & vector)
 {
+	DGLDrawer* drawer = DSystem::GetGraphicsMgr()->m_glDrawer;
+	if (drawer != NULL)
+	{
+		drawer->GlVector3(&vector);
+	}
 }
 
-void DGraphics::Color(DColor &)
+void DGraphics::GLVector(float x, float y, float z)
 {
+	DGLDrawer* drawer = DSystem::GetGraphicsMgr()->m_glDrawer;
+	if (drawer != NULL)
+	{
+		drawer->GlVector(x, y, z);
+	}
+}
+
+void DGraphics::GLColor(DColor & color)
+{
+	DGLDrawer* drawer = DSystem::GetGraphicsMgr()->m_glDrawer;
+	if (drawer != NULL)
+	{
+		drawer->GlColor(&color);
+	}
+}
+
+void DGraphics::GLPushMatrix()
+{
+	DGLDrawer* drawer = DSystem::GetGraphicsMgr()->m_glDrawer;
+	if (drawer != NULL)
+	{
+		drawer->GlPushMatrix();
+	}
+}
+
+void DGraphics::GLPopMatrix()
+{
+	DGLDrawer* drawer = DSystem::GetGraphicsMgr()->m_glDrawer;
+	if (drawer != NULL)
+	{
+		drawer->GlPopMatrix();
+	}
+}
+
+void DGraphics::GLLoadIndentity()
+{
+	DGLDrawer* drawer = DSystem::GetGraphicsMgr()->m_glDrawer;
+	if (drawer != NULL)
+	{
+		drawer->GlLoadIdentity();
+	}
 }
 
 void DGraphics::InitScreenPlane()

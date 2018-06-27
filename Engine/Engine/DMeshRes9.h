@@ -9,8 +9,8 @@ public:
 	virtual void Release();
 
 protected:
-	virtual bool OnInit(DMeshBufferDesc*);
-	virtual void OnRefresh(DMeshBufferDesc*);
+	virtual void OnRefresh(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount);
+	virtual bool OnInit(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount);
 	virtual void OnDraw(DMeshTopology);
 
 private:
@@ -21,17 +21,17 @@ private:
 	int m_indexCount;
 	int m_pimCount;*/
 	//int m_dataSize;
-	int m_dataCount;
-	bool m_hasUV;
-	bool m_hasUV1;
-	bool m_hasUV2;
-	bool m_hasUV3;
-	bool m_hasColor;
-	bool m_hasNormal;
-	bool m_hasTangent;
-	bool m_hasBinormal;
-	int m_vertexCount;
-	int m_indexCount;
-	int m_triCount;
+	//int m_dataCount;
+	//bool m_hasUV;
+	//bool m_hasUV1;
+	//bool m_hasUV2;
+	//bool m_hasUV3;
+	//bool m_hasColor;
+	//bool m_hasNormal;
+	//bool m_hasTangent;
+	//bool m_hasBinormal;
+	//int m_vertexCount;
+	//int m_indexCount;
+	//int m_triCount;
 };
 

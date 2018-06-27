@@ -109,7 +109,7 @@ public:
 class DMeshRes
 {
 public:
-	DMeshRes(int);
+	DMeshRes(int, bool);
 	//void Init(DMeshBufferDesc* desc);
 	void Refresh(DMeshBufferDesc* desc);
 	void Refresh(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount);
@@ -132,9 +132,9 @@ protected:
 	bool m_hasNormal;
 	bool m_hasTangent;
 	bool m_hasBinormal;
-	int m_vertexCount;
 	int m_indexCount;
 	int m_dataCount;
+	bool m_isDynamic;
 
 private:
 	bool m_isInitialized;
@@ -216,7 +216,7 @@ public:
 	virtual void Clear(bool, bool, DColor&, DRenderTextureViewRes* = NULL) = 0;
 	virtual void SetRenderTarget(DRenderTextureViewRes* = NULL) = 0;
 	virtual void EndSetRenderTarget(DRenderTextureViewRes* = NULL) = 0;
-	virtual DMeshRes* CreateMeshRes(int) = 0;
+	virtual DMeshRes* CreateMeshRes(int, bool) = 0;
 	virtual DTextureRes* CreateTextureRes(WCHAR*) = 0;
 	virtual DRenderTextureViewRes* CreateRenderTextureRes(float, float) = 0;
 	virtual DShaderRes* CreateShaderRes() = 0;

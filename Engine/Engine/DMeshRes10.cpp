@@ -1,6 +1,6 @@
 ﻿#include "DMeshRes10.h"
 
-DMeshRes10::DMeshRes10(ID3D10Device * device, int vertexUsage) : DMeshRes(vertexUsage)
+DMeshRes10::DMeshRes10(ID3D10Device * device, int vertexUsage, bool dynamic) : DMeshRes(vertexUsage, dynamic)
 {
 	m_device = device;
 	m_vertexBuffer = 0;
@@ -89,10 +89,10 @@ bool DMeshRes10::OnInit(float * vertexbuffer, unsigned long * indexbuffer, int v
 	D3D10_SUBRESOURCE_DATA vertexData, indexData;
 	HRESULT result;
 
-	vertexBufferDesc.Usage = D3D10_USAGE_DEFAULT;
+	vertexBufferDesc.Usage = m_isDynamic ? D3D10_USAGE_DYNAMIC : D3D10_USAGE_DEFAULT;
 	vertexBufferDesc.ByteWidth = m_dataSize * vertexCount;
 	vertexBufferDesc.BindFlags = D3D10_BIND_VERTEX_BUFFER;
-	vertexBufferDesc.CPUAccessFlags = 0;
+	vertexBufferDesc.CPUAccessFlags = m_isDynamic ? D3D10_CPU_ACCESS_WRITE : 0;
 	vertexBufferDesc.MiscFlags = 0;
 
 	vertexData.pSysMem = vertexbuffer;
@@ -103,10 +103,10 @@ bool DMeshRes10::OnInit(float * vertexbuffer, unsigned long * indexbuffer, int v
 		return false;
 	}
 
-	indexBufferDesc.Usage = D3D10_USAGE_DEFAULT;
+	indexBufferDesc.Usage = m_isDynamic ? D3D10_USAGE_DYNAMIC : D3D10_USAGE_DEFAULT;
 	indexBufferDesc.ByteWidth = sizeof(unsigned long) * indexCount;
 	indexBufferDesc.BindFlags = D3D10_BIND_INDEX_BUFFER;
-	indexBufferDesc.CPUAccessFlags = 0;
+	indexBufferDesc.CPUAccessFlags = m_isDynamic ? D3D10_CPU_ACCESS_WRITE : 0;
 	indexBufferDesc.MiscFlags = 0;
 
 	indexData.pSysMem = indexbuffer;

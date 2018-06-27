@@ -396,9 +396,9 @@ void D3D11Core::EndSetRenderTarget(DRenderTextureViewRes *)
 
 }
 
-DMeshRes * D3D11Core::CreateMeshRes(int vertexUsage)
+DMeshRes * D3D11Core::CreateMeshRes(int vertexUsage, bool dynamic)
 {
-	DMeshRes11* res = new DMeshRes11(m_device, m_deviceContext, vertexUsage);
+	DMeshRes11* res = new DMeshRes11(m_device, m_deviceContext, vertexUsage, dynamic);
 	return res;
 }
 

@@ -4,7 +4,7 @@
 class DMeshRes11 : public DMeshRes
 {
 public:
-	DMeshRes11(ID3D11Device* device, ID3D11DeviceContext* deviceContext, int vertexUsage);
+	DMeshRes11(ID3D11Device* device, ID3D11DeviceContext* deviceContext, int vertexUsage, bool dynamic);
 	~DMeshRes11();
 	virtual void Release();
 

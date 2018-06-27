@@ -2,7 +2,7 @@
 #include "DModelLoader.h"
 #include "DSystem.h"
 
-DMesh::DMesh()
+DMesh::DMesh(bool dynamic)
 {
 	//m_vertexBuffer = 0;
 	//m_indexBuffer = 0;
@@ -31,6 +31,7 @@ DMesh::DMesh()
 	m_indices = 0;*/
 
 	m_topology = DMeshTopology_TriangleList;
+	m_dynamic = dynamic;
 }
 
 
@@ -440,7 +441,7 @@ void DMesh::Draw(int vertexUsage)
 		return;
 	if (m_meshReses.find(vertexUsage) == m_meshReses.end())
 	{
-		DMeshRes* res = DSystem::GetGraphicsMgr()->GetGLCore()->CreateMeshRes(vertexUsage);
+		DMeshRes* res = DSystem::GetGraphicsMgr()->GetGLCore()->CreateMeshRes(vertexUsage, m_dynamic);
 		//res->Init(&m_meshDesc, vertexUsage);
 		m_meshReses.insert(std::pair<int, DMeshRes*>(vertexUsage, res));
 	}
@@ -474,7 +475,7 @@ void DMesh::Draw(int vertexUsage)
 //	return m_meshBuffer;
 //}
 
-DMesh * DMesh::Create(DMeshDefine meshDefine)
+DMesh * DMesh::Create(DMeshDefine meshDefine, bool dynamic)
 {
 	/*float* vertices;
 	unsigned long* indices;
@@ -498,13 +499,13 @@ DMesh * DMesh::Create(DMeshDefine meshDefine)
 	desc.vertexCount = vcount;
 	desc.indices = indices;
 	desc.vertices = vertices;*/
-	DMesh* mesh = new DMesh();
+	DMesh* mesh = new DMesh(dynamic);
 	mesh->m_meshDesc = desc;
 
 	return mesh;
 }
 
-DMesh * DMesh::Create(char* fileName)
+DMesh * DMesh::Create(char* fileName, bool dynamic)
 {
 	/*float* vertices;
 	unsigned long* indices;
@@ -512,7 +513,7 @@ DMesh * DMesh::Create(char* fileName)
 	DMeshBufferDesc desc;
 	DModelLoader::LoadObj(fileName, &desc);
 
-	DMesh* mesh = new DMesh();
+	DMesh* mesh = new DMesh(dynamic);
 	mesh->m_meshDesc = desc;
 
 	return mesh;

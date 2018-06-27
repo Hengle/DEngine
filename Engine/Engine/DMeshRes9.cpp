@@ -1,7 +1,7 @@
 ﻿#include "DMeshRes9.h"
 #include <vector>
 
-DMeshRes9::DMeshRes9(LPDIRECT3DDEVICE9 device, int vertexUsage) : DMeshRes(vertexUsage)
+DMeshRes9::DMeshRes9(LPDIRECT3DDEVICE9 device, int vertexUsage, bool dynamic) : DMeshRes(vertexUsage, dynamic)
 {
 	m_device = device;
 	m_mesh = 0;
@@ -71,6 +71,28 @@ DMeshRes9::~DMeshRes9()
 
 void DMeshRes9::OnRefresh(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
 {
+	return;
+	float* vertices;
+	int i;
+	int vlen = m_dataCount*vertexCount;
+	m_mesh->LockVertexBuffer(0, (void**)&vertices);
+
+	for (i = 0; i < vlen; i++)
+	{
+		vertices[i] = vertexbuffer[i];
+	}
+
+	m_mesh->UnlockVertexBuffer();
+
+	WORD* ids = 0;
+	m_mesh->LockIndexBuffer(0, (void**)&ids);
+
+	for (i = 0; i < m_indexCount; i++)
+	{
+		ids[i] = indexbuffer[i];
+	}
+
+	m_mesh->UnlockIndexBuffer();
 }
 
 bool DMeshRes9::OnInit(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
@@ -96,21 +118,15 @@ bool DMeshRes9::OnInit(float * vertexbuffer, unsigned long * indexbuffer, int ve
 	}
 
 	elements.push_back(D3DDECL_END());
-	/*D3DVERTEXELEMENT9 elements[] =
-	{
-	{ 0, 0, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_POSITION, 0 },
-	{ 0, 12, D3DDECLTYPE_FLOAT2, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TEXCOORD, 0 },
-	D3DDECL_END()
-	};*/
 
 	//m_dataSize = desc->dataSize;
 	int tcount = m_indexCount / 3;
 
-	D3DXCreateMesh(tcount, m_vertexCount, D3DXMESH_MANAGED, &elements[0], m_device, &m_mesh);
+	D3DXCreateMesh(tcount, vertexCount, D3DXMESH_MANAGED, &elements[0], m_device, &m_mesh);
 	//m_vertexBuffer->Lock()
 	float* vertices;
 	int i;
-	int vlen = m_dataCount*m_vertexCount;
+	int vlen = m_dataCount*vertexCount;
 	m_mesh->LockVertexBuffer(0, (void**)&vertices);
 
 	for (i = 0; i < vlen; i++)

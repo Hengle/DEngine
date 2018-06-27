@@ -4,7 +4,7 @@
 class DMeshRes9 : public DMeshRes
 {
 public:
-	DMeshRes9(LPDIRECT3DDEVICE9, int);
+	DMeshRes9(LPDIRECT3DDEVICE9, int, bool);
 	~DMeshRes9();
 	virtual void Release();
 

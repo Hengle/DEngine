@@ -15,7 +15,7 @@ class DMesh
 {
 
 public:
-	DMesh();
+	DMesh(bool = false);
 	~DMesh();
 	void Destroy();
 	int GetIndexCount() const;
@@ -43,8 +43,8 @@ public:
 	bool HasUV(int channel) const;
 	void Draw(int);
 
-	static DMesh* Create(DMeshDefine meshDefine);
-	static DMesh*Create(char* fileName);
+	static DMesh* Create(DMeshDefine meshDefine, bool dynamic = false);
+	static DMesh*Create(char* fileName, bool dynamic = false);
 	
 private:
 	//static DMesh* Create(DMeshBufferDesc*);
@@ -72,5 +72,6 @@ private:
 	DMeshBufferDesc m_meshDesc;
 	DMeshTopology m_topology;
 	std::map<int, DMeshRes*> m_meshReses;
+	bool m_dynamic;
 	//DMeshRes* m_meshRes;
 };

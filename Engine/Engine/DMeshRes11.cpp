@@ -1,6 +1,6 @@
 ﻿#include "DMeshRes11.h"
 
-DMeshRes11::DMeshRes11(ID3D11Device* device,ID3D11DeviceContext * deviceContext, int vertexUsage) : DMeshRes(vertexUsage)
+DMeshRes11::DMeshRes11(ID3D11Device* device,ID3D11DeviceContext * deviceContext, int vertexUsage, bool dynamic) : DMeshRes(vertexUsage, dynamic)
 {
 	m_vertexBuffer = 0;
 	m_indexBuffer = 0;
@@ -85,17 +85,26 @@ void DMeshRes11::Release()
 void DMeshRes11::OnRefresh(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
 {
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	void* dataPtr;
+	float* dataPtr;
+	unsigned i;
 	m_deviceContext->Map(m_vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-	dataPtr = (void*)mappedResource.pData;
+	dataPtr = (float*)mappedResource.pData;
 	memcpy(dataPtr, vertexbuffer, m_dataSize* vertexCount);
+	//for (i = 0; i < m_dataCount*vertexCount; i++)
+	//{
+	//	dataPtr[i] = vertexbuffer[i];
+	//}
 	m_deviceContext->Unmap(m_vertexBuffer, 0);
 
 	D3D11_MAPPED_SUBRESOURCE imappedResource;
-	void* idataPtr;
+	unsigned long* idataPtr;
 	m_deviceContext->Map(m_indexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &imappedResource);
-	idataPtr = (void*)imappedResource.pData;
+	idataPtr = (unsigned long*)imappedResource.pData;
 	memcpy(idataPtr, indexbuffer, sizeof(unsigned long)*indexCount);
+	//for (i = 0; i < indexCount; i++)
+	//{
+	//	idataPtr[i] = indexbuffer[i];
+	//}
 	m_deviceContext->Unmap(m_indexBuffer, 0);
 }
 
@@ -105,10 +114,10 @@ bool DMeshRes11::OnInit(float * vertexbuffer, unsigned long * indexbuffer, int v
 	D3D11_SUBRESOURCE_DATA vertexData, indexData;
 	HRESULT result;
 
-	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	vertexBufferDesc.Usage = m_isDynamic ? D3D11_USAGE_DYNAMIC : D3D11_USAGE_DEFAULT;
 	vertexBufferDesc.ByteWidth = m_dataSize * vertexCount;
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	vertexBufferDesc.CPUAccessFlags = 0;
+	vertexBufferDesc.CPUAccessFlags = m_isDynamic ? D3D11_CPU_ACCESS_WRITE : 0;
 	vertexBufferDesc.MiscFlags = 0;
 	vertexBufferDesc.StructureByteStride = 0;
 
@@ -122,10 +131,10 @@ bool DMeshRes11::OnInit(float * vertexbuffer, unsigned long * indexbuffer, int v
 		return false;
 	}
 
-	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	indexBufferDesc.Usage = m_isDynamic ? D3D11_USAGE_DYNAMIC : D3D11_USAGE_DEFAULT;
 	indexBufferDesc.ByteWidth = sizeof(unsigned long) * indexCount;
 	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	indexBufferDesc.CPUAccessFlags = 0;
+	indexBufferDesc.CPUAccessFlags = m_isDynamic ? D3D11_CPU_ACCESS_WRITE : 0;
 	indexBufferDesc.MiscFlags = 0;
 	indexBufferDesc.StructureByteStride = 0;
 

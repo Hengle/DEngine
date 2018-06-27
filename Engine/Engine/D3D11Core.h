@@ -17,7 +17,7 @@ public:
 	virtual void Clear(bool, bool, DColor&, DRenderTextureViewRes* = NULL);
 	virtual void SetRenderTarget(DRenderTextureViewRes* = NULL);
 	virtual void EndSetRenderTarget(DRenderTextureViewRes* = NULL);
-	virtual DMeshRes* CreateMeshRes(int);
+	virtual DMeshRes* CreateMeshRes(int, bool);
 	virtual DTextureRes* CreateTextureRes(WCHAR*);
 	virtual DRenderTextureViewRes* CreateRenderTextureRes(float, float);
 	virtual DShaderRes* CreateShaderRes();

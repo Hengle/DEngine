@@ -25,7 +25,7 @@ void DGLDrawer::PostGL()
 		if (m_meshRes == NULL)
 		{
 			int vusage = (1UL << DVertexUsage_POSITION) | (1UL << DVertexUsage_COLOR);
-			m_meshRes = DSystem::GetGraphicsMgr()->GetGLCore()->CreateMeshRes(vusage);
+			m_meshRes = DSystem::GetGraphicsMgr()->GetGLCore()->CreateMeshRes(vusage, true);
 		}
 		m_meshRes->Refresh(m_vertices, m_indices, m_currentIndex * 3, m_currentIndex);
 		Draw();
@@ -141,7 +141,7 @@ void DGLDrawer::Draw()
 {
 	if (m_shader == NULL && m_material == NULL)
 	{
-		m_shader = DShader::Create(L"../Res/color.vs", L"../Res/color.ps");
+		m_shader = DShader::Create(L"../Res/color.vs9", L"../Res/color.ps9");
 		m_material = new DMaterial(m_shader);
 	}
 

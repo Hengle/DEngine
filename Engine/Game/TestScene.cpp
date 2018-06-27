@@ -148,7 +148,7 @@ void TestScene::OnLoad()
 
 void TestScene::TestLoad()
 {
-	testcolorshader = DShader::Create(L"../Res/color.vs", L"../Res/color.ps");
+	testcolorshader = DShader::Create(L"../Res/color.vs9", L"../Res/color.ps9");
 	testcolormat = new DMaterial(testcolorshader);
 	testcolormesh = new DMesh();
 	float* vs = new float[12];
@@ -164,7 +164,7 @@ void TestScene::TestLoad()
 
 	testcolormesh->SetVertices(vs, 4);
 	testcolormesh->SetIndices(is, 4);
-	testcolormesh->SetTopology(DMeshTopology_LineStrip);
+	testcolormesh->SetTopology(DMeshTopology_LineList);
 
 	testcolorobj = new DDisplayObject(testcolormesh, testcolormat);
 	AddDisplayObject(testcolorobj);
@@ -198,7 +198,7 @@ void TestScene::TestLoad()
 
 	//DMesh* mesh = DMesh::Create("../Res/eboy.obj");
 	plane = DMesh::Create(DMESH_Plane);
-	shader = DShader::Create(L"../Res/texture.vs", L"../Res/texture.ps");
+	shader = DShader::Create(L"../Res/texture.vs9", L"../Res/texture.ps9");
 	floor = DTexture2D::Create(L"../Res/decal.jpg");
 	map = DTexture2D::Create(L"../Res/eboy.jpg");
 	cb = DTexture2D::Create(L"../Res/ground_12.jpg");

@@ -1,11 +1,13 @@
 ﻿#include "DGLCore.h"
 
-DMeshRes::DMeshRes(int vertexUsage)
+DMeshRes::DMeshRes(int vertexUsage, bool dynamic)
 {
 	m_isSupported = false;
 	m_isInitialized = false;
 	m_vertexUsage = vertexUsage;
 	m_indexCount = 0;
+
+	m_isDynamic = dynamic;
 
 	m_dataCount = 3;
 	if (vertexUsage & (1UL << DVertexUsage_TEXCOORD0))
@@ -130,7 +132,7 @@ void DMeshRes::Refresh(float * vertexbuffer, unsigned long * indexbuffer, int ve
 	if (indexbuffer == 0)
 		return;
 	m_indexCount = indexCount;
-	m_vertexCount = vertexCount;
+	//m_vertexCount = vertexCount;
 
 	if (!m_isInitialized)
 	{
@@ -138,8 +140,8 @@ void DMeshRes::Refresh(float * vertexbuffer, unsigned long * indexbuffer, int ve
 		m_isInitialized = true;
 	}
 	else {
-		//if (m_isSupported)
-		//	OnRefresh(vertexbuffer, indexbuffer, vertexCount, indexCount);
+		if (m_isSupported)
+			OnRefresh(vertexbuffer, indexbuffer, vertexCount, indexCount);
 	}
 }
 

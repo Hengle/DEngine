@@ -182,12 +182,14 @@ protected:
 
 class DGLDrawer
 {
-//public:
-//	virtual void glBegin() = 0;
-//	virtual void glEnd() = 0;
-//	virtual void glVector3(DVector3*) = 0;
-//	virtual void glColor(DColor*) = 0;
-//
+public:
+	virtual void glBegin() = 0;
+	virtual void glEnd() = 0;
+	virtual void glVector3(DVector3*) = 0;
+	virtual void glColor(DColor*) = 0;
+	virtual void glPushMatrix() = 0;
+	virtual void glPopMatrix() = 0;
+	virtual void glLoadIdentity() = 0;
 };
 
 class DRenderStateMgr

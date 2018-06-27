@@ -16,9 +16,22 @@ protected:
 private:
 	LPDIRECT3DDEVICE9 m_device;
 	ID3DXMesh* m_mesh;
-	int m_dataSize;
+	/*int m_dataSize;
 	int m_vertexCount;
 	int m_indexCount;
-	int m_pimCount;
+	int m_pimCount;*/
+	//int m_dataSize;
+	int m_dataCount;
+	bool m_hasUV;
+	bool m_hasUV1;
+	bool m_hasUV2;
+	bool m_hasUV3;
+	bool m_hasColor;
+	bool m_hasNormal;
+	bool m_hasTangent;
+	bool m_hasBinormal;
+	int m_vertexCount;
+	int m_indexCount;
+	int m_triCount;
 };
 

@@ -1,6 +1,6 @@
 ﻿#include "DMeshRes10.h"
 
-DMeshRes10::DMeshRes10(ID3D10Device * device) : DMeshRes()
+DMeshRes10::DMeshRes10(ID3D10Device * device, int vertexUsage) : DMeshRes(vertexUsage)
 {
 	m_device = device;
 	m_vertexBuffer = 0;
@@ -34,7 +34,7 @@ bool DMeshRes10::OnInit(DMeshBufferDesc * desc)
 	D3D10_SUBRESOURCE_DATA vertexData, indexData;
 	HRESULT result;
 
-	m_dataSize = desc->dataSize;
+	//m_dataSize = desc->dataSize;
 	m_indexCount = desc->indexCount;
 
 	vertexBufferDesc.Usage = D3D10_USAGE_DEFAULT;
@@ -65,6 +65,10 @@ bool DMeshRes10::OnInit(DMeshBufferDesc * desc)
 		return false;
 	}
 	return true;
+}
+
+void DMeshRes10::OnRefresh(DMeshBufferDesc *)
+{
 }
 
 void DMeshRes10::OnDraw(DMeshTopology topology)

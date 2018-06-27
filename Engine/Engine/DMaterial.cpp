@@ -257,6 +257,13 @@ void DMaterial::Apply()
 	//DSystem::GetGraphicsMgr()->GetGLCore()->DrawShader(material->GetShader()->GetShaderBuffer(), mesh->GetIndexCount());
 }
 
+int DMaterial::GetVertexUsage()
+{
+	if (m_shader != NULL)
+		return m_shader->GetVertexUsage();
+	return 0;
+}
+
 //int DMaterial::GetParamCount() const
 //{
 //	return m_paramCount;

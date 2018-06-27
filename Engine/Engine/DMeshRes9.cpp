@@ -1,6 +1,6 @@
 ﻿#include "DMeshRes9.h"
 
-DMeshRes9::DMeshRes9(LPDIRECT3DDEVICE9 device) : DMeshRes()
+DMeshRes9::DMeshRes9(LPDIRECT3DDEVICE9 device, int vertexUsage) : DMeshRes(vertexUsage)
 {
 	m_device = device;
 }
@@ -13,8 +13,8 @@ bool DMeshRes9::OnInit(DMeshBufferDesc * desc)
 {
 	if (desc == NULL)
 		return false;
-	if (desc->indexCount <= 0 || desc->vertexCount <= 0 || desc->dataSize <= 0 || desc->dataCount <= 0)
-		return false;
+	//if (desc->indexCount <= 0 || desc->vertexCount <= 0 || desc->dataSize <= 0 || desc->dataCount <= 0)
+	//	return false;
 	if (desc->vertices == nullptr)
 		return false;
 	if (desc->indices == nullptr)
@@ -26,11 +26,11 @@ bool DMeshRes9::OnInit(DMeshBufferDesc * desc)
 		D3DDECL_END()
 	};
 
-	m_dataSize = desc->dataSize;
+	//m_dataSize = desc->dataSize;
 	m_vertexCount = desc->vertexCount;
 	m_indexCount = desc->indexCount;
 	m_pimCount = desc->indexCount / 3;
-	int vlength = desc->vertexCount*desc->dataCount;
+	//int vlength = desc->vertexCount*desc->dataCount;
 
 	D3DXCreateMesh(m_pimCount, m_vertexCount, D3DXMESH_MANAGED, elements, m_device, &m_mesh);
 	//m_vertexBuffer->Lock()
@@ -38,10 +38,10 @@ bool DMeshRes9::OnInit(DMeshBufferDesc * desc)
 	int i;
 	m_mesh->LockVertexBuffer(0, (void**)&ves);
 
-	for (i = 0; i < vlength; i++)
+	/*for (i = 0; i < vlength; i++)
 	{
 		ves[i] = desc->vertices[i];
-	}
+	}*/
 
 	m_mesh->UnlockVertexBuffer();
 
@@ -56,6 +56,10 @@ bool DMeshRes9::OnInit(DMeshBufferDesc * desc)
 	m_mesh->UnlockIndexBuffer();
 
 	return true;
+}
+
+void DMeshRes9::OnRefresh(DMeshBufferDesc *)
+{
 }
 
 void DMeshRes9::OnDraw(DMeshTopology)

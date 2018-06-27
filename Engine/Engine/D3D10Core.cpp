@@ -400,9 +400,9 @@ void D3D10Core::EndSetRenderTarget(DRenderTextureViewRes *)
 {
 }
 
-DMeshRes * D3D10Core::CreateMeshRes()
+DMeshRes * D3D10Core::CreateMeshRes(int vertexUsage)
 {
-	return new DMeshRes10(m_device);
+	return new DMeshRes10(m_device, vertexUsage);
 }
 
 DTextureRes * D3D10Core::CreateTextureRes(WCHAR* filename)

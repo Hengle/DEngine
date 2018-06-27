@@ -84,6 +84,13 @@ void DShader::Draw()
 		m_shaderRes->Draw();
 }
 
+int DShader::GetVertexUsage()
+{
+	if (m_shaderRes != NULL)
+		return m_shaderRes->GetVertexUsage();
+	return 0;
+}
+
 //unsigned int DShader::GetPropertyCount(const LPCSTR cbufferName) const
 //{
 //	return m_shaderBuffer->GetPropertyCount(cbufferName);

@@ -7,7 +7,7 @@
 
 using namespace std;
 
-bool DModelLoader::LoadObj(const char * file, float** buffer, unsigned long ** indexBuffer, int & vertexCount, int & indexCount, int& bufferLength, int& dataSize)
+bool DModelLoader::LoadObj(const char * file, DMeshBufferDesc* desc)
 //bool DObjModelLoader::LoadObj(const char*file)
 {
 	ifstream ifile;
@@ -104,31 +104,37 @@ bool DModelLoader::LoadObj(const char * file, float** buffer, unsigned long ** i
 		ifile.get(input);
 	}
 
-	vertexCount = cindex;
-	indexCount = outindexes.size();
+	desc->vertexCount = cindex;
+	desc->indexCount = outindexes.size();
+	desc->colors = 0;
+	desc->indices = new unsigned long[desc->indexCount];
+	desc->normals = new float[desc->vertexCount * 3];
+	desc->uv2s = 0;
+	desc->uv3s = 0;
+	desc->uvs = new float[desc->vertexCount * 2];
+	desc->vertices = new float[desc->vertexCount * 3];
+	//dataSize = sizeof(float) * 5;
+	//bufferLength = 5;
 
-	dataSize = sizeof(float) * 5;
-	bufferLength = 5;
-
-	(*buffer) = new float[vertexCount * 5];
-	(*indexBuffer) = new unsigned long[indexCount];
+	//(*buffer) = new float[vertexCount * 5];
+	//(*indexBuffer) = new unsigned long[indexCount];
 
 	int i, j, k;
-	for (i = 0, j = 0, k = 0; i < vertexCount; i++, j += 3, k += 2)
+	for (i = 0, j = 0, k = 0; i < desc->vertexCount; i++, j += 3, k += 2)
 	{
-		(*buffer)[i * 5] = outvertexes[j];
-		(*buffer)[i * 5 + 1] = outvertexes[j + 1];
-		(*buffer)[i * 5 + 2] = outvertexes[j + 2];
+		desc->vertices[i * 3] = outvertexes[j];
+		desc->vertices[i * 3 + 1] = outvertexes[j + 1];
+		desc->vertices[i * 3 + 2] = outvertexes[j + 2];
 
-		(*buffer)[i * 5 + 3] = outuvs[k];
-		(*buffer)[i * 5 + 4] = outuvs[k + 1];
+		desc->uvs[i * 2] = outuvs[k];
+		desc->uvs[i * 2 + 1] = outuvs[k + 1];
 
-		//(*buffer)[i * 8 + 5] = outnormals[j];
-		//(*buffer)[i * 8 + 6] = outnormals[j + 1];
-		//(*buffer)[i * 8 + 7] = outnormals[j + 2];
+		desc->normals[i * 3] = outnormals[j];
+		desc->normals[i * 3 + 1] = outnormals[j + 1];
+		desc->normals[i * 3 + 2] = outnormals[j + 2];
 	}
-	for (i = 0; i < indexCount; i++) {
-		(*indexBuffer)[i] = outindexes[i];
+	for (i = 0; i < desc->indexCount; i++) {
+		desc->indices[i] = outindexes[i];
 	}
 
 	ifile.close();
@@ -145,9 +151,9 @@ bool DModelLoader::LoadObj(const char * file, float** buffer, unsigned long ** i
 	return true;
 }
 
-bool DModelLoader::CreateCube(float** buffer, unsigned long ** indexBuffer, int & vertexCount, int & indexCount, int& bufferLength, int& dataSize)
+bool DModelLoader::CreateCube(DMeshBufferDesc*)
 {
-	dataSize = sizeof(float) * 5;
+	/*dataSize = sizeof(float) * 5;
 	vertexCount = 24;
 	indexCount = 36;
 	bufferLength = 5;
@@ -196,14 +202,14 @@ bool DModelLoader::CreateCube(float** buffer, unsigned long ** indexBuffer, int 
 	(*indexBuffer)[24] = 16; (*indexBuffer)[25] = 17; (*indexBuffer)[26] = 18;
 	(*indexBuffer)[27] = 16; (*indexBuffer)[38] = 18; (*indexBuffer)[29] = 19;
 	(*indexBuffer)[30] = 20; (*indexBuffer)[31] = 21; (*indexBuffer)[32] = 22;
-	(*indexBuffer)[33] = 20; (*indexBuffer)[34] = 22; (*indexBuffer)[35] = 23;
+	(*indexBuffer)[33] = 20; (*indexBuffer)[34] = 22; (*indexBuffer)[35] = 23;*/
 
 	return true;
 }
 
-bool DModelLoader::CreatePlane(float** buffer, unsigned long ** indexBuffer, int & vertexCount, int & indexCount, int& bufferLength, int& dataSize)
+bool DModelLoader::CreatePlane(DMeshBufferDesc* desc)
 {
-	dataSize = sizeof(float) * 5;
+	//dataSize = sizeof(float) * 5;
 
 	float width = 20.0f;
 	float height = 20.0f;
@@ -218,13 +224,18 @@ bool DModelLoader::CreatePlane(float** buffer, unsigned long ** indexBuffer, int
 
 	int i, j;
 
-	vertexCount = (step + 1)*(step + 1);
-	indexCount = (step)*(step)* 6;
+	desc->vertexCount = (step + 1)*(step + 1);
+	desc->indexCount = (step)*(step)* 6;
 
-	bufferLength = 5;
+	//bufferLength = 5;
 
-	(*buffer) = new float[vertexCount*5];
-	(*indexBuffer) = new unsigned long[indexCount];
+	desc->vertices = new float[desc ->vertexCount*3];
+	desc->colors = 0;
+	desc->normals = new float[desc->vertexCount * 3];
+	desc->uv2s = 0;
+	desc->uv3s = 0;
+	desc->uvs = new float[desc->vertexCount * 2];
+	desc->indices = new unsigned long[desc->indexCount];
 
 	float x, z, u, v;
 	int index, id;
@@ -242,26 +253,26 @@ bool DModelLoader::CreatePlane(float** buffer, unsigned long ** indexBuffer, int
 			index = i*(step + 1) + j;
 			id = i*step + j;
 
-			(*buffer)[index * 5] = x;
-			(*buffer)[index * 5 + 1] = 0.0f;
-			(*buffer)[index * 5 + 2] = z;
+			desc->vertices[index * 3] = x;
+			desc->vertices[index * 3 + 1] = 0.0f;
+			desc->vertices[index * 3 + 2] = z;
 
-			(*buffer)[index * 5 + 3] = u;
-			(*buffer)[index * 5 + 4] = v;
+			desc->uvs[index * 2] = u;
+			desc->uvs[index * 2 + 1] = v;
 
-			/*(*buffer)[index * 8 + 5] = 0;
-			(*buffer)[index * 8 + 6] = 1.0f;
-			(*buffer)[index * 8 + 7] = 0;*/
+			desc->normals[index * 3] = 0;
+			desc->normals[index * 3 + 1] = 1.0f;
+			desc->normals[index * 3 + 2] = 0;
 
 			if (i != step&&j != step)
 			{
-				(*indexBuffer)[id *6] = i*(step + 1) + j;
-				(*indexBuffer)[id *6+1] = i*(step + 1) + j+1;
-				(*indexBuffer)[id *6+2] = (i+1)*(step + 1) + j+1;
+				desc->indices[id *6] = i*(step + 1) + j;
+				desc->indices[id *6+1] = i*(step + 1) + j+1;
+				desc->indices[id *6+2] = (i+1)*(step + 1) + j+1;
 
-				(*indexBuffer)[id *6+3] = i*(step + 1) + j;
-				(*indexBuffer)[id *6+4] = (i+1)*(step + 1) + j+1;
-				(*indexBuffer)[id *6+5] = (i+1)*(step + 1) + j;
+				desc->indices[id *6+3] = i*(step + 1) + j;
+				desc->indices[id *6+4] = (i+1)*(step + 1) + j+1;
+				desc->indices[id *6+5] = (i+1)*(step + 1) + j;
 			}
 		}
 	}

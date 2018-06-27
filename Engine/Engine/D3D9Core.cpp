@@ -155,9 +155,9 @@ void D3D9Core::EndSetRenderTarget(DRenderTextureViewRes * res)
 	}
 }
 
-DMeshRes * D3D9Core::CreateMeshRes()
+DMeshRes * D3D9Core::CreateMeshRes(int vertexUsage)
 {
-	DMeshRes9* res = new DMeshRes9(m_device);
+	DMeshRes9* res = new DMeshRes9(m_device, vertexUsage);
 	return res;
 }
 

@@ -148,10 +148,10 @@ void TestScene::OnLoad()
 
 void TestScene::TestLoad()
 {
-	DShader* aoshader = DShader::Create(L"../Res/testv9.v9", L"../Res/texture.ps9");
+	/*DShader* aoshader = DShader::Create(L"../Res/testv9.v9", L"../Res/texture.ps9");
 	aoshader->Destroy();
 	delete aoshader;
-	aoshader = NULL;
+	aoshader = NULL;*/
 
 	DCamera* cam = new DCamera();
 	DTransform* transform;
@@ -176,7 +176,7 @@ void TestScene::TestLoad()
 
 	//DMesh* mesh = DMesh::Create("../Res/eboy.obj");
 	plane = DMesh::Create(DMESH_Plane);
-	shader = DShader::Create(L"../Res/texture.vs9", L"../Res/texture.ps9");
+	shader = DShader::Create(L"../Res/texture.vs", L"../Res/texture.ps");
 	floor = DTexture2D::Create(L"../Res/decal.jpg");
 	map = DTexture2D::Create(L"../Res/eboy.jpg");
 	cb = DTexture2D::Create(L"../Res/ground_12.jpg");

@@ -3,7 +3,6 @@
 #include "DDisplayObject.h"
 #include "DShader.h"
 #include "DMesh.h"
-#include "MyTestDraw.h"
 #include "TestFilter.h"
 
 class TestScene : public DScene

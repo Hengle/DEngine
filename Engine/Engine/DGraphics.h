@@ -41,7 +41,7 @@ public:
 	static void SetRenderTarget(DRenderTexture* = NULL);
 	static void EndSetRenderTarget(DRenderTexture* = NULL);
 
-	static void DrawMesh(const DMesh*, const DMatrix4x4&, DMaterial*, const DCamera*);
+	static void DrawMesh(DMesh*, const DMatrix4x4&, DMaterial*, const DCamera*);
 	static void DrawTexture(DTexture*, DMaterial*);
 	//static void Blit()
 	static void SetCullMode(DCullMode);

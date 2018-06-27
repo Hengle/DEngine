@@ -207,7 +207,7 @@ void DGraphics::EndSetRenderTarget(DRenderTexture * res)
 	}
 }
 
-void DGraphics::DrawMesh(const DMesh * mesh, const DMatrix4x4 & matrix, DMaterial * material, const DCamera * camera)
+void DGraphics::DrawMesh(DMesh * mesh, const DMatrix4x4 & matrix, DMaterial * material, const DCamera * camera)
 {
 	if (mesh == NULL || material == NULL || camera == NULL)
 		return;
@@ -241,7 +241,7 @@ void DGraphics::DrawMesh(const DMesh * mesh, const DMatrix4x4 & matrix, DMateria
 
 	material->Apply();
 
-	mesh->Draw();
+	mesh->Draw(material->GetVertexUsage());
 	
 }
 
@@ -270,7 +270,7 @@ void DGraphics::DrawTexture(DTexture * texture, DMaterial * material)
 
 	material->Apply();
 
-	DSystem::GetGraphicsMgr()->m_screenPlane->Draw();
+	DSystem::GetGraphicsMgr()->m_screenPlane->Draw(material->GetVertexUsage());
 }
 
 void DGraphics::SetCullMode(DCullMode cullMode)
@@ -318,37 +318,52 @@ void DGraphics::Color(DColor &)
 
 void DGraphics::InitScreenPlane()
 {
-	DMeshBufferDesc desc;
+	//DMeshBufferDesc desc;
 
-	int dataSize = sizeof(float) * 5;
+	//int dataSize = sizeof(float) * 5;
 	int vertexCount = 4;
 	int indexCount = 6;
-	int bufferLength = 5;
+	//int bufferLength = 5;
 
-	float* buffer;
+	float* vertices,*uvs;
 	unsigned long* indexBuffer;
 
-	buffer = new float[vertexCount * 5];
+	vertices = new float[vertexCount * 3];
+	uvs = new float[vertexCount * 2];
 	indexBuffer = new unsigned long[indexCount];
 
 	float screenWidth, screenHeight;
 	m_GL->GetResolution(screenWidth, screenHeight);
 
-	buffer[0] = -0.5f*screenWidth; buffer[1] = -0.5f*screenHeight; buffer[2] = 0.0f; buffer[3] = 0.0f; buffer[4] = 1.0f;
-	buffer[5] = -0.5f*screenWidth; buffer[6] = 0.5f*screenHeight; buffer[7] = 0.0f; buffer[8] = 0.0f; buffer[9] = 0.0f;
-	buffer[10] = 0.5f*screenWidth; buffer[11] = 0.5f*screenHeight; buffer[12] = 0.0f; buffer[13] = 1.0f; buffer[14] = 0.0f;
-	buffer[15] = 0.5f*screenWidth; buffer[16] = -0.5f*screenHeight; buffer[17] = 0.0f; buffer[18] = 1.0f; buffer[19] = 1.0f;
+	vertices[0] = -0.5f*screenWidth; vertices[1] = -0.5f*screenHeight; vertices[2] = 0.0f;
+	vertices[3] = -0.5f*screenWidth; vertices[4] = 0.5f*screenHeight; vertices[5] = 0.0f;
+	vertices[6] = 0.5f*screenWidth; vertices[7] = 0.5f*screenHeight; vertices[8] = 0.0f;
+	vertices[9] = 0.5f*screenWidth; vertices[10] = -0.5f*screenHeight; vertices[11] = 0.0f;
+
+	uvs[0] = 0.0f; uvs[1] = 1.0f;
+	uvs[2] = 0.0f; uvs[3] = 0.0f;
+	uvs[4] = 1.0f; uvs[5] = 0.0f;
+	uvs[6] = 1.0f; uvs[7] = 1.0f;
 
 	indexBuffer[0] = 0; indexBuffer[1] = 1; indexBuffer[2] = 2;
 	indexBuffer[3] = 0; indexBuffer[4] = 2; indexBuffer[5] = 3;
 
-	desc.dataSize = dataSize;
-	desc.dataCount = bufferLength;
-	desc.indexCount = indexCount;
+	//desc.dataSize = dataSize;
+	//desc.dataCount = bufferLength;
+	/*desc.indexCount = indexCount;
 	desc.vertexCount = vertexCount;
 	desc.indices = indexBuffer;
-	desc.vertices = buffer;
+	desc.vertices = vertices;
+	desc.colors = 0;
+	desc.normals = 0;
+	desc.uv2s = 0;
+	desc.uv3s = 0;
+	desc.uvs = uvs*/
 
-	m_screenPlane = DMesh::Create(&desc);
+	//m_screenPlane = DMesh::Create(&desc);
+	m_screenPlane = new DMesh();
+	m_screenPlane->SetVertices(vertices, 4);
+	m_screenPlane->SetUVs(0, uvs, 4);
+	m_screenPlane->SetIndices(indexBuffer, 6);
 }
 

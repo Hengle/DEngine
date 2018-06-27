@@ -30,9 +30,6 @@
     <ClInclude Include="TestScene.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="MyTestDraw.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="MyTestShader.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -51,9 +48,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="TestScene.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MyTestDraw.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="MyTestShader.cpp">

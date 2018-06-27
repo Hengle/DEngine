@@ -94,8 +94,13 @@ typedef struct DMeshBufferDesc
 public:
 	DMeshBufferDesc(){}
 public:
-	int vertexCount, indexCount, dataSize, dataCount;
+	int vertexCount, indexCount;
 	float*vertices;
+	float*uvs;
+	float*uv2s;
+	float*uv3s;
+	float*normals;
+	float*colors;
 	unsigned long*indices;
 } DMeshBufferDesc;
 
@@ -103,18 +108,24 @@ public:
 class DMeshRes
 {
 public:
-	DMeshRes();
-	void Init(DMeshBufferDesc* desc);
+	DMeshRes(int);
+	//void Init(DMeshBufferDesc* desc);
+	void Refresh(DMeshBufferDesc* desc);
 	void Draw(DMeshTopology);
 	virtual void Release() = 0;
 	bool IsInitialized();
 
 protected:
+	virtual void OnRefresh(DMeshBufferDesc*) = 0;
 	virtual bool OnInit(DMeshBufferDesc*) = 0;
 	virtual void OnDraw(DMeshTopology) = 0;
 
+protected:
+	int m_vertexUsage;
+
 private:
 	bool m_isInitialized;
+	bool m_isSupported;
 };
 
 //抽象贴图资源-用于实现不同API下的texture
@@ -152,6 +163,7 @@ public:
 	void ApplyParams(int cindex, int coffset, int csize, int stype, float* params);
 	void Draw();
 	bool IsInitialized();
+	int GetVertexUsage();
 	virtual void GetPropertyInfo(const LPCSTR key, DShaderParamDesc* desc) const = 0;
 	virtual UINT GetResOffset(const LPCSTR key) const = 0;
 	virtual bool HasProperty(const LPCSTR key) const = 0;
@@ -200,7 +212,7 @@ public:
 	virtual void Clear(bool, bool, DColor&, DRenderTextureViewRes* = NULL) = 0;
 	virtual void SetRenderTarget(DRenderTextureViewRes* = NULL) = 0;
 	virtual void EndSetRenderTarget(DRenderTextureViewRes* = NULL) = 0;
-	virtual DMeshRes* CreateMeshRes() = 0;
+	virtual DMeshRes* CreateMeshRes(int) = 0;
 	virtual DTextureRes* CreateTextureRes(WCHAR*) = 0;
 	virtual DRenderTextureViewRes* CreateRenderTextureRes(float, float) = 0;
 	virtual DShaderRes* CreateShaderRes() = 0;

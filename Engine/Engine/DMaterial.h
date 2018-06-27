@@ -39,6 +39,7 @@ public:
 	void SetZTest(DRSCompareFunc);
 	bool HasProperty(const LPCSTR key) const;
 	void Apply();
+	int GetVertexUsage();
 	virtual void Destroy();
 
 

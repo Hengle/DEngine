@@ -4,12 +4,13 @@
 class DMeshRes9 : public DMeshRes
 {
 public:
-	DMeshRes9(LPDIRECT3DDEVICE9);
+	DMeshRes9(LPDIRECT3DDEVICE9, int);
 	~DMeshRes9();
 	virtual void Release();
 
 protected:
 	virtual bool OnInit(DMeshBufferDesc*);
+	virtual void OnRefresh(DMeshBufferDesc*);
 	virtual void OnDraw(DMeshTopology);
 
 private:

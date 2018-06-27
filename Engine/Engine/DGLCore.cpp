@@ -1,18 +1,33 @@
 ﻿#include "DGLCore.h"
 
-DMeshRes::DMeshRes()
+DMeshRes::DMeshRes(int vertexUsage)
 {
+	m_isSupported = false;
 	m_isInitialized = false;
+	m_vertexUsage = vertexUsage;
 }
 
-void DMeshRes::Init(DMeshBufferDesc * desc)
+//void DMeshRes::Init(DMeshBufferDesc * desc)
+//{
+//	m_isInitialized = OnInit(desc);
+//}
+
+void DMeshRes::Refresh(DMeshBufferDesc * desc)
 {
-	m_isInitialized = OnInit(desc);
+	if (!m_isInitialized)
+	{
+		m_isSupported = OnInit(desc);
+		m_isInitialized = true;
+	}
+	else {
+		if (m_isSupported)
+			OnRefresh(desc);
+	}
 }
 
 void DMeshRes::Draw(DMeshTopology topology)
 {
-	if (m_isInitialized)
+	if (m_isSupported)
 		OnDraw(topology);
 }
 
@@ -59,6 +74,11 @@ void DShaderRes::Draw()
 bool DShaderRes::IsInitialized()
 {
 	return m_isInitialized;
+}
+
+int DShaderRes::GetVertexUsage()
+{
+	return m_vertexUsage;
 }
 
 

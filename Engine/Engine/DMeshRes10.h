@@ -4,12 +4,13 @@
 class DMeshRes10 : public DMeshRes
 {
 public:
-	DMeshRes10(ID3D10Device* device);
+	DMeshRes10(ID3D10Device* device, int vertexUsage);
 	~DMeshRes10();
 	virtual void Release();
 
 protected:
 	virtual bool OnInit(DMeshBufferDesc*);
+	virtual void OnRefresh(DMeshBufferDesc*);
 	virtual void OnDraw(DMeshTopology);
 
 private:

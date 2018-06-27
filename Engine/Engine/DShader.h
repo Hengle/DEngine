@@ -21,7 +21,7 @@ public:
 	void ApplyParams(int cindex, int coffset, int csize, int stype, float* params) const;
 	void ApplyRes(const LPCSTR key, DTexture*) const;
 	void Draw();
-
+	int GetVertexUsage();
 	static DShader* Create(WCHAR*, WCHAR*);
 
 private:

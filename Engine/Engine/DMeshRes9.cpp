@@ -123,6 +123,7 @@ bool DMeshRes9::OnInit(float * vertexbuffer, unsigned long * indexbuffer, int ve
 	int tcount = m_indexCount / 3;
 
 	D3DXCreateMesh(tcount, vertexCount, D3DXMESH_MANAGED, &elements[0], m_device, &m_mesh);
+
 	//m_vertexBuffer->Lock()
 	float* vertices;
 	int i;

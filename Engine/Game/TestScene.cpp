@@ -148,9 +148,9 @@ void TestScene::OnLoad()
 
 void TestScene::TestLoad()
 {
-	testcolorshader = DShader::Create(L"../Res/color.vs9", L"../Res/color.ps9");
+	testcolorshader = DShader::Create(L"../Res/color.vs", L"../Res/color.ps");
 	testcolormat = new DMaterial(testcolorshader);
-	testcolormesh = new DMesh();
+	/*testcolormesh = new DMesh();
 	float* vs = new float[12];
 	unsigned long* is = new unsigned long[4];
 
@@ -167,7 +167,7 @@ void TestScene::TestLoad()
 	testcolormesh->SetTopology(DMeshTopology_LineList);
 
 	testcolorobj = new DDisplayObject(testcolormesh, testcolormat);
-	AddDisplayObject(testcolorobj);
+	AddDisplayObject(testcolorobj);*/
 
 
 	/*DShader* aoshader = DShader::Create(L"../Res/testv9.v9", L"../Res/texture.ps9");
@@ -198,7 +198,7 @@ void TestScene::TestLoad()
 
 	//DMesh* mesh = DMesh::Create("../Res/eboy.obj");
 	plane = DMesh::Create(DMESH_Plane);
-	shader = DShader::Create(L"../Res/texture.vs9", L"../Res/texture.ps9");
+	shader = DShader::Create(L"../Res/texture.vs", L"../Res/texture.ps");
 	floor = DTexture2D::Create(L"../Res/decal.jpg");
 	map = DTexture2D::Create(L"../Res/eboy.jpg");
 	cb = DTexture2D::Create(L"../Res/ground_12.jpg");
@@ -297,27 +297,31 @@ void TestScene::OnUnLoad()
 	testcolormat->Destroy();
 	delete testcolormat;
 	testcolormat = 0;
-	testcolormesh->Destroy();
+	/*testcolormesh->Destroy();
 	delete testcolormesh;
-	testcolormesh = 0;
+	testcolormesh = 0;*/
 }
 
 void TestScene::OnRender()
 {
-	DGraphics::GLPushMatrix();
-	DGraphics::GLLoadIndentity();
+	DGraphics::GlSetMaterial(testcolormat);
+	DGraphics::GlPushMatrix();
+	DGraphics::GlLoadIndentity();
 
 	DGraphics::GlBegin();
 
-	DGraphics::GLVector(0.0f, 0.0f, 0.0f);
-	DGraphics::GLVector(3.2f, 3.78f, 2.3f);
+	DGraphics::GlVector(0.0f, 0.0f, 0.0f);
+	DGraphics::GlVector(3.2f, 3.78f, 2.3f);
 
-	DGraphics::GLVector(3.2f, 3.78f, 2.3f);
-	DGraphics::GLVector(3.2f, 7.0f, 2.3f);
+	DGraphics::GlVector(3.2f, 3.78f, 2.3f);
+	DGraphics::GlVector(3.2f, 7.0f, 2.3f);
+
+	DGraphics::GlVector(3.2f, 7.0f, 2.3f);
+	DGraphics::GlVector(-3.2f, 2.0f, -2.3f);
 
 	DGraphics::GlEnd();
 
-	DGraphics::GLPopMatrix();
+	DGraphics::GlPopMatrix();
 
 
 	//testd->Render();

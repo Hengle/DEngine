@@ -42,6 +42,6 @@ private:
 
 	DShader* testcolorshader;
 	DMaterial* testcolormat;
-	DMesh* testcolormesh;
-	DDisplayObject* testcolorobj;
+	/*DMesh* testcolormesh;
+	DDisplayObject* testcolorobj;*/
 };

@@ -21,7 +21,7 @@ DCamera::DCamera()
 	m_ortho = false;
 	m_isProjectionChanged = true;
 	//m_position = D3DXVECTOR3(2.178069f, 3.102766f, -0.4222083f);
-
+	m_backgroundColor = dcol_blue;
 }
 
 
@@ -60,13 +60,13 @@ void DCamera::BeginRender()
 
 	if (m_renderTexture != NULL)
 	{
-		DGraphics::BeginScene(true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f), m_renderTexture);
+		DGraphics::BeginScene(true, false, m_backgroundColor, m_renderTexture);
 		//DGraphics::SetRenderTarget(m_renderTexture);
 		//DGraphics::ClearRenderTarget(m_renderTexture, true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f));
 	}
 	else
 	{
-		DGraphics::BeginScene(true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f));
+		DGraphics::BeginScene(true, false, m_backgroundColor);
 		//DGraphics::SetDefaultRenderTarget();
 		//DGraphics::Clear(true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f));
 	}
@@ -91,7 +91,7 @@ void DCamera::RenderFilter()
 	{
 		FLOAT width, height;
 
-		DGraphics::BeginScene(true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f));
+		DGraphics::BeginScene(true, false, m_backgroundColor);
 		//DGraphics::Clear(true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f));
 		DSystem::GetGraphicsMgr()->GetResolution(width, height);
 		m_filter->Render(m_renderTexture);
@@ -118,6 +118,11 @@ void DCamera::GetViewMatrix(DMatrix4x4& mOut) const
 void DCamera::GetProjection(DMatrix4x4& mOut)const
 {
 	mOut = m_projection;
+}
+
+void DCamera::GetBackgroundColor(DColor & color) const
+{
+	color = m_backgroundColor;
 }
 
 float DCamera::GetFieldOfView()const
@@ -209,6 +214,11 @@ void DCamera::SetOrthoSize(float size)
 void DCamera::SetFilter(DCameraFilter * filter)
 {
 	m_filter = filter;
+}
+
+void DCamera::SetBackgroundColor(DColor & color)
+{
+	m_backgroundColor = color;
 }
 
 void DCamera::ClearFilter()

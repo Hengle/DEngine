@@ -313,6 +313,15 @@ void DGraphics::SetZTestFunc(DRSCompareFunc ztest)
 	}
 }
 
+void DGraphics::GlSetMaterial(DMaterial * material)
+{
+	DGLDrawer* drawer = DSystem::GetGraphicsMgr()->m_glDrawer;
+	if (drawer != NULL)
+	{
+		drawer->GlSetMaterial(material);
+	}
+}
+
 void DGraphics::GlBegin()
 {
 	DGLDrawer* drawer = DSystem::GetGraphicsMgr()->m_glDrawer;
@@ -331,7 +340,7 @@ void DGraphics::GlEnd()
 	}
 }
 
-void DGraphics::GLVector3(DVector3 & vector)
+void DGraphics::GlVector3(DVector3 & vector)
 {
 	DGLDrawer* drawer = DSystem::GetGraphicsMgr()->m_glDrawer;
 	if (drawer != NULL)
@@ -340,7 +349,7 @@ void DGraphics::GLVector3(DVector3 & vector)
 	}
 }
 
-void DGraphics::GLVector(float x, float y, float z)
+void DGraphics::GlVector(float x, float y, float z)
 {
 	DGLDrawer* drawer = DSystem::GetGraphicsMgr()->m_glDrawer;
 	if (drawer != NULL)
@@ -349,7 +358,7 @@ void DGraphics::GLVector(float x, float y, float z)
 	}
 }
 
-void DGraphics::GLColor(DColor & color)
+void DGraphics::GlColor(DColor & color)
 {
 	DGLDrawer* drawer = DSystem::GetGraphicsMgr()->m_glDrawer;
 	if (drawer != NULL)
@@ -358,7 +367,7 @@ void DGraphics::GLColor(DColor & color)
 	}
 }
 
-void DGraphics::GLPushMatrix()
+void DGraphics::GlPushMatrix()
 {
 	DGLDrawer* drawer = DSystem::GetGraphicsMgr()->m_glDrawer;
 	if (drawer != NULL)
@@ -367,7 +376,7 @@ void DGraphics::GLPushMatrix()
 	}
 }
 
-void DGraphics::GLPopMatrix()
+void DGraphics::GlPopMatrix()
 {
 	DGLDrawer* drawer = DSystem::GetGraphicsMgr()->m_glDrawer;
 	if (drawer != NULL)
@@ -376,7 +385,7 @@ void DGraphics::GLPopMatrix()
 	}
 }
 
-void DGraphics::GLLoadIndentity()
+void DGraphics::GlLoadIndentity()
 {
 	DGLDrawer* drawer = DSystem::GetGraphicsMgr()->m_glDrawer;
 	if (drawer != NULL)

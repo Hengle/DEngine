@@ -49,14 +49,15 @@ public:
 	static void SetZWriteEnable(bool);
 	static void SetZTestFunc(DRSCompareFunc);
 
+	static void GlSetMaterial(DMaterial*);
 	static void GlBegin();
 	static void GlEnd();
-	static void GLVector3(DVector3&);
-	static void GLVector(float, float, float);
-	static void GLColor(DColor&);
-	static void GLPushMatrix();
-	static void GLPopMatrix();
-	static void GLLoadIndentity();
+	static void GlVector3(DVector3&);
+	static void GlVector(float, float, float);
+	static void GlColor(DColor&);
+	static void GlPushMatrix();
+	static void GlPopMatrix();
+	static void GlLoadIndentity();
 
 private:
 	void InitScreenPlane();

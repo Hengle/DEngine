@@ -3,6 +3,28 @@
 #include "DMesh.h"
 #include "DMaterial.h"
 #include <stack>
+#include <vector>
+
+class DGLDrawerProcess
+{
+public:
+	DGLDrawerProcess();
+	void Release();
+	void ProcessVector(float, float, float);
+	void ProcessColor(DColor*);
+	void PostProcess(DMaterial*, DMatrix4x4&);
+	
+private:
+	void ProcessDraw(DMaterial*, DMatrix4x4&);
+
+private:
+	float* m_vertices;
+	unsigned long* m_indices;
+	DColor m_currentColor;
+	DMeshRes* m_meshRes;
+	unsigned long m_currentIndex, m_preIndex;
+	bool m_hasDrawCommand;
+};
 
 class DGLDrawer
 {
@@ -19,23 +41,28 @@ public:
 	void GlPushMatrix();
 	void GlPopMatrix();
 	void GlLoadIdentity();
+	void GlSetMaterial(DMaterial*);
 	void Release();
 
 private:
-	void Draw();
+	void GenerateNewProcesses();
 
 private:
-	float* m_vertices;
-	unsigned long* m_indices;
+	//float* m_vertices;
+	//unsigned long* m_indices;
 
-	DColor m_currentColor;
+	//DColor m_currentColor;
 	DMatrix4x4 m_currentMatrix;
-	DMeshRes* m_meshRes;
-	DShader* m_shader;
+	//DMeshRes* m_meshRes;
+	//DShader* m_shader;
 	DMaterial* m_material;
 
-	unsigned long m_currentIndex, m_preIndex;
+	//unsigned long m_currentIndex, m_preIndex;
+	unsigned int m_currentPLen, m_prePLen;
 	std::stack<DMatrix4x4> m_matrixStack;
-	bool m_hasDrawCommand;
+	std::vector<DGLDrawerProcess*> m_processVector;
+	//bool m_hasDrawCommand;
+
+	DGLDrawerProcess* m_currentProcess;
 };
 

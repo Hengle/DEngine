@@ -21,6 +21,7 @@ public:
 	virtual void Destroy();
 	void GetViewMatrix(DMatrix4x4&) const;
 	void GetProjection(DMatrix4x4&) const;
+	void GetBackgroundColor(DColor&) const;
 	float GetFieldOfView() const;
 	float GetNear() const;
 	float GetFar() const;
@@ -34,6 +35,7 @@ public:
 	void SetOrthographic(bool);
 	void SetOrthoSize(float);
 	void SetFilter(DCameraFilter*);
+	void SetBackgroundColor(DColor&);
 	void ClearFilter();
 	DRenderTexture* GetRenderTexture();
 	void SetRenderTexture(DRenderTexture*);
@@ -52,6 +54,7 @@ private:
 	bool m_isProjectionChanged;
 	DCameraFilter* m_filter;
 	DRenderTexture* m_renderTexture;
+	DColor m_backgroundColor;
 };
 
 static DCamera* sCurrent;

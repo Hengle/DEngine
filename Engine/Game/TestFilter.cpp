@@ -4,7 +4,7 @@
 
 TestFilter::TestFilter()
 {
-	m_shader = DShader::Create(L"../Res/texture.vs9", L"../Res/imgeffect.ps9");
+	m_shader = DShader::Create(L"../Res/texture.vs", L"../Res/imgeffect.ps");
 	m_mat = new DMaterial(m_shader);
 }
 

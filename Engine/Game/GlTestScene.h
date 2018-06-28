@@ -17,8 +17,8 @@ protected:
 	virtual void OnUpdate();
 
 private:
-	DShader* testcolorshader;
-	DMaterial* testcolormat;
+	DShader* m_testcolorshader;
+	DMaterial* m_testcolormat;
 
 };
 

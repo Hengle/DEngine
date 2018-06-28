@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "GameFrame.h"
 #include "TestScene.h"
-
+#include "GlTestScene.h"
 
 GameFrame::GameFrame()
 {
@@ -15,5 +15,6 @@ GameFrame::~GameFrame()
 void GameFrame::OnInit()
 {
 	RegisterScene(new TestScene(5, "tst"));
-	ChangeScene(5);
+	RegisterScene(new GlTestScene(6, "glsce"));
+	ChangeScene(6);
 }

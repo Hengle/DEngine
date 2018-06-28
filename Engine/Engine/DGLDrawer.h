@@ -41,6 +41,7 @@ public:
 	void GlPushMatrix();
 	void GlPopMatrix();
 	void GlLoadIdentity();
+	void GLMultiMatrix(DMatrix4x4&);
 	void GlSetMaterial(DMaterial*);
 	void Release();
 
@@ -52,7 +53,7 @@ private:
 	//unsigned long* m_indices;
 
 	//DColor m_currentColor;
-	DMatrix4x4 m_currentMatrix;
+	DMatrix4x4 m_currentMV;
 	//DMeshRes* m_meshRes;
 	//DShader* m_shader;
 	DMaterial* m_material;

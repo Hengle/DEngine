@@ -3,7 +3,7 @@
 
 DGLDrawer::DGLDrawer()
 {
-	m_currentMatrix = dmat_identity;
+	m_currentMV = dmat_identity;
 	m_currentPLen = 0;
 	m_prePLen = 0;
 }
@@ -37,7 +37,7 @@ void DGLDrawer::GlEnd()
 {
 	if (m_currentProcess != NULL)
 	{
-		m_currentProcess->PostProcess(m_material, m_currentMatrix);
+		m_currentProcess->PostProcess(m_material, m_currentMV);
 	}
 	m_currentProcess = NULL;
 }
@@ -66,21 +66,26 @@ void DGLDrawer::GlColor(DColor * color)
 
 void DGLDrawer::GlPushMatrix()
 {
-	m_matrixStack.push(m_currentMatrix);
+	m_matrixStack.push(m_currentMV);
 }
 
 void DGLDrawer::GlPopMatrix()
 {
 	if (!m_matrixStack.empty())
 	{
-		m_currentMatrix = m_matrixStack.top();
+		m_currentMV = m_matrixStack.top();
 		m_matrixStack.pop();
 	}
 }
 
 void DGLDrawer::GlLoadIdentity()
 {
-	DMatrix4x4::Identity(&m_currentMatrix);
+	DMatrix4x4::Identity(&m_currentMV);
+}
+
+void DGLDrawer::GLMultiMatrix(DMatrix4x4& matrix)
+{
+	m_currentMV = matrix * m_currentMV;
 }
 
 void DGLDrawer::GlSetMaterial(DMaterial * material)

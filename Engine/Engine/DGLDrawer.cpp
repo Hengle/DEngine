@@ -4,6 +4,7 @@
 DGLDrawer::DGLDrawer()
 {
 	m_currentMV = dmat_identity;
+	m_currentP = dmat_identity;
 	m_currentPLen = 0;
 	m_prePLen = 0;
 }
@@ -37,7 +38,7 @@ void DGLDrawer::GlEnd()
 {
 	if (m_currentProcess != NULL)
 	{
-		m_currentProcess->PostProcess(m_material, m_currentMV);
+		m_currentProcess->PostProcess(m_material, m_currentMV, m_currentP);
 	}
 	m_currentProcess = NULL;
 }
@@ -66,21 +67,37 @@ void DGLDrawer::GlColor(DColor * color)
 
 void DGLDrawer::GlPushMatrix()
 {
-	m_matrixStack.push(m_currentMV);
+	m_MVMatrixStack.push(m_currentMV);
+	m_PMatrixStack.push(m_currentP);
 }
 
 void DGLDrawer::GlPopMatrix()
 {
-	if (!m_matrixStack.empty())
+	if (!m_MVMatrixStack.empty())
 	{
-		m_currentMV = m_matrixStack.top();
-		m_matrixStack.pop();
+		m_currentMV = m_MVMatrixStack.top();
+		m_MVMatrixStack.pop();
+	}
+	if (!m_PMatrixStack.empty())
+	{
+		m_currentP = m_PMatrixStack.top();
+		m_PMatrixStack.pop();
 	}
 }
 
 void DGLDrawer::GlLoadIdentity()
 {
 	DMatrix4x4::Identity(&m_currentMV);
+}
+
+void DGLDrawer::GLLoadProjectionMatrix(DMatrix4x4& projection)
+{
+	m_currentP = projection;
+}
+
+void DGLDrawer::GLLoadOrtho()
+{
+
 }
 
 void DGLDrawer::GLMultiMatrix(DMatrix4x4& matrix)
@@ -191,7 +208,7 @@ void DGLDrawerProcess::ProcessColor(DColor * color)
 	m_hasDrawCommand = true;
 }
 
-void DGLDrawerProcess::PostProcess(DMaterial* material, DMatrix4x4& matrix)
+void DGLDrawerProcess::PostProcess(DMaterial* material, DMatrix4x4& modelview, DMatrix4x4& projection)
 {
 	if (m_vertices != 0 && m_indices != 0 && m_hasDrawCommand)
 	{
@@ -201,7 +218,7 @@ void DGLDrawerProcess::PostProcess(DMaterial* material, DMatrix4x4& matrix)
 			m_meshRes = DSystem::GetGraphicsMgr()->GetGLCore()->CreateMeshRes(vusage, true);
 		}
 		m_meshRes->Refresh(m_vertices, m_indices, m_currentIndex * 3, m_currentIndex);
-		ProcessDraw(material, matrix);
+		ProcessDraw(material, modelview, projection);
 		m_hasDrawCommand = false;
 	}
 	if (m_currentIndex != m_preIndex)
@@ -223,19 +240,21 @@ void DGLDrawerProcess::PostProcess(DMaterial* material, DMatrix4x4& matrix)
 	m_currentIndex = 0;
 }
 
-void DGLDrawerProcess::ProcessDraw(DMaterial * material, DMatrix4x4& matrix)
+void DGLDrawerProcess::ProcessDraw(DMaterial * material, DMatrix4x4& modelview, DMatrix4x4& projection)
 {
 
-	DCamera* camera;
+	/*DCamera* camera;
 	DCamera::GetCurrentCamera(&camera);
 
 	DMatrix4x4 view, proj;
 	camera->GetViewMatrix(view);
-	camera->GetProjection(proj);
+	camera->GetProjection(proj);*/
+	DMatrix4x4 world;
+	DMatrix4x4::Identity(&world);
 
-	material->SetMatrix("worldMatrix", matrix);
-	material->SetMatrix("viewMatrix", view);
-	material->SetMatrix("projectionMatrix", proj);
+	material->SetMatrix("worldMatrix", world);
+	material->SetMatrix("viewMatrix", modelview);
+	material->SetMatrix("projectionMatrix", projection);
 
 	material->Apply();
 

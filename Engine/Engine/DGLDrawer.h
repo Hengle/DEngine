@@ -12,10 +12,10 @@ public:
 	void Release();
 	void ProcessVector(float, float, float);
 	void ProcessColor(DColor*);
-	void PostProcess(DMaterial*, DMatrix4x4&);
+	void PostProcess(DMaterial*, DMatrix4x4&, DMatrix4x4&);
 	
 private:
-	void ProcessDraw(DMaterial*, DMatrix4x4&);
+	void ProcessDraw(DMaterial*, DMatrix4x4&, DMatrix4x4&);
 
 private:
 	float* m_vertices;
@@ -41,6 +41,8 @@ public:
 	void GlPushMatrix();
 	void GlPopMatrix();
 	void GlLoadIdentity();
+	void GLLoadProjectionMatrix(DMatrix4x4&);
+	void GLLoadOrtho();
 	void GLMultiMatrix(DMatrix4x4&);
 	void GlSetMaterial(DMaterial*);
 	void Release();
@@ -54,13 +56,15 @@ private:
 
 	//DColor m_currentColor;
 	DMatrix4x4 m_currentMV;
+	DMatrix4x4 m_currentP;
 	//DMeshRes* m_meshRes;
 	//DShader* m_shader;
 	DMaterial* m_material;
 
 	//unsigned long m_currentIndex, m_preIndex;
 	unsigned int m_currentPLen, m_prePLen;
-	std::stack<DMatrix4x4> m_matrixStack;
+	std::stack<DMatrix4x4> m_MVMatrixStack;
+	std::stack<DMatrix4x4> m_PMatrixStack;
 	std::vector<DGLDrawerProcess*> m_processVector;
 	//bool m_hasDrawCommand;
 

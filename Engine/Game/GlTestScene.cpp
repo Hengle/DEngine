@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "GlTestScene.h"
+#include "DGraphics.h"
 
 GlTestScene::GlTestScene(SCENEID sceneId, char * sceneName) : DScene(sceneId, sceneName)
 {
@@ -17,9 +18,11 @@ void GlTestScene::OnLoad()
 	DCamera * cam = new DCamera();
 
 	DTransform* transform = cam->GetTransform();
-	transform->SetPosition(-3.0437f, 9.261985f, -10.086f);
-	transform->SetEuler(31.319f, 16.501f, 0);
+	transform->SetPosition(-11.47823f, 13.5114f, -19.58396f);
+	transform->SetEuler(35.444f, 29.564f, 0);
 	cam->SetBackgroundColor(DColor(49.0f / 255.0f, 77.0f / 255.0f, 121.0f / 255.0f));
+
+	SetCamera(cam);
 }
 
 void GlTestScene::OnUnLoad()
@@ -40,6 +43,47 @@ void GlTestScene::OnUnLoad()
 
 void GlTestScene::OnRender()
 {
+	DGraphics::GlSetMaterial(m_testcolormat);
+	DGraphics::GlPushMatrix();
+
+	DGraphics::GlBegin();
+
+	DGraphics::GlVector(0.0f, 0.0f, 0.0f);
+	DGraphics::GlVector(-1.0f, 1.0f, -1.0f);
+
+	DGraphics::GlEnd();
+
+	DGraphics::GlPopMatrix();
+
+
+	DCamera* cam = GetCamera();
+	if (cam != NULL)
+	{
+		DTransform* tran = cam->GetTransform();
+		DMatrix4x4 ltw;
+		tran->GetLocalToWorld(ltw);
+		DGraphics::GlPushMatrix();
+		DGraphics::GlMultiMatrix(ltw);
+		DGraphics::GlBegin();
+
+		DGraphics::GlVector(0.0f, 0.0f, 10.0f);
+		DGraphics::GlVector(-2.0f, 3.0f, 20.0f);
+
+		DGraphics::GlEnd();
+
+		DGraphics::GlPopMatrix();
+	}
+
+	DGraphics::GlPushMatrix();
+	DGraphics::GlLoadOrtho();
+	DGraphics::GlBegin();
+
+	DGraphics::GlVector(-1.0f, -1.0f, 0.0f);
+	DGraphics::GlVector(1.0f, 1.0f, 0.0f);
+
+	DGraphics::GlEnd();
+
+	DGraphics::GlPopMatrix();
 }
 
 void GlTestScene::OnUpdate()

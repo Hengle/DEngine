@@ -41,9 +41,9 @@ public:
 	void GlPushMatrix();
 	void GlPopMatrix();
 	void GlLoadIdentity();
-	void GLLoadProjectionMatrix(DMatrix4x4&);
-	void GLLoadOrtho();
-	void GLMultiMatrix(DMatrix4x4&);
+	void GlLoadProjectionMatrix(DMatrix4x4&);
+	void GlLoadOrtho();
+	void GlMultiMatrix(DMatrix4x4&);
 	void GlSetMaterial(DMaterial*);
 	void Release();
 

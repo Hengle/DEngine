@@ -394,6 +394,33 @@ void DGraphics::GlLoadIndentity()
 	}
 }
 
+void DGraphics::GlLoadProjectionMatrix(DMatrix4x4 & projection)
+{
+	DGLDrawer* drawer = DSystem::GetGraphicsMgr()->m_glDrawer;
+	if (drawer != NULL)
+	{
+		drawer->GlLoadProjectionMatrix(projection);
+	}
+}
+
+void DGraphics::GlLoadOrtho()
+{
+	DGLDrawer* drawer = DSystem::GetGraphicsMgr()->m_glDrawer;
+	if (drawer != NULL)
+	{
+		drawer->GlLoadOrtho();
+	}
+}
+
+void DGraphics::GlMultiMatrix(DMatrix4x4 & matrix)
+{
+	DGLDrawer* drawer = DSystem::GetGraphicsMgr()->m_glDrawer;
+	if (drawer != NULL)
+	{
+		drawer->GlMultiMatrix(matrix);
+	}
+}
+
 void DGraphics::InitScreenPlane()
 {
 	//DMeshBufferDesc desc;

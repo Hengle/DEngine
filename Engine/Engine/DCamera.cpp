@@ -58,6 +58,10 @@ void DCamera::BeginRender()
 		DMatrix4x4::LookAt(&m_viewMatrix, position, lookAt, up);
 	}
 
+	DGraphics::GlLoadIndentity();
+	DGraphics::GlMultiMatrix(m_viewMatrix);
+	DGraphics::GlLoadProjectionMatrix(m_projection);
+
 	if (m_renderTexture != NULL)
 	{
 		DGraphics::BeginScene(true, false, m_backgroundColor, m_renderTexture);

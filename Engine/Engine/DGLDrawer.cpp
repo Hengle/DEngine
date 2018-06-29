@@ -90,17 +90,23 @@ void DGLDrawer::GlLoadIdentity()
 	DMatrix4x4::Identity(&m_currentMV);
 }
 
-void DGLDrawer::GLLoadProjectionMatrix(DMatrix4x4& projection)
+void DGLDrawer::GlLoadProjectionMatrix(DMatrix4x4& projection)
 {
 	m_currentP = projection;
 }
 
-void DGLDrawer::GLLoadOrtho()
+void DGLDrawer::GlLoadOrtho()
 {
-
+	m_currentMV = DMatrix4x4(1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, -1.0f, 0.0f,
+		0.0f, 0.0f, -1.0f, 1.0f);
+	float screenWidth, screenHeight;
+	DSystem::GetGraphicsMgr()->GetGLCore()->GetResolution(screenWidth, screenHeight);
+	DMatrix4x4::Ortho(&m_currentP, 2.0f, 2.0f, -1.0f, 1.0f);
 }
 
-void DGLDrawer::GLMultiMatrix(DMatrix4x4& matrix)
+void DGLDrawer::GlMultiMatrix(DMatrix4x4& matrix)
 {
 	m_currentMV = matrix * m_currentMV;
 }

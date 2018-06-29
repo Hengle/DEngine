@@ -58,6 +58,9 @@ public:
 	static void GlPushMatrix();
 	static void GlPopMatrix();
 	static void GlLoadIndentity();
+	static void GlLoadProjectionMatrix(DMatrix4x4&);
+	static void GlLoadOrtho();
+	static void GlMultiMatrix(DMatrix4x4&);
 
 private:
 	void InitScreenPlane();

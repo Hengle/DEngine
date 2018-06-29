@@ -117,6 +117,12 @@ void DGraphics::Shutdown()
 		delete m_screenPlane;
 		m_screenPlane = NULL;
 	}
+	if (m_skyMesh != NULL)
+	{
+		m_skyMesh->Destroy();
+		delete m_skyMesh;
+		m_skyMesh = NULL;
+	}
 	if (m_glDrawer != NULL)
 	{
 		m_glDrawer->Release();
@@ -286,6 +292,25 @@ void DGraphics::DrawTexture(DTexture * texture, DMaterial * material)
 	DSystem::GetGraphicsMgr()->m_screenPlane->Draw(material->GetVertexUsage());
 }
 
+void DGraphics::DrawSkyBox(DMaterial * material, const DCamera * camera)
+{
+	if (material == NULL || camera == NULL)
+		return;
+	if (DSystem::GetGraphicsMgr()->m_skyMesh == NULL)
+	{
+		DSystem::GetGraphicsMgr()->InitSkyBox();
+	}
+	DMatrix4x4 world;
+	DTransform* transform = camera->GetTransform();
+	DVector3 pos;
+	transform->GetPosition(pos);
+	DMatrix4x4::Translate(&world, pos.x, pos.y, pos.z);
+
+	material->SetZWrite(false);
+
+	DrawMesh(DSystem::GetGraphicsMgr()->m_skyMesh, world, material, camera);
+}
+
 void DGraphics::SetCullMode(DCullMode cullMode)
 {
 	DRenderStateMgr* mgr = DSystem::GetGraphicsMgr()->GetGLCore()->GetRenderStateMgr();
@@ -426,16 +451,16 @@ void DGraphics::InitScreenPlane()
 	//DMeshBufferDesc desc;
 
 	//int dataSize = sizeof(float) * 5;
-	int vertexCount = 4;
-	int indexCount = 6;
+	//int vertexCount = 4;
+	//int indexCount = 6;
 	//int bufferLength = 5;
 
-	float* vertices,*uvs;
-	unsigned long* indexBuffer;
+	float vertices[12],uvs[8];
+	unsigned long indexBuffer[6];
 
-	vertices = new float[vertexCount * 3];
-	uvs = new float[vertexCount * 2];
-	indexBuffer = new unsigned long[indexCount];
+	//vertices = new float[vertexCount * 3];
+	//uvs = new float[vertexCount * 2];
+	//indexBuffer = new unsigned long[indexCount];
 
 	float screenWidth, screenHeight;
 	m_GL->GetResolution(screenWidth, screenHeight);
@@ -470,5 +495,46 @@ void DGraphics::InitScreenPlane()
 	m_screenPlane->SetVertices(vertices, 4);
 	m_screenPlane->SetUVs(0, uvs, 4);
 	m_screenPlane->SetIndices(indexBuffer, 6);
+
+	//delete[] vertices;
+	//delete[] uvs;
+	//delete[] indexBuffer;
+}
+
+void DGraphics::InitSkyBox()
+{
+	m_skyMesh = new DMesh();
+	float vertices[24];
+	unsigned long indices[36];
+
+	vertices[0] = -1000.0f; vertices[1] = -1000.0f; vertices[2] = -1000.0f;
+	vertices[3] = 1000.0f; vertices[4] = -1000.0f; vertices[5] = -1000.0f;
+	vertices[6] = -1000.0f; vertices[7] = 1000.0f; vertices[8] = -1000.0f;
+	vertices[9] = 1000.0f; vertices[10] = 1000.0f; vertices[11] = -1000.0f;
+	vertices[12] = -1000.0f; vertices[13] = -1000.0f; vertices[14] = 1000.0f;
+	vertices[15] = 1000.0f; vertices[16] = -1000.0f; vertices[17] = 1000.0f;
+	vertices[18] = -1000.0f; vertices[19] = 1000.0f; vertices[20] = 1000.0f;
+	vertices[21] = 1000.0f; vertices[22] = 1000.0f; vertices[23] = 1000.0f;
+
+	indices[0] = 0; indices[1] = 3; indices[2] = 2;
+	indices[3] = 0; indices[4] = 1; indices[5] = 3;
+
+	indices[6] = 2; indices[7] = 7; indices[8] = 6;
+	indices[9] = 2; indices[10] = 3; indices[0] = 7;
+
+	indices[12] = 4; indices[13] = 6; indices[14] = 7;
+	indices[15] = 4; indices[16] = 7; indices[17] = 5;
+
+	indices[18] = 0; indices[19] = 4; indices[20] = 5;
+	indices[21] = 0; indices[22] = 5; indices[23] = 1;
+
+	indices[24] = 1; indices[25] = 7; indices[26] = 3;
+	indices[27] = 1; indices[28] = 5; indices[29] = 7;
+
+	indices[30] = 0; indices[31] = 2; indices[32] = 6;
+	indices[33] = 0; indices[34] = 6; indices[35] = 4;
+
+	m_skyMesh->SetVertices(vertices, 6);
+	m_skyMesh->SetIndices(indices, 36);
 }
 

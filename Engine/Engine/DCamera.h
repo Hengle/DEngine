@@ -36,6 +36,8 @@ public:
 	void SetOrthoSize(float);
 	void SetFilter(DCameraFilter*);
 	void SetBackgroundColor(DColor&);
+	void SetSkyBox(DMaterial*);
+	void ClearSkyBox();
 	void ClearFilter();
 	DRenderTexture* GetRenderTexture();
 	void SetRenderTexture(DRenderTexture*);
@@ -55,6 +57,7 @@ private:
 	DCameraFilter* m_filter;
 	DRenderTexture* m_renderTexture;
 	DColor m_backgroundColor;
+	DMaterial* m_skyBoxMaterial;
 };
 
 static DCamera* sCurrent;

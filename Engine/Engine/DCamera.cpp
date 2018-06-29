@@ -74,6 +74,11 @@ void DCamera::BeginRender()
 		//DGraphics::SetDefaultRenderTarget();
 		//DGraphics::Clear(true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f));
 	}
+
+	if (m_skyBoxMaterial != NULL)
+	{
+		DGraphics::DrawSkyBox(m_skyBoxMaterial, this);
+	}
 }
 
 void DCamera::EndRender()
@@ -223,6 +228,16 @@ void DCamera::SetFilter(DCameraFilter * filter)
 void DCamera::SetBackgroundColor(DColor & color)
 {
 	m_backgroundColor = color;
+}
+
+void DCamera::SetSkyBox(DMaterial * skyBoxMaterial)
+{
+	m_skyBoxMaterial = skyBoxMaterial;
+}
+
+void DCamera::ClearSkyBox()
+{
+	m_skyBoxMaterial = NULL;
 }
 
 void DCamera::ClearFilter()

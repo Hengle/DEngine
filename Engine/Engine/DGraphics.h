@@ -44,6 +44,7 @@ public:
 
 	static void DrawMesh(DMesh*, const DMatrix4x4&, DMaterial*, const DCamera*);
 	static void DrawTexture(DTexture*, DMaterial*);
+	static void DrawSkyBox(DMaterial*, const DCamera*);
 	//static void Blit()
 	static void SetCullMode(DCullMode);
 	static void SetZWriteEnable(bool);
@@ -64,6 +65,7 @@ public:
 
 private:
 	void InitScreenPlane();
+	void InitSkyBox();
 
 private:
 	float* m_glVertices;
@@ -73,5 +75,6 @@ private:
 	DImGUICore* m_GUI;
 	DGLDrawer* m_glDrawer;
 	DMesh* m_screenPlane;
+	DMesh* m_skyMesh;
 };
 

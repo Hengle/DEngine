@@ -1,6 +1,7 @@
-#pragma once
+﻿#pragma once
 #include "DSceneObject.h"
 #include "DTexture.h"
+#include "DMaterial.h"
 
 class DCameraFilter
 {

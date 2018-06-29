@@ -177,5 +177,7 @@ void DMeshRes11::OnDraw(DMeshTopology topology)
 	else if (topology == DMeshTopology_TriangleStrip)
 		m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
+	
+
 	m_deviceContext->DrawIndexed(m_indexCount, 0, 0);
 }

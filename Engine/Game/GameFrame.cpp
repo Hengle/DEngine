@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "GameFrame.h"
 #include "TestScene.h"
 #include "GlTestScene.h"
@@ -16,5 +16,5 @@ void GameFrame::OnInit()
 {
 	RegisterScene(new TestScene(5, "tst"));
 	RegisterScene(new GlTestScene(6, "glsce"));
-	ChangeScene(6);
+	ChangeScene(5);
 }

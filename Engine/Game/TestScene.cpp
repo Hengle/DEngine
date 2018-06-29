@@ -6,7 +6,6 @@
 #include "DLog.h"
 #include "DGUI.h"
 #include "D3D9Core.h"
-#include <D3DX10math.h>
 
 TestScene::TestScene(SCENEID sceneId, char * sceneName) : DScene(sceneId, sceneName)
 {
@@ -148,7 +147,7 @@ void TestScene::OnLoad()
 
 void TestScene::TestLoad()
 {
-	testcolorshader = DShader::Create(L"../Res/color.vs", L"../Res/color.ps");
+	testcolorshader = DShader::Create(L"../Res/sky.vs", L"../Res/sky.ps");
 	testcolormat = new DMaterial(testcolorshader);
 	/*testcolormesh = new DMesh();
 	float* vs = new float[12];
@@ -185,6 +184,7 @@ void TestScene::TestLoad()
 
 	m_filter = new TestFilter();
 	//cam->SetFilter(m_filter);
+	cam->SetSkyBox(testcolormat);
 
 	transform = cam->GetTransform();
 	transform->SetEuler(34.996f, -154.423f, 0.0f);
@@ -304,7 +304,7 @@ void TestScene::OnUnLoad()
 
 void TestScene::OnRender()
 {
-	DGraphics::GlSetMaterial(testcolormat);
+	/*DGraphics::GlSetMaterial(testcolormat);
 	DGraphics::GlPushMatrix();
 	DGraphics::GlLoadIndentity();
 
@@ -321,7 +321,7 @@ void TestScene::OnRender()
 
 	DGraphics::GlEnd();
 
-	DGraphics::GlPopMatrix();
+	DGraphics::GlPopMatrix();*/
 
 
 	//testd->Render();
@@ -380,17 +380,24 @@ void TestScene::OnUpdate()
 
 	transform->SetEuler(euler.x, euler.y, euler.z);*/
 
-	DVector3 euler;
-	DVector3 forward;
-	DVector3 position;
-	m_camera->GetTransform()->GetEuler(euler);
+	if (DInput::IsMousePress(0))
+	{
+		int dtx, dty;
+		DInput::GetDeltaMouseMove(dtx, dty);
+		DVector3 euler;
+		DVector3 forward;
+		DVector3 position;
+		m_camera->GetTransform()->GetEuler(euler);
 
-	euler.y += DTime::GetDeltaTime()*20.0f;
+		//euler.y += DTime::GetDeltaTime()*20.0f;
+		euler.y += dtx;
+		euler.x += dty;
 
-	m_camera->GetTransform()->SetEuler(euler);
+		m_camera->GetTransform()->SetEuler(euler);
 
-	m_camera->GetTransform()->GetForward(forward);
+		m_camera->GetTransform()->GetForward(forward);
 
-	position = forward*-14.0f;
-	m_camera->GetTransform()->SetPosition(position);
+		position = forward*-14.0f;
+		m_camera->GetTransform()->SetPosition(position);
+	}
 }

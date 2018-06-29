@@ -307,6 +307,7 @@ void DGraphics::DrawSkyBox(DMaterial * material, const DCamera * camera)
 	DMatrix4x4::Translate(&world, pos.x, pos.y, pos.z);
 
 	material->SetZWrite(false);
+	//material->SetCullMode(DCullMode_Off);
 
 	DrawMesh(DSystem::GetGraphicsMgr()->m_skyMesh, world, material, camera);
 }
@@ -451,16 +452,16 @@ void DGraphics::InitScreenPlane()
 	//DMeshBufferDesc desc;
 
 	//int dataSize = sizeof(float) * 5;
-	//int vertexCount = 4;
-	//int indexCount = 6;
+	int vertexCount = 4;
+	int indexCount = 6;
 	//int bufferLength = 5;
 
-	float vertices[12],uvs[8];
-	unsigned long indexBuffer[6];
+	float *vertices,*uvs;
+	unsigned long *indexBuffer;
 
-	//vertices = new float[vertexCount * 3];
-	//uvs = new float[vertexCount * 2];
-	//indexBuffer = new unsigned long[indexCount];
+	vertices = new float[vertexCount * 3];
+	uvs = new float[vertexCount * 2];
+	indexBuffer = new unsigned long[indexCount];
 
 	float screenWidth, screenHeight;
 	m_GL->GetResolution(screenWidth, screenHeight);
@@ -504,37 +505,78 @@ void DGraphics::InitScreenPlane()
 void DGraphics::InitSkyBox()
 {
 	m_skyMesh = new DMesh();
-	float vertices[24];
-	unsigned long indices[36];
+	float *vertices = new float[108];
+	unsigned long* indices = new unsigned long[36];
 
-	vertices[0] = -1000.0f; vertices[1] = -1000.0f; vertices[2] = -1000.0f;
-	vertices[3] = 1000.0f; vertices[4] = -1000.0f; vertices[5] = -1000.0f;
-	vertices[6] = -1000.0f; vertices[7] = 1000.0f; vertices[8] = -1000.0f;
-	vertices[9] = 1000.0f; vertices[10] = 1000.0f; vertices[11] = -1000.0f;
-	vertices[12] = -1000.0f; vertices[13] = -1000.0f; vertices[14] = 1000.0f;
-	vertices[15] = 1000.0f; vertices[16] = -1000.0f; vertices[17] = 1000.0f;
-	vertices[18] = -1000.0f; vertices[19] = 1000.0f; vertices[20] = 1000.0f;
-	vertices[21] = 1000.0f; vertices[22] = 1000.0f; vertices[23] = 1000.0f;
+	float sz = 500.0f;
 
-	indices[0] = 0; indices[1] = 3; indices[2] = 2;
-	indices[3] = 0; indices[4] = 1; indices[5] = 3;
+	vertices[0] = -sz; vertices[1] = -sz; vertices[2] = -sz;
+	vertices[3] = sz; vertices[4] = sz; vertices[5] = -sz;
+	vertices[6] = -sz; vertices[7] = sz; vertices[8] = -sz;
 
-	indices[6] = 2; indices[7] = 7; indices[8] = 6;
-	indices[9] = 2; indices[10] = 3; indices[0] = 7;
+	vertices[9] = -sz; vertices[10] = -sz; vertices[11] = -sz;
+	vertices[12] = sz; vertices[13] = -sz; vertices[14] = -sz;
+	vertices[15] = sz; vertices[16] = sz; vertices[17] = -sz;
 
-	indices[12] = 4; indices[13] = 6; indices[14] = 7;
-	indices[15] = 4; indices[16] = 7; indices[17] = 5;
+	vertices[18] = -sz; vertices[19] = sz; vertices[20] = -sz;
+	vertices[21] = sz; vertices[22] = sz; vertices[23] = sz;
+	vertices[24] = -sz; vertices[25] = sz; vertices[26] = sz;
 
-	indices[18] = 0; indices[19] = 4; indices[20] = 5;
-	indices[21] = 0; indices[22] = 5; indices[23] = 1;
+	vertices[27] = -sz; vertices[28] = sz; vertices[29] = -sz;
+	vertices[30] = sz; vertices[31] = sz; vertices[32] = -sz;
+	vertices[33] = sz; vertices[34] = sz; vertices[35] = sz;
 
-	indices[24] = 1; indices[25] = 7; indices[26] = 3;
-	indices[27] = 1; indices[28] = 5; indices[29] = 7;
+	vertices[36] = -sz; vertices[37] = -sz; vertices[38] = sz;
+	vertices[39] = -sz; vertices[40] = sz; vertices[41] = sz;
+	vertices[42] = sz; vertices[43] = sz; vertices[44] = sz;
 
-	indices[30] = 0; indices[31] = 2; indices[32] = 6;
-	indices[33] = 0; indices[34] = 6; indices[35] = 4;
+	vertices[45] = -sz; vertices[46] = -sz; vertices[47] = sz;
+	vertices[48] = sz; vertices[49] = sz; vertices[50] = sz;
+	vertices[51] = sz; vertices[52] = -sz; vertices[53] = sz;
 
-	m_skyMesh->SetVertices(vertices, 6);
+	vertices[54] = -sz; vertices[55] = -sz; vertices[56] = -sz;
+	vertices[57] = -sz; vertices[58] = -sz; vertices[59] = sz;
+	vertices[60] = sz; vertices[61] = -sz; vertices[62] = sz;
+
+	vertices[63] = -sz; vertices[64] = -sz; vertices[65] = -sz;
+	vertices[66] = sz; vertices[67] = -sz; vertices[68] = sz;
+	vertices[69] = sz; vertices[70] = -sz; vertices[71] = -sz;
+
+	vertices[72] = sz; vertices[73] = -sz; vertices[74] = -sz;
+	vertices[75] = sz; vertices[76] = sz; vertices[77] = sz;
+	vertices[78] = sz; vertices[79] = sz; vertices[80] = -sz;
+
+	vertices[81] = sz; vertices[82] = -sz; vertices[83] = -sz;
+	vertices[84] = sz; vertices[85] = -sz; vertices[86] = sz;
+	vertices[87] = sz; vertices[88] = sz; vertices[89] = sz;
+	
+	vertices[90] = -sz; vertices[91] = -sz; vertices[92] = -sz;
+	vertices[93] = -sz; vertices[94] = sz; vertices[95] = -sz;
+	vertices[96] = -sz; vertices[97] = sz; vertices[98] = sz;
+
+	vertices[99] = -sz; vertices[100] = -sz; vertices[101] = -sz;
+	vertices[102] = -sz; vertices[103] = sz; vertices[104] = sz;
+	vertices[105] = -sz; vertices[106] = -sz; vertices[107] = sz;
+
+	indices[0] = 0; indices[1] = 1; indices[2] = 2;
+	indices[3] = 3; indices[4] = 4; indices[5] = 5;
+
+	indices[6] = 6; indices[7] = 7; indices[8] = 8;
+	indices[9] = 9; indices[10] = 10; indices[11] = 11;
+
+	indices[12] = 12; indices[13] = 13; indices[14] = 14;
+	indices[15] = 15; indices[16] = 16; indices[17] = 17;
+
+	indices[18] = 18; indices[19] = 19; indices[20] = 20;
+	indices[21] = 21; indices[22] = 22; indices[23] = 23;
+
+	indices[24] = 24; indices[25] = 25; indices[26] = 26;
+	indices[27] = 27; indices[28] = 28; indices[29] = 29;
+
+	indices[30] = 30; indices[31] = 31; indices[32] = 32;
+	indices[33] = 33; indices[34] = 34; indices[35] = 35;
+
+	m_skyMesh->SetVertices(vertices, 36);
 	m_skyMesh->SetIndices(indices, 36);
 }
 

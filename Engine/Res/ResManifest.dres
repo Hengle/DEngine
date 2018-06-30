@@ -1,0 +1,7 @@
+#RES_GROUP_BEGIN 0
+
+	#RES_BEGIN SHADER 1000 
+		#D3D9 ../Res/testv9.v9 ../Res/testv9.ps
+	#RES_END
+
+#RES_GROUP_END

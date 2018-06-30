@@ -1,6 +1,9 @@
 ﻿#pragma once
 #include "DResObject.h"
 #include <map>
+#include <fstream>
+
+using namespace std;
 
 enum DResType
 {
@@ -20,8 +23,13 @@ private:
 		~ResItem();
 		DResType GetResType();
 
+	public:
+		char** args;
+		int argsCount;
+
 	private:
 		DResType m_resType;
+		DResObject* m_res;
 	};
 
 private:
@@ -51,7 +59,9 @@ public:
 	static void HasRes(unsigned int groupid, unsigned int resid);
 
 private:
-	void LoadResList();
+	bool LoadResManifest(char * fileName);
+	void LoadResGroupManifest(ifstream&, unsigned int groupid);
+	void LoadShaderResManifest(ifstream&, unsigned int resid);
 
 private:
 	std::map<unsigned int, ResGroup*>* m_groups;

@@ -10,7 +10,7 @@ DMeshRes11::DMeshRes11(ID3D11Device* device,ID3D11DeviceContext * deviceContext,
 	//m_dataCount = 0;
 	//m_indexCount = 0;
 
-	m_dataSize = sizeof(float) * m_dataCount;
+	//m_dataSize = sizeof(float) * m_dataCount;
 	//m_dataCount = 3;
 	/*if (vertexUsage & (1UL << DVertexUsage_TEXCOORD0))
 	{

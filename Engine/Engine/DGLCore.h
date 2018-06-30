@@ -133,8 +133,10 @@ protected:
 	bool m_hasTangent;
 	bool m_hasBinormal;
 	int m_indexCount;
+	int m_vertexCount;
 	int m_dataCount;
 	bool m_isDynamic;
+	int m_dataSize;
 
 private:
 	bool m_isInitialized;

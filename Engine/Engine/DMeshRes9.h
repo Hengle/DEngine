@@ -15,7 +15,10 @@ protected:
 
 private:
 	LPDIRECT3DDEVICE9 m_device;
-	ID3DXMesh* m_mesh;
+	//ID3DXMesh* m_mesh;
+	IDirect3DVertexBuffer9* m_vertexBuffer;
+	IDirect3DIndexBuffer9* m_indexBuffer;
+	IDirect3DVertexDeclaration9* m_vertexDeclaration;
 	/*int m_dataSize;
 	int m_vertexCount;
 	int m_indexCount;

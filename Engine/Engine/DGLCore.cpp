@@ -6,6 +6,7 @@ DMeshRes::DMeshRes(int vertexUsage, bool dynamic)
 	m_isInitialized = false;
 	m_vertexUsage = vertexUsage;
 	m_indexCount = 0;
+	m_vertexCount = 0;
 
 	m_isDynamic = dynamic;
 
@@ -58,6 +59,8 @@ DMeshRes::DMeshRes(int vertexUsage, bool dynamic)
 		m_dataCount += 3;
 		m_hasBinormal = true;
 	}
+
+	m_dataSize = sizeof(float) * m_dataCount;
 }
 
 //void DMeshRes::Init(DMeshBufferDesc * desc)
@@ -76,6 +79,8 @@ void DMeshRes::Refresh(DMeshBufferDesc * desc)
 	if (desc->indices == nullptr)
 		return;
 	m_indexCount = desc->indexCount;
+	m_vertexCount = desc->vertexCount;
+
 
 	float* vertices = new float[m_dataCount * desc->vertexCount];
 	int i, j;
@@ -132,7 +137,7 @@ void DMeshRes::Refresh(float * vertexbuffer, unsigned long * indexbuffer, int ve
 	if (indexbuffer == 0)
 		return;
 	m_indexCount = indexCount;
-	//m_vertexCount = vertexCount;
+	m_vertexCount = vertexCount;
 
 	if (!m_isInitialized)
 	{

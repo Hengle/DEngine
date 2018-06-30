@@ -12,7 +12,7 @@ void GlTestScene::OnGUI()
 
 void GlTestScene::OnLoad()
 {
-	m_testcolorshader = DShader::Create(L"../Res/color.vs", L"../Res/color.ps");
+	m_testcolorshader = DShader::Create(L"../Res/color.vs9", L"../Res/color.ps9");
 	m_testcolormat = new DMaterial(m_testcolorshader);
 
 	DCamera * cam = new DCamera();

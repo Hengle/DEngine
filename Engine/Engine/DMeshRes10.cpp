@@ -9,7 +9,7 @@ DMeshRes10::DMeshRes10(ID3D10Device * device, int vertexUsage, bool dynamic) : D
 	//m_dataCount = 0;
 	//m_indexCount = 0;
 
-	m_dataSize = sizeof(float) * m_dataCount;
+	//m_dataSize = sizeof(float) * m_dataCount;
 	/*if (vertexUsage & (1UL << DVertexUsage_TEXCOORD0))
 	{
 		m_dataSize += fsize * 2;

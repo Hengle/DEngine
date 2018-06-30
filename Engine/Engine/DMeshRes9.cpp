@@ -4,7 +4,10 @@
 DMeshRes9::DMeshRes9(LPDIRECT3DDEVICE9 device, int vertexUsage, bool dynamic) : DMeshRes(vertexUsage, dynamic)
 {
 	m_device = device;
-	m_mesh = 0;
+	//m_mesh = 0;
+	m_vertexBuffer = 0;
+	m_indexBuffer = 0;
+	m_vertexDeclaration = 0;
 
 	//m_dataSize = 0;
 	//m_dataCount = 0;
@@ -75,7 +78,23 @@ void DMeshRes9::OnRefresh(float * vertexbuffer, unsigned long * indexbuffer, int
 	float* vertices;
 	int i;
 	int vlen = m_dataCount*vertexCount;
-	m_mesh->LockVertexBuffer(0, (void**)&vertices);
+
+	/*m_vertexBuffer->Lock(0, 0, (void**)vertices, 0);
+	for (i = 0; i < vlen; i++)
+	{
+		vertices[i] = vertexbuffer[i];
+	}
+	m_vertexBuffer->Unlock();
+
+	WORD* ids = 0;
+	m_indexBuffer->Lock(0, 0, (void**)&ids, 0);
+	for (i = 0; i < m_indexCount; i++)
+	{
+		ids[i] = indexbuffer[i];
+	}
+	m_indexBuffer->Unlock();*/
+
+	/*m_mesh->LockVertexBuffer(0, (void**)&vertices);
 
 	for (i = 0; i < vlen; i++)
 	{
@@ -92,7 +111,7 @@ void DMeshRes9::OnRefresh(float * vertexbuffer, unsigned long * indexbuffer, int
 		ids[i] = indexbuffer[i];
 	}
 
-	m_mesh->UnlockIndexBuffer();
+	m_mesh->UnlockIndexBuffer();*/
 }
 
 bool DMeshRes9::OnInit(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
@@ -120,50 +139,97 @@ bool DMeshRes9::OnInit(float * vertexbuffer, unsigned long * indexbuffer, int ve
 	elements.push_back(D3DDECL_END());
 
 	//m_dataSize = desc->dataSize;
-	int tcount = m_indexCount / 3;
+	
 
-	D3DXCreateMesh(tcount, vertexCount, D3DXMESH_MANAGED, &elements[0], m_device, &m_mesh);
+	m_device->CreateVertexDeclaration(&elements[0], &m_vertexDeclaration);
+	UINT len = m_dataSize*vertexCount;
+	m_device->CreateVertexBuffer(len, D3DUSAGE_WRITEONLY, 0, D3DPOOL_MANAGED, &m_vertexBuffer, 0);
+	m_device->CreateIndexBuffer(sizeof(WORD)*indexCount, D3DUSAGE_WRITEONLY, D3DFMT_INDEX16, D3DPOOL_MANAGED, &m_indexBuffer, 0);
+
+	//D3DXCreateMesh(tcount, vertexCount, D3DXMESH_MANAGED, &elements[0], m_device, &m_mesh);
 
 	//m_vertexBuffer->Lock()
 	float* vertices;
 	int i;
 	int vlen = m_dataCount*vertexCount;
-	m_mesh->LockVertexBuffer(0, (void**)&vertices);
+	//m_mesh->LockVertexBuffer(0, (void**)&vertices);
+	m_vertexBuffer->Lock(0, 0, (void**)&vertices, 0);
 
 	for (i = 0; i < vlen; i++)
 	{
 		vertices[i] = vertexbuffer[i];
 	}
 
-	m_mesh->UnlockVertexBuffer();
+	//m_mesh->UnlockVertexBuffer();
+	m_vertexBuffer->Unlock();
 
 	WORD* ids = 0;
-	m_mesh->LockIndexBuffer(0, (void**)&ids);
+	//m_mesh->LockIndexBuffer(0, (void**)&ids);
+	m_indexBuffer->Lock(0, 0, (void**)&ids, 0);
 
 	for (i = 0; i < m_indexCount; i++)
 	{
 		ids[i] = indexbuffer[i];
 	}
 
-	m_mesh->UnlockIndexBuffer();
+	//m_mesh->UnlockIndexBuffer();
+	m_indexBuffer->Unlock();
 
 	elements.clear();
 
 	return true;
 }
 
-void DMeshRes9::OnDraw(DMeshTopology)
+void DMeshRes9::OnDraw(DMeshTopology topology)
 {
-	if(m_mesh != NULL)
-		m_mesh->DrawSubset(0);
+	//if(m_mesh != NULL)
+	//	m_mesh->DrawSubset(0);
+	m_device->SetStreamSource(0, m_vertexBuffer, 0, m_dataSize);
+	m_device->SetIndices(m_indexBuffer);
+	m_device->SetVertexDeclaration(m_vertexDeclaration);
+
+	if (topology == DMeshTopology_LineList)
+		m_device->DrawIndexedPrimitive(D3DPT_LINELIST, 0, 0, m_vertexCount, 0, m_indexCount / 2);
+	else if (topology == DMeshTopology_LineStrip)
+		m_device->DrawIndexedPrimitive(D3DPT_LINESTRIP, 0, 0, m_vertexCount, 0, m_indexCount / 2);
+	else if (topology == DMeshTopology_PointList)
+		m_device->DrawIndexedPrimitive(D3DPT_POINTLIST, 0, 0, m_vertexCount, 0, m_indexCount);
+	else if (topology == DMeshTopology_TriangleList) {
+		m_device->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, m_vertexCount, 0, m_indexCount / 3);
+	}
+	else if (topology == DMeshTopology_TriangleStrip)
+		m_device->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0, m_vertexCount, 0, m_indexCount / 3);
+
+	//m_device->SetStreamSource()
+	//Device->SetStreamSource(0, VB, 0, sizeof(Vertex));
+	//Device->SetIndices(IB);
+	//Device->SetFVF(Vertex::FVF);
+
+	//// Draw cube.
+	//Device->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 8, 0, 12);
 }
 
 void DMeshRes9::Release()
 {
 	m_device = NULL;
-	if (m_mesh != NULL)
+	/*if (m_mesh != NULL)
 	{
 		m_mesh->Release();
 	}
-	m_mesh = NULL;
+	m_mesh = NULL;*/
+	if (m_vertexBuffer != NULL)
+	{
+		m_vertexBuffer->Release();
+	}
+	if (m_indexBuffer != NULL)
+	{
+		m_indexBuffer->Release();
+	}
+	if (m_vertexDeclaration != NULL)
+	{
+		m_vertexDeclaration->Release();
+	}
+	m_vertexBuffer = NULL;
+	m_indexBuffer = NULL;
+	m_vertexDeclaration = NULL;
 }

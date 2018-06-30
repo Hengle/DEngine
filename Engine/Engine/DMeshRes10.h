@@ -16,7 +16,7 @@ protected:
 private:
 	ID3D10Device* m_device;
 	ID3D10Buffer* m_vertexBuffer, *m_indexBuffer;
-	int m_dataSize;
+	//int m_dataSize;
 	//int m_dataCount;
 	//bool m_hasUV;
 	//bool m_hasUV1;

@@ -23,7 +23,7 @@ TestScene::TestScene(SCENEID sceneId, char * sceneName) : DScene(sceneId, sceneN
 	cube = 0;
 	obj = 0;
 
-	//m_light = 0;
+	m_light = 0;
 }
 
 void TestScene::OnGUI()
@@ -74,9 +74,10 @@ void TestScene::OnGUI()
 
 
 
-	/*transform->SetEuler(euler.x, euler.y, euler.z);
+	//transform->SetEuler(euler.x, euler.y, euler.z);
 
-	transform = m_light->GetTransform();
+	DTransform* transform = m_light->GetTransform();
+	DVector3 euler, forward;
 	transform->GetEuler(euler);
 
 	ImGui::SliderFloat("LPitch", &euler.x, 0.0f, 360.0f);
@@ -84,8 +85,9 @@ void TestScene::OnGUI()
 	ImGui::SliderFloat("LRoll", &euler.z, 0.0f, 360.0f);
 
 
-	transform->SetEuler(euler.x, euler.y, euler.z);*/
-
+	transform->SetEuler(euler.x, euler.y, euler.z);
+	transform->GetForward(forward);
+	DShader::SetGlobalVector3("g_sundir", forward);
 }
 
 void TestScene::OnLoad()
@@ -147,7 +149,7 @@ void TestScene::OnLoad()
 
 void TestScene::TestLoad()
 {
-	testcolorshader = DShader::Create(L"../Res/color.vs9", L"../Res/color.ps9");
+	testcolorshader = DShader::Create(L"../Res/sky.vs", L"../Res/sky.ps");
 	testcolormat = new DMaterial(testcolorshader);
 	/*testcolormesh = new DMesh();
 	float* vs = new float[12];
@@ -191,14 +193,14 @@ void TestScene::TestLoad()
 	transform->SetPosition(3.24f, 6.822f, 7.701f);
 	SetCamera(cam);
 
-	////m_light = new DLight();
-	////m_light->SetColor(1, 1, 1, 1);
-	////transform = m_light->GetTransform();
-	////transform->SetEuler(50, -30, 0);
+	m_light = new DLight();
+	m_light->SetColor(1, 1, 1, 1);
+	transform = m_light->GetTransform();
+	transform->SetEuler(50, -30, 0);
 
 	//DMesh* mesh = DMesh::Create("../Res/eboy.obj");
 	plane = DMesh::Create(DMESH_Plane);
-	shader = DShader::Create(L"../Res/texture.vs9", L"../Res/texture.ps9");
+	shader = DShader::Create(L"../Res/texture.vs", L"../Res/texture.ps");
 	floor = DTexture2D::Create(L"../Res/decal.jpg");
 	map = DTexture2D::Create(L"../Res/eboy.jpg");
 	cb = DTexture2D::Create(L"../Res/ground_12.jpg");
@@ -279,6 +281,9 @@ void TestScene::OnUnLoad()
 	m_rt->Destroy();
 	delete m_rt;
 	m_rt = 0;
+	m_light->Destroy();
+	delete m_light;
+	m_light = 0;
 	//testd->Release();
 	//delete testd;
 	//testd = NULL;

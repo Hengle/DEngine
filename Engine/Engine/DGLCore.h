@@ -2,6 +2,8 @@
 #include "DColor.h"
 #include "DMath.h"
 #include <d3dcommon.h>
+#include <string>
+#include <map>
 
 enum DVertexUsage
 {
@@ -61,18 +63,6 @@ enum DRSStencilOp
 	IncrementWrap = 6,
 };
 
-typedef struct DShaderResDesc
-{
-public:
-	DShaderResDesc()
-	{
-
-	}
-	
-public:
-
-} DShaderResDesc;
-
 typedef struct DShaderParamDesc
 {
 public:
@@ -89,6 +79,57 @@ public:
 public:
 	int cbufferIndex, cbufferOffset, cbufferLength,propertyOffset, propertySize,shaderType;
 } DShaderParamDesc;
+
+typedef struct DShaderPropertyDesc
+{
+public:
+	DShaderPropertyDesc()
+	{
+		propertyOffset = -1;
+		propertySize = 0;
+		isGlobal = false;
+	}
+
+public:
+	int propertyOffset;//属性在cbuffer中的偏移量
+	int propertySize;//属性大小
+	bool isGlobal;//是否为全局属性
+	std::string propertyName;//属性名称
+} DShaderPropertyDesc;
+
+typedef struct DShaderResDesc
+{
+public:
+	DShaderResDesc()
+	{
+		offset = 0;
+		isGlobal = false;
+	}
+
+public:
+	UINT offset;
+	std::string resName;
+	bool isGlobal;
+};
+
+class DShaderCBufferDesc
+{
+public:
+	DShaderCBufferDesc()
+	{
+		cbufferIndex = -1;
+		cbufferStartSlot = -1;
+		cbufferSize = 0;
+		shaderType = 0;
+	}
+
+public:
+	int cbufferIndex;//用于索引该cbuffer指针
+	int cbufferStartSlot;
+	int cbufferSize;//cbuffer大小
+	int shaderType;
+	std::map<std::string, DShaderPropertyDesc> properties;
+};
 
 typedef struct DMeshBufferDesc
 {
@@ -173,25 +214,29 @@ class DShaderRes
 {
 public:
 	DShaderRes();
-	unsigned int GetCBufferCount() const;
+	//unsigned int GetCBufferCount() const;
 	unsigned int GetPropertyCount() const;
 	void Init(WCHAR* vsfile, WCHAR* psfile);
-	void ApplyParams(int cindex, int coffset, int csize, int stype, float* params);
+	unsigned int GetResCount() const;
+	void ApplyParams(std::map<std::string, float*>&params, std::map<std::string, float*>&gparams);
+	//void ApplyParams(int cindex, int coffset, int csize, int stype, float* params);
 	void Draw();
 	bool IsInitialized();
 	int GetVertexUsage();
-	virtual void GetPropertyInfo(const LPCSTR key, DShaderParamDesc* desc) const = 0;
-	virtual UINT GetResOffset(const LPCSTR key) const = 0;
+	//virtual void GetPropertyInfo(const LPCSTR key, DShaderParamDesc* desc) const = 0;
+	//virtual UINT GetResOffset(const LPCSTR key) const = 0;
+	virtual void GetResDesc(unsigned int index, DShaderResDesc&) const = 0;
 	virtual bool HasProperty(const LPCSTR key) const = 0;
 	virtual void Release() = 0;
 
 protected:
 	virtual bool OnInit(WCHAR*, WCHAR*) = 0;
-	virtual void OnApplyParams(int, int, int, int, float*) = 0;
+	virtual void OnApplyParams(std::map<std::string, float*>&params, std::map<std::string, float*>&gparams) = 0;
+	//virtual void OnApplyParams(int, int, int, int, float*) = 0;
 	virtual void OnDraw() = 0;
 
 protected:
-	unsigned int m_cbufferCount, m_propertyCount;
+	unsigned int m_cbufferCount, m_propertyCount, m_resCount;
 	bool m_isInitialized;
 	int m_vertexUsage;
 };

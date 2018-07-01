@@ -167,12 +167,13 @@ DShaderRes::DShaderRes()
 	m_cbufferCount = 0;
 	m_propertyCount = 0;
 	m_vertexUsage = 0;
+	m_resCount = 0;
 }
 
-unsigned int DShaderRes::GetCBufferCount() const
-{
-	return m_cbufferCount;
-}
+//unsigned int DShaderRes::GetCBufferCount() const
+//{
+//	return m_cbufferCount;
+//}
 
 unsigned int DShaderRes::GetPropertyCount() const
 {
@@ -184,11 +185,22 @@ void DShaderRes::Init(WCHAR * vsfile, WCHAR * psfile)
 	m_isInitialized = OnInit(vsfile, psfile);
 }
 
-void DShaderRes::ApplyParams(int cindex, int coffset, int csize, int stype, float * params)
+unsigned int DShaderRes::GetResCount() const
+{
+	return m_resCount;
+}
+
+void DShaderRes::ApplyParams(std::map<std::string, float*>& params, std::map<std::string, float*>&gparams)
 {
 	if (m_isInitialized)
-		OnApplyParams(cindex, coffset, csize, stype, params);
+		OnApplyParams(params, gparams);
 }
+
+//void DShaderRes::ApplyParams(int cindex, int coffset, int csize, int stype, float * params)
+//{
+//	if (m_isInitialized)
+//		OnApplyParams(cindex, coffset, csize, stype, params);
+//}
 
 void DShaderRes::Draw()
 {

@@ -9,8 +9,9 @@ class DShaderRes10 : public DShaderRes
 public:
 	DShaderRes10(ID3D10Device* device);
 	~DShaderRes10();
-	virtual void GetPropertyInfo(const LPCSTR key, DShaderParamDesc* desc) const;
-	virtual UINT GetResOffset(const LPCSTR key) const;
+	//virtual void GetPropertyInfo(const LPCSTR key, DShaderParamDesc* desc) const;
+	//virtual UINT GetResOffset(const LPCSTR key) const;
+	virtual void GetResDesc(unsigned int index, DShaderResDesc&) const;
 	virtual bool HasProperty(const LPCSTR key) const;
 	virtual void Release();
 
@@ -21,7 +22,8 @@ private:
 protected:
 	virtual bool OnInit(WCHAR*, WCHAR*);
 	virtual void OnDraw();
-	virtual void OnApplyParams(int, int, int, int, float*);
+	//virtual void OnApplyParams(int, int, int, int, float*);
+	virtual void OnApplyParams(std::map<std::string, float*>&params, std::map<std::string, float*>&gparams);
 
 private:
 	ID3D10Device* m_device;

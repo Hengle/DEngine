@@ -4,24 +4,24 @@
 
 class DMaterial : public DResObject
 {
-private:
-	struct MaterialParam
-	{
-	public:
-		MaterialParam(int length, int index, int size, int offset, int shadertype);
-		~MaterialParam();
-		void SetParam(int index, float value);
-		void Release();
-		void GetParams(int& pcount, int&pindex, int&poffset, int&psize, int&stype, float**params);
-
-	private:
-		float* m_params;
-		int m_shaderType;
-		int m_offset;
-		int m_length;
-		int m_index;
-		int m_size;
-	};
+//private:
+//	struct MaterialParam
+//	{
+//	public:
+//		MaterialParam(int length, int index, int size, int offset, int shadertype);
+//		~MaterialParam();
+//		void SetParam(int index, float value);
+//		void Release();
+//		void GetParams(int& pcount, int&pindex, int&poffset, int&psize, int&stype, float**params);
+//
+//	private:
+//		float* m_params;
+//		int m_shaderType;
+//		int m_offset;
+//		int m_length;
+//		int m_index;
+//		int m_size;
+//	};
 
 public:
 	DMaterial(DShader*);
@@ -45,9 +45,11 @@ public:
 
 private:
 	DShader* m_shader;
-	MaterialParam** m_params;
-	std::map<std::string, DTexture*> m_textures;
-	unsigned int m_paramCount;
+	//MaterialParam** m_params;
+	//std::map<std::string, float*> m_params;
+	//std::map<std::string, DTexture*> m_textures;
+	DShaderConstantTable* m_constantTable;
+	//unsigned int m_paramCount;
 	DCullMode m_cullMode;
 	bool m_zwrite;
 	DRSCompareFunc m_ztest;

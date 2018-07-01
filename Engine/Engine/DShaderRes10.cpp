@@ -13,34 +13,38 @@ DShaderRes10::~DShaderRes10()
 {
 }
 
-void DShaderRes10::GetPropertyInfo(const LPCSTR key, DShaderParamDesc * desc) const
-{
-	if (m_params.find(key) != m_params.end())
-	{
-		DShaderParamDesc pm = m_params.at(key);
-		desc->cbufferIndex = pm.cbufferIndex;
-		desc->cbufferOffset = pm.cbufferOffset;
-		desc->cbufferLength = pm.cbufferLength;
-		desc->propertySize = pm.propertySize;
-		desc->propertyOffset = pm.propertyOffset;
-		desc->shaderType = pm.shaderType;
-		return;
-	}
-	desc->cbufferIndex = -1;
-	desc->cbufferOffset = -1;
-	desc->cbufferLength = 0;
-	desc->propertySize = 0;
-	desc->propertyOffset = -1;
-	desc->shaderType = 0;
-}
+//void DShaderRes10::GetPropertyInfo(const LPCSTR key, DShaderParamDesc * desc) const
+//{
+//	if (m_params.find(key) != m_params.end())
+//	{
+//		DShaderParamDesc pm = m_params.at(key);
+//		desc->cbufferIndex = pm.cbufferIndex;
+//		desc->cbufferOffset = pm.cbufferOffset;
+//		desc->cbufferLength = pm.cbufferLength;
+//		desc->propertySize = pm.propertySize;
+//		desc->propertyOffset = pm.propertyOffset;
+//		desc->shaderType = pm.shaderType;
+//		return;
+//	}
+//	desc->cbufferIndex = -1;
+//	desc->cbufferOffset = -1;
+//	desc->cbufferLength = 0;
+//	desc->propertySize = 0;
+//	desc->propertyOffset = -1;
+//	desc->shaderType = 0;
+//}
+//
+//UINT DShaderRes10::GetResOffset(const LPCSTR key) const
+//{
+//	if (m_resParams.find(key) != m_resParams.end())
+//	{
+//		return m_resParams.at(key);
+//	}
+//	return NAN;
+//}
 
-UINT DShaderRes10::GetResOffset(const LPCSTR key) const
+void DShaderRes10::GetResDesc(unsigned int index, DShaderResDesc &) const
 {
-	if (m_resParams.find(key) != m_resParams.end())
-	{
-		return m_resParams.at(key);
-	}
-	return NAN;
 }
 
 bool DShaderRes10::HasProperty(const LPCSTR key) const
@@ -49,6 +53,8 @@ bool DShaderRes10::HasProperty(const LPCSTR key) const
 	{
 		return true;
 	}
+	if (m_resParams.find(key) != m_resParams.end())
+		return true;
 	return false;
 }
 
@@ -443,35 +449,39 @@ void DShaderRes10::OnDraw()
 	//deviceContext->PSSetSamplers(0, 1, &m_samplerState);
 }
 
-void DShaderRes10::OnApplyParams(int cindex, int coffset, int csize, int stype, float* params)
+void DShaderRes10::OnApplyParams(std::map<std::string, float*>& params, std::map<std::string, float*>&gparams)
 {
-	HRESULT result;
-
-	float* dataPtr;
-	unsigned int bufferNumber = coffset;
-
-	ID3D10Buffer* pbuffer = m_paramBuffers[cindex];
-
-	result = pbuffer->Map(D3D10_MAP_WRITE_DISCARD, 0, (void**)&dataPtr);
-	if (FAILED(result))
-	{
-		return;
-	}
-
-	int i;
-	for (i = 0; i < csize; i++)
-	{
-		dataPtr[i] = params[i];
-	}
-
-	pbuffer->Unmap();
-
-	if (stype == 0)
-	{
-		m_device->VSSetConstantBuffers(bufferNumber, 1, &pbuffer);
-	}
-	else
-	{
-		m_device->PSSetConstantBuffers(bufferNumber, 1, &pbuffer);
-	}
 }
+
+//void DShaderRes10::OnApplyParams(int cindex, int coffset, int csize, int stype, float* params)
+//{
+//	HRESULT result;
+//
+//	float* dataPtr;
+//	unsigned int bufferNumber = coffset;
+//
+//	ID3D10Buffer* pbuffer = m_paramBuffers[cindex];
+//
+//	result = pbuffer->Map(D3D10_MAP_WRITE_DISCARD, 0, (void**)&dataPtr);
+//	if (FAILED(result))
+//	{
+//		return;
+//	}
+//
+//	int i;
+//	for (i = 0; i < csize; i++)
+//	{
+//		dataPtr[i] = params[i];
+//	}
+//
+//	pbuffer->Unmap();
+//
+//	if (stype == 0)
+//	{
+//		m_device->VSSetConstantBuffers(bufferNumber, 1, &pbuffer);
+//	}
+//	else
+//	{
+//		m_device->PSSetConstantBuffers(bufferNumber, 1, &pbuffer);
+//	}
+//}

@@ -98,11 +98,11 @@ void DCamera::RenderFilter()
 {
 	if (m_filter != NULL && m_renderTexture != NULL)
 	{
-		FLOAT width, height;
+		//FLOAT width, height;
 
 		DGraphics::BeginScene(true, false, m_backgroundColor);
 		//DGraphics::Clear(true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f));
-		DSystem::GetGraphicsMgr()->GetResolution(width, height);
+		//DSystem::GetGraphicsMgr()->GetResolution(width, height);
 		m_filter->Render(m_renderTexture);
 		DGraphics::EndScene();
 	}

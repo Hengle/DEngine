@@ -36,7 +36,7 @@ bool DSystem::Init()
 	m_timeMgr->Init();
 
 	m_graphicsMgr = new DGraphics();
-	if (!m_graphicsMgr->Init(width, height, false, m_hwnd, DGRAPHICS_API_D3D9))
+	if (!m_graphicsMgr->Init(width, height, false, m_hwnd, DGRAPHICS_API_D3D11))
 	{
 		return false;
 	}
@@ -123,6 +123,7 @@ void DSystem::Shutdown()
 		m_res->Shutdown();
 		delete m_res;
 	}
+	DShader::ReleaseGlobalConstants();
 	m_res = NULL;
 
 	m_hwnd = NULL;

@@ -4,9 +4,11 @@ struct PixelInputType
     float3 viewDir : TEXCOORD0;
 };
 
+float3 g_sundir;
+
 float3 GetSkyColor(float3 dir) {
 	float3 col = float3(0,0,0);
-	float3 _SunDir = float3(1.0f, -0.8f, 1.0f);
+	//float3 _SunDir = float3(1.0f, -0.8f, 1.0f);
 
 	float sign = step(0.0, -dir.y);
 
@@ -22,7 +24,7 @@ float3 GetSkyColor(float3 dir) {
 	col += 0.3*float3(0.8, 0.9, 1.0)*exp2(hort*20.0 - 20.0);
 	col += 0.1*float3(0.8, 0.9, 1.0)*exp2(hort*15.0 - 15.0);
 
-	float sun = clamp(dot(normalize(_SunDir.xyz), dir), 0.0, 1.0);
+	float sun = clamp(dot(normalize(g_sundir.xyz), dir), 0.0, 1.0);
 	col += 0.2*float3(1.0, 0.8, 0.2)*pow(sun, 2.0);
 	col += 0.5*float3(1.0, 0.8, 0.9)*exp2(sun*650. - 650.0f);
 	col += 0.1*float3(1.0, 1.0, 0.8)*exp2(sun*100. - 100.0f);

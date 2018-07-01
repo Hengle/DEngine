@@ -38,7 +38,7 @@ private:
 	DTexture* map;
 	DTexture* cb;
 	DRenderTexture* m_rt;
-
+	DLight* m_light;
 
 	DShader* testcolorshader;
 	DMaterial* testcolormat;

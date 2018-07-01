@@ -13,35 +13,39 @@ DShaderRes9::~DShaderRes9()
 {
 }
 
-void DShaderRes9::GetPropertyInfo(const LPCSTR key, DShaderParamDesc * desc) const
-{
-	if (m_params.find(key) != m_params.end())
-	{
-		DShaderParamDesc pm = m_params.at(key);
-		desc->cbufferIndex = pm.cbufferIndex;
-		desc->cbufferOffset = pm.cbufferOffset;
-		desc->cbufferLength = pm.cbufferLength;
-		desc->propertySize = pm.propertySize;
-		desc->propertyOffset = pm.propertyOffset;
-		desc->shaderType = pm.shaderType;
-		return;
-		//}
-	}
-	desc->cbufferIndex = -1;
-	desc->cbufferOffset = -1;
-	desc->cbufferLength = 0;
-	desc->propertySize =  0;
-	desc->propertyOffset = -1;
-	desc->shaderType = 0;
-}
+//void DShaderRes9::GetPropertyInfo(const LPCSTR key, DShaderParamDesc * desc) const
+//{
+//	if (m_params.find(key) != m_params.end())
+//	{
+//		DShaderParamDesc pm = m_params.at(key);
+//		desc->cbufferIndex = pm.cbufferIndex;
+//		desc->cbufferOffset = pm.cbufferOffset;
+//		desc->cbufferLength = pm.cbufferLength;
+//		desc->propertySize = pm.propertySize;
+//		desc->propertyOffset = pm.propertyOffset;
+//		desc->shaderType = pm.shaderType;
+//		return;
+//		//}
+//	}
+//	desc->cbufferIndex = -1;
+//	desc->cbufferOffset = -1;
+//	desc->cbufferLength = 0;
+//	desc->propertySize =  0;
+//	desc->propertyOffset = -1;
+//	desc->shaderType = 0;
+//}
+//
+//UINT DShaderRes9::GetResOffset(const LPCSTR key) const
+//{
+//	if (m_resParams.find(key) != m_resParams.end())
+//	{
+//		return m_resParams.at(key).RegisterIndex;
+//	}
+//	return NAN;
+//}
 
-UINT DShaderRes9::GetResOffset(const LPCSTR key) const
+void DShaderRes9::GetResDesc(unsigned int index, DShaderResDesc &) const
 {
-	if (m_resParams.find(key) != m_resParams.end())
-	{
-		return m_resParams.at(key).RegisterIndex;
-	}
-	return NAN;
 }
 
 bool DShaderRes9::HasProperty(const LPCSTR key) const
@@ -50,6 +54,8 @@ bool DShaderRes9::HasProperty(const LPCSTR key) const
 	{
 		return true;
 	}
+	if (m_resParams.find(key) != m_resParams.end())
+		return true;
 	return false;
 }
 
@@ -167,16 +173,20 @@ void DShaderRes9::OnDraw()
 	m_device->SetPixelShader(m_pixelShader);
 }
 
-void DShaderRes9::OnApplyParams(int cindex, int coffset, int csize, int stype, float* params)
+void DShaderRes9::OnApplyParams(std::map<std::string, float*>& params, std::map<std::string, float*>&gparams)
 {
-	if (cindex < 0 || cindex >= m_handles.size())
-		return;
-	D3DXHANDLE handle = m_handles.at(cindex);
-	if (stype == 0)
-		m_vertexConstable->SetValue(m_device, handle, params, csize);
-	else
-		m_pixelConstable->SetValue(m_device, handle, params, csize);
 }
+
+//void DShaderRes9::OnApplyParams(int cindex, int coffset, int csize, int stype, float* params)
+//{
+//	if (cindex < 0 || cindex >= m_handles.size())
+//		return;
+//	D3DXHANDLE handle = m_handles.at(cindex);
+//	if (stype == 0)
+//		m_vertexConstable->SetValue(m_device, handle, params, csize);
+//	else
+//		m_pixelConstable->SetValue(m_device, handle, params, csize);
+//}
 
 HRESULT DShaderRes9::InitVertexShader(ID3DXBuffer*vertexShaderBuffer)
 {

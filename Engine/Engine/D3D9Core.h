@@ -10,7 +10,7 @@ public:
 	D3D9Core();
 	~D3D9Core();
 
-	virtual bool Init(int, int, bool, HWND);
+	virtual bool Init(int width, int height, bool fullscreen, HWND);
 	virtual void Destroy();
 	virtual void BeginRender();
 	virtual void EndRender();

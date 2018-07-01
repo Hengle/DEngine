@@ -1,4 +1,4 @@
-#include "DRes.h"
+﻿#include "DRes.h"
 
 DRes::DRes()
 {
@@ -11,7 +11,7 @@ DRes::~DRes()
 void DRes::Init()
 {
 	m_groups = new std::map<unsigned int, ResGroup*>();
-	LoadResManifest("../Res/ResManifest.dres");
+	//LoadResManifest("../Res/ResManifest.dres");
 }
 
 void DRes::Shutdown()

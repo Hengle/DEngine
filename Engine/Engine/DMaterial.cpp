@@ -6,8 +6,8 @@ DMaterial::DMaterial(DShader * shader)
 {
 	m_shader = shader;
 	//m_params = m_shader->GetParam();
-	m_params = new MaterialParam*[m_shader->GetCBufferCount()]{ NULL };
-	m_paramCount = m_shader->GetCBufferCount();
+	//m_params = new MaterialParam*[m_shader->GetCBufferCount()]{ NULL };
+	//m_paramCount = m_shader->GetCBufferCount();
 	m_cullMode = DCullMode_Back;
 	m_ztest = DRSCompareFunc_LEqual;
 	m_zwrite = true;
@@ -27,164 +27,305 @@ void DMaterial::SetMatrix(const LPCSTR key, DMatrix4x4 & matrix)
 {
 	if (m_shader == NULL)
 		return;
-	DShaderParamDesc desc;
-	//m_shader->GetCBufferInfo(cbuffername, cindex, coffset, clength, ctype);
-	//m_shader->GetPropertyInfo(key, cindex, coffset, clength, offset, length, ctype);
-	m_shader->GetPropertyInfo(key, &desc);
+	if (m_constantTable == nullptr)
+		m_constantTable = new DShaderConstantTable();
+	m_constantTable->SetMatrix(key, matrix);
 
+	/*float* values = 0;
 	int i;
-
-	if (desc.propertyOffset >= 0 && desc.propertySize == 16)
+	if (m_params.find(key) != m_params.end())
 	{
-		if (m_params[desc.cbufferIndex] == NULL)
-		{
-			m_params[desc.cbufferIndex] = new MaterialParam(desc.propertySize, desc.cbufferIndex, desc.cbufferLength, desc.cbufferOffset, desc.shaderType);
-		}
-		
-		for (i = 0; i < 16; i++)
-		{
-			m_params[desc.cbufferIndex]->SetParam(desc.propertyOffset+i, matrix[i]);
-		}
+		values = m_params.at(key);
 	}
+	else 
+	{
+		values = new float[16];
+		m_params.insert(std::pair<std::string, float*>(key, values));
+	}
+
+	for (i = 0; i < 16; i++)
+	{
+		values[i] = matrix[i];
+	}*/
+
+	/*if (!m_shader->HasProperty(key))
+		return;*/
+	//DShaderParamDesc desc;
+	////m_shader->GetCBufferInfo(cbuffername, cindex, coffset, clength, ctype);
+	////m_shader->GetPropertyInfo(key, cindex, coffset, clength, offset, length, ctype);
+	//m_shader->GetPropertyInfo(key, &desc);
+
+	//int i;
+
+	//if (desc.propertyOffset >= 0 && desc.propertySize == 16)
+	//{
+	//	if (m_params[desc.cbufferIndex] == NULL)
+	//	{
+	//		m_params[desc.cbufferIndex] = new MaterialParam(desc.propertySize, desc.cbufferIndex, desc.cbufferLength, desc.cbufferOffset, desc.shaderType);
+	//	}
+	//	
+	//	for (i = 0; i < 16; i++)
+	//	{
+	//		m_params[desc.cbufferIndex]->SetParam(desc.propertyOffset+i, matrix[i]);
+	//	}
+	//}
 }
 
 void DMaterial::SetVector4(const LPCSTR key, DVector4 & vector)
 {
 	if (m_shader == NULL)
 		return;
-	DShaderParamDesc desc;
-	//int offset, length, cindex, coffset, ctype, clength;
-	//m_shader->GetCBufferInfo(cbuffername, cindex, coffset, clength, ctype);
-	//m_shader->GetPropertyInfo(key, cindex, coffset, clength, offset, length, ctype);
-	m_shader->GetPropertyInfo(key, &desc);
+	if (m_constantTable == nullptr)
+		m_constantTable = new DShaderConstantTable();
+	m_constantTable->SetVector4(key, vector);
 
+	/*float* values = 0;
 	int i;
-
-	if (desc.propertyOffset >= 0 && desc.propertySize == 4)
+	if (m_params.find(key) != m_params.end())
 	{
-		if (m_params[desc.cbufferIndex] == NULL)
-		{
-			m_params[desc.cbufferIndex] = new MaterialParam(desc.propertySize, desc.cbufferIndex, desc.cbufferLength, desc.cbufferOffset, desc.shaderType);
-		}
-
-		for (i = 0; i < 4; i++)
-		{
-			m_params[desc.cbufferIndex]->SetParam(desc.propertyOffset + i, vector[i]);
-		}
+		values = m_params.at(key);
 	}
+	else
+	{
+		values = new float[4];
+		m_params.insert(std::pair<std::string, float*>(key, values));
+	}
+
+	for (i = 0; i < 4; i++)
+	{
+		values[i] = vector[i];
+	}*/
+
+	/*if (!m_shader->HasProperty(key))
+		return;*/
+	//DShaderParamDesc desc;
+	////int offset, length, cindex, coffset, ctype, clength;
+	////m_shader->GetCBufferInfo(cbuffername, cindex, coffset, clength, ctype);
+	////m_shader->GetPropertyInfo(key, cindex, coffset, clength, offset, length, ctype);
+	//m_shader->GetPropertyInfo(key, &desc);
+
+	//int i;
+
+	//if (desc.propertyOffset >= 0 && desc.propertySize == 4)
+	//{
+	//	if (m_params[desc.cbufferIndex] == NULL)
+	//	{
+	//		m_params[desc.cbufferIndex] = new MaterialParam(desc.propertySize, desc.cbufferIndex, desc.cbufferLength, desc.cbufferOffset, desc.shaderType);
+	//	}
+
+	//	for (i = 0; i < 4; i++)
+	//	{
+	//		m_params[desc.cbufferIndex]->SetParam(desc.propertyOffset + i, vector[i]);
+	//	}
+	//}
 }
 
 void DMaterial::SetVector3(const LPCSTR key, DVector3 & vector)
 {
 	if (m_shader == NULL)
 		return;
-	DShaderParamDesc desc;
-	//int offset, length, cindex, coffset, ctype, clength;
-	//m_shader->GetCBufferInfo(cbuffername, cindex, coffset, clength, ctype);
-	//m_shader->GetPropertyInfo(key, cindex, coffset, clength, offset, length, ctype);
-	m_shader->GetPropertyInfo(key, &desc);
+	if (m_constantTable == nullptr)
+		m_constantTable = new DShaderConstantTable();
+	m_constantTable->SetVector3(key, vector);
 
+	/*float* values = 0;
 	int i;
-
-	if (desc.propertyOffset >= 0 && desc.propertySize == 3)
+	if (m_params.find(key) != m_params.end())
 	{
-		if (m_params[desc.cbufferIndex] == NULL)
-		{
-			m_params[desc.cbufferIndex] = new MaterialParam(desc.propertySize, desc.cbufferIndex, desc.cbufferLength, desc.cbufferOffset, desc.shaderType);
-		}
-
-		for (i = 0; i < 3; i++)
-		{
-			m_params[desc.cbufferIndex]->SetParam(desc.propertyOffset + i, vector[i]);
-		}
+		values = m_params.at(key);
 	}
+	else
+	{
+		values = new float[3];
+		m_params.insert(std::pair<std::string, float*>(key, values));
+	}
+
+	for (i = 0; i < 3; i++)
+	{
+		values[i] = vector[i];
+	}*/
+
+	/*if (!m_shader->HasProperty(key))
+		return;*/
+	//DShaderParamDesc desc;
+	////int offset, length, cindex, coffset, ctype, clength;
+	////m_shader->GetCBufferInfo(cbuffername, cindex, coffset, clength, ctype);
+	////m_shader->GetPropertyInfo(key, cindex, coffset, clength, offset, length, ctype);
+	//m_shader->GetPropertyInfo(key, &desc);
+
+	//int i;
+
+	//if (desc.propertyOffset >= 0 && desc.propertySize == 3)
+	//{
+	//	if (m_params[desc.cbufferIndex] == NULL)
+	//	{
+	//		m_params[desc.cbufferIndex] = new MaterialParam(desc.propertySize, desc.cbufferIndex, desc.cbufferLength, desc.cbufferOffset, desc.shaderType);
+	//	}
+
+	//	for (i = 0; i < 3; i++)
+	//	{
+	//		m_params[desc.cbufferIndex]->SetParam(desc.propertyOffset + i, vector[i]);
+	//	}
+	//}
 }
 
 void DMaterial::SetVector2(const LPCSTR key, DVector2 & vector)
 {
 	if (m_shader == NULL)
 		return;
-	DShaderParamDesc desc;
-	//int offset, length, cindex, coffset, ctype, clength;
-	//m_shader->GetCBufferInfo(cbuffername, cindex, coffset, clength, ctype);
-	//m_shader->GetPropertyInfo(key, cindex, coffset, clength, offset, length, ctype);
-	m_shader->GetPropertyInfo(key, &desc);
+	if (m_constantTable == nullptr)
+		m_constantTable = new DShaderConstantTable();
+	m_constantTable->SetVector2(key, vector);
 
+	/*float* values = 0;
 	int i;
-
-	if (desc.propertyOffset >= 0 && desc.propertySize == 2)
+	if (m_params.find(key) != m_params.end())
 	{
-		if (m_params[desc.cbufferIndex] == NULL)
-		{
-			m_params[desc.cbufferIndex] = new MaterialParam(desc.propertySize, desc.cbufferIndex, desc.cbufferLength, desc.cbufferOffset, desc.shaderType);
-		}
-
-		for (i = 0; i < 2; i++)
-		{
-			m_params[desc.cbufferIndex]->SetParam(desc.propertyOffset + i, vector[i]);
-		}
+		values = m_params.at(key);
 	}
+	else
+	{
+		values = new float[2];
+		m_params.insert(std::pair<std::string, float*>(key, values));
+	}
+
+	for (i = 0; i < 2; i++)
+	{
+		values[i] = vector[i];
+	}*/
+
+	/*if (!m_shader->HasProperty(key))
+		return;*/
+	//DShaderParamDesc desc;
+	////int offset, length, cindex, coffset, ctype, clength;
+	////m_shader->GetCBufferInfo(cbuffername, cindex, coffset, clength, ctype);
+	////m_shader->GetPropertyInfo(key, cindex, coffset, clength, offset, length, ctype);
+	//m_shader->GetPropertyInfo(key, &desc);
+
+	//int i;
+
+	//if (desc.propertyOffset >= 0 && desc.propertySize == 2)
+	//{
+	//	if (m_params[desc.cbufferIndex] == NULL)
+	//	{
+	//		m_params[desc.cbufferIndex] = new MaterialParam(desc.propertySize, desc.cbufferIndex, desc.cbufferLength, desc.cbufferOffset, desc.shaderType);
+	//	}
+
+	//	for (i = 0; i < 2; i++)
+	//	{
+	//		m_params[desc.cbufferIndex]->SetParam(desc.propertyOffset + i, vector[i]);
+	//	}
+	//}
 }
 
 void DMaterial::SetColor(const LPCSTR key, DColor & color)
 {
 	if (m_shader == NULL)
 		return;
-	DShaderParamDesc desc;
-	//int offset, length, cindex, coffset, ctype, clength;
-	//m_shader->GetCBufferInfo(cbuffername, cindex, coffset, clength, ctype);
-	//m_shader->GetPropertyInfo(key, cindex, coffset, clength, offset, length, ctype);
-	m_shader->GetPropertyInfo(key, &desc);
+	if (m_constantTable == nullptr)
+		m_constantTable = new DShaderConstantTable();
+	m_constantTable->SetColor(key, color);
 
+	/*float* values = 0;
 	int i;
-
-	if (desc.propertyOffset >= 0 && desc.propertySize == 4)
+	if (m_params.find(key) != m_params.end())
 	{
-		if (m_params[desc.cbufferIndex] == NULL)
-		{
-			m_params[desc.cbufferIndex] = new MaterialParam(desc.propertySize, desc.cbufferIndex, desc.cbufferLength, desc.cbufferOffset, desc.shaderType);
-		}
-
-		for (i = 0; i < 4; i++)
-		{
-			m_params[desc.cbufferIndex]->SetParam(desc.propertyOffset + i, color[i]);
-		}
+		values = m_params.at(key);
 	}
+	else
+	{
+		values = new float[4];
+		m_params.insert(std::pair<std::string, float*>(key, values));
+	}
+
+	for (i = 0; i < 4; i++)
+	{
+		values[i] = color[i];
+	}*/
+
+	/*if (!m_shader->HasProperty(key))
+		return;*/
+	//DShaderParamDesc desc;
+	////int offset, length, cindex, coffset, ctype, clength;
+	////m_shader->GetCBufferInfo(cbuffername, cindex, coffset, clength, ctype);
+	////m_shader->GetPropertyInfo(key, cindex, coffset, clength, offset, length, ctype);
+	//m_shader->GetPropertyInfo(key, &desc);
+
+	//int i;
+
+	//if (desc.propertyOffset >= 0 && desc.propertySize == 4)
+	//{
+	//	if (m_params[desc.cbufferIndex] == NULL)
+	//	{
+	//		m_params[desc.cbufferIndex] = new MaterialParam(desc.propertySize, desc.cbufferIndex, desc.cbufferLength, desc.cbufferOffset, desc.shaderType);
+	//	}
+
+	//	for (i = 0; i < 4; i++)
+	//	{
+	//		m_params[desc.cbufferIndex]->SetParam(desc.propertyOffset + i, color[i]);
+	//	}
+	//}
 }
 
 void DMaterial::SetFloat(const LPCSTR key, float value)
 {
 	if (m_shader == NULL)
 		return;
-	DShaderParamDesc desc;
-	//int offset, length, cindex, coffset, ctype, clength;
-	//m_shader->GetCBufferInfo(cbuffername, cindex, coffset, clength, ctype);
-	//m_shader->GetPropertyInfo(key, cindex, coffset, clength, offset, length, ctype);
-	m_shader->GetPropertyInfo(key, &desc);
+	if (m_constantTable == nullptr)
+		m_constantTable = new DShaderConstantTable();
+	m_constantTable->SetFloat(key, value);
 
-	if (desc.propertyOffset >= 0 && desc.propertySize == 1)
+	/*float* values = 0;
+	int i;
+	if (m_params.find(key) != m_params.end())
 	{
-		if (m_params[desc.cbufferIndex] == NULL)
-		{
-			m_params[desc.cbufferIndex] = new MaterialParam(desc.propertySize, desc.cbufferIndex, desc.cbufferLength, desc.cbufferOffset, desc.shaderType);
-		}
-
-		m_params[desc.cbufferIndex]->SetParam(desc.propertyOffset, value);
+		values = m_params.at(key);
 	}
+	else
+	{
+		values = new float[1];
+		m_params.insert(std::pair<std::string, float*>(key, values));
+	}
+
+	values[0] = value;*/
+
+	/*if (!m_shader->HasProperty(key))
+		return;*/
+	//DShaderParamDesc desc;
+	////int offset, length, cindex, coffset, ctype, clength;
+	////m_shader->GetCBufferInfo(cbuffername, cindex, coffset, clength, ctype);
+	////m_shader->GetPropertyInfo(key, cindex, coffset, clength, offset, length, ctype);
+	//m_shader->GetPropertyInfo(key, &desc);
+
+	//if (desc.propertyOffset >= 0 && desc.propertySize == 1)
+	//{
+	//	if (m_params[desc.cbufferIndex] == NULL)
+	//	{
+	//		m_params[desc.cbufferIndex] = new MaterialParam(desc.propertySize, desc.cbufferIndex, desc.cbufferLength, desc.cbufferOffset, desc.shaderType);
+	//	}
+
+	//	m_params[desc.cbufferIndex]->SetParam(desc.propertyOffset, value);
+	//}
 }
 
 void DMaterial::SetTexture(const LPCSTR key, DTexture * texture)
 {
 	if (m_shader == NULL)
 		return;
-	if (m_textures.find(key) == m_textures.end())
+	if (m_constantTable == nullptr)
+		m_constantTable = new DShaderConstantTable();
+	m_constantTable->SetTexture(key, texture);
+
+	/*if (!m_shader->HasProperty(key))
+		return;*/
+	/*if (m_textures.find(key) == m_textures.end())
 	{
 		m_textures.insert(std::pair<std::string, DTexture*>(key, texture));
 	}
 	else
 	{
 		m_textures[key] = texture;
-	}
+	}*/
 }
 
 void DMaterial::SetCullMode(DCullMode cullMode)
@@ -227,31 +368,33 @@ void DMaterial::Apply()
 {
 	if (m_shader == NULL)
 		return;
-	int i = 0;
-	int pcount, poffset, pindex, psize, stype;
-	float* params;
+	//int i = 0;
+	//int pcount, poffset, pindex, psize, stype;
+	//float* params;
 
 	DGraphics::SetCullMode(m_cullMode);
 	DGraphics::SetZTestFunc(m_ztest);
 	DGraphics::SetZWriteEnable(m_zwrite);
 
-	for (i = 0; i < m_paramCount; i++)
-	{
-		//material->GetParams(i, pcount, pindex, poffset, psize, stype, &params);
-		m_params[i]->GetParams(pcount, pindex, poffset, psize, stype, &params);
-		m_shader->ApplyParams(pindex, poffset, psize, stype, params);
-		//DSystem::GetGraphicsMgr()->GetGLCore()->ApplyShaderParams(material->GetShader()->GetShaderBuffer(), pindex, poffset, psize, stype, params);
-	}
+	m_shader->Apply(m_constantTable);
 
-	std::map<std::string, DTexture*>::iterator  iter;
-	for (iter = m_textures.begin(); iter != m_textures.end(); iter++)
-	{
-		if (iter->second != NULL)
-		{
-			LPCSTR key = iter->first.c_str();
-			m_shader->ApplyRes(key, iter->second);
-		}
-	}
+	//for (i = 0; i < m_paramCount; i++)
+	//{
+	//	//material->GetParams(i, pcount, pindex, poffset, psize, stype, &params);
+	//	m_params[i]->GetParams(pcount, pindex, poffset, psize, stype, &params);
+	//	m_shader->ApplyParams(pindex, poffset, psize, stype, params);
+	//	//DSystem::GetGraphicsMgr()->GetGLCore()->ApplyShaderParams(material->GetShader()->GetShaderBuffer(), pindex, poffset, psize, stype, params);
+	//}
+
+	//std::map<std::string, DTexture*>::iterator  iter;
+	//for (iter = m_textures.begin(); iter != m_textures.end(); iter++)
+	//{
+	//	if (iter->second != NULL)
+	//	{
+	//		LPCSTR key = iter->first.c_str();
+	//		m_shader->ApplyRes(key, iter->second);
+	//	}
+	//}
 
 	m_shader->Draw();
 	//DSystem::GetGraphicsMgr()->GetGLCore()->DrawShader(material->GetShader()->GetShaderBuffer(), mesh->GetIndexCount());
@@ -281,7 +424,7 @@ void DMaterial::Destroy()
 	//m_cbuffers = NULL;
 	//m_params->Release();
 	//delete m_params;
-	int i;
+	/*int i;
 	for (i = 0; i < m_paramCount; i++)
 	{
 		if (m_params[i] != NULL)
@@ -291,21 +434,38 @@ void DMaterial::Destroy()
 		}
 		m_params[i] = NULL;
 	}
-	delete[] m_params;
+	delete[] m_params;*/
 
-	std::map<std::string, DTexture*>::iterator  iter;
-	for (iter = m_textures.begin(); iter != m_textures.end(); iter++)
+	if (m_constantTable != nullptr)
 	{
-		if (iter->second != NULL)
+		m_constantTable->Release();
+		delete m_constantTable;
+		m_constantTable = nullptr;
+	}
+
+	/*std::map<std::string, float*>::iterator piter;
+	for (piter = m_params.begin(); piter != m_params.end(); piter++)
+	{
+		if (piter->second != NULL)
 		{
-			iter->second->Destroy();
-			delete iter->second;
+			delete[] piter->second;
+		}
+	}
+	m_params.clear();
+
+	std::map<std::string, DTexture*>::iterator  titer;
+	for (titer = m_textures.begin(); titer != m_textures.end(); titer++)
+	{
+		if (titer->second != NULL)
+		{
+			titer->second->Destroy();
+			delete titer->second;
 		}
 	}
 
-	m_textures.clear();
+	m_textures.clear();*/
 
-	m_params = NULL;
+	//m_params = NULL;
 }
 
 //void DMaterial::SetParams()
@@ -319,37 +479,37 @@ void DMaterial::Destroy()
 //	}
 //}
 
-DMaterial::MaterialParam::MaterialParam(int length, int index, int size, int offset, int shadertype)
-{
-	m_params = new float[size];
-	m_shaderType = shadertype;
-	m_offset = offset;
-	m_length = length;
-	m_index = index;
-	m_size = size;
-}
-
-DMaterial::MaterialParam::~MaterialParam()
-{
-}
-
-void DMaterial::MaterialParam::SetParam(int index, float value)
-{
-	m_params[index] = value;
-}
-
-void DMaterial::MaterialParam::Release()
-{
-	delete[] m_params;
-	m_params = NULL;
-}
-
-void DMaterial::MaterialParam::GetParams(int & pcount, int & pindex, int & poffset, int & psize, int & stype, float ** params)
-{
-	pcount = m_length;
-	pindex = m_index;
-	poffset = m_offset;
-	psize = m_size;
-	stype = m_shaderType;
-	(*params) = m_params;
-}
+//DMaterial::MaterialParam::MaterialParam(int length, int index, int size, int offset, int shadertype)
+//{
+//	m_params = new float[size];
+//	m_shaderType = shadertype;
+//	m_offset = offset;
+//	m_length = length;
+//	m_index = index;
+//	m_size = size;
+//}
+//
+//DMaterial::MaterialParam::~MaterialParam()
+//{
+//}
+//
+//void DMaterial::MaterialParam::SetParam(int index, float value)
+//{
+//	m_params[index] = value;
+//}
+//
+//void DMaterial::MaterialParam::Release()
+//{
+//	delete[] m_params;
+//	m_params = NULL;
+//}
+//
+//void DMaterial::MaterialParam::GetParams(int & pcount, int & pindex, int & poffset, int & psize, int & stype, float ** params)
+//{
+//	pcount = m_length;
+//	pindex = m_index;
+//	poffset = m_offset;
+//	psize = m_size;
+//	stype = m_shaderType;
+//	(*params) = m_params;
+//}

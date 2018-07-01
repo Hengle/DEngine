@@ -9,15 +9,17 @@ class DShaderRes9 : public DShaderRes
 public:
 	DShaderRes9(LPDIRECT3DDEVICE9 device);
 	~DShaderRes9();
-	virtual void GetPropertyInfo(const LPCSTR key, DShaderParamDesc* desc) const;
-	virtual UINT GetResOffset(const LPCSTR key) const;
+	//virtual void GetPropertyInfo(const LPCSTR key, DShaderParamDesc* desc) const;
+	//virtual UINT GetResOffset(const LPCSTR key) const;
+	virtual void GetResDesc(unsigned int index, DShaderResDesc&) const;
 	virtual bool HasProperty(const LPCSTR key) const;
 	virtual void Release();
 
 protected:
 	virtual bool OnInit(WCHAR*, WCHAR*);
 	virtual void OnDraw();
-	virtual void OnApplyParams(int, int, int, int, float*);
+	//virtual void OnApplyParams(int, int, int, int, float*);
+	virtual void OnApplyParams(std::map<std::string, float*>&params, std::map<std::string, float*>&gparams);
 
 private:
 	HRESULT InitVertexShader(ID3DXBuffer*);

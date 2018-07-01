@@ -15,3 +15,5 @@
 #define DECAL_MAT        3000
 #define BODY_MAT         3001
 #define GROUND_MAT       3002
+
+#define BODY_MESH        4000

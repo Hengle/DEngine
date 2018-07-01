@@ -73,3 +73,17 @@ private:
 	std::map<std::string, MaterialResTexDesc> m_textureIds;
 };
 
+class DMeshResItem : public DResItem
+{
+public:
+	DMeshResItem(char* path);
+	virtual void Release();
+	static DMeshResItem* LoadManifest(std::ifstream&);
+
+protected:
+	virtual DResObject* OnLoad();
+
+private:
+	char* m_path;
+};
+

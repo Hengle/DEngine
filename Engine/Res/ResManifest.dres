@@ -64,4 +64,8 @@
 		#SHADER 0 1003
 	#RES_END
 
+	#RES_BEGIN MESH 4000
+		#PATH ../Res/eboy.obj
+	#RES_END
+
 #RES_GROUP_END

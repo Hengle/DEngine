@@ -202,6 +202,12 @@ void DRes::LoadResGroupManifest(ifstream & ifile, unsigned int groupid)
 				if (item != NULL)
 					group->AddItem(rid, item);
 			}
+			else if (strcmp(rtype, "MESH") == 0)
+			{
+				item = DMeshResItem::LoadManifest(ifile);
+				if (item != NULL)
+					group->AddItem(rid, item);
+			}
 		}
 		if (strcmp(rdef, "#RES_GROUP_END") == 0)
 		{

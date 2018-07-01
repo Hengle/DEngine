@@ -2,6 +2,7 @@
 #include "DMath.h"
 #include "DColor.h"
 #include "DGLCore.h"
+#include "DResObject.h"
 #include <map>
 
 enum DMeshDefine
@@ -11,13 +12,13 @@ enum DMeshDefine
 	DMESH_Plane = 2,
 };
 
-class DMesh
+class DMesh : public DResObject
 {
 
 public:
 	DMesh(bool = false);
 	~DMesh();
-	void Destroy();
+	virtual void Destroy();
 	int GetIndexCount() const;
 	int GetVertexCount() const;
 	void GetVertex(int index, DVector3* vertex) const;

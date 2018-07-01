@@ -28,8 +28,8 @@ private:
 	DDisplayObject* m_obj0;
 	DDisplayObject* m_cube;
 	DMesh* plane;
-	DMesh* cube;
-	DMesh* obj;
+	//DMesh* cube;
+	//DMesh* obj;
 	DRenderTexture* m_rt;
 	DLight* m_light;
 	/*DMesh* testcolormesh;

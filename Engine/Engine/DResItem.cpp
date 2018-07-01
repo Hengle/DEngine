@@ -250,3 +250,47 @@ DResObject * DMaterialResItem::OnLoad()
 	}
 	return obj;
 }
+
+DMeshResItem::DMeshResItem(char * path)
+{
+	m_path = path;
+}
+
+void DMeshResItem::Release()
+{
+	DResItem::Release();
+	delete[] m_path;
+}
+
+DMeshResItem * DMeshResItem::LoadManifest(std::ifstream & ifile)
+{
+	char mdef[32], path[512];
+	char* argp = 0;
+	int argplen;
+	DMeshResItem* item = NULL;
+	while (!ifile.eof())
+	{
+		ifile >> mdef;
+		if (strcmp(mdef, "#PATH") == 0)
+		{
+			ifile >> path;
+			argplen = strlen(path) + 1;
+			argp = new char[argplen];
+			strcpy_s(argp, argplen, path);
+		}
+		else if (strcmp(mdef, "#RES_END") == 0)
+		{
+			if (argp != 0)
+			{
+				item = new DMeshResItem(argp);
+			}
+			return item;
+		}
+	}
+	return NULL;
+}
+
+DResObject * DMeshResItem::OnLoad()
+{
+	return DMesh::Create(m_path);
+}

@@ -21,8 +21,8 @@ TestScene::TestScene(SCENEID sceneId, char * sceneName) : DScene(sceneId, sceneN
 	mat = 0;
 	mat2 = 0;
 	mat3 = 0;*/
-	cube = 0;
-	obj = 0;
+	//cube = 0;
+	//obj = 0;
 
 	m_light = 0;
 }
@@ -219,7 +219,8 @@ void TestScene::TestLoad()
 
 	AddDisplayObject(m_plane);
 
-	obj = DMesh::Create("../Res/eboy.obj");
+	//obj = DMesh::Create("../Res/eboy.obj");
+	DMesh* obj = DRes::Load<DMesh>(DEFAULT_GROUP, BODY_MESH);
 	// mat2 = new DMaterial(shader);
 	DMaterial* mat2 = DRes::Load<DMaterial>(DEFAULT_GROUP, BODY_MAT);
 	//mat2->SetCullMode(DCullMode_Front);
@@ -235,7 +236,8 @@ void TestScene::TestLoad()
 	AddDisplayObject(m_obj0);
 
 
-	cube = DMesh::Create("../Res/eboy.obj");
+	//cube = DMesh::Create("../Res/eboy.obj");
+	DMesh* cube = DRes::Load<DMesh>(DEFAULT_GROUP, BODY_MESH);
 	//mat3 = new DMaterial(shader);
 	//mat3->SetTexture("shaderTexture", cb);
 	DMaterial* mat3 = DRes::Load<DMaterial>(DEFAULT_GROUP, GROUND_MAT);
@@ -251,12 +253,12 @@ void TestScene::OnUnLoad()
 	plane->Destroy();
 	delete plane;
 	plane = 0;
-	cube->Destroy();
+	/*cube->Destroy();
 	delete cube;
 	cube = 0;
 	obj->Destroy();
 	delete obj;
-	obj = 0;
+	obj = 0;*/
 	/*shader->Destroy();
 	delete shader;
 	shader = 0;

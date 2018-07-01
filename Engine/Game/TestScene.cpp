@@ -17,10 +17,10 @@ TestScene::TestScene(SCENEID sceneId, char * sceneName) : DScene(sceneId, sceneN
 	m_camera = 0;
 	m_obj0 = 0;
 	plane = 0;
-	shader = 0;
+	/*shader = 0;
 	mat = 0;
 	mat2 = 0;
-	mat3 = 0;
+	mat3 = 0;*/
 	cube = 0;
 	obj = 0;
 
@@ -150,8 +150,7 @@ void TestScene::OnLoad()
 
 void TestScene::TestLoad()
 {
-	testcolorshader = DRes::Load<DShader>(DEFAULT_GROUP, SKY_SHADER);
-	testcolormat = new DMaterial(testcolorshader);
+	DMaterial* skymat = DRes::Load<DMaterial>(DEFAULT_GROUP, SKY_MAT);
 	/*testcolormesh = new DMesh();
 	float* vs = new float[12];
 	unsigned long* is = new unsigned long[4];
@@ -187,7 +186,7 @@ void TestScene::TestLoad()
 
 	m_filter = new TestFilter();
 	//cam->SetFilter(m_filter);
-	cam->SetSkyBox(testcolormat);
+	cam->SetSkyBox(skymat);
 
 	transform = cam->GetTransform();
 	transform->SetEuler(34.996f, -154.423f, 0.0f);
@@ -201,15 +200,16 @@ void TestScene::TestLoad()
 
 	//DMesh* mesh = DMesh::Create("../Res/eboy.obj");
 	plane = DMesh::Create(DMESH_Plane);
-	shader = DRes::Load<DShader>(DEFAULT_GROUP, TEXTURE_SHADER);
-	floor = DRes::Load<DTexture2D>(DEFAULT_GROUP, DECAL_TEX);
-	map = DRes::Load<DTexture2D>(DEFAULT_GROUP, BODY_TEX);
-	cb = DRes::Load<DTexture2D>(DEFAULT_GROUP, GROUND_TEX);
-	mat = new DMaterial(shader);
+	//shader = DRes::Load<DShader>(DEFAULT_GROUP, TEXTURE_SHADER);
+	//floor = DRes::Load<DTexture2D>(DEFAULT_GROUP, DECAL_TEX);
+	//map = DRes::Load<DTexture2D>(DEFAULT_GROUP, BODY_TEX);
+	//cb = DRes::Load<DTexture2D>(DEFAULT_GROUP, GROUND_TEX);
+	DMaterial* mat = DRes::Load<DMaterial>(DEFAULT_GROUP, DECAL_MAT);
+	//mat = new DMaterial(shader);
 
 	//mat->SetFloat("power", 1.3f);
 	//mat->SetColor("vcolor", DColor(1.0f, 0.0f, 0.0f, 1.0f));
-	mat->SetTexture("shaderTexture", floor);
+	//mat->SetTexture("shaderTexture", floor);
 
 	////DTexture2D* texture = new DTexture2D(L"../Res/eboy.tif");
 	////DTexture2D* decal = new DTexture2D(L"../Res/decal.jpg");
@@ -220,12 +220,13 @@ void TestScene::TestLoad()
 	AddDisplayObject(m_plane);
 
 	obj = DMesh::Create("../Res/eboy.obj");
-	mat2 = new DMaterial(shader);
+	// mat2 = new DMaterial(shader);
+	DMaterial* mat2 = DRes::Load<DMaterial>(DEFAULT_GROUP, BODY_MAT);
 	//mat2->SetCullMode(DCullMode_Front);
 
 	//mat2->SetFloat("power", 1.6f);
 	//mat2->SetColor("vcolor", DColor(0.0f, 1.0f, 0.0f, 1.0f));
-	mat2->SetTexture("shaderTexture", map);
+	//mat2->SetTexture("shaderTexture", map);
 
 	m_obj0 = new DDisplayObject(obj, mat2);
 	transform = m_obj0->GetTransform();
@@ -235,8 +236,9 @@ void TestScene::TestLoad()
 
 
 	cube = DMesh::Create("../Res/eboy.obj");
-	mat3 = new DMaterial(shader);
-	mat3->SetTexture("shaderTexture", cb);
+	//mat3 = new DMaterial(shader);
+	//mat3->SetTexture("shaderTexture", cb);
+	DMaterial* mat3 = DRes::Load<DMaterial>(DEFAULT_GROUP, GROUND_MAT);
 	//mat3->SetZTest(DRSCompareFunc_Greater);
 	m_cube = new DDisplayObject(cube, mat3);
 	transform = m_cube->GetTransform();
@@ -255,7 +257,7 @@ void TestScene::OnUnLoad()
 	obj->Destroy();
 	delete obj;
 	obj = 0;
-	shader->Destroy();
+	/*shader->Destroy();
 	delete shader;
 	shader = 0;
 	mat->Destroy();
@@ -275,7 +277,7 @@ void TestScene::OnUnLoad()
 	floor = 0;
 	cb->Destroy();
 	delete cb;
-	cb = 0;
+	cb = 0;*/
 	m_filter->Release();
 	delete m_filter;
 	m_filter = 0;
@@ -297,15 +299,17 @@ void TestScene::OnUnLoad()
 	/*m_obj->Destroy();
 	delete m_obj;
 	m_obj = NULL;*/
-	testcolorshader->Destroy();
+	/*testcolorshader->Destroy();
 	delete testcolorshader;
 	testcolorshader = 0;
 	testcolormat->Destroy();
 	delete testcolormat;
-	testcolormat = 0;
+	testcolormat = 0;*/
 	/*testcolormesh->Destroy();
 	delete testcolormesh;
 	testcolormesh = 0;*/
+
+	DRes::UnLoadGroup(DEFAULT_GROUP);
 }
 
 void TestScene::OnRender()

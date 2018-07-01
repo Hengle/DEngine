@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "DResObject.h"
 #include <fstream>
+#include <map>
 
 class DResItem
 {
@@ -50,12 +51,25 @@ private:
 
 class DMaterialResItem : public DResItem
 {
+private:
+	struct MaterialResTexDesc
+	{
+	public:
+		unsigned int groupId, resId;
+	};
+
 public:
-	DMaterialResItem(char* path, int wrapMode);
+	DMaterialResItem(unsigned int shaderGroupId, unsigned int shaderId);
+	void AddTexture(char*, unsigned int, unsigned int);
 	virtual void Release();
 	static DMaterialResItem* LoadManifest(std::ifstream&);
 
 protected:
 	virtual DResObject* OnLoad();
+
+private:
+	unsigned int m_shaderId;
+	unsigned int m_shaderGroupId;
+	std::map<std::string, MaterialResTexDesc> m_textureIds;
 };
 

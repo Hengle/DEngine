@@ -30,18 +30,8 @@ private:
 	DMesh* plane;
 	DMesh* cube;
 	DMesh* obj;
-	DShader* shader;
-	DMaterial* mat;
-	DMaterial* mat2;
-	DMaterial* mat3;
-	DTexture* floor;
-	DTexture* map;
-	DTexture* cb;
 	DRenderTexture* m_rt;
 	DLight* m_light;
-
-	DShader* testcolorshader;
-	DMaterial* testcolormat;
 	/*DMesh* testcolormesh;
 	DDisplayObject* testcolorobj;*/
 };

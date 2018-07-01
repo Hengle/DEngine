@@ -10,3 +10,8 @@
 #define DECAL_TEX        2000
 #define BODY_TEX         2001
 #define GROUND_TEX       2002
+
+#define SKY_MAT          3003
+#define DECAL_MAT        3000
+#define BODY_MAT         3001
+#define GROUND_MAT       3002

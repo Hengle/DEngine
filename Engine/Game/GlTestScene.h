@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "DScene.h"
 #include "DDisplayObject.h"
 #include "DShader.h"
@@ -17,7 +17,7 @@ protected:
 	virtual void OnUpdate();
 
 private:
-	DShader* m_testcolorshader;
+	//DShader* m_testcolorshader;
 	DMaterial* m_testcolormat;
 
 };

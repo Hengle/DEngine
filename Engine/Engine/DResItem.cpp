@@ -177,3 +177,76 @@ DResObject * DTexture2DResItem::OnLoad()
 	delete[] p;
 	return obj;
 }
+
+DMaterialResItem::DMaterialResItem(unsigned int shaderGroupId, unsigned int shaderId)
+{
+	m_shaderId = shaderId;
+	m_shaderGroupId = shaderGroupId;
+}
+
+void DMaterialResItem::AddTexture(char * key, unsigned int textureGroupId, unsigned int textureId)
+{
+	if (m_textureIds.find(key) != m_textureIds.end())
+	{
+		m_textureIds[key].resId = textureId;
+		m_textureIds[key].groupId = textureGroupId;
+	}
+	else {
+		MaterialResTexDesc desc;
+		desc.groupId = textureGroupId;
+		desc.resId = textureId;
+		m_textureIds.insert(std::pair<std::string, MaterialResTexDesc>(key, desc));
+	}
+}
+
+void DMaterialResItem::Release()
+{
+	m_textureIds.clear();
+}
+
+DMaterialResItem * DMaterialResItem::LoadManifest(std::ifstream & ifile)
+{
+	char mdef[32], pname[32];
+	unsigned int texid, texgid, shaderid, shadergid;
+	DMaterialResItem* item = NULL;
+	while (!ifile.eof())
+	{
+		ifile >> mdef;
+		if (strcmp(mdef, "#SHADER") == 0)
+		{
+			ifile >> shadergid >> shaderid;
+			item = new DMaterialResItem(shadergid, shaderid);
+		}
+		else if (strcmp(mdef, "#PARAM_TEX") == 0)
+		{
+			ifile >> pname >> texgid >> texid;
+			if (item != NULL)
+			{
+				item->AddTexture(pname, texgid, texid);
+			}
+		}
+		else if (strcmp(mdef, "#RES_END") == 0)
+		{
+			return item;
+		}
+	}
+	return NULL;
+}
+
+DResObject * DMaterialResItem::OnLoad()
+{
+	DShader* shader = DRes::Load<DShader>(m_shaderGroupId, m_shaderId);
+	if (shader == NULL)
+		return NULL;
+	DMaterial* obj = new DMaterial(shader);
+	std::map<std::string, MaterialResTexDesc>::iterator iter;
+	for (iter = m_textureIds.begin(); iter != m_textureIds.end(); iter++)
+	{
+		DTexture2D* tex = DRes::Load<DTexture2D>(iter->second.groupId, iter->second.resId);
+		if (tex != NULL)
+		{
+			obj->SetTexture(iter->first.c_str(), tex);
+		}
+	}
+	return obj;
+}

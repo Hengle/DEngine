@@ -196,6 +196,12 @@ void DRes::LoadResGroupManifest(ifstream & ifile, unsigned int groupid)
 				if (item != NULL)
 					group->AddItem(rid, item);
 			}
+			else if (strcmp(rtype, "MATERIAL") == 0)
+			{
+				item = DMaterialResItem::LoadManifest(ifile);
+				if (item != NULL)
+					group->AddItem(rid, item);
+			}
 		}
 		if (strcmp(rdef, "#RES_GROUP_END") == 0)
 		{

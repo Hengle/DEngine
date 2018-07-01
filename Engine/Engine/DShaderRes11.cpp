@@ -103,7 +103,6 @@ void DShaderRes11::Release()
 			delete desc;
 		}
 	}
-	//m_params.clear();
 	m_cbuffers.clear();
 	m_resParams.clear();
 

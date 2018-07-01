@@ -43,23 +43,69 @@ DShaderRes10::~DShaderRes10()
 //	return NAN;
 //}
 
-void DShaderRes10::GetResDesc(unsigned int index, DShaderResDesc &) const
+void DShaderRes10::GetResDesc(unsigned int index, DShaderResDesc & res) const
 {
+	if (index < m_resParams.size())
+	{
+		res = m_resParams.at(index);
+	}
 }
 
 bool DShaderRes10::HasProperty(const LPCSTR key) const
 {
-	if (m_params.find(key) != m_params.end())
+	size_t size = m_cbuffers.size();
+	int i;
+	for (i = 0; i < size; i++)
+	{
+		DShaderCBufferDesc* cdesc = m_cbuffers.at(i);
+		if (cdesc == NULL)
+			continue;
+		if (cdesc->properties.find(key) != cdesc->properties.end())
+			return true;
+	}
+	size = m_resParams.size();
+	for (i = 0; i < size; i++)
+	{
+		DShaderResDesc rdesc = m_resParams.at(i);
+		if (rdesc.resName.compare(key) == 0)
+			return true;
+	}
+	/*if (m_params.find(key) != m_params.end())
 	{
 		return true;
 	}
 	if (m_resParams.find(key) != m_resParams.end())
-		return true;
+		return true;*/
 	return false;
 }
 
 void DShaderRes10::Release()
 {
+	int i;
+	if (m_paramBuffers.size() > 0)
+	{
+		for (i = 0; i < m_paramBuffers.size(); i++)
+		{
+			ID3D10Buffer* bf = m_paramBuffers.at(i);
+			if (bf != NULL)
+			{
+				bf->Release();
+				bf = NULL;
+			}
+		}
+	}
+	m_paramBuffers.clear();
+	if (m_cbuffers.size() > 0)
+	{
+		for (i = 0; i < m_cbuffers.size(); i++)
+		{
+			DShaderCBufferDesc* desc = m_cbuffers.at(i);
+			delete desc;
+		}
+	}
+	m_cbuffers.clear();
+	m_resParams.clear();
+
 	if (m_layout)
 	{
 		m_layout->Release();
@@ -95,7 +141,9 @@ HRESULT DShaderRes10::InitVertexShader(ID3DBlob * pShaderBlob, ID3D10Device *pD3
 	// get shader description
 	D3D10_SHADER_DESC shaderDesc;
 
-	DShaderParamDesc param;
+	//DShaderParamDesc param;
+	DShaderCBufferDesc* cbufferdesc = 0;
+	DShaderPropertyDesc propertydesc;
 
 	//ShaderParam param;
 	pVertexShaderReflection->GetDesc(&shaderDesc);
@@ -212,6 +260,12 @@ HRESULT DShaderRes10::InitVertexShader(ID3DBlob * pShaderBlob, ID3D10Device *pD3
 		int offset = 0;
 		int size = 0;
 
+		cbufferdesc = new DShaderCBufferDesc();
+		cbufferdesc->cbufferIndex = m_cbufferCount;
+		cbufferdesc->cbufferStartSlot = i;
+		cbufferdesc->cbufferSize = clength;
+		cbufferdesc->shaderType = 0;
+
 		for (unsigned int j = 0; j < desc.Variables; j++)
 		{
 			ID3D10ShaderReflectionVariable* bv = bf->GetVariableByIndex(j);
@@ -223,22 +277,36 @@ HRESULT DShaderRes10::InitVertexShader(ID3DBlob * pShaderBlob, ID3D10Device *pD3
 			size = vdesc.Size / fsize;
 
 			//param = ShaderParam10(m_cbufferCount, i, clength, offset, size, 0);
-			param.cbufferIndex = m_cbufferCount;
+			/*param.cbufferIndex = m_cbufferCount;
 			param.cbufferOffset = i;
 			param.cbufferLength = clength;
 			param.propertyOffset = offset;
 			param.propertySize = size;
 			param.shaderType = 0;
-			m_params.insert(std::pair<const LPCSTR, DShaderParamDesc>(vdesc.Name, param));
+			m_params.insert(std::pair<const LPCSTR, DShaderParamDesc>(vdesc.Name, param));*/
 
 			//param.properties.insert(std::pair<const LPCSTR, ShaderProperty>(vdesc.Name, ShaderProperty(j, size, offset)));
+
+			propertydesc.isGlobal = false;
+			if (strlen(vdesc.Name) >= 2 && vdesc.Name[0] == 'g' && vdesc.Name[1] == '_')
+			{
+				propertydesc.isGlobal = true;
+			}
+			propertydesc.propertyName = vdesc.Name;
+			propertydesc.propertyOffset = offset;
+			propertydesc.propertySize = size;
+			cbufferdesc->properties.insert(std::pair<std::string, DShaderPropertyDesc>(vdesc.Name, propertydesc));
 
 			m_propertyCount += 1;
 		}
 
+		m_cbuffers.push_back(cbufferdesc);
+
 		m_paramBuffers.push_back(buffer);
 
 		m_cbufferCount += 1;
+
+		cbufferdesc = 0;
 	}
 
 	// Try to create Input Layout
@@ -261,7 +329,10 @@ HRESULT DShaderRes10::InitPixelShader(ID3DBlob * pShaderBlob, ID3D10Device * pD3
 
 	D3D10_BUFFER_DESC paramBufferDesc;
 
-	DShaderParamDesc param;
+	//DShaderParamDesc param;
+	DShaderCBufferDesc* cbufferdesc = 0;
+	DShaderPropertyDesc propertydesc;
+	DShaderResDesc resdesc;
 
 	if (FAILED(D3D10ReflectShader(pShaderBlob->GetBufferPointer(), pShaderBlob->GetBufferSize(), &pPixelShaderReflection)))
 	{
@@ -298,6 +369,12 @@ HRESULT DShaderRes10::InitPixelShader(ID3DBlob * pShaderBlob, ID3D10Device * pD3
 		int offset = 0;
 		int size = 0;
 
+		cbufferdesc = new DShaderCBufferDesc();
+		cbufferdesc->cbufferIndex = m_cbufferCount;
+		cbufferdesc->cbufferSize = clength;
+		cbufferdesc->cbufferStartSlot = i;
+		cbufferdesc->shaderType = 1;
+
 		for (unsigned int j = 0; j < desc.Variables; j++)
 		{
 			ID3D10ShaderReflectionVariable* bv = bf->GetVariableByIndex(j);
@@ -309,24 +386,37 @@ HRESULT DShaderRes10::InitPixelShader(ID3DBlob * pShaderBlob, ID3D10Device * pD3
 			size = vdesc.Size / fsize;
 
 			//param = ShaderParam10(m_cbufferCount, i, clength, offset, size, 1);
-			param.cbufferIndex = m_cbufferCount;
+			/*param.cbufferIndex = m_cbufferCount;
 			param.cbufferOffset = i;
 			param.cbufferLength = clength;
 			param.propertyOffset = offset;
 			param.propertySize = size;
-			param.shaderType = 1;
+			param.shaderType = 1;*/
 
 			//param.properties.insert(std::pair<const LPCSTR, ShaderProperty>(vdesc.Name, ShaderProperty(j, size, offset)));
 
-			m_params.insert(std::pair<const LPCSTR, DShaderParamDesc>(vdesc.Name, param));
+			//m_params.insert(std::pair<const LPCSTR, DShaderParamDesc>(vdesc.Name, param));
+
+			propertydesc.isGlobal = false;
+			if (strlen(vdesc.Name) >= 2 && vdesc.Name[0] == 'g' && vdesc.Name[1] == '_')
+			{
+				propertydesc.isGlobal = true;
+			}
+			propertydesc.propertyName = vdesc.Name;
+			propertydesc.propertyOffset = offset;
+			propertydesc.propertySize = size;
+
+			cbufferdesc->properties.insert(std::pair<const LPCSTR, DShaderPropertyDesc>(vdesc.Name, propertydesc));
 
 			m_propertyCount += 1;
 		}
 
-
+		m_cbuffers.push_back(cbufferdesc);
 		m_paramBuffers.push_back(buffer);
 
 		m_cbufferCount += 1;
+
+		cbufferdesc = 0;
 	}
 
 	for (i = 0; i < shaderDesc.BoundResources; i++)
@@ -334,7 +424,18 @@ HRESULT DShaderRes10::InitPixelShader(ID3DBlob * pShaderBlob, ID3D10Device * pD3
 		D3D10_SHADER_INPUT_BIND_DESC rdesc;
 		pPixelShaderReflection->GetResourceBindingDesc(i, &rdesc);
 
-		m_resParams.insert(std::pair<std::string, UINT>(rdesc.Name, rdesc.BindPoint));
+		//m_resParams.insert(std::pair<std::string, UINT>(rdesc.Name, rdesc.BindPoint));
+		resdesc.isGlobal = false;
+		if (strlen(rdesc.Name) >= 2 && rdesc.Name[0] == 'g' && rdesc.Name[1] == '_')
+		{
+			resdesc.isGlobal = true;
+		}
+		resdesc.offset = rdesc.BindPoint;
+		resdesc.resName = rdesc.Name;
+
+		m_resParams.push_back(resdesc);
+
+		m_resCount += 1;
 	}
 
 	pPixelShaderReflection->Release();
@@ -451,6 +552,62 @@ void DShaderRes10::OnDraw()
 
 void DShaderRes10::OnApplyParams(std::map<std::string, float*>& params, std::map<std::string, float*>&gparams)
 {
+	int i, j, k;
+	HRESULT result;
+	float* dataPtr = 0, *paramvalue = 0;
+	unsigned int bufferNumber = 0;
+	ID3D10Buffer* pbuffer = 0;
+	DShaderCBufferDesc* desc = 0;
+	std::map<std::string, DShaderPropertyDesc>::iterator iter;
+
+	if (m_cbuffers.size() > 0)
+	{
+		for (i = 0; i < m_cbuffers.size(); i++)
+		{
+			desc = m_cbuffers.at(i);
+			pbuffer = m_paramBuffers[desc->cbufferIndex];
+			if (pbuffer == NULL)
+				continue;
+			bufferNumber = desc->cbufferStartSlot;
+			result = pbuffer->Map(D3D10_MAP_WRITE_DISCARD, 0, (void**)&dataPtr);
+			if (FAILED(result))
+			{
+				continue;
+			}
+
+			paramvalue = 0;
+			for (iter = desc->properties.begin(); iter != desc->properties.end(); iter++)
+			{
+				if (params.find(iter->first) != params.end())
+				{
+					paramvalue = params.at(iter->first);
+					for (k = 0; k < iter->second.propertySize; k++)
+					{
+						dataPtr[k + iter->second.propertyOffset] = paramvalue[k];
+					}
+				}
+				else if (iter->second.isGlobal && gparams.find(iter->first) != gparams.end())
+				{
+					paramvalue = gparams.at(iter->first);
+					for (k = 0; k < iter->second.propertySize; k++)
+					{
+						dataPtr[k + iter->second.propertyOffset] = paramvalue[k];
+					}
+				}
+			}
+
+			pbuffer->Unmap();
+
+			if (desc->shaderType == 0)
+			{
+				m_device->VSSetConstantBuffers(bufferNumber, 1, &pbuffer);
+			}
+			else
+			{
+				m_device->PSSetConstantBuffers(bufferNumber, 1, &pbuffer);
+			}
+		}
+	}
 }
 
 //void DShaderRes10::OnApplyParams(int cindex, int coffset, int csize, int stype, float* params)

@@ -30,8 +30,10 @@ private:
 	ID3D10VertexShader* m_vertexShader;
 	ID3D10PixelShader *m_pixelShader;
 	ID3D10InputLayout* m_layout;
-	std::map<const std::string, DShaderParamDesc> m_params;
-	std::map<const std::string, UINT> m_resParams;
+	//std::map<const std::string, DShaderParamDesc> m_params;
+	//std::map<const std::string, UINT> m_resParams;
+	std::vector<DShaderResDesc> m_resParams;
+	std::vector<DShaderCBufferDesc*> m_cbuffers;
 	std::vector<ID3D10Buffer*> m_paramBuffers;
 };
 

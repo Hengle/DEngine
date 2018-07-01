@@ -229,6 +229,23 @@ DColor DColor::HSVToRGB(float h, float s, float v)
 	return col;
 }
 
+DColor DColor::Color32(unsigned short r, unsigned short g, unsigned short b, unsigned short a)
+{
+	float red = ((float)r) / 255.0f;
+	float green = ((float)g) / 255.0f;
+	float blue = ((float)b) / 255.0f;
+	float alpha = ((float)a) / 255.0f;
+	return DColor(red, green, blue, alpha);
+}
+
+DColor DColor::Color32(unsigned short r, unsigned short g, unsigned short b)
+{
+	float red = ((float)r) / 255.0f;
+	float green = ((float)g) / 255.0f;
+	float blue = ((float)b) / 255.0f;
+	return DColor(red, green, blue, 1.0f);
+}
+
 void DColor::RGBToHSV(const DColor& color, float & h, float & s, float & v)
 {
 	if (color.b > color.g && color.b > color.r)

@@ -23,9 +23,6 @@ bool DSystem::Init()
 	int width = D_DEFAULT_WIDTH, height = D_DEFAULT_HEIGHT;
 	InitWindow(width, height, false);
 
-	m_res = new DRes();
-	m_res->Init();
-
 	m_inputMgr = new DInput();
 	if (!m_inputMgr->Init(m_hInstance, m_hwnd, width, height))
 	{
@@ -36,7 +33,7 @@ bool DSystem::Init()
 	m_timeMgr->Init();
 
 	m_graphicsMgr = new DGraphics();
-	if (!m_graphicsMgr->Init(width, height, false, m_hwnd, DGRAPHICS_API_D3D9))
+	if (!m_graphicsMgr->Init(width, height, false, m_hwnd, DGRAPHICS_API_D3D10))
 	{
 		return false;
 	}
@@ -44,6 +41,9 @@ bool DSystem::Init()
 	m_sceneMgr = new DSceneManager();
 	m_logMgr = new DLog();
 	m_logMgr->Init();
+
+	m_res = new DRes();
+	m_res->Init("../Res/ResManifest.dres");
 
 	return true;
 }

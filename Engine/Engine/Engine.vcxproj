@@ -166,6 +166,8 @@
     <ClInclude Include="DRenderStateMgr11.h" />
     <ClInclude Include="DRenderStateMgr9.h" />
     <ClInclude Include="DRes.h" />
+    <ClInclude Include="DResGroup.h" />
+    <ClInclude Include="DResItem.h" />
     <ClInclude Include="DResObject.h" />
     <ClInclude Include="DScene.h" />
     <ClInclude Include="DSceneManager.h" />
@@ -181,6 +183,7 @@
     <ClInclude Include="DTextureRes9.h" />
     <ClInclude Include="DTime.h" />
     <ClInclude Include="DTransform.h" />
+    <ClInclude Include="DUtils.h" />
     <ClInclude Include="imconfig.h" />
     <ClInclude Include="imgui.h" />
     <ClInclude Include="imgui_internal.h" />
@@ -223,6 +226,8 @@
     <ClCompile Include="DRenderStateMgr11.cpp" />
     <ClCompile Include="DRenderStateMgr9.cpp" />
     <ClCompile Include="DRes.cpp" />
+    <ClCompile Include="DResGroup.cpp" />
+    <ClCompile Include="DResItem.cpp" />
     <ClCompile Include="DResObject.cpp" />
     <ClCompile Include="DScene.cpp" />
     <ClCompile Include="DSceneManager.cpp" />

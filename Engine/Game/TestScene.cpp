@@ -6,6 +6,7 @@
 #include "DLog.h"
 #include "DGUI.h"
 #include "D3D9Core.h"
+#include "TestResDefine.h"
 
 TestScene::TestScene(SCENEID sceneId, char * sceneName) : DScene(sceneId, sceneName)
 {
@@ -149,7 +150,7 @@ void TestScene::OnLoad()
 
 void TestScene::TestLoad()
 {
-	testcolorshader = DShader::Create(L"../Res/sky.vs9", L"../Res/sky.ps9");
+	testcolorshader = DRes::Load<DShader>(DEFAULT_GROUP, SKY_SHADER);
 	testcolormat = new DMaterial(testcolorshader);
 	/*testcolormesh = new DMesh();
 	float* vs = new float[12];
@@ -200,10 +201,10 @@ void TestScene::TestLoad()
 
 	//DMesh* mesh = DMesh::Create("../Res/eboy.obj");
 	plane = DMesh::Create(DMESH_Plane);
-	shader = DShader::Create(L"../Res/texture.vs9", L"../Res/texture.ps9");
-	floor = DTexture2D::Create(L"../Res/decal.jpg");
-	map = DTexture2D::Create(L"../Res/eboy.jpg");
-	cb = DTexture2D::Create(L"../Res/ground_12.jpg");
+	shader = DRes::Load<DShader>(DEFAULT_GROUP, TEXTURE_SHADER);
+	floor = DRes::Load<DTexture2D>(DEFAULT_GROUP, DECAL_TEX);
+	map = DRes::Load<DTexture2D>(DEFAULT_GROUP, BODY_TEX);
+	cb = DRes::Load<DTexture2D>(DEFAULT_GROUP, GROUND_TEX);
 	mat = new DMaterial(shader);
 
 	//mat->SetFloat("power", 1.3f);

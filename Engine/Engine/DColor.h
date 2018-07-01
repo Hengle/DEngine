@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 typedef struct DColor
 {
@@ -32,6 +32,8 @@ public:
 
 	static DColor Lerp(const DColor&, const DColor&, float);
 	static DColor HSVToRGB(float, float, float);
+	static DColor Color32(unsigned short, unsigned short, unsigned short, unsigned short);
+	static DColor Color32(unsigned short, unsigned short, unsigned short);
 	static void RGBToHSV(const DColor&, float&, float&, float&);
 
 private:

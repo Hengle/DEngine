@@ -167,6 +167,7 @@ DShader::~DShader()
 
 DShader * DShader::Create(WCHAR * vertexShader, WCHAR * pixelShader)
 {
+	
 	DShaderRes* sbf = DSystem::GetGraphicsMgr()->GetGLCore()->CreateShaderRes();
 	if (sbf != NULL)
 	{

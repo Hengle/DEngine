@@ -222,6 +222,15 @@
     <ClInclude Include="DGLDrawer.h">
       <Filter>头文件\Core</Filter>
     </ClInclude>
+    <ClInclude Include="DUtils.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="DResItem.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DResGroup.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DMath.cpp">
@@ -370,6 +379,12 @@
     </ClCompile>
     <ClCompile Include="DGLDrawer.cpp">
       <Filter>源文件\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DResItem.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DResGroup.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

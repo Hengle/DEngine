@@ -1,10 +1,11 @@
 ﻿#include "stdafx.h"
 #include "TestFilter.h"
 #include "DSystem.h"
+#include "TestResDefine.h"
 
 TestFilter::TestFilter()
 {
-	m_shader = DShader::Create(L"../Res/texture.vs9", L"../Res/imgeffect.ps9");
+	m_shader = DRes::Load<DShader>(DEFAULT_GROUP, PEFFECT_SHADER);
 	m_mat = new DMaterial(m_shader);
 }
 

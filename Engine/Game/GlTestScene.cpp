@@ -1,6 +1,8 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "GlTestScene.h"
 #include "DGraphics.h"
+#include "DRes.h"
+#include "TestResDefine.h"
 
 GlTestScene::GlTestScene(SCENEID sceneId, char * sceneName) : DScene(sceneId, sceneName)
 {
@@ -12,7 +14,7 @@ void GlTestScene::OnGUI()
 
 void GlTestScene::OnLoad()
 {
-	m_testcolorshader = DShader::Create(L"../Res/color.vs9", L"../Res/color.ps9");
+	m_testcolorshader = DRes::Load<DShader>(DEFAULT_GROUP, COLOR_SHADER);
 	m_testcolormat = new DMaterial(m_testcolorshader);
 
 	DCamera * cam = new DCamera();

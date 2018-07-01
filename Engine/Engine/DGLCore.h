@@ -63,22 +63,22 @@ enum DRSStencilOp
 	IncrementWrap = 6,
 };
 
-typedef struct DShaderParamDesc
-{
-public:
-	DShaderParamDesc()
-	{
-		cbufferIndex = -1;
-		cbufferOffset = -1;
-		cbufferLength = 0;
-		propertyOffset = 0;
-		propertySize = 0;
-		shaderType = 0;
-	}
-
-public:
-	int cbufferIndex, cbufferOffset, cbufferLength,propertyOffset, propertySize,shaderType;
-} DShaderParamDesc;
+//typedef struct DShaderParamDesc
+//{
+//public:
+//	DShaderParamDesc()
+//	{
+//		cbufferIndex = -1;
+//		cbufferOffset = -1;
+//		cbufferLength = 0;
+//		propertyOffset = 0;
+//		propertySize = 0;
+//		shaderType = 0;
+//	}
+//
+//public:
+//	int cbufferIndex, cbufferOffset, cbufferLength,propertyOffset, propertySize,shaderType;
+//} DShaderParamDesc;
 
 typedef struct DShaderPropertyDesc
 {

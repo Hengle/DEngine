@@ -44,18 +44,37 @@ DShaderRes9::~DShaderRes9()
 //	return NAN;
 //}
 
-void DShaderRes9::GetResDesc(unsigned int index, DShaderResDesc &) const
+void DShaderRes9::GetResDesc(unsigned int index, DShaderResDesc & res) const
 {
+	if (index < m_resParams.size())
+	{
+		res = m_resParams.at(index);
+	}
 }
 
 bool DShaderRes9::HasProperty(const LPCSTR key) const
 {
-	if (m_params.find(key) != m_params.end())
+	size_t size = m_properties.size();
+	int i;
+	for (i = 0; i < size; i++)
+	{
+		DShaderPropertyDesc9 pdesc = m_properties.at(i);
+		if (pdesc.propertyName.compare(key) == 0)
+			return true;
+	}
+	size = m_resParams.size();
+	for (i = 0; i < size; i++)
+	{
+		DShaderResDesc rdesc = m_resParams.at(i);
+		if (rdesc.resName.compare(key) == 0)
+			return true;
+	}
+	/*if (m_params.find(key) != m_params.end())
 	{
 		return true;
 	}
 	if (m_resParams.find(key) != m_resParams.end())
-		return true;
+		return true;*/
 	return false;
 }
 
@@ -83,7 +102,7 @@ void DShaderRes9::Release()
 	}
 	m_resParams.clear();
 	m_handles.clear();
-	m_params.clear();
+	m_properties.clear();
 }
 
 bool DShaderRes9::OnInit(WCHAR * vsfile, WCHAR * psfile)
@@ -175,6 +194,32 @@ void DShaderRes9::OnDraw()
 
 void DShaderRes9::OnApplyParams(std::map<std::string, float*>& params, std::map<std::string, float*>&gparams)
 {
+	int i;
+	size_t size = m_properties.size();
+	D3DXHANDLE handle;
+	float* value;
+	for (i = 0; i < size; i++)
+	{
+		DShaderPropertyDesc9 pdesc = m_properties.at(i);
+		if (params.find(pdesc.propertyName) != params.end())
+		{
+			handle = m_handles.at(pdesc.propertyOffset);
+			value = params.at(pdesc.propertyName);
+			if(pdesc.shaderType == 0)
+				m_vertexConstable->SetValue(m_device, handle, value, pdesc.propertySize);
+			else
+				m_pixelConstable->SetValue(m_device, handle, value, pdesc.propertySize);
+		}
+		else if (pdesc.isGlobal && gparams.find(pdesc.propertyName) != gparams.end())
+		{
+			handle = m_handles.at(pdesc.propertyOffset);
+			value = gparams.at(pdesc.propertyName);
+			if (pdesc.shaderType == 0)
+				m_vertexConstable->SetValue(m_device, handle, value, pdesc.propertySize);
+			else
+				m_pixelConstable->SetValue(m_device, handle, value, pdesc.propertySize);
+		}
+	}
 }
 
 //void DShaderRes9::OnApplyParams(int cindex, int coffset, int csize, int stype, float* params)
@@ -194,6 +239,7 @@ HRESULT DShaderRes9::InitVertexShader(ID3DXBuffer*vertexShaderBuffer)
 	D3DXCONSTANT_DESC cdesc;
 	D3DXHANDLE handle;
 	HRESULT result;
+	DShaderPropertyDesc9 pdesc;
 
 	result = m_vertexConstable->GetDesc(&desc);
 
@@ -213,15 +259,25 @@ HRESULT DShaderRes9::InitVertexShader(ID3DXBuffer*vertexShaderBuffer)
 
 		length = cdesc.Bytes / fsize;
 
-		DShaderParamDesc param;
+		/*DShaderParamDesc param;
 		param.cbufferIndex = m_propertyCount;
 		param.cbufferOffset = m_propertyCount;
 		param.cbufferLength = cdesc.Bytes;
 		param.propertyOffset = 0;
 		param.propertySize = length;
-		param.shaderType = 0;
+		param.shaderType = 0;*/
+		pdesc.isGlobal = false;
+		if (strlen(cdesc.Name) >= 2 && cdesc.Name[0] == 'g' && cdesc.Name[1] == '_')
+		{
+			pdesc.isGlobal = true;
+		}
+		pdesc.propertyName = cdesc.Name;
+		pdesc.propertySize = cdesc.Bytes;
+		pdesc.propertyOffset = m_cbufferCount;
+		pdesc.shaderType = 0;
 
-		m_params.insert(std::pair<std::string, DShaderParamDesc>(cdesc.Name, param));
+		//m_params.insert(std::pair<std::string, DShaderParamDesc>(cdesc.Name, param));
+		m_properties.push_back(pdesc);
 		m_handles.push_back(handle);
 
 		m_propertyCount += 1;
@@ -294,6 +350,8 @@ HRESULT DShaderRes9::InitPixelShader()
 	D3DXCONSTANT_DESC cdesc;
 	D3DXHANDLE handle;
 	HRESULT result;
+	DShaderPropertyDesc9 pdesc;
+	DShaderResDesc rdesc;
 
 	result = m_pixelConstable->GetDesc(&desc);
 
@@ -315,14 +373,22 @@ HRESULT DShaderRes9::InitPixelShader()
 
 		if (cdesc.Class == D3DXPC_OBJECT)
 		{
-			m_resParams.insert(std::pair<std::string, D3DXCONSTANT_DESC>(cdesc.Name, cdesc));
-
+			rdesc.isGlobal = false;
+			if (strlen(cdesc.Name) >= 2 && cdesc.Name[0] == 'g' && cdesc.Name[1] == '_')
+			{
+				rdesc.isGlobal = true;
+			}
+			rdesc.resName = cdesc.Name;
+			rdesc.offset = cdesc.RegisterIndex;
+			//m_resParams.insert(std::pair<std::string, D3DXCONSTANT_DESC>(cdesc.Name, cdesc));
+			m_resParams.push_back(rdesc);
+			m_resCount += 1;
 			m_propertyCount += 1;
 		}
 		else
 		{
 
-			DShaderParamDesc param;
+			/*DShaderParamDesc param;
 			param.cbufferIndex = m_propertyCount;
 			param.cbufferOffset = m_propertyCount;
 			param.cbufferLength = cdesc.Bytes;
@@ -330,7 +396,19 @@ HRESULT DShaderRes9::InitPixelShader()
 			param.propertySize = length;
 			param.shaderType = 1;
 
-			m_params.insert(std::pair<std::string, DShaderParamDesc>(cdesc.Name, param));
+			m_params.insert(std::pair<std::string, DShaderParamDesc>(cdesc.Name, param));*/
+
+			pdesc.isGlobal = false;
+			if (strlen(cdesc.Name) >= 2 && cdesc.Name[0] == 'g' && cdesc.Name[1] == '_')
+			{
+				pdesc.isGlobal = true;
+			}
+			pdesc.propertyName = cdesc.Name;
+			pdesc.propertySize = cdesc.Bytes;
+			pdesc.propertyOffset = m_cbufferCount;
+			pdesc.shaderType = 1;
+			m_properties.push_back(pdesc);
+
 			m_handles.push_back(handle);
 
 			m_propertyCount += 1;

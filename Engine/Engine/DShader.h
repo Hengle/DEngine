@@ -4,6 +4,7 @@
 #include "DColor.h"
 #include "DGLCore.h"
 #include "DTexture.h"
+#include "DShaderBlock.h"
 
 class DShaderConstantTable
 {

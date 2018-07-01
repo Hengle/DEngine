@@ -17,3 +17,8 @@ void DGUI::Label(const char * text, ...)
 	ImGui::TextV(text, args);
 	va_end(args);
 }
+
+bool DGUI::IsGUIActive()
+{
+	return ImGui::IsAnyItemActive();
+}

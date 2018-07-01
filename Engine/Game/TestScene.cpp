@@ -93,6 +93,15 @@ void TestScene::OnGUI()
 
 void TestScene::OnLoad()
 {
+	DShaderBlock* block = new DShaderBlock();
+	block->Compile("../Res/color.shader");
+
+	if (block != NULL)
+	{
+		block->Release();
+		delete block;
+		block = NULL;
+	}
 	//DShader* testshader = DShader::Create(L"../Res/color.vs9", L"../Res/color.ps9");
 	//if (testshader != NULL)
 	//{
@@ -392,7 +401,7 @@ void TestScene::OnUpdate()
 
 	transform->SetEuler(euler.x, euler.y, euler.z);*/
 
-	if (DInput::IsMousePress(0))
+	if (DInput::IsMousePress(0) && !DGUI::IsGUIActive())
 	{
 		int dtx, dty;
 		DInput::GetDeltaMouseMove(dtx, dty);

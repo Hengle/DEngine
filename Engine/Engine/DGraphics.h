@@ -4,13 +4,7 @@
 #include "DCamera.h"
 #include "DImGUICore.h"
 #include "DGLDrawer.h"
-
-enum DGraphicsAPI
-{
-	DGRAPHICS_API_D3D11 = 0,
-	DGRAPHICS_API_D3D10 = 1,
-	DGRAPHICS_API_D3D9  = 2,
-};
+#include "DGraphicsDefine.h"
 
 enum DVertexBufferType
 {

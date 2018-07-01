@@ -7,5 +7,6 @@ public:
 	static void EndWindow();
 	static void Label(const char* text, ...);
 
+	static bool IsGUIActive();
 };
 

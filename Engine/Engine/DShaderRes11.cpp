@@ -138,7 +138,6 @@ bool DShaderRes11::OnInit(WCHAR * vsFilename, WCHAR * psFilename)
 	errorMessage = 0;
 	vertexShaderBuffer = 0;
 	pixelShaderBuffer = 0;
-
 	result = D3DX11CompileFromFile(vsFilename, NULL, NULL, "TextureVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
 		&vertexShaderBuffer, &errorMessage, NULL);
 	if (FAILED(result))
@@ -237,6 +236,7 @@ void DShaderRes11::OnDraw()
 
 void DShaderRes11::OnApplyParams(std::map<std::string, float*>& params, std::map<std::string, float*>&gparams)
 {
+
 	int i,j,k;
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;

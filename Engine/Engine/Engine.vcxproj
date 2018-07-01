@@ -144,6 +144,7 @@
     <ClInclude Include="DGLCore.h" />
     <ClInclude Include="DGLDrawer.h" />
     <ClInclude Include="DGraphics.h" />
+    <ClInclude Include="DGraphicsDefine.h" />
     <ClInclude Include="DGUI.h" />
     <ClInclude Include="DImGUICore.h" />
     <ClInclude Include="DImGUICore10.h" />
@@ -173,6 +174,7 @@
     <ClInclude Include="DSceneManager.h" />
     <ClInclude Include="DSceneObject.h" />
     <ClInclude Include="DShader.h" />
+    <ClInclude Include="DShaderBlock.h" />
     <ClInclude Include="DShaderRes10.h" />
     <ClInclude Include="DShaderRes11.h" />
     <ClInclude Include="DShaderRes9.h" />
@@ -233,6 +235,7 @@
     <ClCompile Include="DSceneManager.cpp" />
     <ClCompile Include="DSceneObject.cpp" />
     <ClCompile Include="DShader.cpp" />
+    <ClCompile Include="DShaderBlock.cpp" />
     <ClCompile Include="DShaderRes10.cpp" />
     <ClCompile Include="DShaderRes11.cpp" />
     <ClCompile Include="DShaderRes9.cpp" />

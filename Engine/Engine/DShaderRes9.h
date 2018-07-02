@@ -31,6 +31,7 @@ public:
 
 protected:
 	virtual bool OnInit(WCHAR*, WCHAR*);
+	virtual bool OnInit(const char* content, char* vsfunc, char* psfunc);
 	virtual void OnDraw();
 	//virtual void OnApplyParams(int, int, int, int, float*);
 	virtual void OnApplyParams(std::map<std::string, float*>&params, std::map<std::string, float*>&gparams);

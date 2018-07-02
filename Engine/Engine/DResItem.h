@@ -23,7 +23,7 @@ private:
 class DShaderResItem : public DResItem
 {
 public:
-	DShaderResItem(char* vsfile, char* psfile);
+	DShaderResItem(char* path);
 	virtual void Release();
 	static DShaderResItem* LoadManifest(std::ifstream&);
 
@@ -31,7 +31,7 @@ protected:
 	virtual DResObject* OnLoad();
 
 private:
-	char* m_vsfile, *m_psfile;
+	char* m_path;
 };
 
 class DTexture2DResItem : public DResItem

@@ -34,12 +34,14 @@ public:
 	void SetColor(const LPCSTR key, DColor&);
 	void SetFloat(const LPCSTR key, float);
 	void SetTexture(const LPCSTR key, DTexture*);
-	void SetCullMode(DCullMode);
-	void SetZWrite(bool);
-	void SetZTest(DRSCompareFunc);
+	//void SetCullMode(DCullMode);
+	//void SetZWrite(bool);
+	//void SetZTest(DRSCompareFunc);
 	bool HasProperty(const LPCSTR key) const;
-	void Apply();
-	int GetVertexUsage();
+	//void Apply();
+	void SetPass(int);
+	int GetVertexUsage(int);
+	int GetPassCount();
 	virtual void Destroy();
 
 
@@ -50,7 +52,7 @@ private:
 	//std::map<std::string, DTexture*> m_textures;
 	DShaderConstantTable* m_constantTable;
 	//unsigned int m_paramCount;
-	DCullMode m_cullMode;
-	bool m_zwrite;
-	DRSCompareFunc m_ztest;
+	//DCullMode m_cullMode;
+	//bool m_zwrite;
+	//DRSCompareFunc m_ztest;
 };

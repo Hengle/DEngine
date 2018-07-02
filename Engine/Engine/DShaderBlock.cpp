@@ -1,4 +1,5 @@
 ﻿#include "DShaderBlock.h"
+#include "DSystem.h"
 #include <string>
 
 DShaderBlock::DShaderBlock()
@@ -11,20 +12,19 @@ DShaderBlock::~DShaderBlock()
 
 void DShaderBlock::Release()
 {
-	int i;
-	for (i = 0; i < m_subShaders.size(); i++)
+	if (m_supportShader != NULL)
 	{
-		DSubShader* subshader = m_subShaders[i];
-		subshader->Release();
-		delete subshader;
+		m_supportShader->Release();
+		delete m_supportShader;
+		m_supportShader = NULL;
 	}
-	m_subShaders.clear();
 }
 
 bool DShaderBlock::Compile(char * fileName)
 {
 	ifstream ifile;
 	ifile.open(fileName);
+	bool result = false;
 	if (ifile.fail())
 	{
 		return false;
@@ -35,14 +35,18 @@ bool DShaderBlock::Compile(char * fileName)
 		ifile >> read;
 		if (strcmp(read, "SubShader") == 0)
 		{
-			InterpretSubShader(ifile);
+			result = InterpretSubShader(ifile);
+			if (result)
+				break;
 		}
 	}
+
+	ifile.close();
 
 	return true;
 }
 
-void DShaderBlock::InterpretSubShader(ifstream & ifile)
+bool DShaderBlock::InterpretSubShader(ifstream & ifile)
 {
 	bool isBegin = false;
 	char read[128];
@@ -56,7 +60,7 @@ void DShaderBlock::InterpretSubShader(ifstream & ifile)
 			if (strcmp(read, "{") == 0)
 			{
 				subshader = new DSubShader();
-				m_subShaders.push_back(subshader);
+				//m_subShaders.push_back(subshader);
 				isBegin = true;
 			}
 		}
@@ -65,11 +69,22 @@ void DShaderBlock::InterpretSubShader(ifstream & ifile)
 			if (strcmp(read, "}") == 0) 
 			{
 				isBegin = false;
-				return;
+				if (subshader != NULL)
+				{
+					if (subshader->IsSupport(DSystem::GetGraphicsMgr()->GetAPI()))
+					{
+						m_supportShader = subshader;
+						return true;
+					}
+					subshader->Release();
+					delete subshader;
+					subshader = NULL;
+				}
+				return false;
 			}
-			else if (strcmp(read, "Tags") == 0)
+			else if (strcmp(read, "Desc") == 0)
 			{
-				InterpretTags(ifile, subshader);
+				InterpretDesc(ifile, subshader);
 			}
 			else if (strcmp(read, "Pass") == 0)
 			{
@@ -77,9 +92,10 @@ void DShaderBlock::InterpretSubShader(ifstream & ifile)
 			}
 		}
 	}
+	return false;
 }
 
-void DShaderBlock::InterpretTags(ifstream & ifile, DSubShader* subshader)
+void DShaderBlock::InterpretDesc(ifstream & ifile, DSubShader * subshader)
 {
 	bool isBegin = false;
 	char read[128], funcname[32];
@@ -104,16 +120,6 @@ void DShaderBlock::InterpretTags(ifstream & ifile, DSubShader* subshader)
 			else if (strcmp(read, "CompileTarget:") == 0)
 			{
 				InterpretCompileTarget(ifile, subshader);
-			}
-			else if (strcmp(read, "VertexFunc:") == 0)
-			{
-				ifile >> funcname;
-				subshader->SetVertexFuncName(funcname);
-			}
-			else if (strcmp(read, "PixelFunc:") == 0)
-			{
-				ifile >> funcname;
-				subshader->SetPixelFuncName(funcname);
 			}
 		}
 	}
@@ -181,6 +187,10 @@ void DShaderBlock::InterpretPass(ifstream & ifile, DSubShader* subshader)
 				isBegin = false;
 				return;
 			}
+			else if (strcmp(read, "Tags") == 0)
+			{
+				InterpretTags(ifile, pass);
+			}
 			else if (strcmp(read, "State") == 0)
 			{
 				InterpretState(ifile, pass);
@@ -188,6 +198,42 @@ void DShaderBlock::InterpretPass(ifstream & ifile, DSubShader* subshader)
 			else if (strcmp(read, "Shader") == 0)
 			{
 				InterpretShader(ifile, pass);
+			}
+		}
+	}
+}
+
+void DShaderBlock::InterpretTags(ifstream & ifile, DShaderPass* pass)
+{
+	bool isBegin = false;
+	char read[128], funcname[32];
+	while (!ifile.eof())
+	{
+		ifile >> read;
+
+		if (!isBegin)
+		{
+			if (strcmp(read, "{") == 0)
+			{
+				isBegin = true;
+			}
+		}
+		else
+		{
+			if (strcmp(read, "}") == 0)
+			{
+				isBegin = false;
+				return;
+			}
+			else if (strcmp(read, "VertexFunc:") == 0)
+			{
+				ifile >> funcname;
+				pass->SetVertexFuncName(funcname);
+			}
+			else if (strcmp(read, "PixelFunc:") == 0)
+			{
+				ifile >> funcname;
+				pass->SetPixelFuncName(funcname);
 			}
 		}
 	}
@@ -256,7 +302,9 @@ void DShaderBlock::InterpretShader(ifstream & ifile, DShaderPass * pass)
 			{
 				isBegin = false;
 
-				const char* str = s.c_str();
+				const char* content = s.c_str();
+
+				pass->CompileShader(content);
 
 				return;
 			}
@@ -268,17 +316,29 @@ void DShaderBlock::InterpretShader(ifstream & ifile, DShaderPass * pass)
 	}
 }
 
+bool DShaderBlock::IsSupported()
+{
+	return m_supportShader != NULL;
+}
+
+int DShaderBlock::GetPassCount()
+{
+	return m_supportShader->GetPassCount();
+}
+
+DShaderPass * DShaderBlock::GetPass(int index)
+{
+	return m_supportShader->GetPass(index);
+}
+
 DSubShader::DSubShader()
 {
 	m_compileTarget = 0;
-	m_vertexFuncName = 0;
-	m_pixelFuncName = 0;
 }
 
 void DSubShader::Release()
 {
-	delete[] m_vertexFuncName;
-	delete[] m_pixelFuncName;
+	
 	int i;
 	for (i = 0; i < m_passes.size(); i++)
 	{
@@ -287,20 +347,6 @@ void DSubShader::Release()
 		delete pass;
 	}
 	m_passes.clear();
-}
-
-void DSubShader::SetVertexFuncName(char * vertexFuncName)
-{
-	int len = strlen(vertexFuncName) + 1;
-	m_vertexFuncName = new char[len];
-	strcpy_s(m_vertexFuncName, len, vertexFuncName);
-}
-
-void DSubShader::SetPixelFuncName(char * pixelFuncName)
-{
-	int len = strlen(pixelFuncName) + 1;
-	m_pixelFuncName = new char[len];
-	strcpy_s(m_pixelFuncName, len, pixelFuncName);
 }
 
 void DSubShader::AddCompileTarget(DGraphicsAPI api)
@@ -313,8 +359,27 @@ void DSubShader::AddPass(DShaderPass * pass)
 	m_passes.push_back(pass);
 }
 
+bool DSubShader::IsSupport(DGraphicsAPI api)
+{
+	return m_compileTarget & api != 0;
+}
+
+int DSubShader::GetPassCount()
+{
+	return m_passes.size();
+}
+
+DShaderPass * DSubShader::GetPass(int index)
+{
+	if (index >= 0 && index < m_passes.size())
+		return m_passes.at(index);
+	return NULL;
+}
+
 DShaderPass::DShaderPass()
 {
+	m_vertexFuncName = 0;
+	m_pixelFuncName = 0;
 	m_zwrite = true;
 	m_ztest = DRSCompareFunc_LEqual;
 	m_cullmode = DCullMode_Back;
@@ -322,6 +387,18 @@ DShaderPass::DShaderPass()
 
 void DShaderPass::Release()
 {
+	if(m_vertexFuncName != 0)
+		delete[] m_vertexFuncName;
+	if(m_pixelFuncName != 0)
+		delete[] m_pixelFuncName;
+	m_vertexFuncName = 0;
+	m_pixelFuncName = 0;
+	if (m_shaderRes != NULL)
+	{
+		m_shaderRes->Release();
+		delete m_shaderRes;
+		m_shaderRes = NULL;
+	}
 }
 
 void DShaderPass::SetZWrite(char * state)
@@ -360,4 +437,40 @@ void DShaderPass::SetCullMode(char * state)
 		m_cullmode = DCullMode_Back;
 	else if (strcmp(state, "front") == 0)
 		m_cullmode = DCullMode_Front;
+}
+
+void DShaderPass::SetVertexFuncName(char *vertexFuncName)
+{
+	int len = strlen(vertexFuncName) + 1;
+	m_vertexFuncName = new char[len];
+	strcpy_s(m_vertexFuncName, len, vertexFuncName);
+}
+
+void DShaderPass::SetPixelFuncName(char *pixelFuncName)
+{
+	int len = strlen(pixelFuncName) + 1;
+	m_pixelFuncName = new char[len];
+	strcpy_s(m_pixelFuncName, len, pixelFuncName);
+}
+
+void DShaderPass::CompileShader(const char * content)
+{
+	DShaderRes* res = DSystem::GetGraphicsMgr()->GetGLCore()->CreateShaderRes();
+	if (res != NULL)
+	{
+		res->Init(content, m_vertexFuncName, m_pixelFuncName);
+		m_shaderRes = res;
+	}
+}
+
+DShaderRes * DShaderPass::GetShaderRes()
+{
+	return m_shaderRes;
+}
+
+void DShaderPass::ApplyStates()
+{
+	DGraphics::SetCullMode(m_cullmode);
+	DGraphics::SetZTestFunc(m_ztest);
+	DGraphics::SetZWriteEnable(m_zwrite);
 }

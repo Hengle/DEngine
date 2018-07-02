@@ -258,9 +258,15 @@ void DGraphics::DrawMesh(DMesh * mesh, const DMatrix4x4 & matrix, DMaterial * ma
 	material->SetMatrix("viewMatrix", v);
 	material->SetMatrix("projectionMatrix", p);
 
-	material->Apply();
+	int passcount = material->GetPassCount();
+	int i;
+	for (i = 0; i < passcount; i++)
+	{
+		material->SetPass(i);
+		mesh->Draw(material->GetVertexUsage(i));
+	}
 
-	mesh->Draw(material->GetVertexUsage());
+	
 	
 }
 
@@ -270,8 +276,8 @@ void DGraphics::DrawTexture(DTexture * texture, DMaterial * material)
 	{
 		DSystem::GetGraphicsMgr()->InitScreenPlane();
 	}
-	material->SetZWrite(false);
-	material->SetZTest(DRSCompareFunc_Always);
+	//material->SetZWrite(false);
+	//material->SetZTest(DRSCompareFunc_Always);
 	DMatrix4x4 world, proj;
 	DMatrix4x4::Identity(&world);
 	DMatrix4x4 view = DMatrix4x4(1.0f, 0.0f, 0.0f, 0.0f,
@@ -287,9 +293,17 @@ void DGraphics::DrawTexture(DTexture * texture, DMaterial * material)
 	material->SetMatrix("projectionMatrix", proj);
 	material->SetTexture("screenTexture", texture);
 
-	material->Apply();
+	//material->Apply();
 
-	DSystem::GetGraphicsMgr()->m_screenPlane->Draw(material->GetVertexUsage());
+	//DSystem::GetGraphicsMgr()->m_screenPlane->Draw(material->GetVertexUsage());
+	int passcount = material->GetPassCount();
+	int i;
+
+	for (i = 0; i < passcount; i++)
+	{
+		material->SetPass(i);
+		DSystem::GetGraphicsMgr()->m_screenPlane->Draw(material->GetVertexUsage(i));
+	}
 }
 
 void DGraphics::DrawSkyBox(DMaterial * material, const DCamera * camera)
@@ -306,7 +320,7 @@ void DGraphics::DrawSkyBox(DMaterial * material, const DCamera * camera)
 	transform->GetPosition(pos);
 	DMatrix4x4::Translate(&world, pos.x, pos.y, pos.z);
 
-	material->SetZWrite(false);
+	//material->SetZWrite(false);
 	//material->SetCullMode(DCullMode_Off);
 
 	DrawMesh(DSystem::GetGraphicsMgr()->m_skyMesh, world, material, camera);

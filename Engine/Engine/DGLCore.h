@@ -160,6 +160,7 @@ public:
 	//unsigned int GetCBufferCount() const;
 	unsigned int GetPropertyCount() const;
 	void Init(WCHAR* vsfile, WCHAR* psfile);
+	void Init(const char* content, char* vsfunc, char* psfunc);
 	unsigned int GetResCount() const;
 	void ApplyParams(std::map<std::string, float*>&params, std::map<std::string, float*>&gparams);
 	//void ApplyParams(int cindex, int coffset, int csize, int stype, float* params);
@@ -174,6 +175,7 @@ public:
 
 protected:
 	virtual bool OnInit(WCHAR*, WCHAR*) = 0;
+	virtual bool OnInit(const char* content, char* vsfunc, char* psfunc) = 0;
 	virtual void OnApplyParams(std::map<std::string, float*>&params, std::map<std::string, float*>&gparams) = 0;
 	//virtual void OnApplyParams(int, int, int, int, float*) = 0;
 	virtual void OnDraw() = 0;

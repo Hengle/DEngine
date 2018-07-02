@@ -540,6 +540,11 @@ bool DShaderRes10::OnInit(WCHAR * vsFilename, WCHAR * psFilename)
 	return true;
 }
 
+bool DShaderRes10::OnInit(const char * content, char * vsfunc, char * psfunc)
+{
+	return false;
+}
+
 void DShaderRes10::OnDraw()
 {
 	m_device->IASetInputLayout(m_layout);

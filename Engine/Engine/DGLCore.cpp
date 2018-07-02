@@ -185,6 +185,11 @@ void DShaderRes::Init(WCHAR * vsfile, WCHAR * psfile)
 	m_isInitialized = OnInit(vsfile, psfile);
 }
 
+void DShaderRes::Init(const char * content, char * vsfunc, char * psfunc)
+{
+	m_isInitialized = OnInit(content, vsfunc, psfunc);
+}
+
 unsigned int DShaderRes::GetResCount() const
 {
 	return m_resCount;

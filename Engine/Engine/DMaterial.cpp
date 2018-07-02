@@ -1,5 +1,5 @@
 ﻿#include "DMaterial.h"
-#include "DSystem.h"
+//#include "DSystem.h"
 
 
 DMaterial::DMaterial(DShader * shader)
@@ -8,9 +8,9 @@ DMaterial::DMaterial(DShader * shader)
 	//m_params = m_shader->GetParam();
 	//m_params = new MaterialParam*[m_shader->GetCBufferCount()]{ NULL };
 	//m_paramCount = m_shader->GetCBufferCount();
-	m_cullMode = DCullMode_Back;
-	m_ztest = DRSCompareFunc_LEqual;
-	m_zwrite = true;
+	//m_cullMode = DCullMode_Back;
+	//m_ztest = DRSCompareFunc_LEqual;
+	//m_zwrite = true;
 	//m_cbuffers = new void*[m_shader->GetCBufferCount()];
 }
 
@@ -328,20 +328,20 @@ void DMaterial::SetTexture(const LPCSTR key, DTexture * texture)
 	}*/
 }
 
-void DMaterial::SetCullMode(DCullMode cullMode)
-{
-	m_cullMode = cullMode;
-}
-
-void DMaterial::SetZWrite(bool zwrite)
-{
-	m_zwrite = zwrite;
-}
-
-void DMaterial::SetZTest(DRSCompareFunc ztest)
-{
-	m_ztest = ztest;
-}
+//void DMaterial::SetCullMode(DCullMode cullMode)
+//{
+//	m_cullMode = cullMode;
+//}
+//
+//void DMaterial::SetZWrite(bool zwrite)
+//{
+//	m_zwrite = zwrite;
+//}
+//
+//void DMaterial::SetZTest(DRSCompareFunc ztest)
+//{
+//	m_ztest = ztest;
+//}
 
 //void DMaterial::SetTexture(const LPCSTR cbuffername, const LPCSTR key, const DTexture &)
 //{
@@ -364,48 +364,67 @@ bool DMaterial::HasProperty(const LPCSTR key) const
 	return m_shader->HasProperty(key);
 }
 
-void DMaterial::Apply()
+//void DMaterial::Apply()
+//{
+//	if (m_shader == NULL)
+//		return;
+//	//int i = 0;
+//	//int pcount, poffset, pindex, psize, stype;
+//	//float* params;
+//
+//	DGraphics::SetCullMode(m_cullMode);
+//	DGraphics::SetZTestFunc(m_ztest);
+//	DGraphics::SetZWriteEnable(m_zwrite);
+//
+//	m_shader->Apply(m_constantTable);
+//
+//	//for (i = 0; i < m_paramCount; i++)
+//	//{
+//	//	//material->GetParams(i, pcount, pindex, poffset, psize, stype, &params);
+//	//	m_params[i]->GetParams(pcount, pindex, poffset, psize, stype, &params);
+//	//	m_shader->ApplyParams(pindex, poffset, psize, stype, params);
+//	//	//DSystem::GetGraphicsMgr()->GetGLCore()->ApplyShaderParams(material->GetShader()->GetShaderBuffer(), pindex, poffset, psize, stype, params);
+//	//}
+//
+//	//std::map<std::string, DTexture*>::iterator  iter;
+//	//for (iter = m_textures.begin(); iter != m_textures.end(); iter++)
+//	//{
+//	//	if (iter->second != NULL)
+//	//	{
+//	//		LPCSTR key = iter->first.c_str();
+//	//		m_shader->ApplyRes(key, iter->second);
+//	//	}
+//	//}
+//	
+//	m_shader->Draw();
+//	//DSystem::GetGraphicsMgr()->GetGLCore()->DrawShader(material->GetShader()->GetShaderBuffer(), mesh->GetIndexCount());
+//}
+
+void DMaterial::SetPass(int pass)
 {
 	if (m_shader == NULL)
 		return;
-	//int i = 0;
-	//int pcount, poffset, pindex, psize, stype;
-	//float* params;
 
-	DGraphics::SetCullMode(m_cullMode);
-	DGraphics::SetZTestFunc(m_ztest);
-	DGraphics::SetZWriteEnable(m_zwrite);
+	m_shader->ApplyStates(pass);
 
-	m_shader->Apply(m_constantTable);
+	m_shader->ApplyParams(m_constantTable, pass);
 
-	//for (i = 0; i < m_paramCount; i++)
-	//{
-	//	//material->GetParams(i, pcount, pindex, poffset, psize, stype, &params);
-	//	m_params[i]->GetParams(pcount, pindex, poffset, psize, stype, &params);
-	//	m_shader->ApplyParams(pindex, poffset, psize, stype, params);
-	//	//DSystem::GetGraphicsMgr()->GetGLCore()->ApplyShaderParams(material->GetShader()->GetShaderBuffer(), pindex, poffset, psize, stype, params);
-	//}
-
-	//std::map<std::string, DTexture*>::iterator  iter;
-	//for (iter = m_textures.begin(); iter != m_textures.end(); iter++)
-	//{
-	//	if (iter->second != NULL)
-	//	{
-	//		LPCSTR key = iter->first.c_str();
-	//		m_shader->ApplyRes(key, iter->second);
-	//	}
-	//}
-
-	m_shader->Draw();
-	//DSystem::GetGraphicsMgr()->GetGLCore()->DrawShader(material->GetShader()->GetShaderBuffer(), mesh->GetIndexCount());
+	m_shader->Draw(pass);
 }
 
-int DMaterial::GetVertexUsage()
+int DMaterial::GetVertexUsage(int pass)
 {
 	if (m_shader != NULL)
-		return m_shader->GetVertexUsage();
+		return m_shader->GetVertexUsage(pass);
 	return 0;
 }
+
+//int DMaterial::GetVertexUsage()
+//{
+//	if (m_shader != NULL)
+//		return m_shader->GetVertexUsage();
+//	return 0;
+//}
 
 //int DMaterial::GetParamCount() const
 //{
@@ -416,6 +435,13 @@ int DMaterial::GetVertexUsage()
 //{
 //	m_params[index]->GetParams(pcount, pindex, poffset, psize, stype, params);
 //}
+
+int DMaterial::GetPassCount()
+{
+	if (m_shader != NULL)
+		return m_shader->GetPassCount();
+	return 0;
+}
 
 void DMaterial::Destroy()
 {

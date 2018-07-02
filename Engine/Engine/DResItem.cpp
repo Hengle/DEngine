@@ -39,69 +39,33 @@ DResObject * DResItem::GetRes()
 	return m_res;
 }
 
-DShaderResItem::DShaderResItem(char * vsfile, char * psfile)
+DShaderResItem::DShaderResItem(char * path)
 {
-	m_vsfile = vsfile;
-	m_psfile = psfile;
+	m_path = path;
 }
 
 void DShaderResItem::Release()
 {
 	DResItem::Release();
-	delete[] m_vsfile;
-	delete[] m_psfile;
+	delete[] m_path;
 }
 
 DShaderResItem * DShaderResItem::LoadManifest(std::ifstream & ifile)
 {
-	char gdef[32], vspath[512], pspath[512];
-	char* argvp, *argpp;
-	int argvlen, argplen;
+	char gdef[32], path[512];
+	char* argp;
+	int argplen;
 	DShaderResItem* item = NULL;
 	while (!ifile.eof())
 	{
 		ifile >> gdef;
-		if (strcmp(gdef, "#D3D9") == 0)
+		if (strcmp(gdef, "#PATH") == 0)
 		{
-			ifile >> vspath >> pspath;
-			if (DSystem::GetGraphicsMgr()->GetAPI() == DGRAPHICS_API_D3D9)
-			{
-				argvlen = strlen(vspath) + 1;
-				argvp = new char[argvlen];
-				strcpy_s(argvp, argvlen, vspath);
-				argplen = strlen(pspath) + 1;
-				argpp = new char[argplen];
-				strcpy_s(argpp, argplen, pspath);
-				item = new DShaderResItem(argvp, argpp);
-			}
-		}
-		else if (strcmp(gdef, "#D3D10") == 0)
-		{
-			ifile >> vspath >> pspath;
-			if (DSystem::GetGraphicsMgr()->GetAPI() == DGRAPHICS_API_D3D10)
-			{
-				argvlen = strlen(vspath) + 1;
-				argvp = new char[argvlen];
-				strcpy_s(argvp, argvlen, vspath);
-				argplen = strlen(pspath) + 1;
-				argpp = new char[argplen];
-				strcpy_s(argpp, argplen, pspath);
-				item = new DShaderResItem(argvp, argpp);
-			}
-		}
-		else if (strcmp(gdef, "#D3D11") == 0)
-		{
-			ifile >> vspath >> pspath;
-			if (DSystem::GetGraphicsMgr()->GetAPI() == DGRAPHICS_API_D3D11)
-			{
-				argvlen = strlen(vspath) + 1;
-				argvp = new char[argvlen];
-				strcpy_s(argvp, argvlen, vspath);
-				argplen = strlen(pspath) + 1;
-				argpp = new char[argplen];
-				strcpy_s(argpp, argplen, pspath);
-				item = new DShaderResItem(argvp, argpp);
-			}
+			ifile >> path;
+			argplen = strlen(path) + 1;
+			argp = new char[argplen];
+			strcpy_s(argp, argplen, path);
+			item = new DShaderResItem(argp);
 		}
 		else if (strcmp(gdef, "#RES_END") == 0)
 		{
@@ -113,11 +77,9 @@ DShaderResItem * DShaderResItem::LoadManifest(std::ifstream & ifile)
 
 DResObject * DShaderResItem::OnLoad()
 {
-	wchar_t* vs = CharToWCHAR(m_vsfile);
-	wchar_t* ps = CharToWCHAR(m_psfile);
-	DResObject* obj = DShader::Create(vs, ps);
-	delete[] vs;
-	delete[] ps;
+	//wchar_t* p = CharToWCHAR(m_path);
+	DResObject* obj = DShader::Create(m_path);
+	//delete[] p;
 	return obj;
 }
 

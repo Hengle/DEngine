@@ -1,27 +1,19 @@
 #RES_GROUP_BEGIN 0
 
 	#RES_BEGIN SHADER 1000 
-		#D3D9 ../Res/texture.vs9 ../Res/texture.ps9
-		#D3D10 ../Res/texture.vs ../Res/texture.ps
-		#D3D11 ../Res/texture.vs ../Res/texture.ps
+		#PATH ../Res/texture.shader
 	#RES_END
 
 	#RES_BEGIN SHADER 1001 
-		#D3D9 ../Res/sky.vs9 ../Res/sky.ps9
-		#D3D10 ../Res/sky.vs ../Res/sky.ps
-		#D3D11 ../Res/sky.vs ../Res/sky.ps
+		#PATH ../Res/sky.shader
 	#RES_END
 
 	#RES_BEGIN SHADER 1002 
-		#D3D9 ../Res/color.vs9 ../Res/color.ps9
-		#D3D10 ../Res/color.vs ../Res/color.ps
-		#D3D11 ../Res/color.vs ../Res/color.ps
+		#PATH ../Res/color.shader 
 	#RES_END
 
 	#RES_BEGIN SHADER 1003 
-		#D3D9 ../Res/texture.vs9 ../Res/imgeffect.ps9
-		#D3D10 ../Res/texture.vs ../Res/imgeffect.ps
-		#D3D11 ../Res/texture.vs ../Res/imgeffect.ps
+		#PATH ../Res/posteffect.shader
 	#RES_END
 
 	#RES_BEGIN TEXTURE2D 2000

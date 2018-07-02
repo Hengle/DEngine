@@ -164,6 +164,7 @@ bool DRes::LoadResManifest(char * fileName)
 			LoadResGroupManifest(ifile, groupid);
 		}
 	}
+	ifile.close();
 }
 
 void DRes::LoadResGroupManifest(ifstream & ifile, unsigned int groupid)

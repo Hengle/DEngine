@@ -186,6 +186,11 @@ bool DShaderRes9::OnInit(WCHAR * vsfile, WCHAR * psfile)
 	return true;
 }
 
+bool DShaderRes9::OnInit(const char * content, char * vsfunc, char * psfunc)
+{
+	return false;
+}
+
 void DShaderRes9::OnDraw()
 {
 	m_device->SetVertexShader(m_vertexShader);

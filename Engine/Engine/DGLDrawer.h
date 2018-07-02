@@ -44,7 +44,7 @@ public:
 	void GlLoadProjectionMatrix(DMatrix4x4&);
 	void GlLoadOrtho();
 	void GlMultiMatrix(DMatrix4x4&);
-	void GlSetMaterial(DMaterial*);
+	//void GlSetMaterial(DMaterial*);
 	void Release();
 
 private:
@@ -59,7 +59,7 @@ private:
 	DMatrix4x4 m_currentP;
 	//DMeshRes* m_meshRes;
 	//DShader* m_shader;
-	DMaterial* m_material;
+	//DMaterial* m_material;
 
 	//unsigned long m_currentIndex, m_preIndex;
 	unsigned int m_currentPLen, m_prePLen;

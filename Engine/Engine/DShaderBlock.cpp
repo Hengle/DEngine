@@ -167,8 +167,11 @@ void DShaderBlock::InterpretPass(ifstream & ifile, DSubShader* subshader)
 {
 	bool isBegin = false;
 	char read[128];
-	DShaderPass* pass = new DShaderPass();
-	subshader->AddPass(pass);
+	DShaderPass* pass = NULL;
+	if (subshader->IsSupport(DSystem::GetGraphicsMgr()->GetAPI())) {
+		pass = new DShaderPass();
+		subshader->AddPass(pass);
+	}
 	while (!ifile.eof())
 	{
 		ifile >> read;
@@ -228,12 +231,14 @@ void DShaderBlock::InterpretTags(ifstream & ifile, DShaderPass* pass)
 			else if (strcmp(read, "VertexFunc:") == 0)
 			{
 				ifile >> funcname;
-				pass->SetVertexFuncName(funcname);
+				if(pass != NULL)
+					pass->SetVertexFuncName(funcname);
 			}
 			else if (strcmp(read, "PixelFunc:") == 0)
 			{
 				ifile >> funcname;
-				pass->SetPixelFuncName(funcname);
+				if (pass != NULL)
+					pass->SetPixelFuncName(funcname);
 			}
 		}
 	}
@@ -264,17 +269,20 @@ void DShaderBlock::InterpretState(ifstream & ifile, DShaderPass* pass)
 			else if (strcmp(read, "zwrite") == 0)
 			{
 				ifile >> state;
-				pass->SetZWrite(state);
+				if (pass != NULL)
+					pass->SetZWrite(state);
 			}
 			else if (strcmp(read, "ztest") == 0)
 			{
 				ifile >> state;
-				pass->SetZTest(state);
+				if (pass != NULL)
+					pass->SetZTest(state);
 			}
 			else if (strcmp(read, "cull") == 0)
 			{
 				ifile >> state;
-				pass->SetCullMode(state);
+				if (pass != NULL)
+					pass->SetCullMode(state);
 			}
 		}
 	}
@@ -304,7 +312,8 @@ void DShaderBlock::InterpretShader(ifstream & ifile, DShaderPass * pass)
 
 				const char* content = s.c_str();
 
-				pass->CompileShader(content);
+				if (pass != NULL)
+					pass->CompileShader(content);
 
 				return;
 			}
@@ -361,7 +370,7 @@ void DSubShader::AddPass(DShaderPass * pass)
 
 bool DSubShader::IsSupport(DGraphicsAPI api)
 {
-	return m_compileTarget & api != 0;
+	return (m_compileTarget & api) != 0;
 }
 
 int DSubShader::GetPassCount()

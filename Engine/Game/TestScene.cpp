@@ -93,7 +93,7 @@ void TestScene::OnGUI()
 
 void TestScene::OnLoad()
 {
-	DShaderBlock* block = new DShaderBlock();
+	/*DShaderBlock* block = new DShaderBlock();
 	block->Compile("../Res/color.shader");
 
 	if (block != NULL)
@@ -101,7 +101,7 @@ void TestScene::OnLoad()
 		block->Release();
 		delete block;
 		block = NULL;
-	}
+	}*/
 	//DShader* testshader = DShader::Create(L"../Res/color.vs9", L"../Res/color.ps9");
 	//if (testshader != NULL)
 	//{
@@ -191,10 +191,10 @@ void TestScene::TestLoad()
 	float w, h;
 	DSystem::GetGraphicsMgr()->GetResolution(w, h);
 	m_rt = DRenderTexture::Create(w,h);
-	//cam->SetRenderTexture(m_rt);
+	cam->SetRenderTexture(m_rt);
 
 	m_filter = new TestFilter();
-	//cam->SetFilter(m_filter);
+	cam->SetFilter(m_filter);
 	cam->SetSkyBox(skymat);
 
 	transform = cam->GetTransform();

@@ -240,6 +240,8 @@ bool DShaderRes11::OnInit(const char * content, char * vsfunc, char * psfunc)
 		if (errorMessage)
 		{
 			//OutputShaderErrorMessage(errorMessage, vsFilename);
+			errorMessage->Release();
+			errorMessage = 0;
 		}
 		else
 		{
@@ -257,7 +259,8 @@ bool DShaderRes11::OnInit(const char * content, char * vsfunc, char * psfunc)
 	{
 		if (errorMessage)
 		{
-			//OutputShaderErrorMessage(errorMessage, psFilename);
+			errorMessage->Release();
+			errorMessage = 0;
 		}
 		else
 		{

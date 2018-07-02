@@ -13,6 +13,6 @@ public:
 
 private:
 	DMaterial* m_mat;
-	DShader* m_shader;
+	//DShader* m_shader;
 };
 

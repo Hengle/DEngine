@@ -188,7 +188,66 @@ void DShaderRes9::Release()
 
 bool DShaderRes9::OnInit(const char * content, char * vsfunc, char * psfunc)
 {
-	return false;
+	HRESULT hr;
+	ID3DXBuffer* vshader, *pshader = 0;
+	ID3DXBuffer* errorBuffer = 0;
+
+	UINT len = strlen(content);
+	hr = D3DXCompileShader(content, len, 0, 0, vsfunc, "vs_2_0", D3DXSHADER_DEBUG, &vshader, &errorBuffer, &m_vertexConstable);
+
+	if (errorBuffer)
+	{
+		char* log = (char*)errorBuffer->GetBufferPointer();
+		errorBuffer->Release();
+		errorBuffer = 0;
+	}
+
+	if (FAILED(hr))
+	{
+		return false;
+	}
+
+	hr = D3DXCompileShader(content, len, 0, 0, psfunc, "ps_2_0", D3DXSHADER_DEBUG, &pshader, &errorBuffer, &m_pixelConstable);
+
+	if (errorBuffer)
+	{
+		char* log = (char*)errorBuffer->GetBufferPointer();
+		errorBuffer->Release();
+		errorBuffer = 0;
+	}
+
+	if (FAILED(hr))
+	{
+		return false;
+	}
+
+	hr = m_device->CreateVertexShader((DWORD*)vshader->GetBufferPointer(), &m_vertexShader);
+	if (FAILED(hr))
+	{
+		return false;
+	}
+
+	hr = m_device->CreatePixelShader((DWORD*)pshader->GetBufferPointer(), &m_pixelShader);
+	if (FAILED(hr))
+	{
+		return false;
+	}
+
+	hr = InitVertexShader(vshader);
+	if (FAILED(hr))
+		return false;
+
+	hr = InitPixelShader();
+	if (FAILED(hr))
+		return false;
+
+	if (vshader != NULL)
+		vshader->Release();
+	vshader = 0;
+	if (pshader != NULL)
+		pshader->Release();
+	pshader = 0;
+	return true;
 }
 
 void DShaderRes9::OnDraw()

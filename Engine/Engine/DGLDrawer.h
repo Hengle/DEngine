@@ -12,10 +12,10 @@ public:
 	void Release();
 	void ProcessVector(float, float, float);
 	void ProcessColor(DColor*);
-	void PostProcess(DMaterial*, DMatrix4x4&, DMatrix4x4&);
+	void PostProcess(DMatrix4x4&, DMatrix4x4&);
 	
 private:
-	void ProcessDraw(DMaterial*, DMatrix4x4&, DMatrix4x4&);
+	void ProcessDraw(DMatrix4x4&, DMatrix4x4&);
 
 private:
 	float* m_vertices;

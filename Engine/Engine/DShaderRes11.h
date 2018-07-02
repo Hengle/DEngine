@@ -20,7 +20,7 @@ private:
 	HRESULT InitPixelShader(ID3DBlob*, ID3D11Device*);
 
 protected:
-	virtual bool OnInit(WCHAR*, WCHAR*);
+	//virtual bool OnInit(WCHAR*, WCHAR*);
 	virtual bool OnInit(const char* content, char* vsfunc, char* psfunc);
 	virtual void OnDraw();
 	virtual void OnApplyParams(std::map<std::string, float*>&params, std::map<std::string, float*>&gparams);

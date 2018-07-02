@@ -16,9 +16,9 @@ SubShader {
 
 			cbuffer MatrixBuffer
 			{
-				matrix worldMatrix;
-				matrix viewMatrix;
-				matrix projectionMatrix;
+				matrix g_worldMatrix;
+				matrix g_viewMatrix;
+				matrix g_projectionMatrix;
 			};
 
 			struct VertexInputType
@@ -68,9 +68,9 @@ SubShader {
     
     			input.position.w = 1.0f;
 
-    			output.position  = mul(worldMatrix, input.position);
-    output.position  = mul(viewMatrix, output.position);
-    output.position = mul(projectionMatrix, output.position);
+    			output.position  = mul(g_worldMatrix, input.position);
+    output.position  = mul(g_viewMatrix, output.position);
+    output.position = mul(g_projectionMatrix, output.position);
 
 	output.viewDir = -input.position.xyz;
     
@@ -107,9 +107,9 @@ SubShader {
 
 		Shader [
 
-			matrix worldMatrix;
-matrix viewMatrix;
-matrix projectionMatrix;
+			matrix g_worldMatrix;
+matrix g_viewMatrix;
+matrix g_projectionMatrix;
 
 struct VS_INPUT
 {
@@ -158,9 +158,9 @@ float3 GetSkyColor(float3 dir) {
     
     float4 pos = float4(input.position, 1.0f);
 
-    output.position = mul(pos, worldMatrix);
-    output.position = mul(output.position, viewMatrix);
-    output.position = mul(output.position, projectionMatrix);
+    output.position = mul(pos, g_worldMatrix);
+    output.position = mul(output.position, g_viewMatrix);
+    output.position = mul(output.position, g_projectionMatrix);
 
 	output.viewDir = -input.position.xyz;
     

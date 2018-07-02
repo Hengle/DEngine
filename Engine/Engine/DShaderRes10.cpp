@@ -443,102 +443,102 @@ HRESULT DShaderRes10::InitPixelShader(ID3DBlob * pShaderBlob, ID3D10Device * pD3
 	return hr;
 }
 
-bool DShaderRes10::OnInit(WCHAR * vsFilename, WCHAR * psFilename)
-{
-	HRESULT result;
-	ID3D10Blob* errorMessage;
-	ID3D10Blob* vertexShaderBuffer;
-	ID3D10Blob* pixelShaderBuffer;
-
-
-	errorMessage = 0;
-	vertexShaderBuffer = 0;
-	pixelShaderBuffer = 0;
-
-	result = D3DX10CompileFromFile(vsFilename, NULL, NULL, "TextureVertexShader", "vs_4_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
-		&vertexShaderBuffer, &errorMessage, NULL);
-	if (FAILED(result))
-	{
-		if (errorMessage)
-		{
-			//OutputShaderErrorMessage(errorMessage, vsFilename);
-		}
-		else
-		{
-			/*char s[1024];
-			_bstr_t b(vsFilename);
-			char* fname = b;
-			sprintf_s(s, "Missing Vertex Shader File:%s", fname);
-			DLog::Err(s);*/
-		}
-
-		return false;
-	}
-
-	result = D3DX10CompileFromFile(psFilename, NULL, NULL, "TexturePixelShader", "ps_4_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
-		&pixelShaderBuffer, &errorMessage, NULL);
-	if (FAILED(result))
-	{
-		if (errorMessage)
-		{
-			//OutputShaderErrorMessage(errorMessage, psFilename);
-		}
-		else
-		{
-			/*char s[1024];
-			_bstr_t b(psFilename);
-			char* fname = b;
-			sprintf_s(s, "Missing Pixel Shader File:%s", fname);
-			DLog::Err(s);*/
-		}
-
-		return false;
-	}
-
-	result = m_device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), &m_vertexShader);
-	if (FAILED(result))
-	{
-		return false;
-	}
-
-	result = m_device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), &m_pixelShader);
-	if (FAILED(result))
-	{
-		return false;
-	}
-
-	// Create the vertex input layout.
-
-	int byteLength = 0;
-	m_cbufferCount = 0;
-	m_propertyCount = 0;
-
-	result = InitVertexShader(vertexShaderBuffer, m_device, &m_layout, &byteLength);
-	if (FAILED(result))
-	{
-		return false;
-	}
-
-	result = InitPixelShader(pixelShaderBuffer, m_device);
-	if (FAILED(result))
-	{
-		return false;
-	}
-
-	vertexShaderBuffer->Release();
-	vertexShaderBuffer = 0;
-
-	pixelShaderBuffer->Release();
-	pixelShaderBuffer = 0;
-
-	/*char s[1024];
-	_bstr_t b(vsFilename);
-	char* fname = b;
-	sprintf_s(s, "Shader Load Complie Success! (%s)", fname);
-	DLog::Info(s);*/
-
-	return true;
-}
+//bool DShaderRes10::OnInit(WCHAR * vsFilename, WCHAR * psFilename)
+//{
+//	HRESULT result;
+//	ID3D10Blob* errorMessage;
+//	ID3D10Blob* vertexShaderBuffer;
+//	ID3D10Blob* pixelShaderBuffer;
+//
+//
+//	errorMessage = 0;
+//	vertexShaderBuffer = 0;
+//	pixelShaderBuffer = 0;
+//
+//	result = D3DX10CompileFromFile(vsFilename, NULL, NULL, "TextureVertexShader", "vs_4_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
+//		&vertexShaderBuffer, &errorMessage, NULL);
+//	if (FAILED(result))
+//	{
+//		if (errorMessage)
+//		{
+//			//OutputShaderErrorMessage(errorMessage, vsFilename);
+//		}
+//		else
+//		{
+//			/*char s[1024];
+//			_bstr_t b(vsFilename);
+//			char* fname = b;
+//			sprintf_s(s, "Missing Vertex Shader File:%s", fname);
+//			DLog::Err(s);*/
+//		}
+//
+//		return false;
+//	}
+//
+//	result = D3DX10CompileFromFile(psFilename, NULL, NULL, "TexturePixelShader", "ps_4_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
+//		&pixelShaderBuffer, &errorMessage, NULL);
+//	if (FAILED(result))
+//	{
+//		if (errorMessage)
+//		{
+//			//OutputShaderErrorMessage(errorMessage, psFilename);
+//		}
+//		else
+//		{
+//			/*char s[1024];
+//			_bstr_t b(psFilename);
+//			char* fname = b;
+//			sprintf_s(s, "Missing Pixel Shader File:%s", fname);
+//			DLog::Err(s);*/
+//		}
+//
+//		return false;
+//	}
+//
+//	result = m_device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), &m_vertexShader);
+//	if (FAILED(result))
+//	{
+//		return false;
+//	}
+//
+//	result = m_device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), &m_pixelShader);
+//	if (FAILED(result))
+//	{
+//		return false;
+//	}
+//
+//	// Create the vertex input layout.
+//
+//	int byteLength = 0;
+//	m_cbufferCount = 0;
+//	m_propertyCount = 0;
+//
+//	result = InitVertexShader(vertexShaderBuffer, m_device, &m_layout, &byteLength);
+//	if (FAILED(result))
+//	{
+//		return false;
+//	}
+//
+//	result = InitPixelShader(pixelShaderBuffer, m_device);
+//	if (FAILED(result))
+//	{
+//		return false;
+//	}
+//
+//	vertexShaderBuffer->Release();
+//	vertexShaderBuffer = 0;
+//
+//	pixelShaderBuffer->Release();
+//	pixelShaderBuffer = 0;
+//
+//	/*char s[1024];
+//	_bstr_t b(vsFilename);
+//	char* fname = b;
+//	sprintf_s(s, "Shader Load Complie Success! (%s)", fname);
+//	DLog::Info(s);*/
+//
+//	return true;
+//}
 
 bool DShaderRes10::OnInit(const char * content, char * vsfunc, char * psfunc)
 {

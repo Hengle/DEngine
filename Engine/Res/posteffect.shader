@@ -16,9 +16,9 @@ SubShader {
 
 			cbuffer MatrixBuffer
 			{
-				matrix worldMatrix;
-				matrix viewMatrix;
-				matrix projectionMatrix;
+				matrix g_worldMatrix;
+				matrix g_viewMatrix;
+				matrix g_projectionMatrix;
 			};
 
 			struct VertexInputType
@@ -46,9 +46,9 @@ SubShader {
 
 				// Calculate the position of the vertex against the world, view, and projection matrices.
 
-			    output.position  = mul(worldMatrix, input.position);
-			    output.position  = mul(viewMatrix, output.position);
-			    output.position = mul(projectionMatrix, output.position);
+			    output.position  = mul(g_worldMatrix, input.position);
+			    output.position  = mul(g_viewMatrix, output.position);
+			    output.position = mul(g_projectionMatrix, output.position);
     
 				// Store the texture coordinates for the pixel shader.
 				output.tex = input.tex;
@@ -86,9 +86,9 @@ SubShader {
 
 		Shader [
 
-			matrix worldMatrix;
-			matrix viewMatrix;
-			matrix projectionMatrix;
+			matrix g_worldMatrix;
+			matrix g_viewMatrix;
+			matrix g_projectionMatrix;
 
 			struct VS_INPUT
 			{
@@ -110,9 +110,9 @@ SubShader {
 
     			float4 pos = float4(input.position, 1.0f);
 
-    			output.position = mul(pos, worldMatrix);
-    			output.position = mul(output.position, viewMatrix);
-    			output.position = mul(output.position, projectionMatrix);
+    			output.position = mul(pos, g_worldMatrix);
+    			output.position = mul(output.position, g_viewMatrix);
+    			output.position = mul(output.position, g_projectionMatrix);
 
     			output.uv = input.uv;
     

@@ -254,9 +254,9 @@ void DGraphics::DrawMesh(DMesh * mesh, const DMatrix4x4 & matrix, DMaterial * ma
 
 	//camera->GetTransform()->GetPosition(cpos);
 
-	material->SetMatrix("worldMatrix", world);
-	material->SetMatrix("viewMatrix", v);
-	material->SetMatrix("projectionMatrix", p);
+	material->SetMatrix("g_worldMatrix", world);
+	material->SetMatrix("g_viewMatrix", v);
+	material->SetMatrix("g_projectionMatrix", p);
 
 	int passcount = material->GetPassCount();
 	int i;
@@ -288,9 +288,9 @@ void DGraphics::DrawTexture(DTexture * texture, DMaterial * material)
 	DSystem::GetGraphicsMgr()->GetGLCore()->GetResolution(screenWidth, screenHeight);
 	DMatrix4x4::Ortho(&proj, screenWidth, screenHeight, -100.0f, 100.0f);
 
-	material->SetMatrix("worldMatrix", world);
-	material->SetMatrix("viewMatrix", view);
-	material->SetMatrix("projectionMatrix", proj);
+	material->SetMatrix("g_worldMatrix", world);
+	material->SetMatrix("g_viewMatrix", view);
+	material->SetMatrix("g_projectionMatrix", proj);
 	material->SetTexture("screenTexture", texture);
 
 	//material->Apply();
@@ -353,14 +353,14 @@ void DGraphics::SetZTestFunc(DRSCompareFunc ztest)
 	}
 }
 
-void DGraphics::GlSetMaterial(DMaterial * material)
-{
-	DGLDrawer* drawer = DSystem::GetGraphicsMgr()->m_glDrawer;
-	if (drawer != NULL)
-	{
-		drawer->GlSetMaterial(material);
-	}
-}
+//void DGraphics::GlSetMaterial(DMaterial * material)
+//{
+//	DGLDrawer* drawer = DSystem::GetGraphicsMgr()->m_glDrawer;
+//	if (drawer != NULL)
+//	{
+//		drawer->GlSetMaterial(material);
+//	}
+//}
 
 void DGraphics::GlBegin()
 {

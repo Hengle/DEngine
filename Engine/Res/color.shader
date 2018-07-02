@@ -16,9 +16,9 @@ SubShader {
 
 			cbuffer MatrixBuffer
 			{
-				matrix worldMatrix;
-				matrix viewMatrix;
-				matrix projectionMatrix;
+				matrix g_worldMatrix;
+				matrix g_viewMatrix;
+				matrix g_projectionMatrix;
 			};
 
 			struct VertexInputType
@@ -39,9 +39,9 @@ SubShader {
 
 				float4 vpos = float4(input.position.xyz, 1.0f);
 
-			    output.position  = mul(worldMatrix, vpos);
-			    output.position  = mul(viewMatrix, output.position);
-			    output.position = mul(projectionMatrix, output.position);
+			    output.position  = mul(g_worldMatrix, vpos);
+			    output.position  = mul(g_viewMatrix, output.position);
+			    output.position = mul(g_projectionMatrix, output.position);
 
 			    output.color = input.color;
 
@@ -71,9 +71,9 @@ SubShader {
 
 		Shader [
 
-			matrix worldMatrix;
-			matrix viewMatrix;
-			matrix projectionMatrix;
+			matrix g_worldMatrix;
+			matrix g_viewMatrix;
+			matrix g_projectionMatrix;
 
 			struct VS_INPUT
 			{
@@ -93,9 +93,9 @@ SubShader {
 
 			    float4 pos = float4(input.position, 1.0f);
 
-    			output.position = mul(pos, worldMatrix);
-    			output.position = mul(output.position, viewMatrix);
-    			output.position = mul(output.position, projectionMatrix);
+    			output.position = mul(pos, g_worldMatrix);
+    			output.position = mul(output.position, g_viewMatrix);
+    			output.position = mul(output.position, g_projectionMatrix);
 
     			output.color = input.color;
     

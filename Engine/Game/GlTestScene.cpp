@@ -45,7 +45,8 @@ void GlTestScene::OnUnLoad()
 
 void GlTestScene::OnRender()
 {
-	DGraphics::GlSetMaterial(m_testcolormat);
+	//DGraphics::GlSetMaterial(m_testcolormat);
+	m_testcolormat->SetPass(0);
 	DGraphics::GlPushMatrix();
 
 	DGraphics::GlBegin();

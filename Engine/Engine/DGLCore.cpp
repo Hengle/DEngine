@@ -180,10 +180,10 @@ unsigned int DShaderRes::GetPropertyCount() const
 	return m_propertyCount;
 }
 
-void DShaderRes::Init(WCHAR * vsfile, WCHAR * psfile)
-{
-	m_isInitialized = OnInit(vsfile, psfile);
-}
+//void DShaderRes::Init(WCHAR * vsfile, WCHAR * psfile)
+//{
+//	m_isInitialized = OnInit(vsfile, psfile);
+//}
 
 void DShaderRes::Init(const char * content, char * vsfunc, char * psfunc)
 {

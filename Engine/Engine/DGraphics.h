@@ -44,7 +44,7 @@ public:
 	static void SetZWriteEnable(bool);
 	static void SetZTestFunc(DRSCompareFunc);
 
-	static void GlSetMaterial(DMaterial*);
+	//static void GlSetMaterial(DMaterial*);
 	static void GlBegin();
 	static void GlEnd();
 	static void GlVector3(DVector3&);

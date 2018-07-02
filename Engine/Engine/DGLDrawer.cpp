@@ -38,7 +38,7 @@ void DGLDrawer::GlEnd()
 {
 	if (m_currentProcess != NULL)
 	{
-		m_currentProcess->PostProcess(m_material, m_currentMV, m_currentP);
+		m_currentProcess->PostProcess(m_currentMV, m_currentP);
 	}
 	m_currentProcess = NULL;
 }
@@ -111,10 +111,10 @@ void DGLDrawer::GlMultiMatrix(DMatrix4x4& matrix)
 	m_currentMV = matrix * m_currentMV;
 }
 
-void DGLDrawer::GlSetMaterial(DMaterial * material)
-{
-	m_material = material;
-}
+//void DGLDrawer::GlSetMaterial(DMaterial * material)
+//{
+//	m_material = material;
+//}
 
 void DGLDrawer::Release()
 {
@@ -130,7 +130,7 @@ void DGLDrawer::Release()
 		}
 	}
 	m_processVector.clear();
-	m_material = NULL;
+	//m_material = NULL;
 }
 
 void DGLDrawer::GenerateNewProcesses()
@@ -214,7 +214,7 @@ void DGLDrawerProcess::ProcessColor(DColor * color)
 	m_hasDrawCommand = true;
 }
 
-void DGLDrawerProcess::PostProcess(DMaterial* material, DMatrix4x4& modelview, DMatrix4x4& projection)
+void DGLDrawerProcess::PostProcess(DMatrix4x4& modelview, DMatrix4x4& projection)
 {
 	if (m_vertices != 0 && m_indices != 0 && m_hasDrawCommand)
 	{
@@ -224,7 +224,7 @@ void DGLDrawerProcess::PostProcess(DMaterial* material, DMatrix4x4& modelview, D
 			m_meshRes = DSystem::GetGraphicsMgr()->GetGLCore()->CreateMeshRes(vusage, true);
 		}
 		m_meshRes->Refresh(m_vertices, m_indices, m_currentIndex * 3, m_currentIndex);
-		ProcessDraw(material, modelview, projection);
+		ProcessDraw(modelview, projection);
 		m_hasDrawCommand = false;
 	}
 	if (m_currentIndex != m_preIndex)
@@ -246,7 +246,7 @@ void DGLDrawerProcess::PostProcess(DMaterial* material, DMatrix4x4& modelview, D
 	m_currentIndex = 0;
 }
 
-void DGLDrawerProcess::ProcessDraw(DMaterial * material, DMatrix4x4& modelview, DMatrix4x4& projection)
+void DGLDrawerProcess::ProcessDraw(DMatrix4x4& modelview, DMatrix4x4& projection)
 {
 
 	/*DCamera* camera;
@@ -258,11 +258,14 @@ void DGLDrawerProcess::ProcessDraw(DMaterial * material, DMatrix4x4& modelview, 
 	DMatrix4x4 world;
 	DMatrix4x4::Identity(&world);
 
-	material->SetMatrix("worldMatrix", world);
+	/*material->SetMatrix("worldMatrix", world);
 	material->SetMatrix("viewMatrix", modelview);
 	material->SetMatrix("projectionMatrix", projection);
 
-	material->Apply();
+	material->Apply();*/
+	DShader::SetGlobalMatrix("g_worldMatrix", world);
+	DShader::SetGlobalMatrix("g_viewMatrix", modelview);
+	DShader::SetGlobalMatrix("g_projectionMatrix", projection);
 
 	m_meshRes->Draw(DMeshTopology_LineList);
 }

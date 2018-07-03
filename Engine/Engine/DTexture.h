@@ -20,7 +20,6 @@ public:
 	virtual void Destroy();
 	virtual void Apply(UINT);
 	DWrapMode GetWrapMode();
-	//DTextureBuffer* GetTextureBuffer();
 
 	static DTexture2D* Create(WCHAR*);
 	static DTexture2D* Create(WCHAR*, DWrapMode);

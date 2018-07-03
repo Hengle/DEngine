@@ -17,16 +17,5 @@ private:
 	ID3D11Device* m_device;
 	ID3D11DeviceContext* m_deviceContext;
 	ID3D11Buffer* m_vertexBuffer, *m_indexBuffer;
-	//int m_dataSize;
-	//int m_dataCount;
-	//bool m_hasUV;
-	//bool m_hasUV1;
-	//bool m_hasUV2;
-	//bool m_hasUV3;
-	//bool m_hasColor;
-	//bool m_hasNormal;
-	//bool m_hasTangent;
-	//bool m_hasBinormal;
-	//int m_indexCount;
 };
 

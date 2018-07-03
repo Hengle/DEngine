@@ -6,23 +6,7 @@
 #include <string>
 #include <map>
 
-//typedef struct DShaderParamDesc
-//{
-//public:
-//	DShaderParamDesc()
-//	{
-//		cbufferIndex = -1;
-//		cbufferOffset = -1;
-//		cbufferLength = 0;
-//		propertyOffset = 0;
-//		propertySize = 0;
-//		shaderType = 0;
-//	}
-//
-//public:
-//	int cbufferIndex, cbufferOffset, cbufferLength,propertyOffset, propertySize,shaderType;
-//} DShaderParamDesc;
-
+/*shader属性描述*/
 typedef struct DShaderPropertyDesc
 {
 public:
@@ -35,11 +19,12 @@ public:
 
 public:
 	int propertyOffset;//属性在cbuffer中的偏移量
-	int propertySize;//属性大小
+	int propertySize;//属性占用大小
 	bool isGlobal;//是否为全局属性
 	std::string propertyName;//属性名称
 } DShaderPropertyDesc;
 
+/*shader资源描述*/
 typedef struct DShaderResDesc
 {
 public:
@@ -50,11 +35,12 @@ public:
 	}
 
 public:
-	UINT offset;
-	std::string resName;
-	bool isGlobal;
+	UINT offset;//资源偏移
+	std::string resName;//资源名称
+	bool isGlobal;//是否为全局属性
 };
 
+/*shader ConstantBuffer描述*/
 class DShaderCBufferDesc
 {
 public:
@@ -70,19 +56,20 @@ public:
 	int cbufferIndex;//用于索引该cbuffer指针
 	int cbufferStartSlot;
 	int cbufferSize;//cbuffer大小
-	int shaderType;
+	int shaderType;//shader类型
 	std::map<std::string, DShaderPropertyDesc> properties;
 };
 
+/*meshbuffer描述*/
 typedef struct DMeshBufferDesc
 {
 public:
 	DMeshBufferDesc(){}
 public:
-	int vertexCount, indexCount;
-	float*vertices;
-	float*uvs;
-	float*uv2s;
+	int vertexCount /*顶点数量*/, indexCount /*索引数量*/;
+	float*vertices; /*顶点缓存*/
+	float*uvs; 
+	float*uv2s; 
 	float*uv3s;
 	float*normals;
 	float*colors;
@@ -93,12 +80,11 @@ public:
 class DMeshRes
 {
 public:
-	DMeshRes(int, bool);
-	//void Init(DMeshBufferDesc* desc);
-	void Refresh(DMeshBufferDesc* desc);
-	void Refresh(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount);
-	void Draw(DMeshTopology);
-	virtual void Release() = 0;
+	DMeshRes(int vertexUsage /*顶点用法描述*/, bool dynamic /*是否为动态mesh*/);
+	void Refresh(DMeshBufferDesc* desc); //更新顶点缓存
+	void Refresh(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount);//更新顶点缓存
+	void DrawPrimitive(DMeshTopology topology);//绘制
+	virtual void Release() = 0; //释放资源
 	bool IsInitialized();
 
 protected:
@@ -157,27 +143,20 @@ class DShaderRes
 {
 public:
 	DShaderRes();
-	//unsigned int GetCBufferCount() const;
 	unsigned int GetPropertyCount() const;
-	//void Init(WCHAR* vsfile, WCHAR* psfile);
 	void Init(const char* content, char* vsfunc, char* psfunc);
 	unsigned int GetResCount() const;
 	void ApplyParams(std::map<std::string, float*>&params, std::map<std::string, float*>&gparams);
-	//void ApplyParams(int cindex, int coffset, int csize, int stype, float* params);
 	void Draw();
 	bool IsInitialized();
 	int GetVertexUsage();
-	//virtual void GetPropertyInfo(const LPCSTR key, DShaderParamDesc* desc) const = 0;
-	//virtual UINT GetResOffset(const LPCSTR key) const = 0;
 	virtual void GetResDesc(unsigned int index, DShaderResDesc&) const = 0;
 	virtual bool HasProperty(const LPCSTR key) const = 0;
 	virtual void Release() = 0;
 
 protected:
-	//virtual bool OnInit(WCHAR*, WCHAR*) = 0;
 	virtual bool OnInit(const char* content, char* vsfunc, char* psfunc) = 0;
 	virtual void OnApplyParams(std::map<std::string, float*>&params, std::map<std::string, float*>&gparams) = 0;
-	//virtual void OnApplyParams(int, int, int, int, float*) = 0;
 	virtual void OnDraw() = 0;
 
 protected:
@@ -214,7 +193,6 @@ public:
 	virtual DShaderRes* CreateShaderRes() = 0;
 	virtual void ApplySamplerState(UINT, DWrapMode) = 0;
 	virtual DRenderStateMgr* GetRenderStateMgr() = 0;
-	//virtual void 
 	void GetResolution(float&, float&);
 
 protected:

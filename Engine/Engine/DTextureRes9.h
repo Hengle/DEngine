@@ -1,6 +1,9 @@
 ﻿#pragma once
 #include "D3D9Core.h"
 
+/*
+	纹理资源Direct3D9底层
+*/
 class DTextureRes9 : public DTextureRes
 {
 public:
@@ -15,6 +18,9 @@ private:
 	LPDIRECT3DDEVICE9 m_device;
 };
 
+/*
+	RenderTexture Direct3D9底层
+*/
 class DRenderTextureViewRes9 : public DRenderTextureViewRes
 {
 public:
@@ -39,5 +45,4 @@ private:
 	LPDIRECT3DSURFACE9 m_surface;
 	bool m_isSuccess;
 	LPDIRECT3DDEVICE9 m_device;
-	//DRenderBuffer* m_depthBuffer;
 };

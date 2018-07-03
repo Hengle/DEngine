@@ -67,7 +67,6 @@ private:
 	void InterpretShader(ifstream&, DShaderPass*);
 
 private:
-	//vector<DSubShader*> m_subShaders;
 	DSubShader* m_supportShader;
 };
 

@@ -1,6 +1,9 @@
 ﻿#pragma once
 #include "D3D10Core.h"
 
+/*
+	Mesh资源Direct3D10底层
+*/
 class DMeshRes10 : public DMeshRes
 {
 public:
@@ -16,16 +19,5 @@ protected:
 private:
 	ID3D10Device* m_device;
 	ID3D10Buffer* m_vertexBuffer, *m_indexBuffer;
-	//int m_dataSize;
-	//int m_dataCount;
-	//bool m_hasUV;
-	//bool m_hasUV1;
-	//bool m_hasUV2;
-	//bool m_hasUV3;
-	//bool m_hasColor;
-	//bool m_hasNormal;
-	//bool m_hasTangent;
-	//bool m_hasBinormal;
-	//int m_indexCount;
 };
 

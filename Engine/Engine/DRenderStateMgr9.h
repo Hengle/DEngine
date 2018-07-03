@@ -1,6 +1,9 @@
 ﻿#pragma once
 #include "D3D9Core.h"
 
+/*
+	Direct3D9渲染状态管理器
+*/
 class DRenderStateMgr9 : public DRenderStateMgr
 {
 public:
@@ -9,9 +12,12 @@ public:
 
 	virtual void Init();
 	virtual void Release();
-	virtual void SetCullMode(DCullMode);
-	virtual void SetZWriteEnable(bool);
-	virtual void SetZTestFunc(DRSCompareFunc);
+	/*设置Cull模式*/
+	virtual void SetCullMode(DCullMode cullmode);
+	/*开启/关闭深度写入*/
+	virtual void SetZWriteEnable(bool zwrite);
+	/*设置深度测试模式*/
+	virtual void SetZTestFunc(DRSCompareFunc ztest);
 
 private:
 	void ChangeCullMode(DCullMode);

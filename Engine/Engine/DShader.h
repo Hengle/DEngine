@@ -31,18 +31,12 @@ public:
 	~DShader();
 
 	virtual void Destroy();
-	//unsigned int GetCBufferCount() const;
-	//unsigned int GetPropertyCount() const;
-	//void GetPropertyInfo(const LPCSTR key, DShaderParamDesc* desc) const;
 	bool HasProperty(const LPCSTR key) const;
-	//void ApplyParams(int cindex, int coffset, int csize, int stype, float* params) const;
-	//void ApplyRes(const LPCSTR key, DTexture*) const;
 	void ApplyStates(int);
 	void ApplyParams(DShaderConstantTable*, int);
 	void Draw(int);
 	int GetVertexUsage(int);
 	int GetPassCount();
-	//static DShader* Create(WCHAR*, WCHAR*);
 	static DShader* Create(char*);
 	static void ReleaseGlobalConstants();
 
@@ -55,7 +49,6 @@ public:
 	static void SetGlobalTexture(const LPCSTR key, DTexture*);
 
 private:
-	//DShaderRes* m_shaderRes;
 	DShaderBlock* m_shaderBlock;
 };
 

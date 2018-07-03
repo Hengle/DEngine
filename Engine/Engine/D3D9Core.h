@@ -4,22 +4,31 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 
+/*
+	D3D9渲染与管理模块
+*/
 class D3D9Core : public DGLCore
 {
 public:
 	D3D9Core();
 	~D3D9Core();
 
+	/*模块初始化*/
 	virtual bool Init(int width, int height, bool fullscreen, HWND);
+	/*模块销毁*/
 	virtual void Destroy();
 	virtual void BeginRender();
 	virtual void EndRender();
-	virtual void Clear(bool, bool, DColor&, DRenderTextureViewRes* = NULL);
+	virtual void Clear(bool clearDepth, bool clearStencil, DColor& clearColor, DRenderTextureViewRes* = NULL);
 	virtual void SetRenderTarget(DRenderTextureViewRes* = NULL);
 	virtual void EndSetRenderTarget(DRenderTextureViewRes* = NULL);
-	virtual DMeshRes* CreateMeshRes(int, bool);
-	virtual DTextureRes* CreateTextureRes(WCHAR*);
-	virtual DRenderTextureViewRes* CreateRenderTextureRes(float, float);
+	/*创建网格资源*/
+	virtual DMeshRes* CreateMeshRes(int vertexUsage, bool dynamic);
+	/*创建贴图资源*/
+	virtual DTextureRes* CreateTextureRes(WCHAR* path);
+	/*创建RenderTexture资源*/
+	virtual DRenderTextureViewRes* CreateRenderTextureRes(float width, float height);
+	/*创建shader资源*/
 	virtual DShaderRes* CreateShaderRes();
 	virtual void ApplySamplerState(UINT, DWrapMode);
 	virtual DRenderStateMgr* GetRenderStateMgr();

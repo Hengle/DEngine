@@ -143,9 +143,13 @@ class DShaderRes
 {
 public:
 	DShaderRes();
+	/*获得属性数量*/
 	unsigned int GetPropertyCount() const;
-	void Init(const char* content, char* vsfunc, char* psfunc);
-	unsigned int GetResCount() const;
+	/*初始化*/
+	void Init(const char* content /*shader内容*/, char* vsfunc /*顶点函数名*/, char* psfunc /*片段函数名*/);
+	/*获得shader资源属性数量*/
+	unsigned int GetResCount() const; 
+	/*应用shader参数*/
 	void ApplyParams(std::map<std::string, float*>&params, std::map<std::string, float*>&gparams);
 	void Draw();
 	bool IsInitialized();
@@ -175,17 +179,23 @@ public:
 	virtual void SetZTestFunc(DRSCompareFunc) = 0;
 };
 
+/*抽象图形库模块*/
 class DGLCore
 {
 public:
 	DGLCore();
 	~DGLCore();
-	virtual bool Init(int, int, bool, HWND);
+	/*初始化图形库*/
+	virtual bool Init(int width, int height, bool fullscreen, HWND);
+	/*销毁图形库*/
 	virtual void Destroy() = 0;
 	virtual void BeginRender() = 0;
 	virtual void EndRender() = 0;
+	/*提交渲染结果*/
+	virtual void Present() = 0;
 	virtual void Clear(bool, bool, DColor&, DRenderTextureViewRes* = NULL) = 0;
 	virtual void SetRenderTarget(DRenderTextureViewRes* = NULL) = 0;
+	virtual void SetViewPort(DRect&) = 0;
 	virtual void EndSetRenderTarget(DRenderTextureViewRes* = NULL) = 0;
 	virtual DMeshRes* CreateMeshRes(int, bool) = 0;
 	virtual DTextureRes* CreateTextureRes(WCHAR*) = 0;

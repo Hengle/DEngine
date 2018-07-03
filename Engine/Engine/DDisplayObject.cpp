@@ -1,4 +1,4 @@
-#include "DDisplayObject.h"
+﻿#include "DDisplayObject.h"
 #include "DSystem.h"
 
 DDisplayObject::DDisplayObject(DMesh* mesh, DMaterial* material)
@@ -21,14 +21,6 @@ void DDisplayObject::Render()
 		DCamera::GetCurrentCamera(&cur);
 		m_Transform->GetLocalToWorld(world);
 		DGraphics::DrawMesh(m_mesh, world, m_material, cur);
-		/*DMatrix4x4 world, view, projection;
-		DGraphics::DrawMesh(m_mesh);
-		DCamera* cur;
-		DCamera::GetCurrentCamera(&cur);
-		m_Transform->GetLocalToWorld(world);
-		cur->GetViewMatrix(view);
-		cur->GetProjection(projection);*/
-		//m_shader->Render(DSystem::GetGraphicsMgr()->GetDeviceContext(), m_mesh->GetIndexCount(), world, view, projection);
 	}
 }
 

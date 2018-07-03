@@ -28,6 +28,7 @@ public:
 	float GetFar() const;
 	float GetAspect() const;
 	float GetOrthoSize() const;
+	void GetViewPort(DRect&) const;
 	bool IsOrthographic() const;
 	void SetFieldOfView(float);
 	void SetNear(float);
@@ -38,6 +39,7 @@ public:
 	void SetFilter(DCameraFilter*);
 	void SetBackgroundColor(DColor&);
 	void SetSkyBox(DMaterial*);
+	void SetViewPort(DRect&);
 	void ClearSkyBox();
 	void ClearFilter();
 	DRenderTexture* GetRenderTexture();
@@ -59,6 +61,7 @@ private:
 	DRenderTexture* m_renderTexture;
 	DColor m_backgroundColor;
 	DMaterial* m_skyBoxMaterial;
+	DRect m_viewPort;
 };
 
 static DCamera* sCurrent;

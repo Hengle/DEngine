@@ -114,6 +114,11 @@ void D3D9Core::EndRender()
 	m_device->Present(0, 0, 0, 0);
 }
 
+void D3D9Core::Present()
+{
+	m_device->Present(0, 0, 0, 0);
+}
+
 void D3D9Core::Clear(bool clearDepth, bool clearStencil, DColor & color, DRenderTextureViewRes * res)
 {
 	DWORD flag = D3DCLEAR_TARGET;
@@ -139,6 +144,16 @@ void D3D9Core::Clear(bool clearDepth, bool clearStencil, DColor & color, DRender
 
 void D3D9Core::SetRenderTarget(DRenderTextureViewRes * res)
 {
+}
+
+void D3D9Core::SetViewPort(DRect & viewPort)
+{
+	m_viewPort.Width = viewPort.width;
+	m_viewPort.Height = viewPort.height;
+	m_viewPort.X = viewPort.x;
+	m_viewPort.Y = viewPort.y;
+
+	m_device->SetViewport(&m_viewPort);
 }
 
 void D3D9Core::EndSetRenderTarget(DRenderTextureViewRes * res)

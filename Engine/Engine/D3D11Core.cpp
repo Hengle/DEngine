@@ -342,6 +342,13 @@ void D3D11Core::EndRender()
 	}
 }
 
+void D3D11Core::Present()
+{
+	if (m_swapChain != NULL) {
+		m_swapChain->Present(0, 0);
+	}
+}
+
 void D3D11Core::Clear(bool clearDepth, bool clearStencil, DColor & color, DRenderTextureViewRes * res)
 {
 	int flag = 0;
@@ -389,6 +396,16 @@ void D3D11Core::SetRenderTarget(DRenderTextureViewRes * res)
 		ID3D11DepthStencilView* dv = ((DDepthBuffer11*)m_depthBuffer)->GetView();
 		m_deviceContext->OMSetRenderTargets(1, &rv, dv);
 	}
+}
+
+void D3D11Core::SetViewPort(DRect & viewPort)
+{
+	m_viewPort.Width = viewPort.width;
+	m_viewPort.Height = viewPort.height;
+	m_viewPort.TopLeftX = viewPort.x;
+	m_viewPort.TopLeftY = viewPort.y;
+
+	m_deviceContext->RSSetViewports(1, &m_viewPort);
 }
 
 void D3D11Core::EndSetRenderTarget(DRenderTextureViewRes *)

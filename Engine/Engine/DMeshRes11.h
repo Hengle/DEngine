@@ -1,6 +1,9 @@
 ﻿#pragma once
 #include "D3D11Core.h"
 
+/*
+	Mesh资源Direct3D11底层
+*/
 class DMeshRes11 : public DMeshRes
 {
 public:

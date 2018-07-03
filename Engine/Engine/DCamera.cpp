@@ -17,6 +17,10 @@ DCamera::DCamera()
 	m_viewPort.MaxDepth = 1.0f;
 	m_viewPort.TopLeftX = 0.0f;
 	m_viewPort.TopLeftY = 0.0f;*/
+	m_viewPort.width = width;
+	m_viewPort.height = height;
+	m_viewPort.x = 0;
+	m_viewPort.y = 0;
 	m_aspect = width / height;
 	m_ortho = false;
 	m_isProjectionChanged = true;
@@ -159,6 +163,11 @@ float DCamera::GetOrthoSize()const
 	return m_orthoSize;
 }
 
+void DCamera::GetViewPort(DRect & rect) const
+{
+	rect = m_viewPort;
+}
+
 bool DCamera::IsOrthographic()const
 {
 	return m_ortho;
@@ -233,6 +242,11 @@ void DCamera::SetBackgroundColor(DColor & color)
 void DCamera::SetSkyBox(DMaterial * skyBoxMaterial)
 {
 	m_skyBoxMaterial = skyBoxMaterial;
+}
+
+void DCamera::SetViewPort(DRect & viewPort)
+{
+	m_viewPort = viewPort;
 }
 
 void DCamera::ClearSkyBox()

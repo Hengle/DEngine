@@ -16,6 +16,10 @@
 		#PATH ../Res/posteffect.shader
 	#RES_END
 
+	#RES_BEGIN SHADER 1004 
+		#PATH ../Res/outline.shader
+	#RES_END
+
 	#RES_BEGIN TEXTURE2D 2000
 		#PATH ../Res/decal.jpg
 		#WRAPMODE REPEAT
@@ -54,6 +58,10 @@
 
 	#RES_BEGIN MATERIAL 3005
 		#SHADER 0 1003
+	#RES_END
+
+	#RES_BEGIN MATERIAL 3006
+		#SHADER 0 1004
 	#RES_END
 
 	#RES_BEGIN MESH 4000

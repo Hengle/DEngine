@@ -4,15 +4,6 @@
 
 DMesh::DMesh(bool dynamic)
 {
-	//m_vertexBuffer = 0;
-	//m_indexBuffer = 0;
-	//m_dataSize = 0;
-	//m_meshBuffer = 0;
-	//m_meshRes = 0;
-	//m_vertexOffset = 0;
-	//m_normalOffset = 0;
-	//m_colorOffset = 0;
-	//m_uvOffset = 0;
 
 	m_vertexChanged = false;
 	m_meshDesc.vertices = 0;
@@ -22,13 +13,6 @@ DMesh::DMesh(bool dynamic)
 	m_meshDesc.normals = 0;
 	m_meshDesc.colors = 0;
 	m_meshDesc.indices = 0;
-	/*m_vertices = 0;
-	m_uvs = 0;
-	m_uv2s = 0;
-	m_uv3s = 0;
-	m_normals = 0;
-	m_colors = 0;
-	m_indices = 0;*/
 
 	m_topology = DMeshTopology_TriangleList;
 	m_dynamic = dynamic;
@@ -51,28 +35,7 @@ void DMesh::Destroy()
 		}
 	}
 	m_meshReses.clear();
-	/*if (m_meshRes != NULL)
-	{
-		m_meshRes->Release();
-		delete m_meshRes;
-		m_meshRes = NULL;
-	}*/
-	/*if (m_meshBuffer != NULL)
-	{
-		m_meshBuffer->Release();
-		delete m_meshBuffer;
-		m_meshBuffer = NULL;
-	}*/
-	/*if (m_vertexBuffer != NULL)
-	{
-		delete[] m_vertexBuffer;
-		m_vertexBuffer = 0;
-	}
-	if (m_indexBuffer != NULL)
-	{
-		delete[] m_indexBuffer;
-		m_indexBuffer = 0;
-	}*/
+
 	if (m_meshDesc.vertices != NULL)
 	{
 		delete[] m_meshDesc.vertices;
@@ -442,7 +405,7 @@ void DMesh::Draw(int vertexUsage)
 	if (m_meshReses.find(vertexUsage) == m_meshReses.end())
 	{
 		DMeshRes* res = DSystem::GetGraphicsMgr()->GetGLCore()->CreateMeshRes(vertexUsage, m_dynamic);
-		//res->Init(&m_meshDesc, vertexUsage);
+	
 		m_meshReses.insert(std::pair<int, DMeshRes*>(vertexUsage, res));
 	}
 	if (m_vertexChanged)
@@ -450,10 +413,6 @@ void DMesh::Draw(int vertexUsage)
 		UpdateMeshReses();
 		m_vertexChanged = false;
 	}
-	/*if (m_meshRes != NULL)
-	{
-		m_meshRes->Draw(m_topology);
-	}*/
 	if (m_meshReses.find(vertexUsage) != m_meshReses.end())
 	{
 		DMeshRes* res = m_meshReses.at(vertexUsage);
@@ -461,25 +420,12 @@ void DMesh::Draw(int vertexUsage)
 		{
 			res->Refresh(&m_meshDesc);
 		}
-		res->Draw(m_topology);
+		res->DrawPrimitive(m_topology);
 	}
 }
 
-//int DMesh::GetDataSize() const
-//{
-//	return m_dataSize;
-//}
-
-//DMeshBuffer * DMesh::GetBuffer() const
-//{
-//	return m_meshBuffer;
-//}
-
 DMesh * DMesh::Create(DMeshDefine meshDefine, bool dynamic)
 {
-	/*float* vertices;
-	unsigned long* indices;
-	int vcount, icount, dsize, blen;*/
 	DMeshBufferDesc desc;
 	if (meshDefine == DMESH_Plane)
 	{
@@ -492,13 +438,6 @@ DMesh * DMesh::Create(DMeshDefine meshDefine, bool dynamic)
 	else
 		return NULL;
 
-	
-	/*desc.dataCount = blen;
-	desc.dataSize = dsize;
-	desc.indexCount = icount;
-	desc.vertexCount = vcount;
-	desc.indices = indices;
-	desc.vertices = vertices;*/
 	DMesh* mesh = new DMesh(dynamic);
 	mesh->m_meshDesc = desc;
 
@@ -507,9 +446,6 @@ DMesh * DMesh::Create(DMeshDefine meshDefine, bool dynamic)
 
 DMesh * DMesh::Create(char* fileName, bool dynamic)
 {
-	/*float* vertices;
-	unsigned long* indices;
-	int vcount, icount, dsize, blen;*/
 	DMeshBufferDesc desc;
 	DModelLoader::LoadObj(fileName, &desc);
 
@@ -517,51 +453,7 @@ DMesh * DMesh::Create(char* fileName, bool dynamic)
 	mesh->m_meshDesc = desc;
 
 	return mesh;
-	/*desc.dataCount = blen;
-	desc.dataSize = dsize;
-	desc.indexCount = icount;
-	desc.vertexCount = vcount;
-	desc.indices = indices;
-	desc.vertices = vertices;*/
-
-	//return Create(&desc);
 }
-
-//DMesh * DMesh::Create(DMeshBufferDesc * desc)
-//{
-//	if (desc == NULL)
-//		return nullptr;
-//	if (desc->dataCount == 0 || desc->dataSize == 0 || desc->indexCount <= 0 || desc->vertexCount <= 0)
-//		return nullptr;
-//	if (desc->vertices == 0 || desc->indices == 0)
-//		return nullptr;
-//	DMesh* mesh = new DMesh();
-//	mesh->Init(desc);
-//	
-//	return mesh;
-//}
-
-//void DMesh::Init(DMeshBufferDesc* desc)
-//{
-//	m_vertexBuffer = desc->vertices;
-//	m_indexBuffer = desc->indices;
-//	m_vertexCount = desc->vertexCount;
-//	m_indexCount = desc->indexCount;
-//	m_dataSize = desc->dataSize;
-//	m_bufferLength = desc->dataCount;
-//	m_vertexOffset = 8;
-//	m_uvOffset = 3;
-//	m_normalOffset = 5;
-//
-//	m_meshRes = DSystem::GetGraphicsMgr()->GetGLCore()->CreateMeshRes();
-//	m_meshRes->Init(desc);
-//
-//	delete[] desc->indices;
-//	delete[] desc->vertices;
-//
-//	desc->indices = 0;
-//	desc->vertices = 0;
-//}
 
 void DMesh::UpdateMeshReses()
 {
@@ -574,8 +466,4 @@ void DMesh::UpdateMeshReses()
 		}
 	}
 }
-
-//void DMesh::MarkMeshChanged()
-//{
-//}
 

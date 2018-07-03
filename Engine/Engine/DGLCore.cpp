@@ -150,7 +150,7 @@ void DMeshRes::Refresh(float * vertexbuffer, unsigned long * indexbuffer, int ve
 	}
 }
 
-void DMeshRes::Draw(DMeshTopology topology)
+void DMeshRes::DrawPrimitive(DMeshTopology topology)
 {
 	if (m_isSupported)
 		OnDraw(topology);

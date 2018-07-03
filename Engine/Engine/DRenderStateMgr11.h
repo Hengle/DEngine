@@ -2,6 +2,9 @@
 #include "D3D11Core.h"
 #include <map>
 
+/*
+	Direct3D11渲染状态管理器
+*/
 class DRenderStateMgr11 : public DRenderStateMgr
 {
 private:
@@ -22,8 +25,11 @@ public:
 
 	virtual void Init();
 	virtual void Release();
+	/*设置Cull模式*/
 	virtual void SetCullMode(DCullMode);
+	/*开启/关闭深度写入*/
 	virtual void SetZWriteEnable(bool);
+	/*设置深度测试模式*/
 	virtual void SetZTestFunc(DRSCompareFunc);
 
 private:

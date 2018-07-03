@@ -1,6 +1,9 @@
 ﻿#pragma once
 #include "D3D10Core.h"
 
+/*
+	纹理资源Direct3D10底层
+*/
 class DTextureRes10 : public DTextureRes
 {
 public:
@@ -15,6 +18,9 @@ private:
 	ID3D10Device* m_device;
 };
 
+/*
+	RenderTexture Direct3D10底层
+*/
 class DRenderTextureViewRes10 : public DRenderTextureViewRes
 {
 public:

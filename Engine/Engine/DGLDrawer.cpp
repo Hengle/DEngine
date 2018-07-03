@@ -249,23 +249,12 @@ void DGLDrawerProcess::PostProcess(DMatrix4x4& modelview, DMatrix4x4& projection
 void DGLDrawerProcess::ProcessDraw(DMatrix4x4& modelview, DMatrix4x4& projection)
 {
 
-	/*DCamera* camera;
-	DCamera::GetCurrentCamera(&camera);
-
-	DMatrix4x4 view, proj;
-	camera->GetViewMatrix(view);
-	camera->GetProjection(proj);*/
 	DMatrix4x4 world;
 	DMatrix4x4::Identity(&world);
 
-	/*material->SetMatrix("worldMatrix", world);
-	material->SetMatrix("viewMatrix", modelview);
-	material->SetMatrix("projectionMatrix", projection);
-
-	material->Apply();*/
 	DShader::SetGlobalMatrix("g_worldMatrix", world);
 	DShader::SetGlobalMatrix("g_viewMatrix", modelview);
 	DShader::SetGlobalMatrix("g_projectionMatrix", projection);
 
-	m_meshRes->Draw(DMeshTopology_LineList);
+	m_meshRes->DrawPrimitive(DMeshTopology_LineList);
 }

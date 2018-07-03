@@ -6,16 +6,7 @@
 #include "DGLDrawer.h"
 #include "DGraphicsDefine.h"
 
-enum DVertexBufferType
-{
-	DVERTEX_BUFFER_TYPE_POSITION = 1,
-	DVERTEX_BUFFER_TYPE_NORMAL = 2,
-	DVERTEX_BUFFER_TYPE_COLOR = 4,
-	DVERTEX_BUFFER_TYPE_UV0 = 8,
-	DVERTEX_BUFFER_TYPE_UV1 = 16,
-	DVERTEX_BUFFER_TYPE_UV2 = 32,
-};
-
+/*图形模块*/
 class DGraphics
 {
 public:
@@ -44,7 +35,6 @@ public:
 	static void SetZWriteEnable(bool);
 	static void SetZTestFunc(DRSCompareFunc);
 
-	//static void GlSetMaterial(DMaterial*);
 	static void GlBegin();
 	static void GlEnd();
 	static void GlVector3(DVector3&);

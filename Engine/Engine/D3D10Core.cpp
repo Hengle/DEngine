@@ -347,6 +347,12 @@ void D3D10Core::EndRender()
 		m_swapChain->Present(0, 0);
 }
 
+void D3D10Core::Present()
+{
+	if (m_swapChain != NULL)
+		m_swapChain->Present(0, 0);
+}
+
 void D3D10Core::Clear(bool clearDepth, bool clearStencil, DColor & color, DRenderTextureViewRes * res)
 {
 	int flag = 0;
@@ -394,6 +400,16 @@ void D3D10Core::SetRenderTarget(DRenderTextureViewRes *res)
 		ID3D10DepthStencilView* dv = ((DDepthBuffer10*)m_depthBuffer)->GetView();
 		m_device->OMSetRenderTargets(1, &rv, dv);
 	}
+}
+
+void D3D10Core::SetViewPort(DRect & viewPort)
+{
+	m_viewPort.Width = viewPort.width;
+	m_viewPort.Height = viewPort.height;
+	m_viewPort.TopLeftX = viewPort.x;
+	m_viewPort.TopLeftY = viewPort.y;
+
+	m_device->RSSetViewports(1, &m_viewPort);
 }
 
 void D3D10Core::EndSetRenderTarget(DRenderTextureViewRes *)

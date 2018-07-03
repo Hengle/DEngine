@@ -191,10 +191,10 @@ void TestScene::TestLoad()
 	float w, h;
 	DSystem::GetGraphicsMgr()->GetResolution(w, h);
 	m_rt = DRenderTexture::Create(w,h);
-	cam->SetRenderTexture(m_rt);
+	//cam->SetRenderTexture(m_rt);
 
 	m_filter = new TestFilter();
-	cam->SetFilter(m_filter);
+	//cam->SetFilter(m_filter);
 	cam->SetSkyBox(skymat);
 
 	transform = cam->GetTransform();
@@ -249,7 +249,9 @@ void TestScene::TestLoad()
 	DMesh* cube = DRes::Load<DMesh>(DEFAULT_GROUP, BODY_MESH);
 	//mat3 = new DMaterial(shader);
 	//mat3->SetTexture("shaderTexture", cb);
-	DMaterial* mat3 = DRes::Load<DMaterial>(DEFAULT_GROUP, GROUND_MAT);
+	DMaterial* mat3 = DRes::Load<DMaterial>(DEFAULT_GROUP, OUTLINE_MAT);
+	mat3->SetFloat("outline", 0.1f);
+	mat3->SetColor("outlinecolor", DColor(0,0,0,1.0f));
 	//mat3->SetZTest(DRSCompareFunc_Greater);
 	m_cube = new DDisplayObject(cube, mat3);
 	transform = m_cube->GetTransform();

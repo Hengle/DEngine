@@ -133,6 +133,16 @@ void DGLDrawer::Release()
 	//m_material = NULL;
 }
 
+void DGLDrawer::GetModelView(DMatrix4x4 & out)
+{
+	out = m_currentMV;
+}
+
+void DGLDrawer::GetProjection(DMatrix4x4 & out)
+{
+	out = m_currentP;
+}
+
 void DGLDrawer::GenerateNewProcesses()
 {
 	if (m_currentPLen > m_prePLen)

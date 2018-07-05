@@ -13,7 +13,7 @@ public:
 	DGraphics();
 	~DGraphics();
 	bool Init(int, int, bool, HWND, DGraphicsAPI);
-	bool Render();
+	bool Execute();
 	void Shutdown();
 	DGLCore* GetGLCore();
 	DImGUICore* GetGUICore();
@@ -30,7 +30,7 @@ public:
 	static void DrawMesh(DMesh*, const DMatrix4x4&, DMaterial*, const DCamera*);
 	static void DrawTexture(DTexture*, DMaterial*);
 	static void DrawSkyBox(DMaterial*, const DCamera*);
-	//static void Blit()
+	
 	static void SetCullMode(DCullMode);
 	static void SetZWriteEnable(bool);
 	static void SetZTestFunc(DRSCompareFunc);
@@ -48,6 +48,8 @@ public:
 	static void GlLoadProjectionMatrix(DMatrix4x4&);
 	static void GlLoadOrtho();
 	static void GlMultiMatrix(DMatrix4x4&);
+	static void GetModelView(DMatrix4x4&);
+	static void GetProjection(DMatrix4x4&);
 
 private:
 	void InitScreenPlane();
@@ -62,5 +64,7 @@ private:
 	DGLDrawer* m_glDrawer;
 	DMesh* m_screenPlane;
 	DMesh* m_skyMesh;
+	DMatrix4x4 m_modelView;
+	DMatrix4x4 m_projection;
 };
 

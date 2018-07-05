@@ -39,6 +39,8 @@ protected:
 	void AddDisplayObject(DDisplayObject*);
 	void SetCamera(DCamera*);
 	DCamera* GetCamera();
+	void SetLight(DLight*);
+	DLight* GetLight();
 
 private:
 	void DrawScene(bool callOnRender, DShader* replaceShader);
@@ -46,6 +48,7 @@ private:
 protected:
 	std::vector<DDisplayObject*>* m_displayObjects;
 	DCamera* m_camera;
+	DLight* m_light;
 
 private:
 	bool m_isLoaded;

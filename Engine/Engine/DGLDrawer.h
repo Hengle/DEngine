@@ -45,6 +45,8 @@ public:
 	void GlLoadOrtho();
 	void GlMultiMatrix(DMatrix4x4&);
 	void Release();
+	void GetModelView(DMatrix4x4&);
+	void GetProjection(DMatrix4x4&);
 
 private:
 	void GenerateNewProcesses();

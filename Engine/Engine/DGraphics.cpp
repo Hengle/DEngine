@@ -61,7 +61,7 @@ bool DGraphics::Init(int width, int height, bool fullScreen, HWND hwnd, DGraphic
 	return true;
 }
 
-bool DGraphics::Render()
+bool DGraphics::Execute()
 {
 	DTime* time = DSystem::GetTimeMgr();
 	DSceneManager* sceneManager = DSystem::GetSceneMgr();
@@ -235,25 +235,9 @@ void DGraphics::DrawMesh(DMesh * mesh, const DMatrix4x4 & matrix, DMaterial * ma
 	camera->GetViewMatrix(view);
 	camera->GetProjection(proj);
 
-	/*DVector3 f, u, pos, e;
-	DQuaterion rot;
-	camera->GetTransform()->GetForward(f);
-	camera->GetTransform()->GetUp(u);
-	camera->GetTransform()->GetPosition(pos);
-	camera->GetTransform()->GetEuler(e);
-	camera->GetTransform()->GetRotation(rot);*/
-
 	DMatrix4x4 world = matrix;
 	DMatrix4x4 v = view;
 	DMatrix4x4 p = proj;
-	//DVector3 cpos;
-	/*world.Transpose();
-	v.Transpose();
-	p.Transpose();*/
-
-	
-
-	//camera->GetTransform()->GetPosition(cpos);
 
 	material->SetMatrix("g_worldMatrix", world);
 	material->SetMatrix("g_viewMatrix", v);
@@ -277,8 +261,6 @@ void DGraphics::DrawTexture(DTexture * texture, DMaterial * material)
 	{
 		DSystem::GetGraphicsMgr()->InitScreenPlane();
 	}
-	//material->SetZWrite(false);
-	//material->SetZTest(DRSCompareFunc_Always);
 	DMatrix4x4 world, proj;
 	DMatrix4x4::Identity(&world);
 	DMatrix4x4 view = DMatrix4x4(1.0f, 0.0f, 0.0f, 0.0f,
@@ -294,9 +276,6 @@ void DGraphics::DrawTexture(DTexture * texture, DMaterial * material)
 	material->SetMatrix("g_projectionMatrix", proj);
 	material->SetTexture("screenTexture", texture);
 
-	//material->Apply();
-
-	//DSystem::GetGraphicsMgr()->m_screenPlane->Draw(material->GetVertexUsage());
 	int passcount = material->GetPassCount();
 	int i;
 
@@ -362,15 +341,6 @@ void DGraphics::SetViewPort(DRect & viewPort)
 		gl->SetViewPort(viewPort);
 	}
 }
-
-//void DGraphics::GlSetMaterial(DMaterial * material)
-//{
-//	DGLDrawer* drawer = DSystem::GetGraphicsMgr()->m_glDrawer;
-//	if (drawer != NULL)
-//	{
-//		drawer->GlSetMaterial(material);
-//	}
-//}
 
 void DGraphics::GlBegin()
 {
@@ -471,6 +441,24 @@ void DGraphics::GlMultiMatrix(DMatrix4x4 & matrix)
 	}
 }
 
+void DGraphics::GetModelView(DMatrix4x4 & modelView)
+{
+	DGLDrawer* drawer = DSystem::GetGraphicsMgr()->m_glDrawer;
+	if (drawer != NULL)
+	{
+		drawer->GetModelView(modelView);
+	}
+}
+
+void DGraphics::GetProjection(DMatrix4x4 & projection)
+{
+	DGLDrawer* drawer = DSystem::GetGraphicsMgr()->m_glDrawer;
+	if (drawer != NULL)
+	{
+		drawer->GetProjection(projection);
+	}
+}
+
 void DGraphics::InitScreenPlane()
 {
 	//DMeshBufferDesc desc;
@@ -503,27 +491,11 @@ void DGraphics::InitScreenPlane()
 	indexBuffer[0] = 0; indexBuffer[1] = 1; indexBuffer[2] = 2;
 	indexBuffer[3] = 0; indexBuffer[4] = 2; indexBuffer[5] = 3;
 
-	//desc.dataSize = dataSize;
-	//desc.dataCount = bufferLength;
-	/*desc.indexCount = indexCount;
-	desc.vertexCount = vertexCount;
-	desc.indices = indexBuffer;
-	desc.vertices = vertices;
-	desc.colors = 0;
-	desc.normals = 0;
-	desc.uv2s = 0;
-	desc.uv3s = 0;
-	desc.uvs = uvs*/
-
-	//m_screenPlane = DMesh::Create(&desc);
 	m_screenPlane = new DMesh();
 	m_screenPlane->SetVertices(vertices, 4);
 	m_screenPlane->SetUVs(0, uvs, 4);
 	m_screenPlane->SetIndices(indexBuffer, 6);
 
-	//delete[] vertices;
-	//delete[] uvs;
-	//delete[] indexBuffer;
 }
 
 void DGraphics::InitSkyBox()

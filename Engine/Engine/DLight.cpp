@@ -1,5 +1,5 @@
-#include "DLight.h"
-
+﻿#include "DLight.h"
+#include "DShader.h"
 
 DLight::DLight()
 {
@@ -36,4 +36,11 @@ float DLight::GetIntensity()
 void DLight::SetIntensity(float intensity)
 {
 	m_intensity = intensity;
+}
+
+void DLight::Update()
+{
+	DVector3 forward;
+	m_Transform->GetForward(forward);
+	DShader::SetGlobalVector3("g_sundir", forward);
 }

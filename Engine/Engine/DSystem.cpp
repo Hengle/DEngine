@@ -177,7 +177,7 @@ bool DSystem::Loop()
 	{
 		return false;
 	}
-	if (!m_graphicsMgr->Render())
+	if (!m_graphicsMgr->Execute())
 	{
 		return false;
 	}

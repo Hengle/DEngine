@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "DSceneObject.h"
 #include "DColor.h"
 
@@ -18,6 +18,7 @@ public:
 	void SetColor(DColor);
 	float GetIntensity();
 	void SetIntensity(float);
+	virtual void Update();
 
 protected:
 	DColor m_color;

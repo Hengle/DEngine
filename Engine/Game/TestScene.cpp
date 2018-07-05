@@ -87,8 +87,8 @@ void TestScene::OnGUI()
 
 
 	transform->SetEuler(euler.x, euler.y, euler.z);
-	transform->GetForward(forward);
-	DShader::SetGlobalVector3("g_sundir", forward);
+	//transform->GetForward(forward);
+	//DShader::SetGlobalVector3("g_sundir", forward);
 }
 
 void TestScene::OnLoad()
@@ -209,6 +209,7 @@ void TestScene::TestLoad()
 	m_light->SetColor(1, 1, 1, 1);
 	transform = m_light->GetTransform();
 	transform->SetEuler(50, -30, 0);
+	SetLight(m_light);
 
 	//DMesh* mesh = DMesh::Create("../Res/eboy.obj");
 	plane = DMesh::Create(DMESH_Plane);
@@ -300,9 +301,9 @@ void TestScene::OnUnLoad()
 	m_rt->Destroy();
 	delete m_rt;
 	m_rt = 0;
-	m_light->Destroy();
+	/*m_light->Destroy();
 	delete m_light;
-	m_light = 0;
+	m_light = 0;*/
 	//testd->Release();
 	//delete testd;
 	//testd = NULL;

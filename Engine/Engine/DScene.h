@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "DCamera.h"
 #include "DDisplayObject.h"
 #include <vector>
@@ -24,7 +24,7 @@ public:
 	bool IsEnter();
 	virtual void Destroy();
 
-	static void Draw(bool callOnRender);
+	static void Draw(bool callOnRender, DShader* replaceShader = NULL);
 
 protected:
 	virtual void OnGUI();
@@ -41,7 +41,7 @@ protected:
 	DCamera* GetCamera();
 
 private:
-	void DrawScene(bool callOnRender);
+	void DrawScene(bool callOnRender, DShader* replaceShader);
 
 protected:
 	std::vector<DDisplayObject*>* m_displayObjects;

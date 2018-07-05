@@ -10,7 +10,7 @@ class DDisplayObject : public DSceneObject
 public:
 	DDisplayObject(DMesh*, DMaterial*);
 	~DDisplayObject();
-	virtual void Render();
+	virtual void Render(DShader* replaceShader);
 	virtual void Init();
 	virtual void Destroy();
 	/*设置可见性*/

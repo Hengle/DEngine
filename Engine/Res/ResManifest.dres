@@ -20,6 +20,10 @@
 		#PATH ../Res/outline.shader
 	#RES_END
 
+	#RES_BEGIN SHADER 1005 
+		#PATH ../Res/replacetest.shader
+	#RES_END
+
 	#RES_BEGIN TEXTURE2D 2000
 		#PATH ../Res/decal.jpg
 		#WRAPMODE REPEAT

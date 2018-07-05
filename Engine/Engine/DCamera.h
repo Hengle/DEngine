@@ -26,8 +26,6 @@ public:
 	void RenderFilter();
 	/*渲染当前相机*/
 	void Render();
-	/*使用指定shader渲染*/
-	void Render(DShader*);
 	virtual void Init();
 	virtual void Destroy();
 	/*返回当前相机的视空间矩阵*/
@@ -67,6 +65,8 @@ public:
 	void ClearFilter();
 	DRenderTexture* GetRenderTexture();
 	void SetRenderTexture(DRenderTexture*);
+	void SetReplaceShader(DShader* replacement);
+	void ResetReplaceShader();
 
 	static void GetCurrentCamera(DCamera** cam);
 
@@ -89,6 +89,7 @@ private:
 	DColor m_backgroundColor;
 	DMaterial* m_skyBoxMaterial;
 	DRect m_viewPort;
+	DShader* m_replacementShader;
 };
 
 static DCamera* sCurrent;

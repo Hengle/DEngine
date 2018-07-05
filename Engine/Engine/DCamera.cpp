@@ -52,16 +52,11 @@ void DCamera::Render()
 {
 	DGraphics::SetViewPort(m_viewPort);
 	BeginRender();
-	DScene::Draw(true);
+	if (m_replacementShader != NULL)
+		DScene::Draw(true, m_replacementShader);
+	else
+		DScene::Draw(true);
 	EndRender();
-}
-
-void DCamera::Render(DShader * replaceShader)
-{
-	/*DGraphics::SetViewPort(m_viewPort);
-	BeginRender();
-	DScene::Draw(true, replaceShader);
-	EndRender();*/
 }
 
 void DCamera::Init()
@@ -73,6 +68,10 @@ void DCamera::Init()
 void DCamera::Destroy()
 {
 	DSceneObject::Destroy();
+	m_renderTexture = NULL;
+	m_replacementShader = NULL;
+	m_skyBoxMaterial = NULL;
+	m_filter = NULL;
 }
 
 void DCamera::GetViewMatrix(DMatrix4x4& mOut) const
@@ -229,6 +228,16 @@ DRenderTexture * DCamera::GetRenderTexture()
 void DCamera::SetRenderTexture(DRenderTexture * renderTexture)
 {
 	m_renderTexture = renderTexture;
+}
+
+void DCamera::SetReplaceShader(DShader * replacement)
+{
+	m_replacementShader = replacement;
+}
+
+void DCamera::ResetReplaceShader()
+{
+	m_replacementShader = NULL;
 }
 
 void DCamera::GetCurrentCamera(DCamera ** cam)

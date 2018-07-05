@@ -6,6 +6,7 @@
 #define SKY_SHADER       1001
 #define COLOR_SHADER     1002
 #define PEFFECT_SHADER   1002
+#define REPLACE_SHADER   1005
 
 #define DECAL_TEX        2000
 #define BODY_TEX         2001

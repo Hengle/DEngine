@@ -89,6 +89,16 @@ bool DMaterial::HasProperty(const LPCSTR key) const
 	return m_shader->HasProperty(key);
 }
 
+void DMaterial::SetShader(DShader * shader)
+{
+	m_shader = shader;
+}
+
+DShader * DMaterial::GetShader()
+{
+	return m_shader;
+}
+
 void DMaterial::SetPass(int pass)
 {
 	if (m_shader == NULL)

@@ -184,11 +184,11 @@ void DScene::Destroy()
 	Exit();
 }
 
-void DScene::Draw(bool callOnRender)
+void DScene::Draw(bool callOnRender, DShader* replaceShader)
 {
 	DScene* current = DSystem::GetSceneMgr()->GetCurrentScene();
 	if (current != NULL)
-		current->DrawScene(callOnRender);
+		current->DrawScene(callOnRender, replaceShader);
 }
 
 void DScene::OnGUI()
@@ -240,14 +240,14 @@ DCamera * DScene::GetCamera()
 	return m_camera;
 }
 
-void DScene::DrawScene(bool callOnRender)
+void DScene::DrawScene(bool callOnRender, DShader* replaceShader)
 {
 	if (m_displayObjects != NULL) {
 		int i, size;
 		size = m_displayObjects->size();
 		for (int i = 0; i < size; i++) {
 			DDisplayObject* obj = m_displayObjects->at(i);
-			obj->Render();
+			obj->Render(replaceShader);
 		}
 	}
 	if (callOnRender)

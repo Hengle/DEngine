@@ -16,6 +16,8 @@ public:
 	void SetFloat(const LPCSTR key, float);
 	void SetTexture(const LPCSTR key, DTexture*);
 	bool HasProperty(const LPCSTR key) const;
+	void SetShader(DShader* shader);
+	DShader* GetShader();
 	void SetPass(int);
 	int GetVertexUsage(int);
 	int GetPassCount();

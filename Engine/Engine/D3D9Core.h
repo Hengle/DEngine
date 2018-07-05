@@ -17,8 +17,8 @@ public:
 	virtual bool Init(int width, int height, bool fullscreen, HWND);
 	/*模块销毁*/
 	virtual void Destroy();
-	virtual void BeginRender();
-	virtual void EndRender();
+	//virtual void BeginRender();
+	//virtual void EndRender();
 	/*提交渲染结果*/
 	virtual void Present();
 	virtual void Clear(bool clearDepth, bool clearStencil, DColor& clearColor, DRenderTextureViewRes* = NULL);

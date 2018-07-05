@@ -98,21 +98,21 @@ void D3D9Core::Destroy()
 	}
 }
 
-void D3D9Core::BeginRender()
-{
-	//m_device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_COLORVALUE(0.0f, 0.0f, 1.0f, 1.0f), 1.0f, 0);
-
-	//m_device->BeginScene();
-
-	m_device->SetViewport(&m_viewPort);
-}
-
-void D3D9Core::EndRender()
-{
-	//m_device->EndScene();
-
-	m_device->Present(0, 0, 0, 0);
-}
+//void D3D9Core::BeginRender()
+//{
+//	//m_device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_COLORVALUE(0.0f, 0.0f, 1.0f, 1.0f), 1.0f, 0);
+//
+//	//m_device->BeginScene();
+//
+//	m_device->SetViewport(&m_viewPort);
+//}
+//
+//void D3D9Core::EndRender()
+//{
+//	//m_device->EndScene();
+//
+//	m_device->Present(0, 0, 0, 0);
+//}
 
 void D3D9Core::Present()
 {

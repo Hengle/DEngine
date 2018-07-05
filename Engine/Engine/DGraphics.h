@@ -35,6 +35,8 @@ public:
 	static void SetZWriteEnable(bool);
 	static void SetZTestFunc(DRSCompareFunc);
 
+	static void SetViewPort(DRect&);
+
 	static void GlBegin();
 	static void GlEnd();
 	static void GlVector3(DVector3&);

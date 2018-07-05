@@ -2,7 +2,7 @@
 #include "DCamera.h"
 #include "DMaterial.h"
 
-class TestFilter : public DCameraFilter
+class TestFilter : public ICameraFilter
 {
 public:
 	TestFilter();

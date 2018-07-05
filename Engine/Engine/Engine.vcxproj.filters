@@ -237,6 +237,9 @@
     <ClInclude Include="DGraphicsDefine.h">
       <Filter>头文件\Core</Filter>
     </ClInclude>
+    <ClInclude Include="DEngineDefine.h">
+      <Filter>头文件\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DMath.cpp">

@@ -189,8 +189,8 @@ public:
 	virtual bool Init(int width, int height, bool fullscreen, HWND);
 	/*销毁图形库*/
 	virtual void Destroy() = 0;
-	virtual void BeginRender() = 0;
-	virtual void EndRender() = 0;
+	//virtual void BeginRender() = 0;
+	//virtual void EndRender() = 0;
 	/*提交渲染结果*/
 	virtual void Present() = 0;
 	virtual void Clear(bool, bool, DColor&, DRenderTextureViewRes* = NULL) = 0;

@@ -320,27 +320,27 @@ void D3D11Core::Destroy()
 	m_samplerStates.clear();
 }
 
-void D3D11Core::BeginRender()
-{
-	/*float color[4];
-	color[0] = 0.0f;
-	color[1] = 0.0f;
-	color[2] = 1.0f;
-	color[3] = 1.0f;
-
-	m_deviceContext->ClearRenderTargetView(m_renderTargetView, color);
-
-	m_deviceContext->ClearDepthStencilView(m_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);*/
-
-	m_deviceContext->RSSetViewports(1, &m_viewPort);
-}
-
-void D3D11Core::EndRender()
-{
-	if (m_swapChain != NULL) {
-		m_swapChain->Present(0, 0);
-	}
-}
+//void D3D11Core::BeginRender()
+//{
+//	/*float color[4];
+//	color[0] = 0.0f;
+//	color[1] = 0.0f;
+//	color[2] = 1.0f;
+//	color[3] = 1.0f;
+//
+//	m_deviceContext->ClearRenderTargetView(m_renderTargetView, color);
+//
+//	m_deviceContext->ClearDepthStencilView(m_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);*/
+//
+//	m_deviceContext->RSSetViewports(1, &m_viewPort);
+//}
+//
+//void D3D11Core::EndRender()
+//{
+//	if (m_swapChain != NULL) {
+//		m_swapChain->Present(0, 0);
+//	}
+//}
 
 void D3D11Core::Present()
 {

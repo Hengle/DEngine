@@ -84,12 +84,13 @@ bool DGraphics::Render()
 
 	sceneManager->UpdateScene();
 
-	m_GL->BeginRender();
+	//m_GL->BeginRender();
 
 	sceneManager->RenderScene();
 
 	m_GUI->Render();
-	m_GL->EndRender();
+	//m_GL->EndRender();
+	m_GL->Present();
 
 	time->Wait();
 
@@ -350,6 +351,15 @@ void DGraphics::SetZTestFunc(DRSCompareFunc ztest)
 	if (mgr != NULL)
 	{
 		mgr->SetZTestFunc(ztest);
+	}
+}
+
+void DGraphics::SetViewPort(DRect & viewPort)
+{
+	DGLCore* gl = DSystem::GetGraphicsMgr()->GetGLCore();
+	if (gl != NULL)
+	{
+		gl->SetViewPort(viewPort);
 	}
 }
 

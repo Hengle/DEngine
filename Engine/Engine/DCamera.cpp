@@ -1,5 +1,6 @@
 ﻿#include "DCamera.h"
 #include "DSystem.h"
+#include "DScene.h"
 
 DCamera::DCamera()
 {
@@ -31,6 +32,208 @@ DCamera::DCamera()
 
 DCamera::~DCamera()
 {
+}
+
+void DCamera::RenderFilter()
+{
+	if (m_filter != NULL && m_renderTexture != NULL)
+	{
+		//FLOAT width, height;
+
+		DGraphics::BeginScene(true, false, m_backgroundColor);
+		//DGraphics::Clear(true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f));
+		//DSystem::GetGraphicsMgr()->GetResolution(width, height);
+		m_filter->Render(m_renderTexture);
+		DGraphics::EndScene();
+	}
+}
+
+void DCamera::Render()
+{
+	DGraphics::SetViewPort(m_viewPort);
+	BeginRender();
+	DScene::Draw(true);
+	EndRender();
+}
+
+void DCamera::Render(DShader * replaceShader)
+{
+	/*DGraphics::SetViewPort(m_viewPort);
+	BeginRender();
+	DScene::Draw(true, replaceShader);
+	EndRender();*/
+}
+
+void DCamera::Init()
+{
+	DSceneObject::Init();
+
+}
+
+void DCamera::Destroy()
+{
+	DSceneObject::Destroy();
+}
+
+void DCamera::GetViewMatrix(DMatrix4x4& mOut) const
+{
+	mOut = m_viewMatrix;
+}
+
+void DCamera::GetProjection(DMatrix4x4& mOut)const
+{
+	mOut = m_projection;
+}
+
+void DCamera::GetBackgroundColor(DColor & color) const
+{
+	color = m_backgroundColor;
+}
+
+float DCamera::GetFieldOfView()const
+{
+	return m_fieldOfView;
+}
+
+float DCamera::GetNear()const
+{
+	return m_near;
+}
+
+float DCamera::GetFar()const
+{
+	return m_far;
+}
+
+float DCamera::GetAspect()const
+{
+	return m_aspect;
+}
+
+float DCamera::GetOrthoSize()const
+{
+	return m_orthoSize;
+}
+
+void DCamera::GetViewPort(DRect & rect) const
+{
+	rect = m_viewPort;
+}
+
+ICameraFilter * DCamera::GetFilter() const
+{
+	return m_filter;
+}
+
+DMaterial * DCamera::GetSkuBox() const
+{
+	return m_skyBoxMaterial;
+}
+
+bool DCamera::IsOrthographic()const
+{
+	return m_ortho;
+}
+
+void DCamera::SetFieldOfView(float fieldOfView)
+{
+	if (!(IS_FLOAT_EQUAL(m_fieldOfView, fieldOfView)))
+	{
+		m_fieldOfView = fieldOfView;
+		if (!m_ortho)
+			m_isProjectionChanged = true;
+	}
+}
+
+void DCamera::SetNear(float nearClip)
+{
+	if (!(IS_FLOAT_EQUAL(m_near, nearClip)))
+	{
+		m_near = nearClip;
+		m_isProjectionChanged = true;
+	}
+}
+
+void DCamera::SetFar(float farClip)
+{
+	if (!(IS_FLOAT_EQUAL(m_far, farClip)))
+	{
+		m_far = farClip;
+		m_isProjectionChanged = true;
+	}
+}
+
+void DCamera::SetAspect(float aspect)
+{
+	if (!(IS_FLOAT_EQUAL(m_aspect, aspect)))
+	{
+		m_aspect = aspect;
+		m_isProjectionChanged = true;
+	}
+}
+
+void DCamera::SetOrthographic(bool ortho)
+{
+	if (m_ortho != ortho)
+	{
+		m_ortho = ortho;
+		m_isProjectionChanged = true;
+	}
+}
+
+void DCamera::SetOrthoSize(float size)
+{
+	if (m_orthoSize != size)
+	{
+		m_orthoSize = size;
+		if (m_ortho)
+			m_isProjectionChanged = true;
+	}
+}
+
+void DCamera::SetFilter(ICameraFilter * filter)
+{
+	m_filter = filter;
+}
+
+void DCamera::SetBackgroundColor(DColor & color)
+{
+	m_backgroundColor = color;
+}
+
+void DCamera::SetSkyBox(DMaterial * skyBoxMaterial)
+{
+	m_skyBoxMaterial = skyBoxMaterial;
+}
+
+void DCamera::SetViewPort(DRect & viewPort)
+{
+	m_viewPort = viewPort;
+}
+
+void DCamera::ClearSkyBox()
+{
+	m_skyBoxMaterial = NULL;
+}
+
+void DCamera::ClearFilter()
+{
+	m_filter = NULL;
+}
+
+DRenderTexture * DCamera::GetRenderTexture()
+{
+	return m_renderTexture;
+}
+
+void DCamera::SetRenderTexture(DRenderTexture * renderTexture)
+{
+	m_renderTexture = renderTexture;
+}
+
+void DCamera::GetCurrentCamera(DCamera ** cam)
+{
+	(*cam) = sCurrent;
 }
 
 void DCamera::BeginRender()
@@ -96,180 +299,4 @@ void DCamera::EndRender()
 		DGraphics::EndScene();
 	}
 	sCurrent = NULL;
-}
-
-void DCamera::RenderFilter()
-{
-	if (m_filter != NULL && m_renderTexture != NULL)
-	{
-		//FLOAT width, height;
-
-		DGraphics::BeginScene(true, false, m_backgroundColor);
-		//DGraphics::Clear(true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f));
-		//DSystem::GetGraphicsMgr()->GetResolution(width, height);
-		m_filter->Render(m_renderTexture);
-		DGraphics::EndScene();
-	}
-}
-
-void DCamera::Init()
-{
-	DSceneObject::Init();
-
-}
-
-void DCamera::Destroy()
-{
-	DSceneObject::Destroy();
-}
-
-void DCamera::GetViewMatrix(DMatrix4x4& mOut) const
-{
-	mOut = m_viewMatrix;
-}
-
-void DCamera::GetProjection(DMatrix4x4& mOut)const
-{
-	mOut = m_projection;
-}
-
-void DCamera::GetBackgroundColor(DColor & color) const
-{
-	color = m_backgroundColor;
-}
-
-float DCamera::GetFieldOfView()const
-{
-	return m_fieldOfView;
-}
-
-float DCamera::GetNear()const
-{
-	return m_near;
-}
-
-float DCamera::GetFar()const
-{
-	return m_far;
-}
-
-float DCamera::GetAspect()const
-{
-	return m_aspect;
-}
-
-float DCamera::GetOrthoSize()const
-{
-	return m_orthoSize;
-}
-
-void DCamera::GetViewPort(DRect & rect) const
-{
-	rect = m_viewPort;
-}
-
-bool DCamera::IsOrthographic()const
-{
-	return m_ortho;
-}
-
-void DCamera::SetFieldOfView(float fieldOfView)
-{
-	if (!(IS_FLOAT_EQUAL(m_fieldOfView, fieldOfView)))
-	{
-		m_fieldOfView = fieldOfView;
-		if (!m_ortho)
-			m_isProjectionChanged = true;
-	}
-}
-
-void DCamera::SetNear(float nearClip)
-{
-	if (!(IS_FLOAT_EQUAL(m_near, nearClip)))
-	{
-		m_near = nearClip;
-		m_isProjectionChanged = true;
-	}
-}
-
-void DCamera::SetFar(float farClip)
-{
-	if (!(IS_FLOAT_EQUAL(m_far, farClip)))
-	{
-		m_far = farClip;
-		m_isProjectionChanged = true;
-	}
-}
-
-void DCamera::SetAspect(float aspect)
-{
-	if (!(IS_FLOAT_EQUAL(m_aspect, aspect)))
-	{
-		m_aspect = aspect;
-		m_isProjectionChanged = true;
-	}
-}
-
-void DCamera::SetOrthographic(bool ortho)
-{
-	if (m_ortho != ortho)
-	{
-		m_ortho = ortho;
-		m_isProjectionChanged = true;
-	}
-}
-
-void DCamera::SetOrthoSize(float size)
-{
-	if (m_orthoSize != size)
-	{
-		m_orthoSize = size;
-		if (m_ortho)
-			m_isProjectionChanged = true;
-	}
-}
-
-void DCamera::SetFilter(DCameraFilter * filter)
-{
-	m_filter = filter;
-}
-
-void DCamera::SetBackgroundColor(DColor & color)
-{
-	m_backgroundColor = color;
-}
-
-void DCamera::SetSkyBox(DMaterial * skyBoxMaterial)
-{
-	m_skyBoxMaterial = skyBoxMaterial;
-}
-
-void DCamera::SetViewPort(DRect & viewPort)
-{
-	m_viewPort = viewPort;
-}
-
-void DCamera::ClearSkyBox()
-{
-	m_skyBoxMaterial = NULL;
-}
-
-void DCamera::ClearFilter()
-{
-	m_filter = NULL;
-}
-
-DRenderTexture * DCamera::GetRenderTexture()
-{
-	return m_renderTexture;
-}
-
-void DCamera::SetRenderTexture(DRenderTexture * renderTexture)
-{
-	m_renderTexture = renderTexture;
-}
-
-void DCamera::GetCurrentCamera(DCamera ** cam)
-{
-	(*cam) = sCurrent;
 }

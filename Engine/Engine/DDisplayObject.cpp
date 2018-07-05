@@ -5,6 +5,7 @@ DDisplayObject::DDisplayObject(DMesh* mesh, DMaterial* material)
 {
 	m_material = material;
 	m_mesh = mesh;
+	m_isVisible = true;
 }
 
 
@@ -14,7 +15,7 @@ DDisplayObject::~DDisplayObject()
 
 void DDisplayObject::Render()
 {
-	if (m_mesh != NULL && m_material != NULL)
+	if (m_mesh != NULL && m_material != NULL && m_isVisible)
 	{
 		DMatrix4x4 world;
 		DCamera* cur;
@@ -47,4 +48,14 @@ void DDisplayObject::Destroy()
 		delete m_mesh;
 		m_mesh = NULL;
 	}
+}
+
+void DDisplayObject::SetVisible(bool visible)
+{
+	m_isVisible = visible;
+}
+
+bool DDisplayObject::GetVisible()
+{
+	return m_isVisible;
 }

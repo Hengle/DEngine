@@ -1,5 +1,5 @@
 ﻿#include "DScene.h"
-
+#include "DSystem.h"
 
 
 DScene::DScene(SCENEID sceneId, char * sceneName)
@@ -36,6 +36,11 @@ void DScene::Render()
 	if (!m_isLoaded)
 		return;
 	if (m_camera != NULL)
+	{
+		m_camera->Render();
+		m_camera->RenderFilter();
+	}
+	/*if (m_camera != NULL)
 		m_camera->BeginRender();
 	if (m_displayObjects != NULL) {
 		int i, size;
@@ -50,7 +55,7 @@ void DScene::Render()
 	{
 		m_camera->EndRender();
 		m_camera->RenderFilter();
-	}
+	}*/
 }
 
 void DScene::Update()
@@ -179,6 +184,13 @@ void DScene::Destroy()
 	Exit();
 }
 
+void DScene::Draw(bool callOnRender)
+{
+	DScene* current = DSystem::GetSceneMgr()->GetCurrentScene();
+	if (current != NULL)
+		current->DrawScene(callOnRender);
+}
+
 void DScene::OnGUI()
 {
 }
@@ -226,4 +238,18 @@ void DScene::SetCamera(DCamera * camera)
 DCamera * DScene::GetCamera()
 {
 	return m_camera;
+}
+
+void DScene::DrawScene(bool callOnRender)
+{
+	if (m_displayObjects != NULL) {
+		int i, size;
+		size = m_displayObjects->size();
+		for (int i = 0; i < size; i++) {
+			DDisplayObject* obj = m_displayObjects->at(i);
+			obj->Render();
+		}
+	}
+	if (callOnRender)
+		OnRender();
 }

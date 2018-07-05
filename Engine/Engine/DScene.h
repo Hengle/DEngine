@@ -24,6 +24,8 @@ public:
 	bool IsEnter();
 	virtual void Destroy();
 
+	static void Draw(bool callOnRender);
+
 protected:
 	virtual void OnGUI();
 	virtual void OnRender();
@@ -37,6 +39,9 @@ protected:
 	void AddDisplayObject(DDisplayObject*);
 	void SetCamera(DCamera*);
 	DCamera* GetCamera();
+
+private:
+	void DrawScene(bool callOnRender);
 
 protected:
 	std::vector<DDisplayObject*>* m_displayObjects;

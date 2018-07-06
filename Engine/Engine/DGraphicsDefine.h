@@ -54,6 +54,29 @@ enum DRSCompareFunc
 	DRSCompareFunc_Always = 7,
 };
 
+enum DRSBlendFactor
+{
+	DRSBlendFactor_One              = 0,
+	DRSBlendFactor_Zero             = 1,
+	DRSBlendFactor_SrcColor         = 2,
+	DRSBlendFactor_SrcAlpha         = 3,
+	DRSBlendFactor_DstColor         = 4,
+	DRSBlendFactor_DstAlpha         = 5,
+	DRSBlendFactor_OneMinusSrcColor = 6,
+	DRSBlendFactor_OneMinusSrcAlpha = 7,
+	DRSBlendFactor_OneMinusDstColor = 8,
+	DRSBlendFactor_OneMinusDstAlpha = 9,
+};
+
+enum DRSBlendOp
+{
+	DRSBlendOp_Add    = 0,
+	DRSBlendOp_Sub    = 1,
+	DRSBlendOp_RevSub = 2,
+	DRSBlendOp_Min    = 3,
+	DRSBlendOp_Max    = 4,
+};
+
 enum DRSStencilOp
 {
 	Keep = 0,

@@ -19,6 +19,19 @@ private:
 		DRSCompareFunc ztest;
 	};
 
+private:
+	struct BlendState10
+	{
+	public:
+		unsigned long GetKey();
+
+	public:
+		bool enableBlend;
+		DRSBlendOp blendOp;
+		DRSBlendFactor srcfactor;
+		DRSBlendFactor dstfactor;
+	};
+
 public:
 	DRenderStateMgr10(ID3D10Device*);
 	~DRenderStateMgr10();

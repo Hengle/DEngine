@@ -23,6 +23,10 @@ void DRenderStateMgr11::Init()
 	m_currentDepthStencilState.stencilId = 1;
 
 	RefreshDepthStencilState();
+
+	
+	m_currentBlendState.enableBlend = false;
+	RefreshBlendStencilState();
 }
 
 void DRenderStateMgr11::Release()
@@ -48,6 +52,22 @@ void DRenderStateMgr11::Release()
 		}
 	}
 	m_depthStencilStates.clear();
+
+	std::map<unsigned long, ID3D11BlendState*>::iterator  biter;
+	for (biter = m_blendStates.begin(); biter != m_blendStates.end(); biter++)
+	{
+		if (biter->second != NULL)
+		{
+			biter->second->Release();
+		}
+	}
+	m_blendStates.clear();
+
+	if (m_disableBlendState != NULL)
+	{
+		m_disableBlendState->Release();
+		m_disableBlendState = NULL;
+	}
 }
 
 void DRenderStateMgr11::SetCullMode(DCullMode cullMode)
@@ -79,6 +99,46 @@ void DRenderStateMgr11::SetZTestFunc(DRSCompareFunc ztest)
 	RefreshDepthStencilState();
 }
 
+void DRenderStateMgr11::SetBlendOp(DRSBlendOp op)
+{
+	if (m_device == NULL || m_deviceContext == NULL)
+		return;
+	if (m_currentBlendState.blendOp == op)
+		return;
+	m_currentBlendState.blendOp = op;
+	RefreshDepthStencilState();
+}
+
+void DRenderStateMgr11::SetBlendEnable(bool enableBlend)
+{
+	if (m_device == NULL || m_deviceContext == NULL)
+		return;
+	if (m_currentBlendState.enableBlend == enableBlend)
+		return;
+	m_currentBlendState.enableBlend = enableBlend;
+	RefreshDepthStencilState();
+}
+
+void DRenderStateMgr11::SetBlendSrcFactor(DRSBlendFactor factor)
+{
+	if (m_device == NULL || m_deviceContext == NULL)
+		return;
+	if (m_currentBlendState.srcfactor == factor)
+		return;
+	m_currentBlendState.srcfactor = factor;
+	RefreshDepthStencilState();
+}
+
+void DRenderStateMgr11::SetBlendDstFactor(DRSBlendFactor factor)
+{
+	if (m_device == NULL || m_deviceContext == NULL)
+		return;
+	if (m_currentBlendState.dstfactor == factor)
+		return;
+	m_currentBlendState.dstfactor = factor;
+	RefreshDepthStencilState();
+}
+
 void DRenderStateMgr11::ChangeCullMode(DCullMode cullMode)
 {
 	if (m_rasterizerStates.find(cullMode) != m_rasterizerStates.end())
@@ -106,6 +166,54 @@ void DRenderStateMgr11::RefreshDepthStencilState()
 		{
 			m_depthStencilStates.insert(std::pair<unsigned long, ID3D11DepthStencilState*>(key, state));
 			m_deviceContext->OMSetDepthStencilState(state, m_currentDepthStencilState.stencilId);
+		}
+	}
+}
+
+void DRenderStateMgr11::RefreshBlendStencilState()
+{
+	float blendFactor[4];
+
+	blendFactor[0] = 0.0f;
+	blendFactor[1] = 0.0f;
+	blendFactor[2] = 0.0f;
+	blendFactor[3] = 0.0f;
+	if (m_currentBlendState.enableBlend == false)
+	{
+		if (m_disableBlendState == NULL)
+		{
+			ID3D11BlendState* state = 0;
+			HRESULT result = CreateDisableBlendState(&state);
+			if (!FAILED(result))
+			{
+				m_disableBlendState = state;
+				m_deviceContext->OMSetBlendState(state, blendFactor, 0xffffffff);
+			}
+		}
+		else
+		{
+			m_deviceContext->OMSetBlendState(m_disableBlendState, blendFactor, 0xffffffff);
+		}
+	}
+	else
+	{
+
+		unsigned long key = m_currentBlendState.GetKey();
+		
+		if (m_blendStates.find(key) != m_blendStates.end())
+		{
+			ID3D11BlendState* state = m_blendStates.at(key);
+			m_deviceContext->OMSetBlendState(state, blendFactor, 0xffffffff);
+		}
+		else
+		{
+			ID3D11BlendState* state;
+			HRESULT result = CreateBlendState(m_currentBlendState, &state);
+			if (!FAILED(result))
+			{
+				m_blendStates.insert(std::pair<unsigned long, ID3D11BlendState*>(key, state));
+				m_deviceContext->OMSetBlendState(state, blendFactor, 0xffffffff);
+			}
 		}
 	}
 }
@@ -160,6 +268,54 @@ D3D11_COMPARISON_FUNC DRenderStateMgr11::GetComparisonFunc(DRSCompareFunc func)
 	}
 }
 
+D3D11_BLEND_OP DRenderStateMgr11::GetBlendOp(DRSBlendOp op)
+{
+	switch (op)
+	{
+	case DRSBlendOp_Add:
+		return D3D11_BLEND_OP_ADD;
+	case DRSBlendOp_Sub:
+		return D3D11_BLEND_OP_SUBTRACT;
+	case DRSBlendOp_RevSub:
+		return D3D11_BLEND_OP_REV_SUBTRACT;
+	case DRSBlendOp_Min:
+		return D3D11_BLEND_OP_MIN;
+	case DRSBlendOp_Max:
+		return D3D11_BLEND_OP_MAX;
+	default:
+		return D3D11_BLEND_OP_ADD;
+	}
+}
+
+D3D11_BLEND DRenderStateMgr11::GetBlendFactor(DRSBlendFactor factor)
+{
+	switch (factor)
+	{
+	case DRSBlendFactor_One:
+		return D3D11_BLEND_ONE;
+	case DRSBlendFactor_Zero:
+		return D3D11_BLEND_ZERO;
+	case DRSBlendFactor_SrcColor:
+		return D3D11_BLEND_SRC_COLOR;
+	case DRSBlendFactor_SrcAlpha:
+		return D3D11_BLEND_SRC_ALPHA;
+	case DRSBlendFactor_DstColor:
+		return D3D11_BLEND_DEST_COLOR;
+	case DRSBlendFactor_DstAlpha:
+		return D3D11_BLEND_DEST_ALPHA;
+	case DRSBlendFactor_OneMinusSrcColor:
+		return D3D11_BLEND_INV_SRC_COLOR;
+	case DRSBlendFactor_OneMinusSrcAlpha:
+		return D3D11_BLEND_INV_SRC_ALPHA;
+	case DRSBlendFactor_OneMinusDstColor:
+		return D3D11_BLEND_INV_DEST_COLOR;
+	case DRSBlendFactor_OneMinusDstAlpha:
+		return D3D11_BLEND_INV_DEST_ALPHA;
+	default:
+		return D3D11_BLEND_ZERO;
+	}
+}
+
 HRESULT DRenderStateMgr11::CreateRasterizerState(D3D11_CULL_MODE cullmode, ID3D11RasterizerState ** out)
 {
 	D3D11_RASTERIZER_DESC desc;
@@ -211,6 +367,35 @@ HRESULT DRenderStateMgr11::CreateDepthStencilState(DepthStencilState11 desc, ID3
 	return result;
 }
 
+HRESULT DRenderStateMgr11::CreateBlendState(BlendState11 desc, ID3D11BlendState ** state)
+{
+	D3D11_BLEND_DESC blenddesc;
+	ZeroMemory(&blenddesc, sizeof(blenddesc));
+
+	blenddesc.RenderTarget[0].BlendEnable = true;
+	blenddesc.RenderTarget[0].BlendOp = GetBlendOp(desc.blendOp);
+	blenddesc.RenderTarget[0].BlendOpAlpha = GetBlendOp(desc.blendOp);
+	blenddesc.RenderTarget[0].DestBlend = GetBlendFactor(desc.dstfactor);
+	blenddesc.RenderTarget[0].DestBlendAlpha = GetBlendFactor(desc.dstfactor);
+	blenddesc.RenderTarget[0].RenderTargetWriteMask = 0x0f;
+	blenddesc.RenderTarget[0].SrcBlend = GetBlendFactor(desc.srcfactor);
+	blenddesc.RenderTarget[0].SrcBlendAlpha = GetBlendFactor(desc.srcfactor);
+
+	HRESULT result = m_device->CreateBlendState(&blenddesc, state);
+	return result;
+}
+
+HRESULT DRenderStateMgr11::CreateDisableBlendState(ID3D11BlendState ** state)
+{
+	D3D11_BLEND_DESC blenddesc;
+	ZeroMemory(&blenddesc, sizeof(blenddesc));
+
+	blenddesc.RenderTarget[0].BlendEnable = false;
+
+	HRESULT result = m_device->CreateBlendState(&blenddesc, state);
+	return result;
+}
+
 unsigned long DRenderStateMgr11::DepthStencilState11::GetKey()
 {
 	unsigned long key = 0;
@@ -219,5 +404,14 @@ unsigned long DRenderStateMgr11::DepthStencilState11::GetKey()
 	unsigned long func = (unsigned long)ztest;
 	key = key | func;
 
+	return key;
+}
+
+unsigned long DRenderStateMgr11::BlendState11::GetKey()
+{
+	unsigned long key = 0;
+	key = blendOp << 8;
+	key = key | (srcfactor << 4);
+	key = key | dstfactor;
 	return key;
 }

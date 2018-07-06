@@ -177,6 +177,10 @@ public:
 	virtual void SetCullMode(DCullMode) = 0;
 	virtual void SetZWriteEnable(bool) = 0;
 	virtual void SetZTestFunc(DRSCompareFunc) = 0;
+	virtual void SetBlendOp(DRSBlendOp) = 0;
+	virtual void SetBlendEnable(bool) = 0;
+	virtual void SetBlendSrcFactor(DRSBlendFactor) = 0;
+	virtual void SetBlendDstFactor(DRSBlendFactor) = 0;
 };
 
 /*抽象图形库模块*/

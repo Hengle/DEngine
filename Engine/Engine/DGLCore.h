@@ -215,7 +215,7 @@ public:
 	virtual DRenderTextureViewRes* CreateRenderTextureRes(float, float) = 0;
 	virtual DShaderRes* CreateShaderRes() = 0;
 	virtual void ApplySamplerState(UINT, DWrapMode) = 0;
-	virtual DRenderStateMgr* GetRenderStateMgr() = 0;
+	virtual IRenderStateMgr* GetRenderStateMgr() = 0;
 	void GetResolution(float&, float&);
 
 protected:

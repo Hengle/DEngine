@@ -212,7 +212,7 @@ void D3D9Core::ApplySamplerState(UINT index, DWrapMode warpmode)
 	
 }
 
-DRenderStateMgr * D3D9Core::GetRenderStateMgr()
+IRenderStateMgr * D3D9Core::GetRenderStateMgr()
 {
 	return m_renderStateMgr;
 }

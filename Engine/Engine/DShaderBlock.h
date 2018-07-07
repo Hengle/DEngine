@@ -31,6 +31,9 @@ public:
 	DShaderRes* GetShaderRes();
 	void ApplyStates();
 
+	void SetPassEnable(bool);
+	bool IsPassEnable();
+
 private:
 	DRSBlendFactor GetBlendFactor(char*);
 	DRSCompareFunc GetCompFunc(char*);
@@ -55,6 +58,8 @@ private:
 	bool m_enableBlend;
 	char* m_vertexFuncName;
 	char* m_pixelFuncName;
+	
+	bool m_passEnable;
 };
 
 class DSubShader

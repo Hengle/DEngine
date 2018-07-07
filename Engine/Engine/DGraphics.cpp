@@ -308,7 +308,7 @@ void DGraphics::DrawSkyBox(DMaterial * material, const DCamera * camera)
 
 void DGraphics::SetCullMode(DCullMode cullMode)
 {
-	DRenderStateMgr* mgr = DSystem::GetGraphicsMgr()->GetGLCore()->GetRenderStateMgr();
+	IRenderStateMgr* mgr = DSystem::GetGraphicsMgr()->GetGLCore()->GetRenderStateMgr();
 	if (mgr != NULL)
 	{
 		mgr->SetCullMode(cullMode);
@@ -317,7 +317,7 @@ void DGraphics::SetCullMode(DCullMode cullMode)
 
 void DGraphics::SetZWriteEnable(bool zwrite)
 {
-	DRenderStateMgr* mgr = DSystem::GetGraphicsMgr()->GetGLCore()->GetRenderStateMgr();
+	IRenderStateMgr* mgr = DSystem::GetGraphicsMgr()->GetGLCore()->GetRenderStateMgr();
 	if (mgr != NULL)
 	{
 		mgr->SetZWriteEnable(zwrite);
@@ -326,7 +326,7 @@ void DGraphics::SetZWriteEnable(bool zwrite)
 
 void DGraphics::SetZTestFunc(DRSCompareFunc ztest)
 {
-	DRenderStateMgr* mgr = DSystem::GetGraphicsMgr()->GetGLCore()->GetRenderStateMgr();
+	IRenderStateMgr* mgr = DSystem::GetGraphicsMgr()->GetGLCore()->GetRenderStateMgr();
 	if (mgr != NULL)
 	{
 		mgr->SetZTestFunc(ztest);
@@ -335,7 +335,7 @@ void DGraphics::SetZTestFunc(DRSCompareFunc ztest)
 
 void DGraphics::SetBlendOp(DRSBlendOp op)
 {
-	DRenderStateMgr* mgr = DSystem::GetGraphicsMgr()->GetGLCore()->GetRenderStateMgr();
+	IRenderStateMgr* mgr = DSystem::GetGraphicsMgr()->GetGLCore()->GetRenderStateMgr();
 	if (mgr != NULL)
 	{
 		mgr->SetBlendOp(op);
@@ -344,7 +344,7 @@ void DGraphics::SetBlendOp(DRSBlendOp op)
 
 void DGraphics::SetBlendEnable(bool enable)
 {
-	DRenderStateMgr* mgr = DSystem::GetGraphicsMgr()->GetGLCore()->GetRenderStateMgr();
+	IRenderStateMgr* mgr = DSystem::GetGraphicsMgr()->GetGLCore()->GetRenderStateMgr();
 	if (mgr != NULL)
 	{
 		mgr->SetBlendEnable(enable);
@@ -353,7 +353,7 @@ void DGraphics::SetBlendEnable(bool enable)
 
 void DGraphics::SetBlendSrcFactor(DRSBlendFactor factor)
 {
-	DRenderStateMgr* mgr = DSystem::GetGraphicsMgr()->GetGLCore()->GetRenderStateMgr();
+	IRenderStateMgr* mgr = DSystem::GetGraphicsMgr()->GetGLCore()->GetRenderStateMgr();
 	if (mgr != NULL)
 	{
 		mgr->SetBlendSrcFactor(factor);
@@ -362,7 +362,7 @@ void DGraphics::SetBlendSrcFactor(DRSBlendFactor factor)
 
 void DGraphics::SetBlendDstFactor(DRSBlendFactor factor)
 {
-	DRenderStateMgr* mgr = DSystem::GetGraphicsMgr()->GetGLCore()->GetRenderStateMgr();
+	IRenderStateMgr* mgr = DSystem::GetGraphicsMgr()->GetGLCore()->GetRenderStateMgr();
 	if (mgr != NULL)
 	{
 		mgr->SetBlendDstFactor(factor);

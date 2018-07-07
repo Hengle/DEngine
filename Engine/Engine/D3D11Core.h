@@ -35,7 +35,7 @@ public:
 	/*创建shader资源*/
 	virtual DShaderRes* CreateShaderRes();
 	virtual void ApplySamplerState(UINT, DWrapMode);
-	virtual DRenderStateMgr* GetRenderStateMgr();
+	virtual IRenderStateMgr* GetRenderStateMgr();
 	ID3D11Device* GetDevice() const;
 	ID3D11DeviceContext* GetDeviceContext() const;
 
@@ -51,7 +51,7 @@ private:
 	ID3D11Texture2D* m_depthStencilBuffer;
 	DRenderBuffer* m_colorBuffer;
 	DRenderBuffer* m_depthBuffer;
-	DRenderStateMgr* m_renderStateMgr;
+	IRenderStateMgr* m_renderStateMgr;
 	D3D11_VIEWPORT m_viewPort;
 	std::map<DWrapMode, ID3D11SamplerState*> m_samplerStates;
 	

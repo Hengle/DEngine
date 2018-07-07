@@ -445,7 +445,7 @@ void D3D10Core::ApplySamplerState(UINT startSlot, DWrapMode warpmode)
 	}
 }
 
-DRenderStateMgr * D3D10Core::GetRenderStateMgr()
+IRenderStateMgr * D3D10Core::GetRenderStateMgr()
 {
 	return m_renderStateMgr;
 }

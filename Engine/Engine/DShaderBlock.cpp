@@ -500,6 +500,7 @@ DShaderPass::DShaderPass()
 	m_stencilPass = DRSStencilOp_Keep;
 	m_stencilFail = DRSStencilOp_Keep;
 	m_stencilZFail = DRSStencilOp_Keep;
+	m_passEnable = true;
 }
 
 void DShaderPass::Release()
@@ -645,6 +646,16 @@ void DShaderPass::ApplyStates()
 	DGraphics::SetBlendOp(m_blendOp);
 	DGraphics::SetBlendDstFactor(m_blendDst);
 	DGraphics::SetBlendSrcFactor(m_blendSrc);
+}
+
+void DShaderPass::SetPassEnable(bool enable)
+{
+	m_passEnable = enable;
+}
+
+bool DShaderPass::IsPassEnable()
+{
+	return m_passEnable;
 }
 
 DRSBlendFactor DShaderPass::GetBlendFactor(char * state)

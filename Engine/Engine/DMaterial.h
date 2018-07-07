@@ -18,7 +18,9 @@ public:
 	bool HasProperty(const LPCSTR key) const;
 	void SetShader(DShader* shader);
 	DShader* GetShader();
-	void SetPass(int);
+	bool SetPass(int);
+	bool IsPassEnable(int);
+	void SetPassEnable(int, bool);
 	int GetVertexUsage(int);
 	int GetPassCount();
 	virtual void Destroy();

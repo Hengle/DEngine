@@ -99,16 +99,33 @@ DShader * DMaterial::GetShader()
 	return m_shader;
 }
 
-void DMaterial::SetPass(int pass)
+bool DMaterial::SetPass(int pass)
 {
 	if (m_shader == NULL)
-		return;
+		return false;
+	if (!IsPassEnable(pass))
+		return false;
 
 	m_shader->ApplyStates(pass);
 
 	m_shader->ApplyParams(m_constantTable, pass);
 
 	m_shader->Draw(pass);
+
+	return true;
+}
+
+bool DMaterial::IsPassEnable(int pass)
+{
+	if (m_shader != NULL)
+		return m_shader->IsPassEnable(pass);
+	return false;
+}
+
+void DMaterial::SetPassEnable(int pass, bool enable)
+{
+	if (m_shader != NULL)
+		m_shader->SetPassEnable(pass, enable);
 }
 
 int DMaterial::GetVertexUsage(int pass)

@@ -34,7 +34,7 @@ public:
 	/*创建shader资源*/
 	virtual DShaderRes* CreateShaderRes();
 	virtual void ApplySamplerState(UINT, DWrapMode);
-	virtual DRenderStateMgr* GetRenderStateMgr();
+	virtual IRenderStateMgr* GetRenderStateMgr();
 
 	LPDIRECT3DDEVICE9 GetDevice()
 	{
@@ -48,6 +48,6 @@ private:
 	LPDIRECT3D9 m_d3d;
 	LPDIRECT3DDEVICE9 m_device;
 	D3DVIEWPORT9 m_viewPort;
-	DRenderStateMgr* m_renderStateMgr;
+	IRenderStateMgr* m_renderStateMgr;
 };
 

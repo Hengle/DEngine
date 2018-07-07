@@ -444,7 +444,7 @@ void D3D11Core::ApplySamplerState(UINT startSlot, DWrapMode mode)
 	}
 }
 
-DRenderStateMgr * D3D11Core::GetRenderStateMgr()
+IRenderStateMgr * D3D11Core::GetRenderStateMgr()
 {
 	return m_renderStateMgr;
 }

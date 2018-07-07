@@ -366,3 +366,32 @@ int DShader::GetPassCount()
 		return m_shaderBlock->GetPassCount();
 	return 0;
 }
+
+bool DShader::IsPassEnable(int index)
+{
+	if (m_shaderBlock != NULL)
+	{
+		int passcount = m_shaderBlock->GetPassCount();
+		if (index < 0 || index >= passcount)
+			return false;
+		DShaderPass* pass = m_shaderBlock->GetPass(index);
+		if (pass == NULL)
+			return false;
+		return pass->IsPassEnable();
+	}
+	return false;
+}
+
+void DShader::SetPassEnable(int index, bool enable)
+{
+	if (m_shaderBlock != NULL)
+	{
+		int passcount = m_shaderBlock->GetPassCount();
+		if (index < 0 || index >= passcount)
+			return;
+		DShaderPass* pass = m_shaderBlock->GetPass(index);
+		if (pass == NULL)
+			return;
+		pass->SetPassEnable(enable);
+	}
+}

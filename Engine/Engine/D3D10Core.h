@@ -33,7 +33,7 @@ public:
 	/*创建shader资源*/
 	virtual DShaderRes* CreateShaderRes();
 	virtual void ApplySamplerState(UINT, DWrapMode);
-	virtual DRenderStateMgr* GetRenderStateMgr();
+	virtual IRenderStateMgr* GetRenderStateMgr();
 	ID3D10Device* GetDevice() const;
 
 private:
@@ -47,7 +47,7 @@ private:
 	ID3D10Texture2D* m_depthStencilBuffer;
 	DRenderBuffer* m_colorBuffer;
 	DRenderBuffer* m_depthBuffer;
-	DRenderStateMgr* m_renderStateMgr;
+	IRenderStateMgr* m_renderStateMgr;
 	D3D10_VIEWPORT m_viewPort;
 	std::map<DWrapMode, ID3D10SamplerState*> m_samplerStates;
 };

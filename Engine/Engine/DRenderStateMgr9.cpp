@@ -19,6 +19,17 @@ void DRenderStateMgr9::Init()
 	ChangeZTest(DRSCompareFunc_LEqual);
 	ChangeZWrite(true);
 	ChangeBlendEnable(false);
+	ChangeBlendSrcFactor(DRSBlendFactor_One);
+	ChangeBlendDstFactor(DRSBlendFactor_Zero);
+	ChangeBlendOp(DRSBlendOp_Add);
+	ChangeStencilEnable(false);
+	ChangeStencilId(0);
+	ChangeStencilWriteMask(0xff);
+	ChangeStencilReadMask(0xff);
+	ChangeStencilCompFunc(DRSCompareFunc_Always);
+	ChangeStencilPassOp(DRSStencilOp_Keep);
+	ChangeStencilFailOp(DRSStencilOp_Keep);
+	ChangeStencilZFailOp(DRSStencilOp_Keep);
 }
 
 void DRenderStateMgr9::Release()
@@ -89,6 +100,78 @@ void DRenderStateMgr9::SetBlendDstFactor(DRSBlendFactor dst)
 	ChangeBlendDstFactor(dst);
 }
 
+void DRenderStateMgr9::SetStencilRefId(UINT stencilId)
+{
+	if (m_device == NULL)
+		return;
+	if (m_stencilId == stencilId)
+		return;
+	ChangeStencilId(stencilId);
+}
+
+void DRenderStateMgr9::SetStencilEnable(bool enableStencil)
+{
+	if (m_device == NULL)
+		return;
+	if (m_enableStencil == enableStencil)
+		return;
+	ChangeStencilEnable(enableStencil);
+}
+
+void DRenderStateMgr9::SetStencilReadMask(unsigned short readMask)
+{
+	if (m_device == NULL)
+		return;
+	if (m_stencilReadMask == readMask)
+		return;
+	ChangeStencilReadMask(readMask);
+}
+
+void DRenderStateMgr9::SetStencilWriteMask(unsigned short writeMask)
+{
+	if (m_device == NULL)
+		return;
+	if (m_stencilWriteMask == writeMask)
+		return;
+	ChangeStencilWriteMask(writeMask);
+}
+
+void DRenderStateMgr9::SetStencilComparisonFunc(DRSCompareFunc stencilComp)
+{
+	if (m_device == NULL)
+		return;
+	if (m_stencilComp == stencilComp)
+		return;
+	ChangeStencilCompFunc(stencilComp);
+}
+
+void DRenderStateMgr9::SetStencilPassOp(DRSStencilOp stencilPass)
+{
+	if (m_device == NULL)
+		return;
+	if (m_stencilPass == stencilPass)
+		return;
+	ChangeStencilPassOp(stencilPass);
+}
+
+void DRenderStateMgr9::SetStencilFailOp(DRSStencilOp stencilFail)
+{
+	if (m_device == NULL)
+		return;
+	if (m_stencilFail == stencilFail)
+		return;
+	ChangeStencilFailOp(stencilFail);
+}
+
+void DRenderStateMgr9::SetStencilZFailOp(DRSStencilOp stencilZFail)
+{
+	if (m_device == NULL)
+		return;
+	if (m_stencilZFail == stencilZFail)
+		return;
+	ChangeStencilZFailOp(stencilZFail);
+}
+
 void DRenderStateMgr9::ChangeCullMode(DCullMode cullMode)
 {
 	if (cullMode == DCullMode_Back)
@@ -135,6 +218,54 @@ void DRenderStateMgr9::ChangeBlendDstFactor(DRSBlendFactor factor)
 {
 	m_device->SetRenderState(D3DRS_DESTBLEND, GetBlendFactor(factor));
 	m_blendDstFactor = factor;
+}
+
+void DRenderStateMgr9::ChangeStencilEnable(bool enable)
+{
+	m_device->SetRenderState(D3DRS_STENCILENABLE, enable);
+	m_enableStencil = enable;
+}
+
+void DRenderStateMgr9::ChangeStencilId(unsigned short stencilId)
+{
+	m_device->SetRenderState(D3DRS_STENCILREF, stencilId);
+	m_stencilId = stencilId;
+}
+
+void DRenderStateMgr9::ChangeStencilCompFunc(DRSCompareFunc comp)
+{
+	m_device->SetRenderState(D3DRS_STENCILFUNC, GetComparisonFunc(comp));
+	m_stencilComp = comp;
+}
+
+void DRenderStateMgr9::ChangeStencilPassOp(DRSStencilOp op)
+{
+	m_device->SetRenderState(D3DRS_STENCILPASS, GetStencilOp(op));
+	m_stencilPass = op;
+}
+
+void DRenderStateMgr9::ChangeStencilFailOp(DRSStencilOp op)
+{
+	m_device->SetRenderState(D3DRS_STENCILFAIL, GetStencilOp(op));
+	m_stencilFail = op;
+}
+
+void DRenderStateMgr9::ChangeStencilZFailOp(DRSStencilOp op)
+{
+	m_device->SetRenderState(D3DRS_STENCILZFAIL, GetStencilOp(op));
+	m_stencilZFail = op;
+}
+
+void DRenderStateMgr9::ChangeStencilReadMask(unsigned short readMask)
+{
+	m_device->SetRenderState(D3DRS_STENCILMASK, readMask);
+	m_stencilReadMask = readMask;
+}
+
+void DRenderStateMgr9::ChangeStencilWriteMask(unsigned short writeMask)
+{
+	m_device->SetRenderState(D3DRS_STENCILWRITEMASK, writeMask);
+	m_stencilWriteMask = writeMask;
 }
 
 D3DCMPFUNC DRenderStateMgr9::GetComparisonFunc(DRSCompareFunc func)
@@ -207,5 +338,30 @@ D3DBLEND DRenderStateMgr9::GetBlendFactor(DRSBlendFactor factor)
 		return D3DBLEND_INVDESTALPHA;
 	default:
 		return D3DBLEND_ZERO;
+	}
+}
+
+D3DSTENCILOP DRenderStateMgr9::GetStencilOp(DRSStencilOp op)
+{
+	switch (op)
+	{
+	case DRSStencilOp_Keep:
+		return D3DSTENCILOP_KEEP;
+	case DRSStencilOp_Zero:
+		return D3DSTENCILOP_ZERO;
+	case DRSStencilOp_Replace:
+		return D3DSTENCILOP_REPLACE;
+	case DRSStencilOp_IncrementSaturate:
+		return D3DSTENCILOP_INCRSAT;
+	case DRSStencilOp_DecrementSaturate:
+		return D3DSTENCILOP_DECRSAT;
+	case DRSStencilOp_Invert:
+		return D3DSTENCILOP_INVERT;
+	case DRSStencilOp_IncrementWrap:
+		return D3DSTENCILOP_INCR;
+	case DRSStencilOp_DecrementWrap:
+		return D3DSTENCILOP_DECR;
+	default:
+		return D3DSTENCILOP_KEEP;
 	}
 }

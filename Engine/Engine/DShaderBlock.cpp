@@ -299,6 +299,87 @@ void DShaderBlock::InterpretState(ifstream & ifile, DShaderPass* pass)
 				if (pass != NULL)
 					pass->SetBlendDstFactor(state);
 			}
+			else if (strcmp(read, "blendop") == 0)
+			{
+				ifile >> state;
+				if (pass != NULL)
+					pass->SetBlendOp(state);
+			}
+			else if (strcmp(read, "stencil") == 0)
+			{
+				if (pass != NULL)
+					pass->SetStencilEnable(true);
+				InterpretStencil(ifile, pass);
+			}
+		}
+	}
+}
+
+void DShaderBlock::InterpretStencil(ifstream & ifile, DShaderPass * pass)
+{
+	bool isBegin = false;
+	char read[64], state[64];
+	unsigned short value;
+	while (!ifile.eof())
+	{
+		ifile >> read;
+
+		if (!isBegin)
+		{
+			if (strcmp(read, "{") == 0)
+			{
+				isBegin = true;
+			}
+		}
+		else
+		{
+			if (strcmp(read, "}") == 0)
+			{
+				isBegin = false;
+				return;
+			}
+			else if (strcmp(read, "ref") == 0)
+			{
+				ifile >> value;
+				if (pass != NULL)
+					pass->SetStencilId(value);
+			}
+			else if (strcmp(read, "readmask") == 0)
+			{
+				ifile >> value;
+				if (pass != NULL)
+					pass->SetStencilReadMask(value);
+			}
+			else if (strcmp(read, "writemask") == 0)
+			{
+				ifile >> value;
+				if (pass != NULL)
+					pass->SetStencilWriteMask(value);
+			}
+			else if (strcmp(read, "comp") == 0)
+			{
+				ifile >> state;
+				if (pass != NULL)
+					pass->SetStencilComp(state);
+			}
+			else if (strcmp(read, "pass") == 0)
+			{
+				ifile >> state;
+				if (pass != NULL)
+					pass->SetStencilPass(state);
+			}
+			else if (strcmp(read, "fail") == 0)
+			{
+				ifile >> state;
+				if (pass != NULL)
+					pass->SetStencilFail(state);
+			}
+			else if (strcmp(read, "zfail") == 0)
+			{
+				ifile >> state;
+				if (pass != NULL)
+					pass->SetStencilZFail(state);
+			}
 		}
 	}
 }
@@ -411,6 +492,14 @@ DShaderPass::DShaderPass()
 	m_blendOp = DRSBlendOp_Add;
 	m_blendSrc = DRSBlendFactor_SrcAlpha;
 	m_blendDst = DRSBlendFactor_OneMinusSrcAlpha;
+	m_enableStencil = false;
+	m_stencilId = 0;
+	m_stencilReadMask = 255;
+	m_stencilWriteMask = 255;
+	m_stencilComp = DRSCompareFunc_Always;
+	m_stencilPass = DRSStencilOp_Keep;
+	m_stencilFail = DRSStencilOp_Keep;
+	m_stencilZFail = DRSStencilOp_Keep;
 }
 
 void DShaderPass::Release()
@@ -439,22 +528,7 @@ void DShaderPass::SetZWrite(char * state)
 
 void DShaderPass::SetZTest(char * state)
 {
-	if (strcmp(state, "lequal") == 0)
-		m_ztest = DRSCompareFunc_LEqual;
-	else if (strcmp(state, "never") == 0)
-		m_ztest = DRSCompareFunc_Never;
-	else if (strcmp(state, "less") == 0)
-		m_ztest = DRSCompareFunc_Less;
-	else if (strcmp(state, "equal") == 0)
-		m_ztest = DRSCompareFunc_Equal;
-	else if (strcmp(state, "greater") == 0)
-		m_ztest = DRSCompareFunc_Greater;
-	else if (strcmp(state, "notequal") == 0)
-		m_ztest = DRSCompareFunc_NotEqual;
-	else if (strcmp(state, "gequal") == 0)
-		m_ztest = DRSCompareFunc_GEqual;
-	else if (strcmp(state, "always") == 0)
-		m_ztest = DRSCompareFunc_Always;
+	m_ztest = GetCompFunc(state);
 }
 
 void DShaderPass::SetCullMode(char * state)
@@ -491,6 +565,46 @@ void DShaderPass::SetBlendDstFactor(char * state)
 {
 	m_blendDst = GetBlendFactor(state);
 	m_enableBlend = true;
+}
+
+void DShaderPass::SetStencilEnable(bool enable)
+{
+	m_enableStencil = enable;
+}
+
+void DShaderPass::SetStencilId(unsigned short stencilId)
+{
+	m_stencilId = stencilId;
+}
+
+void DShaderPass::SetStencilReadMask(unsigned short readMask)
+{
+	m_stencilReadMask = readMask;
+}
+
+void DShaderPass::SetStencilWriteMask(unsigned short writeMask)
+{
+	m_stencilWriteMask = writeMask;
+}
+
+void DShaderPass::SetStencilComp(char * state)
+{
+	m_stencilComp = GetCompFunc(state);
+}
+
+void DShaderPass::SetStencilPass(char * state)
+{
+	m_stencilPass = GetStencilOp(state);
+}
+
+void DShaderPass::SetStencilFail(char * state)
+{
+	m_stencilFail = GetStencilOp(state);
+}
+
+void DShaderPass::SetStencilZFail(char * state)
+{
+	m_stencilZFail = GetStencilOp(state);
 }
 
 void DShaderPass::SetVertexFuncName(char *vertexFuncName)
@@ -556,4 +670,48 @@ DRSBlendFactor DShaderPass::GetBlendFactor(char * state)
 	else if (strcmp(state, "oneminusdstalpha") == 0)
 		return DRSBlendFactor_OneMinusDstAlpha;
 	return DRSBlendFactor_Zero;
+}
+
+DRSCompareFunc DShaderPass::GetCompFunc(char * state)
+{
+	if (strcmp(state, "lequal") == 0)
+		return DRSCompareFunc_LEqual;
+	else if (strcmp(state, "never") == 0)
+		return DRSCompareFunc_Never;
+	else if (strcmp(state, "less") == 0)
+		return DRSCompareFunc_Less;
+	else if (strcmp(state, "equal") == 0)
+		return DRSCompareFunc_Equal;
+	else if (strcmp(state, "greater") == 0)
+		return DRSCompareFunc_Greater;
+	else if (strcmp(state, "notequal") == 0)
+		return DRSCompareFunc_NotEqual;
+	else if (strcmp(state, "gequal") == 0)
+		return DRSCompareFunc_GEqual;
+	else if (strcmp(state, "always") == 0)
+		return DRSCompareFunc_Always;
+	else
+		return DRSCompareFunc_Always;
+}
+
+DRSStencilOp DShaderPass::GetStencilOp(char * state)
+{
+	if (strcmp(state, "keep") == 0)
+		return DRSStencilOp_Keep;
+	else if (strcmp(state, "zero") == 0)
+		return DRSStencilOp_Zero;
+	else if (strcmp(state, "replace") == 0)
+		return DRSStencilOp_Replace;
+	else if (strcmp(state, "incrsat") == 0)
+		return DRSStencilOp_IncrementSaturate;
+	else if (strcmp(state, "decrsat") == 0)
+		return DRSStencilOp_DecrementSaturate;
+	else if (strcmp(state, "invert") == 0)
+		return DRSStencilOp_Invert;
+	else if (strcmp(state, "incrwrap") == 0)
+		return DRSStencilOp_IncrementWrap;
+	else if (strcmp(state, "decrwrap") == 0)
+		return DRSStencilOp_DecrementWrap;
+	else
+		return DRSStencilOp_Keep;
 }

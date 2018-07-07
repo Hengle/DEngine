@@ -187,6 +187,7 @@ public:
 	virtual void SetStencilReadMask(unsigned short) = 0;
 	virtual void SetStencilWriteMask(unsigned short) = 0;
 	virtual void SetStencilComparisonFunc(DRSCompareFunc) = 0;
+	virtual void SetStencilPassOp(DRSStencilOp) = 0;
 	virtual void SetStencilFailOp(DRSStencilOp) = 0;
 	virtual void SetStencilZFailOp(DRSStencilOp) = 0;
 };

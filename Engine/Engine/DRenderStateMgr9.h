@@ -22,6 +22,14 @@ public:
 	virtual void SetBlendEnable(bool);
 	virtual void SetBlendSrcFactor(DRSBlendFactor);
 	virtual void SetBlendDstFactor(DRSBlendFactor);
+	virtual void SetStencilRefId(UINT);
+	virtual void SetStencilEnable(bool);
+	virtual void SetStencilReadMask(unsigned short);
+	virtual void SetStencilWriteMask(unsigned short);
+	virtual void SetStencilComparisonFunc(DRSCompareFunc);
+	virtual void SetStencilPassOp(DRSStencilOp);
+	virtual void SetStencilFailOp(DRSStencilOp);
+	virtual void SetStencilZFailOp(DRSStencilOp);
 
 private:
 	void ChangeCullMode(DCullMode);
@@ -31,9 +39,18 @@ private:
 	void ChangeBlendOp(DRSBlendOp);
 	void ChangeBlendSrcFactor(DRSBlendFactor);
 	void ChangeBlendDstFactor(DRSBlendFactor);
+	void ChangeStencilEnable(bool);
+	void ChangeStencilId(unsigned short);
+	void ChangeStencilCompFunc(DRSCompareFunc);
+	void ChangeStencilPassOp(DRSStencilOp);
+	void ChangeStencilFailOp(DRSStencilOp);
+	void ChangeStencilZFailOp(DRSStencilOp);
+	void ChangeStencilReadMask(unsigned short);
+	void ChangeStencilWriteMask(unsigned short);
 	D3DCMPFUNC GetComparisonFunc(DRSCompareFunc);
 	D3DBLENDOP GetBlendOp(DRSBlendOp);
 	D3DBLEND GetBlendFactor(DRSBlendFactor);
+	D3DSTENCILOP GetStencilOp(DRSStencilOp);
 
 private:
 	IDirect3DDevice9* m_device;
@@ -45,5 +62,13 @@ private:
 	DRSBlendOp m_blendOp;
 	DRSBlendFactor m_blendSrcFactor;
 	DRSBlendFactor m_blendDstFactor;
+	bool m_enableStencil;
+	unsigned short m_stencilId;
+	DRSCompareFunc m_stencilComp;
+	DRSStencilOp m_stencilPass;
+	DRSStencilOp m_stencilFail;
+	DRSStencilOp m_stencilZFail;
+	unsigned short m_stencilReadMask;
+	unsigned short m_stencilWriteMask;
 };
 

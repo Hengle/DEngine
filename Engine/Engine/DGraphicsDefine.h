@@ -79,13 +79,14 @@ enum DRSBlendOp
 
 enum DRSStencilOp
 {
-	Keep = 0,
-	Zero = 1,
-	Replace = 2,
-	IncrementSaturate = 3,
-	DecrementSaturate = 4,
-	Invert = 5,
-	IncrementWrap = 6,
+	DRSStencilOp_Keep = 0,
+	DRSStencilOp_Zero = 1,
+	DRSStencilOp_Replace = 2,
+	DRSStencilOp_IncrementSaturate = 3,
+	DRSStencilOp_DecrementSaturate = 4,
+	DRSStencilOp_Invert = 5,
+	DRSStencilOp_IncrementWrap = 6,
+	DRSStencilOp_DecrementWrap = 7,
 };
 
 enum DVertexBufferType

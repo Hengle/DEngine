@@ -3,6 +3,7 @@
 DRenderStateMgr10::DRenderStateMgr10(ID3D10Device * device)
 {
 	m_device = device;
+	m_disableBlendState = 0;
 }
 
 DRenderStateMgr10::~DRenderStateMgr10()
@@ -19,7 +20,8 @@ void DRenderStateMgr10::Init()
 
 	m_currentDepthStencilState.ztest = DRSCompareFunc_LEqual;
 	m_currentDepthStencilState.zwrite = true;
-	m_currentDepthStencilState.stencilId = 1;
+	m_currentDepthStencilState.stencilId = 0;
+	m_currentDepthStencilState.enableStencil = false;
 
 	RefreshDepthStencilState();
 
@@ -140,6 +142,96 @@ void DRenderStateMgr10::SetBlendDstFactor(DRSBlendFactor factor)
 	if (m_currentBlendState.enableBlend == false)
 		return;
 	RefreshBlendStencilState();
+}
+
+void DRenderStateMgr10::SetStencilRefId(UINT stencilId)
+{
+	if (m_device == NULL)
+		return;
+	if (m_currentDepthStencilState.stencilId == stencilId)
+		return;
+	m_currentDepthStencilState.stencilId = stencilId;
+	if (m_currentDepthStencilState.enableStencil == false)
+		return;
+	RefreshDepthStencilState();
+}
+
+void DRenderStateMgr10::SetStencilEnable(bool enableStencil)
+{
+	if (m_device == NULL)
+		return;
+	if (m_currentDepthStencilState.enableStencil == enableStencil)
+		return;
+	m_currentDepthStencilState.enableStencil = enableStencil;
+	RefreshDepthStencilState();
+}
+
+void DRenderStateMgr10::SetStencilReadMask(unsigned short readMask)
+{
+	if (m_device == NULL)
+		return;
+	if (m_currentDepthStencilState.stencilReadMask == readMask)
+		return;
+	m_currentDepthStencilState.stencilReadMask = readMask;
+	RefreshDepthStencilState();
+}
+
+void DRenderStateMgr10::SetStencilWriteMask(unsigned short writeMask)
+{
+	if (m_device == NULL)
+		return;
+	if (m_currentDepthStencilState.stencilWriteMask == writeMask)
+		return;
+	m_currentDepthStencilState.stencilWriteMask = writeMask;
+	RefreshDepthStencilState();
+}
+
+void DRenderStateMgr10::SetStencilComparisonFunc(DRSCompareFunc compFunc)
+{
+	if (m_device == NULL)
+		return;
+	if (m_currentDepthStencilState.stencilComp == compFunc)
+		return;
+	m_currentDepthStencilState.stencilComp = compFunc;
+	if (m_currentDepthStencilState.enableStencil == false)
+		return;
+	RefreshDepthStencilState();
+}
+
+void DRenderStateMgr10::SetStencilPassOp(DRSStencilOp stencilPass)
+{
+	if (m_device == NULL)
+		return;
+	if (m_currentDepthStencilState.stencilPassOp == stencilPass)
+		return;
+	m_currentDepthStencilState.stencilPassOp = stencilPass;
+	if (m_currentDepthStencilState.enableStencil == false)
+		return;
+	RefreshDepthStencilState();
+}
+
+void DRenderStateMgr10::SetStencilFailOp(DRSStencilOp stencilFail)
+{
+	if (m_device == NULL)
+		return;
+	if (m_currentDepthStencilState.stencilFailOp == stencilFail)
+		return;
+	m_currentDepthStencilState.stencilFailOp = stencilFail;
+	if (m_currentDepthStencilState.enableStencil == false)
+		return;
+	RefreshDepthStencilState();
+}
+
+void DRenderStateMgr10::SetStencilZFailOp(DRSStencilOp stencilZFail)
+{
+	if (m_device == NULL)
+		return;
+	if (m_currentDepthStencilState.stencilZFailOp == stencilZFail)
+		return;
+	m_currentDepthStencilState.stencilZFailOp = stencilZFail;
+	if (m_currentDepthStencilState.enableStencil == false)
+		return;
+	RefreshDepthStencilState();
 }
 
 void DRenderStateMgr10::ChangeCullMode(DCullMode cullMode)
@@ -319,6 +411,31 @@ D3D10_BLEND DRenderStateMgr10::GetBlendFactor(DRSBlendFactor factor)
 	}
 }
 
+D3D10_STENCIL_OP DRenderStateMgr10::GetStencilOp(DRSStencilOp op)
+{
+	switch (op)
+	{
+	case DRSStencilOp_Keep:
+		return D3D10_STENCIL_OP_KEEP;
+	case DRSStencilOp_Zero:
+		return D3D10_STENCIL_OP_ZERO;
+	case DRSStencilOp_Replace:
+		return D3D10_STENCIL_OP_REPLACE;
+	case DRSStencilOp_IncrementSaturate:
+		return D3D10_STENCIL_OP_INCR_SAT;
+	case DRSStencilOp_DecrementSaturate:
+		return D3D10_STENCIL_OP_DECR_SAT;
+	case DRSStencilOp_Invert:
+		return D3D10_STENCIL_OP_INVERT;
+	case DRSStencilOp_IncrementWrap:
+		return D3D10_STENCIL_OP_INCR;
+	case DRSStencilOp_DecrementWrap:
+		return D3D10_STENCIL_OP_DECR;
+	default:
+		return D3D10_STENCIL_OP_KEEP;
+	}
+}
+
 HRESULT DRenderStateMgr10::CreateRasterizerState(D3D10_CULL_MODE cullmode, ID3D10RasterizerState ** out)
 {
 	D3D10_RASTERIZER_DESC desc;
@@ -352,19 +469,37 @@ HRESULT DRenderStateMgr10::CreateDepthStencilState(DepthStencilState10 desc, ID3
 
 	depthStencilDesc.DepthFunc = GetComparisonFunc(desc.ztest);
 
-	depthStencilDesc.StencilEnable = true;
-	depthStencilDesc.StencilReadMask = 0xFF;
-	depthStencilDesc.StencilWriteMask = 0xFF;
+	depthStencilDesc.StencilEnable = desc.enableStencil;
+	if (!desc.enableStencil)
+	{
+		depthStencilDesc.StencilReadMask = D3D10_DEFAULT_STENCIL_READ_MASK;
+		depthStencilDesc.StencilWriteMask = D3D10_DEFAULT_STENCIL_WRITE_MASK;
 
-	depthStencilDesc.FrontFace.StencilFailOp = D3D10_STENCIL_OP_KEEP;
-	depthStencilDesc.FrontFace.StencilDepthFailOp = D3D10_STENCIL_OP_INCR;
-	depthStencilDesc.FrontFace.StencilPassOp = D3D10_STENCIL_OP_KEEP;
-	depthStencilDesc.FrontFace.StencilFunc = D3D10_COMPARISON_ALWAYS;
+		depthStencilDesc.FrontFace.StencilFailOp = D3D10_STENCIL_OP_KEEP;
+		depthStencilDesc.FrontFace.StencilDepthFailOp = D3D10_STENCIL_OP_INCR;
+		depthStencilDesc.FrontFace.StencilPassOp = D3D10_STENCIL_OP_KEEP;
+		depthStencilDesc.FrontFace.StencilFunc = D3D10_COMPARISON_ALWAYS;
 
-	depthStencilDesc.BackFace.StencilFailOp = D3D10_STENCIL_OP_KEEP;
-	depthStencilDesc.BackFace.StencilDepthFailOp = D3D10_STENCIL_OP_DECR;
-	depthStencilDesc.BackFace.StencilPassOp = D3D10_STENCIL_OP_KEEP;
-	depthStencilDesc.BackFace.StencilFunc = D3D10_COMPARISON_ALWAYS;
+		depthStencilDesc.BackFace.StencilFailOp = D3D10_STENCIL_OP_KEEP;
+		depthStencilDesc.BackFace.StencilDepthFailOp = D3D10_STENCIL_OP_DECR;
+		depthStencilDesc.BackFace.StencilPassOp = D3D10_STENCIL_OP_KEEP;
+		depthStencilDesc.BackFace.StencilFunc = D3D10_COMPARISON_ALWAYS;
+	}
+	else
+	{
+		depthStencilDesc.StencilReadMask = desc.stencilReadMask;
+		depthStencilDesc.StencilWriteMask = desc.stencilWriteMask;
+
+		depthStencilDesc.FrontFace.StencilFailOp = GetStencilOp(desc.stencilFailOp);
+		depthStencilDesc.FrontFace.StencilDepthFailOp = GetStencilOp(desc.stencilZFailOp);
+		depthStencilDesc.FrontFace.StencilPassOp = GetStencilOp(desc.stencilPassOp);
+		depthStencilDesc.FrontFace.StencilFunc = GetComparisonFunc(desc.stencilComp);
+
+		depthStencilDesc.BackFace.StencilFailOp = GetStencilOp(desc.stencilFailOp);
+		depthStencilDesc.BackFace.StencilDepthFailOp = GetStencilOp(desc.stencilZFailOp);
+		depthStencilDesc.BackFace.StencilPassOp = GetStencilOp(desc.stencilPassOp);
+		depthStencilDesc.BackFace.StencilFunc = GetComparisonFunc(desc.stencilComp);
+	}
 
 	HRESULT result = m_device->CreateDepthStencilState(&depthStencilDesc, state);
 	return result;
@@ -404,9 +539,18 @@ unsigned long DRenderStateMgr10::DepthStencilState10::GetKey()
 {
 	unsigned long key = 0;
 	if (zwrite)
-		key = 1L << 4;
-	unsigned long func = (unsigned long)ztest;
+		key = 1L << 31;
+	unsigned long func = ztest << 28;
 	key = key | func;
+	if (enableStencil)
+	{
+		key = key | (stencilWriteMask << 20);
+		key = key | (stencilReadMask << 12);
+		key = key | (stencilComp << 9);
+		key = key | (stencilPassOp << 6);
+		key = key | (stencilFailOp << 3);
+		key = key | (stencilZFailOp);
+	}
 
 	return key;
 }

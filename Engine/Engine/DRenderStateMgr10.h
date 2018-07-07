@@ -15,8 +15,15 @@ private:
 
 	public:
 		bool zwrite;
+		bool enableStencil;
 		UINT stencilId;
 		DRSCompareFunc ztest;
+		DRSCompareFunc stencilComp;
+		DRSStencilOp stencilPassOp;
+		DRSStencilOp stencilFailOp;
+		DRSStencilOp stencilZFailOp;
+		UINT8 stencilReadMask;
+		UINT8 stencilWriteMask;
 	};
 
 private:
@@ -48,6 +55,14 @@ public:
 	virtual void SetBlendEnable(bool);
 	virtual void SetBlendSrcFactor(DRSBlendFactor);
 	virtual void SetBlendDstFactor(DRSBlendFactor);
+	virtual void SetStencilRefId(UINT);
+	virtual void SetStencilEnable(bool);
+	virtual void SetStencilReadMask(unsigned short);
+	virtual void SetStencilWriteMask(unsigned short);
+	virtual void SetStencilComparisonFunc(DRSCompareFunc);
+	virtual void SetStencilPassOp(DRSStencilOp);
+	virtual void SetStencilFailOp(DRSStencilOp);
+	virtual void SetStencilZFailOp(DRSStencilOp);
 
 private:
 	void ChangeCullMode(DCullMode);
@@ -57,6 +72,7 @@ private:
 	D3D10_COMPARISON_FUNC GetComparisonFunc(DRSCompareFunc);
 	D3D10_BLEND_OP GetBlendOp(DRSBlendOp);
 	D3D10_BLEND GetBlendFactor(DRSBlendFactor);
+	D3D10_STENCIL_OP GetStencilOp(DRSStencilOp);
 	HRESULT CreateRasterizerState(D3D10_CULL_MODE, ID3D10RasterizerState**);
 	HRESULT CreateDepthStencilState(DepthStencilState10, ID3D10DepthStencilState**);
 	HRESULT CreateBlendState(BlendState10, ID3D10BlendState**);

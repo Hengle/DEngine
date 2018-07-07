@@ -17,6 +17,14 @@ public:
 	void SetBlendOp(char*);
 	void SetBlendSrcFactor(char*);
 	void SetBlendDstFactor(char*);
+	void SetStencilEnable(bool);
+	void SetStencilId(unsigned short);
+	void SetStencilReadMask(unsigned short);
+	void SetStencilWriteMask(unsigned short);
+	void SetStencilComp(char*);
+	void SetStencilPass(char*);
+	void SetStencilFail(char*);
+	void SetStencilZFail(char*);
 	void SetVertexFuncName(char*);
 	void SetPixelFuncName(char*);
 	void CompileShader(const char*);
@@ -25,15 +33,25 @@ public:
 
 private:
 	DRSBlendFactor GetBlendFactor(char*);
+	DRSCompareFunc GetCompFunc(char*);
+	DRSStencilOp GetStencilOp(char*);
 
 private:
 	bool m_zwrite;
+	bool m_enableStencil;
 	DRSCompareFunc m_ztest;
 	DCullMode m_cullmode;
 	DShaderRes* m_shaderRes;
 	DRSBlendOp m_blendOp;
 	DRSBlendFactor m_blendSrc;
 	DRSBlendFactor m_blendDst;
+	unsigned short m_stencilId;
+	unsigned short m_stencilReadMask;
+	unsigned short m_stencilWriteMask;
+	DRSCompareFunc m_stencilComp;
+	DRSStencilOp m_stencilPass;
+	DRSStencilOp m_stencilFail;
+	DRSStencilOp m_stencilZFail;
 	bool m_enableBlend;
 	char* m_vertexFuncName;
 	char* m_pixelFuncName;
@@ -74,6 +92,7 @@ private:
 	void InterpretPass(ifstream&, DSubShader*);
 	void InterpretTags(ifstream&, DShaderPass*);
 	void InterpretState(ifstream&, DShaderPass*);
+	void InterpretStencil(ifstream&, DShaderPass*);
 	void InterpretShader(ifstream&, DShaderPass*);
 
 private:

@@ -4,6 +4,7 @@ DRenderStateMgr11::DRenderStateMgr11(ID3D11Device *device, ID3D11DeviceContext *
 {
 	m_device = device;
 	m_deviceContext = deviceContext;
+	m_disableBlendState = 0;
 }
 
 DRenderStateMgr11::~DRenderStateMgr11()
@@ -106,7 +107,9 @@ void DRenderStateMgr11::SetBlendOp(DRSBlendOp op)
 	if (m_currentBlendState.blendOp == op)
 		return;
 	m_currentBlendState.blendOp = op;
-	RefreshDepthStencilState();
+	if (m_currentBlendState.enableBlend == false)
+		return;
+	RefreshBlendStencilState();
 }
 
 void DRenderStateMgr11::SetBlendEnable(bool enableBlend)
@@ -116,7 +119,7 @@ void DRenderStateMgr11::SetBlendEnable(bool enableBlend)
 	if (m_currentBlendState.enableBlend == enableBlend)
 		return;
 	m_currentBlendState.enableBlend = enableBlend;
-	RefreshDepthStencilState();
+	RefreshBlendStencilState();
 }
 
 void DRenderStateMgr11::SetBlendSrcFactor(DRSBlendFactor factor)
@@ -126,7 +129,9 @@ void DRenderStateMgr11::SetBlendSrcFactor(DRSBlendFactor factor)
 	if (m_currentBlendState.srcfactor == factor)
 		return;
 	m_currentBlendState.srcfactor = factor;
-	RefreshDepthStencilState();
+	if (m_currentBlendState.enableBlend == false)
+		return;
+	RefreshBlendStencilState();
 }
 
 void DRenderStateMgr11::SetBlendDstFactor(DRSBlendFactor factor)
@@ -136,7 +141,9 @@ void DRenderStateMgr11::SetBlendDstFactor(DRSBlendFactor factor)
 	if (m_currentBlendState.dstfactor == factor)
 		return;
 	m_currentBlendState.dstfactor = factor;
-	RefreshDepthStencilState();
+	if (m_currentBlendState.enableBlend == false)
+		return;
+	RefreshBlendStencilState();
 }
 
 void DRenderStateMgr11::ChangeCullMode(DCullMode cullMode)
@@ -187,7 +194,7 @@ void DRenderStateMgr11::RefreshBlendStencilState()
 			if (!FAILED(result))
 			{
 				m_disableBlendState = state;
-				m_deviceContext->OMSetBlendState(state, blendFactor, 0xffffffff);
+				m_deviceContext->OMSetBlendState(m_disableBlendState, blendFactor, 0xffffffff);
 			}
 		}
 		else
@@ -372,7 +379,7 @@ HRESULT DRenderStateMgr11::CreateBlendState(BlendState11 desc, ID3D11BlendState 
 	D3D11_BLEND_DESC blenddesc;
 	ZeroMemory(&blenddesc, sizeof(blenddesc));
 
-	blenddesc.RenderTarget[0].BlendEnable = true;
+	blenddesc.RenderTarget[0].BlendEnable = TRUE;
 	blenddesc.RenderTarget[0].BlendOp = GetBlendOp(desc.blendOp);
 	blenddesc.RenderTarget[0].BlendOpAlpha = GetBlendOp(desc.blendOp);
 	blenddesc.RenderTarget[0].DestBlend = GetBlendFactor(desc.dstfactor);
@@ -390,7 +397,14 @@ HRESULT DRenderStateMgr11::CreateDisableBlendState(ID3D11BlendState ** state)
 	D3D11_BLEND_DESC blenddesc;
 	ZeroMemory(&blenddesc, sizeof(blenddesc));
 
-	blenddesc.RenderTarget[0].BlendEnable = false;
+	blenddesc.RenderTarget[0].BlendEnable = FALSE;
+	blenddesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	blenddesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	blenddesc.RenderTarget[0].DestBlend = D3D11_BLEND_ZERO;
+	blenddesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	blenddesc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+	blenddesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	blenddesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
 	HRESULT result = m_device->CreateBlendState(&blenddesc, state);
 	return result;

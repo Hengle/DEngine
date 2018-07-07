@@ -22,6 +22,9 @@ void DRenderStateMgr10::Init()
 	m_currentDepthStencilState.stencilId = 1;
 
 	RefreshDepthStencilState();
+
+	m_currentBlendState.enableBlend = false;
+	RefreshBlendStencilState();
 }
 
 void DRenderStateMgr10::Release()
@@ -46,6 +49,22 @@ void DRenderStateMgr10::Release()
 		}
 	}
 	m_depthStencilStates.clear();
+
+	std::map<unsigned long, ID3D10BlendState*>::iterator  biter;
+	for (biter = m_blendStates.begin(); biter != m_blendStates.end(); biter++)
+	{
+		if (biter->second != NULL)
+		{
+			biter->second->Release();
+		}
+	}
+	m_blendStates.clear();
+
+	if (m_disableBlendState != NULL)
+	{
+		m_disableBlendState->Release();
+		m_disableBlendState = NULL;
+	}
 }
 
 void DRenderStateMgr10::SetCullMode(DCullMode cullMode)
@@ -75,6 +94,52 @@ void DRenderStateMgr10::SetZTestFunc(DRSCompareFunc ztest)
 		return;
 	m_currentDepthStencilState.ztest = ztest;
 	RefreshDepthStencilState();
+}
+
+void DRenderStateMgr10::SetBlendOp(DRSBlendOp op)
+{
+	if (m_device == NULL)
+		return;
+	if (m_currentBlendState.blendOp == op)
+		return;
+	m_currentBlendState.blendOp = op;
+	if (m_currentBlendState.enableBlend == false)
+		return;
+	RefreshBlendStencilState();
+}
+
+void DRenderStateMgr10::SetBlendEnable(bool enableBlend)
+{
+	if (m_device == NULL)
+		return;
+	if (m_currentBlendState.enableBlend == enableBlend)
+		return;
+	m_currentBlendState.enableBlend = enableBlend;
+	RefreshBlendStencilState();
+}
+
+void DRenderStateMgr10::SetBlendSrcFactor(DRSBlendFactor factor)
+{
+	if (m_device == NULL)
+		return;
+	if (m_currentBlendState.srcfactor == factor)
+		return;
+	m_currentBlendState.srcfactor = factor;
+	if (m_currentBlendState.enableBlend == false)
+		return;
+	RefreshBlendStencilState();
+}
+
+void DRenderStateMgr10::SetBlendDstFactor(DRSBlendFactor factor)
+{
+	if (m_device == NULL)
+		return;
+	if (m_currentBlendState.dstfactor == factor)
+		return;
+	m_currentBlendState.dstfactor = factor;
+	if (m_currentBlendState.enableBlend == false)
+		return;
+	RefreshBlendStencilState();
 }
 
 void DRenderStateMgr10::ChangeCullMode(DCullMode cullMode)
@@ -108,6 +173,54 @@ void DRenderStateMgr10::RefreshDepthStencilState()
 	}
 }
 
+void DRenderStateMgr10::RefreshBlendStencilState()
+{
+	float blendFactor[4];
+
+	blendFactor[0] = 0.0f;
+	blendFactor[1] = 0.0f;
+	blendFactor[2] = 0.0f;
+	blendFactor[3] = 0.0f;
+	if (m_currentBlendState.enableBlend == false)
+	{
+		if (m_disableBlendState == NULL)
+		{
+			ID3D10BlendState* state = 0;
+			HRESULT result = CreateDisableBlendState(&state);
+			if (!FAILED(result))
+			{
+				m_disableBlendState = state;
+				m_device->OMSetBlendState(state, blendFactor, 0xffffffff);
+			}
+		}
+		else
+		{
+			m_device->OMSetBlendState(m_disableBlendState, blendFactor, 0xffffffff);
+		}
+	}
+	else
+	{
+
+		unsigned long key = m_currentBlendState.GetKey();
+
+		if (m_blendStates.find(key) != m_blendStates.end())
+		{
+			ID3D10BlendState* state = m_blendStates.at(key);
+			m_device->OMSetBlendState(state, blendFactor, 0xffffffff);
+		}
+		else
+		{
+			ID3D10BlendState* state;
+			HRESULT result = CreateBlendState(m_currentBlendState, &state);
+			if (!FAILED(result))
+			{
+				m_blendStates.insert(std::pair<unsigned long, ID3D10BlendState*>(key, state));
+				m_device->OMSetBlendState(state, blendFactor, 0xffffffff);
+			}
+		}
+	}
+}
+
 void DRenderStateMgr10::InitRasterizerStates()
 {
 	HRESULT result;
@@ -130,6 +243,79 @@ void DRenderStateMgr10::InitRasterizerStates()
 	if (!FAILED(result))
 	{
 		m_rasterizerStates.insert(std::pair<DCullMode, ID3D10RasterizerState*>(DCullMode_Off, state));
+	}
+}
+
+D3D10_COMPARISON_FUNC DRenderStateMgr10::GetComparisonFunc(DRSCompareFunc func)
+{
+	switch (func)
+	{
+	case DRSCompareFunc_Always:
+		return D3D10_COMPARISON_ALWAYS;
+	case DRSCompareFunc_Equal:
+		return D3D10_COMPARISON_EQUAL;
+	case DRSCompareFunc_GEqual:
+		return D3D10_COMPARISON_GREATER_EQUAL;
+	case DRSCompareFunc_Greater:
+		return D3D10_COMPARISON_GREATER;
+	case DRSCompareFunc_LEqual:
+		return D3D10_COMPARISON_LESS_EQUAL;
+	case DRSCompareFunc_Less:
+		return D3D10_COMPARISON_LESS;
+	case DRSCompareFunc_Never:
+		return D3D10_COMPARISON_NEVER;
+	case DRSCompareFunc_NotEqual:
+		return D3D10_COMPARISON_NOT_EQUAL;
+	default:
+		return D3D10_COMPARISON_LESS_EQUAL;
+	}
+}
+
+D3D10_BLEND_OP DRenderStateMgr10::GetBlendOp(DRSBlendOp op)
+{
+	switch (op)
+	{
+	case DRSBlendOp_Add:
+		return D3D10_BLEND_OP_ADD;
+	case DRSBlendOp_Sub:
+		return D3D10_BLEND_OP_SUBTRACT;
+	case DRSBlendOp_RevSub:
+		return D3D10_BLEND_OP_REV_SUBTRACT;
+	case DRSBlendOp_Min:
+		return D3D10_BLEND_OP_MIN;
+	case DRSBlendOp_Max:
+		return D3D10_BLEND_OP_MAX;
+	default:
+		return D3D10_BLEND_OP_ADD;
+	}
+}
+
+D3D10_BLEND DRenderStateMgr10::GetBlendFactor(DRSBlendFactor factor)
+{
+	switch (factor)
+	{
+	case DRSBlendFactor_One:
+		return D3D10_BLEND_ONE;
+	case DRSBlendFactor_Zero:
+		return D3D10_BLEND_ZERO;
+	case DRSBlendFactor_SrcColor:
+		return D3D10_BLEND_SRC_COLOR;
+	case DRSBlendFactor_SrcAlpha:
+		return D3D10_BLEND_SRC_ALPHA;
+	case DRSBlendFactor_DstColor:
+		return D3D10_BLEND_DEST_COLOR;
+	case DRSBlendFactor_DstAlpha:
+		return D3D10_BLEND_DEST_ALPHA;
+	case DRSBlendFactor_OneMinusSrcColor:
+		return D3D10_BLEND_INV_SRC_COLOR;
+	case DRSBlendFactor_OneMinusSrcAlpha:
+		return D3D10_BLEND_INV_SRC_ALPHA;
+	case DRSBlendFactor_OneMinusDstColor:
+		return D3D10_BLEND_INV_DEST_COLOR;
+	case DRSBlendFactor_OneMinusDstAlpha:
+		return D3D10_BLEND_INV_DEST_ALPHA;
+	default:
+		return D3D10_BLEND_ZERO;
 	}
 }
 
@@ -164,35 +350,7 @@ HRESULT DRenderStateMgr10::CreateDepthStencilState(DepthStencilState10 desc, ID3
 	else
 		depthStencilDesc.DepthWriteMask = D3D10_DEPTH_WRITE_MASK_ZERO;
 
-	switch (desc.ztest)
-	{
-	case DRSCompareFunc_Always:
-		depthStencilDesc.DepthFunc = D3D10_COMPARISON_ALWAYS;
-		break;
-	case DRSCompareFunc_Equal:
-		depthStencilDesc.DepthFunc = D3D10_COMPARISON_EQUAL;
-		break;
-	case DRSCompareFunc_GEqual:
-		depthStencilDesc.DepthFunc = D3D10_COMPARISON_GREATER_EQUAL;
-		break;
-	case DRSCompareFunc_Greater:
-		depthStencilDesc.DepthFunc = D3D10_COMPARISON_GREATER;
-		break;
-	case DRSCompareFunc_LEqual:
-		depthStencilDesc.DepthFunc = D3D10_COMPARISON_LESS_EQUAL;
-		break;
-	case DRSCompareFunc_Less:
-		depthStencilDesc.DepthFunc = D3D10_COMPARISON_LESS;
-		break;
-	case DRSCompareFunc_Never:
-		depthStencilDesc.DepthFunc = D3D10_COMPARISON_NEVER;
-		break;
-	case DRSCompareFunc_NotEqual:
-		depthStencilDesc.DepthFunc = D3D10_COMPARISON_NOT_EQUAL;
-		break;
-	default:
-		break;
-	}
+	depthStencilDesc.DepthFunc = GetComparisonFunc(desc.ztest);
 
 	depthStencilDesc.StencilEnable = true;
 	depthStencilDesc.StencilReadMask = 0xFF;
@@ -212,6 +370,36 @@ HRESULT DRenderStateMgr10::CreateDepthStencilState(DepthStencilState10 desc, ID3
 	return result;
 }
 
+HRESULT DRenderStateMgr10::CreateBlendState(BlendState10 desc, ID3D10BlendState ** state)
+{
+	D3D10_BLEND_DESC blenddesc;
+	ZeroMemory(&blenddesc, sizeof(blenddesc));
+
+	blenddesc.BlendEnable[0] = true;
+	blenddesc.BlendOp = GetBlendOp(desc.blendOp);
+	blenddesc.BlendOpAlpha = GetBlendOp(desc.blendOp);
+	blenddesc.DestBlend = GetBlendFactor(desc.dstfactor);
+	blenddesc.DestBlendAlpha = GetBlendFactor(desc.dstfactor);
+	blenddesc.RenderTargetWriteMask[0] = 0x0f;
+	blenddesc.SrcBlend = GetBlendFactor(desc.srcfactor);
+	blenddesc.SrcBlendAlpha = GetBlendFactor(desc.srcfactor);
+
+	HRESULT result = m_device->CreateBlendState(&blenddesc, state);
+	return result;
+}
+
+HRESULT DRenderStateMgr10::CreateDisableBlendState(ID3D10BlendState ** state)
+{
+	D3D10_BLEND_DESC blenddesc;
+	ZeroMemory(&blenddesc, sizeof(blenddesc));
+
+	blenddesc.BlendEnable[0] = false;
+	blenddesc.RenderTargetWriteMask[0] = D3D10_COLOR_WRITE_ENABLE_ALL;
+
+	HRESULT result = m_device->CreateBlendState(&blenddesc, state);
+	return result;
+}
+
 unsigned long DRenderStateMgr10::DepthStencilState10::GetKey()
 {
 	unsigned long key = 0;
@@ -220,5 +408,14 @@ unsigned long DRenderStateMgr10::DepthStencilState10::GetKey()
 	unsigned long func = (unsigned long)ztest;
 	key = key | func;
 
+	return key;
+}
+
+unsigned long DRenderStateMgr10::BlendState10::GetKey()
+{
+	unsigned long key = 0;
+	key = blendOp << 8;
+	key = key | (srcfactor << 4);
+	key = key | dstfactor;
 	return key;
 }

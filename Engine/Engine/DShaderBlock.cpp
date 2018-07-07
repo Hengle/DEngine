@@ -284,6 +284,21 @@ void DShaderBlock::InterpretState(ifstream & ifile, DShaderPass* pass)
 				if (pass != NULL)
 					pass->SetCullMode(state);
 			}
+			else if (strcmp(read, "blendop") == 0)
+			{
+				ifile >> state;
+				if (pass != NULL)
+					pass->SetBlendOp(state);
+			}
+			else if (strcmp(read, "blend") == 0)
+			{
+				ifile >> state;
+				if (pass != NULL)
+					pass->SetBlendSrcFactor(state);
+				ifile >> state;
+				if (pass != NULL)
+					pass->SetBlendDstFactor(state);
+			}
 		}
 	}
 }
@@ -392,6 +407,10 @@ DShaderPass::DShaderPass()
 	m_zwrite = true;
 	m_ztest = DRSCompareFunc_LEqual;
 	m_cullmode = DCullMode_Back;
+	m_enableBlend = false;
+	m_blendOp = DRSBlendOp_Add;
+	m_blendSrc = DRSBlendFactor_SrcAlpha;
+	m_blendDst = DRSBlendFactor_OneMinusSrcAlpha;
 }
 
 void DShaderPass::Release()
@@ -448,6 +467,32 @@ void DShaderPass::SetCullMode(char * state)
 		m_cullmode = DCullMode_Front;
 }
 
+void DShaderPass::SetBlendOp(char * state)
+{
+	if (strcmp(state, "add") == 0)
+		m_blendOp = DRSBlendOp_Add;
+	else if (strcmp(state, "sub") == 0)
+		m_blendOp = DRSBlendOp_Sub;
+	else if (strcmp(state, "revsub") == 0)
+		m_blendOp = DRSBlendOp_RevSub;
+	else if (strcmp(state, "min") == 0)
+		m_blendOp = DRSBlendOp_Min;
+	else if (strcmp(state, "max") == 0)
+		m_blendOp = DRSBlendOp_Max;
+}
+
+void DShaderPass::SetBlendSrcFactor(char * state)
+{
+	m_blendSrc = GetBlendFactor(state);
+	m_enableBlend = true;
+}
+
+void DShaderPass::SetBlendDstFactor(char * state)
+{
+	m_blendDst = GetBlendFactor(state);
+	m_enableBlend = true;
+}
+
 void DShaderPass::SetVertexFuncName(char *vertexFuncName)
 {
 	int len = strlen(vertexFuncName) + 1;
@@ -482,4 +527,33 @@ void DShaderPass::ApplyStates()
 	DGraphics::SetCullMode(m_cullmode);
 	DGraphics::SetZTestFunc(m_ztest);
 	DGraphics::SetZWriteEnable(m_zwrite);
+	DGraphics::SetBlendEnable(m_enableBlend);
+	DGraphics::SetBlendOp(m_blendOp);
+	DGraphics::SetBlendDstFactor(m_blendDst);
+	DGraphics::SetBlendSrcFactor(m_blendSrc);
+}
+
+DRSBlendFactor DShaderPass::GetBlendFactor(char * state)
+{
+	if (strcmp(state, "one") == 0)
+		return DRSBlendFactor_One;
+	else if (strcmp(state, "zero") == 0)
+		return DRSBlendFactor_Zero;
+	else if (strcmp(state, "srccolor") == 0)
+		return DRSBlendFactor_SrcColor;
+	else if (strcmp(state, "srcalpha") == 0)
+		return DRSBlendFactor_SrcAlpha;
+	else if (strcmp(state, "dstcolor") == 0)
+		return DRSBlendFactor_DstColor;
+	else if (strcmp(state, "dstalpha") == 0)
+		return DRSBlendFactor_DstAlpha;
+	else if (strcmp(state, "oneminussrccolor") == 0)
+		return DRSBlendFactor_OneMinusSrcColor;
+	else if (strcmp(state, "oneminussrcalpha") == 0)
+		return DRSBlendFactor_OneMinusSrcAlpha;
+	else if (strcmp(state, "oneminusdstcolor") == 0)
+		return DRSBlendFactor_OneMinusDstColor;
+	else if (strcmp(state, "oneminusdstalpha") == 0)
+		return DRSBlendFactor_OneMinusDstAlpha;
+	return DRSBlendFactor_Zero;
 }

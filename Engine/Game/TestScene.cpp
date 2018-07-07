@@ -188,8 +188,8 @@ void TestScene::TestLoad()
 	DCamera* cam = new DCamera();
 	DTransform* transform;
 
-	DShader* replacetest = DRes::Load<DShader>(DEFAULT_GROUP, REPLACE_SHADER);
-	cam->SetReplaceShader(replacetest);
+	//DShader* replacetest = DRes::Load<DShader>(DEFAULT_GROUP, REPLACE_SHADER);
+	//cam->SetReplaceShader(replacetest);
 
 	float w, h;
 	DSystem::GetGraphicsMgr()->GetResolution(w, h);

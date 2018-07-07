@@ -14,6 +14,9 @@ public:
 	void SetZWrite(char*);
 	void SetZTest(char*);
 	void SetCullMode(char*);
+	void SetBlendOp(char*);
+	void SetBlendSrcFactor(char*);
+	void SetBlendDstFactor(char*);
 	void SetVertexFuncName(char*);
 	void SetPixelFuncName(char*);
 	void CompileShader(const char*);
@@ -21,10 +24,17 @@ public:
 	void ApplyStates();
 
 private:
+	DRSBlendFactor GetBlendFactor(char*);
+
+private:
 	bool m_zwrite;
 	DRSCompareFunc m_ztest;
 	DCullMode m_cullmode;
 	DShaderRes* m_shaderRes;
+	DRSBlendOp m_blendOp;
+	DRSBlendFactor m_blendSrc;
+	DRSBlendFactor m_blendDst;
+	bool m_enableBlend;
 	char* m_vertexFuncName;
 	char* m_pixelFuncName;
 };

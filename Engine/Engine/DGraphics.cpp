@@ -333,6 +333,42 @@ void DGraphics::SetZTestFunc(DRSCompareFunc ztest)
 	}
 }
 
+void DGraphics::SetBlendOp(DRSBlendOp op)
+{
+	DRenderStateMgr* mgr = DSystem::GetGraphicsMgr()->GetGLCore()->GetRenderStateMgr();
+	if (mgr != NULL)
+	{
+		mgr->SetBlendOp(op);
+	}
+}
+
+void DGraphics::SetBlendEnable(bool enable)
+{
+	DRenderStateMgr* mgr = DSystem::GetGraphicsMgr()->GetGLCore()->GetRenderStateMgr();
+	if (mgr != NULL)
+	{
+		mgr->SetBlendEnable(enable);
+	}
+}
+
+void DGraphics::SetBlendSrcFactor(DRSBlendFactor factor)
+{
+	DRenderStateMgr* mgr = DSystem::GetGraphicsMgr()->GetGLCore()->GetRenderStateMgr();
+	if (mgr != NULL)
+	{
+		mgr->SetBlendSrcFactor(factor);
+	}
+}
+
+void DGraphics::SetBlendDstFactor(DRSBlendFactor factor)
+{
+	DRenderStateMgr* mgr = DSystem::GetGraphicsMgr()->GetGLCore()->GetRenderStateMgr();
+	if (mgr != NULL)
+	{
+		mgr->SetBlendDstFactor(factor);
+	}
+}
+
 void DGraphics::SetViewPort(DRect & viewPort)
 {
 	DGLCore* gl = DSystem::GetGraphicsMgr()->GetGLCore();

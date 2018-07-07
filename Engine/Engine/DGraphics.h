@@ -34,6 +34,10 @@ public:
 	static void SetCullMode(DCullMode);
 	static void SetZWriteEnable(bool);
 	static void SetZTestFunc(DRSCompareFunc);
+	static void SetBlendOp(DRSBlendOp);
+	static void SetBlendEnable(bool);
+	static void SetBlendSrcFactor(DRSBlendFactor);
+	static void SetBlendDstFactor(DRSBlendFactor);
 
 	static void SetViewPort(DRect&);
 

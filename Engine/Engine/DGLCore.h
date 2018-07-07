@@ -2,6 +2,7 @@
 #include "DColor.h"
 #include "DMath.h"
 #include "DGraphicsDefine.h"
+#include "DEngineDefine.h"
 #include <d3dcommon.h>
 #include <string>
 #include <map>
@@ -169,7 +170,7 @@ protected:
 	int m_vertexUsage;
 };
 
-class DRenderStateMgr
+interface IRenderStateMgr
 {
 public:
 	virtual void Init() = 0;
@@ -181,6 +182,13 @@ public:
 	virtual void SetBlendEnable(bool) = 0;
 	virtual void SetBlendSrcFactor(DRSBlendFactor) = 0;
 	virtual void SetBlendDstFactor(DRSBlendFactor) = 0;
+	virtual void SetStencilRefId(UINT) = 0;
+	virtual void SetStencilEnable(bool) = 0;
+	virtual void SetStencilReadMask(unsigned short) = 0;
+	virtual void SetStencilWriteMask(unsigned short) = 0;
+	virtual void SetStencilComparisonFunc(DRSCompareFunc) = 0;
+	virtual void SetStencilFailOp(DRSStencilOp) = 0;
+	virtual void SetStencilZFailOp(DRSStencilOp) = 0;
 };
 
 /*抽象图形库模块*/

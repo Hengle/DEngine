@@ -5,7 +5,7 @@
 /*
 	Direct3D10渲染状态管理器
 */
-class DRenderStateMgr10 : public DRenderStateMgr
+class DRenderStateMgr10 : public IRenderStateMgr
 {
 private:
 	struct DepthStencilState10

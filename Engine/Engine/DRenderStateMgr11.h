@@ -5,7 +5,7 @@
 /*
 	Direct3D11渲染状态管理器
 */
-class DRenderStateMgr11 : public DRenderStateMgr
+class DRenderStateMgr11 : public IRenderStateMgr
 {
 private:
 	struct DepthStencilState11
@@ -15,8 +15,13 @@ private:
 
 	public:
 		bool zwrite;
+		bool enableStencil;
 		UINT stencilId;
 		DRSCompareFunc ztest;
+		DRSCompareFunc stencilComp;
+		DRSStencilOp stencilPassOp;
+		DRSStencilOp stencilFailOp;
+		DRSStencilOp stencilZFailOp;
 	};
 
 private:

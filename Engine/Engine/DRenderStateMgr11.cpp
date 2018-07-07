@@ -414,9 +414,16 @@ unsigned long DRenderStateMgr11::DepthStencilState11::GetKey()
 {
 	unsigned long key = 0;
 	if (zwrite)
-		key = 1L << 4;
-	unsigned long func = (unsigned long)ztest;
+		key = 1L << 15;
+	unsigned long func = ztest << 12;
 	key = key | func;
+	if (enableStencil)
+	{
+		key = key | (stencilComp << 9);
+		key = key | (stencilPassOp << 6);
+		key = key | (stencilFailOp << 3);
+		key = key | (stencilZFailOp);
+	}
 
 	return key;
 }

@@ -4,7 +4,7 @@
 /*
 	Direct3D9渲染状态管理器
 */
-class DRenderStateMgr9 : public DRenderStateMgr
+class DRenderStateMgr9 : public IRenderStateMgr
 {
 public:
 	DRenderStateMgr9(IDirect3DDevice9*);

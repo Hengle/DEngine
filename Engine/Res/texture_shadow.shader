@@ -84,7 +84,7 @@ SubShader {
 					float4 depthColor = g_shadowMap.Sample(SampleType, input.shadowUV.xy);
 
 					if(input.shadowUV.z - depthColor.r > 0.0001f)
-						textureColor.rgb *= 0.0f;
+						textureColor.rgb *= 0.3f;
 
     			return textureColor;
 			}

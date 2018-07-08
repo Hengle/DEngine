@@ -43,7 +43,11 @@ void DLight::SetIntensity(float intensity)
 
 void DLight::RenderShadow()
 {
-	DGraphics::ResetViewPort();
+	float w = m_shadowMap->GetWidth();
+	float h = m_shadowMap->GetHeight();
+	DRect rect = DRect(0, 0, w, h);
+	//DGraphics::ResetViewPort();
+	DGraphics::SetViewPort(rect);
 	BeginRenderShadow();
 	DScene::Draw(false, m_shadowShader);
 	EndRenderShadow();
@@ -52,9 +56,9 @@ void DLight::RenderShadow()
 void DLight::Init()
 {
 	DSceneObject::Init();
-	float w, h;
-	DSystem::GetGraphicsMgr()->GetResolution(w, h);
-	m_shadowMap = DRenderTexture::Create(w, h);
+	//float w, h;
+	//DSystem::GetGraphicsMgr()->GetResolution(w, h);
+	m_shadowMap = DRenderTexture::Create(1024, 1024);
 	m_shadowShader = DShader::Create("../Res/shadow.shader");
 
 	DMatrix4x4::Ortho(&m_proj, 30.0f, 30.0f, 0.0f, 34.0f);

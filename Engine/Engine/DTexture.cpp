@@ -62,9 +62,11 @@ DTexture2D * DTexture2D::Create(WCHAR *filename, DWrapMode wrapmode)
 	return tex;
 }
 
-DRenderTexture::DRenderTexture() : DTexture()
+DRenderTexture::DRenderTexture(float width, float height) : DTexture()
 {
 	m_renderTextureRes = 0;
+	m_width = width;
+	m_height = height;
 }
 
 DRenderTexture::~DRenderTexture()
@@ -101,9 +103,19 @@ DRenderTextureViewRes * DRenderTexture::GetTextureRes()
 	return m_renderTextureRes;
 }
 
+float DRenderTexture::GetWidth() const
+{
+	return m_width;
+}
+
+float DRenderTexture::GetHeight() const
+{
+	return m_height;
+}
+
 DRenderTexture * DRenderTexture::Create(float width, float height)
 {
-	DRenderTexture* tex = new DRenderTexture();
+	DRenderTexture* tex = new DRenderTexture(width, height);
 	tex->m_renderTextureRes = DSystem::GetGraphicsMgr()->GetGLCore()->CreateRenderTextureRes(width, height);
 	tex->m_wrapMode = DWrapMode_Repeat;
 	return tex;
@@ -111,7 +123,7 @@ DRenderTexture * DRenderTexture::Create(float width, float height)
 
 DRenderTexture * DRenderTexture::Create(float width, float height, DWrapMode wrapMode)
 {
-	DRenderTexture* tex = new DRenderTexture();
+	DRenderTexture* tex = new DRenderTexture(width, height);
 	tex->m_renderTextureRes = DSystem::GetGraphicsMgr()->GetGLCore()->CreateRenderTextureRes(width, height);
 	tex->m_wrapMode = wrapMode;
 	return tex;

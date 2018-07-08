@@ -1,6 +1,7 @@
 ﻿#include "DShaderRes11.h"
 #include "DTextureRes11.h"
 #include <d3dcompiler.h>
+#include <fstream>
 
 DShaderRes11::DShaderRes11(ID3D11Device * device, ID3D11DeviceContext * deviceContext) : DShaderRes()
 {
@@ -239,7 +240,7 @@ bool DShaderRes11::OnInit(const char * content, char * vsfunc, char * psfunc)
 	{
 		if (errorMessage)
 		{
-			//OutputShaderErrorMessage(errorMessage, vsFilename);
+			OutputShaderErrorMessage(errorMessage);
 			errorMessage->Release();
 			errorMessage = 0;
 		}
@@ -787,4 +788,36 @@ HRESULT DShaderRes11::InitPixelShader(ID3DBlob* pShaderBlob, ID3D11Device* pD3DD
 	pPixelShaderReflection->Release();
 
 	return hr;
+}
+
+void DShaderRes11::OutputShaderErrorMessage(ID3D10Blob * errorMessage)
+{
+	char* compileErrors;
+	unsigned long bufferSize, i;
+	std::ofstream fout;
+
+
+	// Get a pointer to the error message text buffer.
+	compileErrors = (char*)(errorMessage->GetBufferPointer());
+
+	// Get the length of the message.
+	bufferSize = errorMessage->GetBufferSize();
+
+	// Open a file to write the error message to.
+	fout.open("shader-error.txt");
+
+	// Write out the error message.
+	for (i = 0; i<bufferSize; i++)
+	{
+		fout << compileErrors[i];
+	}
+
+	// Close the file.
+	fout.close();
+
+	// Release the error message.
+	errorMessage->Release();
+	errorMessage = 0;
+
+	return;
 }

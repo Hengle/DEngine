@@ -5,7 +5,7 @@
 DCamera::DCamera()
 {
 	m_filter = 0;
-	m_fieldOfView = D_PI / 3.0f;;
+	m_fieldOfView = D_PI / 3.0f;
 	m_near = 0.3f;
 	m_far = 1000.0f;
 	m_orthoSize = 5.0f;
@@ -57,6 +57,8 @@ void DCamera::Render()
 	else
 		DScene::Draw(true);
 	EndRender();
+
+	
 }
 
 void DCamera::Init()

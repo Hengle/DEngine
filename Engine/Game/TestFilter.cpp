@@ -7,7 +7,9 @@ TestFilter::TestFilter()
 {
 	//m_shader = DRes::Load<DShader>(DEFAULT_GROUP, PEFFECT_SHADER);
 	//m_mat = new DMaterial(m_shader);
-	m_mat = DRes::Load<DMaterial>(DEFAULT_GROUP, PEFFECT_MAT);
+	//m_mat = DRes::Load<DMaterial>(DEFAULT_GROUP, PEFFECT_MAT);
+	testshadow = DShader::Create("../Res/testshadow.shader");
+	m_mat = new DMaterial(testshadow);
 }
 
 
@@ -22,6 +24,18 @@ void TestFilter::Render(DRenderTexture * screenTexture)
 
 void TestFilter::Release()
 {
+	if (testshadow != NULL)
+	{
+		testshadow->Destroy();
+		delete testshadow;
+		testshadow = NULL;
+	}
+	if (m_mat != NULL)
+	{
+		m_mat->Destroy();
+		delete m_mat;
+		m_mat = NULL;
+	}
 	/*if (m_shader != NULL)
 	{
 		m_shader->Destroy();

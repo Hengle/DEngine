@@ -424,7 +424,7 @@ void TestScene::OnUpdate()
 
 		m_camera->GetTransform()->GetForward(forward);
 
-		position = forward*-14.0f;
+		position = forward*-17.0f;
 		m_camera->GetTransform()->SetPosition(position);
 	}
 }

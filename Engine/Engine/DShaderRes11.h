@@ -14,6 +14,7 @@ public:
 private:
 	HRESULT InitVertexShader(ID3DBlob*, ID3D11Device*, ID3D11InputLayout**, int*);
 	HRESULT InitPixelShader(ID3DBlob*, ID3D11Device*);
+	void OutputShaderErrorMessage(ID3D10Blob*);
 
 protected:
 	virtual bool OnInit(const char* content, char* vsfunc, char* psfunc);

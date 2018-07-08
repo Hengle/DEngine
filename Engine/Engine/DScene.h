@@ -25,6 +25,7 @@ public:
 	virtual void Destroy();
 
 	static void Draw(bool callOnRender, DShader* replaceShader = NULL);
+	static void DrawShadow();
 
 protected:
 	virtual void OnGUI();

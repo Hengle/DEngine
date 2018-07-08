@@ -18,19 +18,19 @@ void DDisplayObject::Render(DShader* replaceShader)
 	if (m_mesh != NULL && m_material != NULL && m_isVisible)
 	{
 		DMatrix4x4 world;
-		DCamera* cur;
-		DCamera::GetCurrentCamera(&cur);
+		//DCamera* cur;
+		//DCamera::GetCurrentCamera(&cur);
 		m_Transform->GetLocalToWorld(world);
 		if (replaceShader != NULL)
 		{
 			DShader* current = m_material->GetShader();
 			m_material->SetShader(replaceShader);
-			DGraphics::DrawMesh(m_mesh, world, m_material, cur);
+			DGraphics::DrawMesh(m_mesh, world, m_material);
 			m_material->SetShader(current);
 		}
 		else
 		{
-			DGraphics::DrawMesh(m_mesh, world, m_material, cur);
+			DGraphics::DrawMesh(m_mesh, world, m_material);
 		}
 	}
 }

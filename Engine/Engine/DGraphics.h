@@ -27,7 +27,7 @@ public:
 	static void SetRenderTarget(DRenderTexture* = NULL);
 	static void EndSetRenderTarget(DRenderTexture* = NULL);
 
-	static void DrawMesh(DMesh*, const DMatrix4x4&, DMaterial*, const DCamera*);
+	static void DrawMesh(DMesh*, const DMatrix4x4&, DMaterial*);
 	static void DrawTexture(DTexture*, DMaterial*);
 	static void DrawSkyBox(DMaterial*, const DCamera*);
 	
@@ -40,6 +40,7 @@ public:
 	static void SetBlendDstFactor(DRSBlendFactor);
 
 	static void SetViewPort(DRect&);
+	static void ResetViewPort();
 
 	static void GlBegin();
 	static void GlEnd();

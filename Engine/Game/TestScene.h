@@ -34,4 +34,5 @@ private:
 	DLight* m_light;
 	/*DMesh* testcolormesh;
 	DDisplayObject* testcolorobj;*/
+	
 };

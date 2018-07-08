@@ -90,6 +90,9 @@ bool DGraphics::Execute()
 
 	m_GUI->Render();
 	//m_GL->EndRender();
+
+	DScene::DrawShadow();
+
 	m_GL->Present();
 
 	time->Wait();
@@ -227,21 +230,22 @@ void DGraphics::EndSetRenderTarget(DRenderTexture * res)
 	}
 }
 
-void DGraphics::DrawMesh(DMesh * mesh, const DMatrix4x4 & matrix, DMaterial * material, const DCamera * camera)
+void DGraphics::DrawMesh(DMesh * mesh, const DMatrix4x4 & matrix, DMaterial * material)
 {
-	if (mesh == NULL || material == NULL || camera == NULL)
+	if (mesh == NULL || material == NULL)
 		return;
 	DMatrix4x4 view, proj;
-	camera->GetViewMatrix(view);
-	camera->GetProjection(proj);
+	/*camera->GetViewMatrix(view);
+	camera->GetProjection(proj);*/
+
+	DGraphics::GetModelView(view);
+	DGraphics::GetProjection(proj);
 
 	DMatrix4x4 world = matrix;
-	DMatrix4x4 v = view;
-	DMatrix4x4 p = proj;
 
 	material->SetMatrix("g_worldMatrix", world);
-	material->SetMatrix("g_viewMatrix", v);
-	material->SetMatrix("g_projectionMatrix", p);
+	material->SetMatrix("g_viewMatrix", view);
+	material->SetMatrix("g_projectionMatrix", proj);
 
 	int passcount = material->GetPassCount();
 	int i;
@@ -303,7 +307,7 @@ void DGraphics::DrawSkyBox(DMaterial * material, const DCamera * camera)
 	//material->SetZWrite(false);
 	//material->SetCullMode(DCullMode_Off);
 
-	DrawMesh(DSystem::GetGraphicsMgr()->m_skyMesh, world, material, camera);
+	DrawMesh(DSystem::GetGraphicsMgr()->m_skyMesh, world, material);
 }
 
 void DGraphics::SetCullMode(DCullMode cullMode)
@@ -376,6 +380,20 @@ void DGraphics::SetViewPort(DRect & viewPort)
 	{
 		gl->SetViewPort(viewPort);
 	}
+}
+
+void DGraphics::ResetViewPort()
+{
+	DGLCore* gl = DSystem::GetGraphicsMgr()->GetGLCore();
+	float w, h;
+	gl->GetResolution(w, h);
+
+	DRect vp;
+	vp.x = 0;
+	vp.y = 0;
+	vp.width = w;
+	vp.height = h;
+	gl->SetViewPort(vp);
 }
 
 void DGraphics::GlBegin()

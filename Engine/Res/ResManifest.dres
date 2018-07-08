@@ -24,6 +24,10 @@
 		#PATH ../Res/replacetest.shader
 	#RES_END
 
+	#RES_BEGIN SHADER 1006 
+		#PATH ../Res/texture_shadow.shader
+	#RES_END
+
 	#RES_BEGIN TEXTURE2D 2000
 		#PATH ../Res/decal.jpg
 		#WRAPMODE REPEAT
@@ -38,7 +42,7 @@
 	#RES_END
 
 	#RES_BEGIN MATERIAL 3000
-		#SHADER 0 1000
+		#SHADER 0 1006
 		#PARAM_TEX shaderTexture 0 2000
 	#RES_END
 

@@ -208,6 +208,13 @@ void DScene::Draw(bool callOnRender, DShader* replaceShader)
 		current->DrawScene(callOnRender, replaceShader);
 }
 
+void DScene::DrawShadow()
+{
+	DScene* current = DSystem::GetSceneMgr()->GetCurrentScene();
+	if (current != NULL && current->m_light != NULL)
+		current->m_light->RenderShadow();
+}
+
 void DScene::OnGUI()
 {
 }

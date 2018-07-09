@@ -24,7 +24,7 @@ public:
 	virtual void Present();
 	virtual void Clear(bool, bool, DColor&, DRenderTextureViewRes* = NULL);
 	virtual void SetRenderTarget(DRenderTextureViewRes* = NULL);
-	virtual void SetViewPort(DRect&);
+	virtual void SetViewPort(float, float, float, float);
 	virtual void EndSetRenderTarget(DRenderTextureViewRes* = NULL);
 	/*创建网格资源*/
 	virtual DMeshRes* CreateMeshRes(int vertexUsage, bool dynamic);

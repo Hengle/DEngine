@@ -146,12 +146,12 @@ void D3D9Core::SetRenderTarget(DRenderTextureViewRes * res)
 {
 }
 
-void D3D9Core::SetViewPort(DRect & viewPort)
+void D3D9Core::SetViewPort(float x, float y, float width, float height)
 {
-	m_viewPort.Width = viewPort.width;
-	m_viewPort.Height = viewPort.height;
-	m_viewPort.X = viewPort.x;
-	m_viewPort.Y = viewPort.y;
+	m_viewPort.Width = width;
+	m_viewPort.Height = height;
+	m_viewPort.X = x;
+	m_viewPort.Y = y;
 
 	m_device->SetViewport(&m_viewPort);
 }

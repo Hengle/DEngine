@@ -37,7 +37,7 @@ SubShader {
 			{
 			    float4 position : SV_POSITION;
 			    float2 tex : TEXCOORD0;
-					float3 shadowUV:TEXCOORD1;
+				float3 shadowUV:TEXCOORD1;
 			};
 
 			Texture2D shaderTexture;
@@ -115,6 +115,8 @@ SubShader {
 			matrix g_shadowView;
 			matrix g_shadowProj;
 
+			float4 g_shadowParams;
+
 			struct VS_INPUT
 			{
 			    float3 position : POSITION;
@@ -125,7 +127,7 @@ SubShader {
 			{
 			    float4 position : POSITION;
 			    float2 uv  : TEXCOORD0;
-					float4 shadowProj:TEXCOORD1;
+				float3 shadowUV:TEXCOORD1;
 			};
 
 			sampler shaderTexture;
@@ -139,8 +141,13 @@ SubShader {
 
     			output.position = mul(pos, g_worldMatrix);
 
-					output.shadowProj = mul(output.position, g_shadowView);
-					output.shadowProj = mul(output.shadowProj, g_shadowProj);
+					float4 shadowPos = mul(output.position, g_shadowView);
+
+					output.shadowUV.z = shadowPos.z * g_shadowParams.w;
+					shadowPos = mul(shadowPos, g_shadowProj);
+
+					output.shadowUV.x = shadowPos.x / shadowPos.w * 0.5 + 0.5;
+					output.shadowUV.y = -(shadowPos.y / shadowPos.w * 0.5)+0.5;
 
     			output.position = mul(output.position, g_viewMatrix);
     			output.position = mul(output.position, g_projectionMatrix);
@@ -152,12 +159,12 @@ SubShader {
 
 			float4 FragMain(VS_OUTPUT input) : SV_TARGET
 			{
-				float2 shadowUv;
-				shadowUv.x = input.shadowProj.x / input.shadowProj.w * 0.5f + 0.5f;
-				shadowUv.y = -(input.shadowProj.y / input.shadowProj.w  * 0.5f)+0.5f;
-				  float4 depthColor = tex2D(g_shadowMap, shadowUv);
-			    //return tex2D(shaderTexture,      input.uv);
-					return depthColor;
+			    float4 col = tex2D(shaderTexture,      input.uv);
+			    float4 depthColor = tex2D(g_shadowMap, input.shadowUV.xy);
+
+					if(input.shadowUV.z - depthColor.r > 0.01)
+						col.rgb *= 0.3;
+					return col;
 			}
 		]
 	}

@@ -402,12 +402,12 @@ void D3D10Core::SetRenderTarget(DRenderTextureViewRes *res)
 	}
 }
 
-void D3D10Core::SetViewPort(DRect & viewPort)
+void D3D10Core::SetViewPort(float x, float y, float width, float height)
 {
-	m_viewPort.Width = viewPort.width;
-	m_viewPort.Height = viewPort.height;
-	m_viewPort.TopLeftX = viewPort.x;
-	m_viewPort.TopLeftY = viewPort.y;
+	m_viewPort.Width = width;
+	m_viewPort.Height = height;
+	m_viewPort.TopLeftX = x;
+	m_viewPort.TopLeftY = y;
 
 	m_device->RSSetViewports(1, &m_viewPort);
 }

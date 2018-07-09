@@ -40,7 +40,7 @@ public:
 	static void SetBlendSrcFactor(DRSBlendFactor);
 	static void SetBlendDstFactor(DRSBlendFactor);
 
-	static void SetViewPort(DRect&);
+	static void SetViewPort(float x, float y, float width, float height);
 	static void ResetViewPort();
 
 	static void GlBegin();

@@ -45,9 +45,8 @@ void DLight::RenderShadow()
 {
 	float w = m_shadowMap->GetWidth();
 	float h = m_shadowMap->GetHeight();
-	DRect rect = DRect(0, 0, w, h);
 	//DGraphics::ResetViewPort();
-	DGraphics::SetViewPort(rect);
+	DGraphics::SetViewPort(0, 0, w, h);
 	BeginRenderShadow();
 	DScene::Draw(false, m_shadowShader);
 	EndRenderShadow();

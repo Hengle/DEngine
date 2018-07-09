@@ -382,12 +382,12 @@ void DGraphics::SetBlendDstFactor(DRSBlendFactor factor)
 	}
 }
 
-void DGraphics::SetViewPort(DRect & viewPort)
+void DGraphics::SetViewPort(float x, float y, float width, float height)
 {
 	DGLCore* gl = DSystem::GetGraphicsMgr()->GetGLCore();
 	if (gl != NULL)
 	{
-		gl->SetViewPort(viewPort);
+		gl->SetViewPort(x, y, width, height);
 	}
 }
 
@@ -397,12 +397,7 @@ void DGraphics::ResetViewPort()
 	float w, h;
 	gl->GetResolution(w, h);
 
-	DRect vp;
-	vp.x = 0;
-	vp.y = 0;
-	vp.width = w;
-	vp.height = h;
-	gl->SetViewPort(vp);
+	gl->SetViewPort(0, 0, w, h);
 }
 
 void DGraphics::GlBegin()

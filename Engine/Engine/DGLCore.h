@@ -209,7 +209,7 @@ public:
 	virtual void Present() = 0;
 	virtual void Clear(bool, bool, DColor&, DRenderTextureViewRes* = NULL) = 0;
 	virtual void SetRenderTarget(DRenderTextureViewRes* = NULL) = 0;
-	virtual void SetViewPort(DRect&) = 0;
+	virtual void SetViewPort(float, float, float, float) = 0;
 	virtual void EndSetRenderTarget(DRenderTextureViewRes* = NULL) = 0;
 	virtual DMeshRes* CreateMeshRes(int, bool) = 0;
 	virtual DTextureRes* CreateTextureRes(WCHAR*) = 0;

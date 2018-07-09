@@ -18,8 +18,8 @@ DCamera::DCamera()
 	m_viewPort.MaxDepth = 1.0f;
 	m_viewPort.TopLeftX = 0.0f;
 	m_viewPort.TopLeftY = 0.0f;*/
-	m_viewPort.width = width;
-	m_viewPort.height = height;
+	m_viewPort.width = 1.0f;
+	m_viewPort.height = 1.0f;
 	m_viewPort.x = 0;
 	m_viewPort.y = 0;
 	m_aspect = width / height;
@@ -50,7 +50,7 @@ void DCamera::RenderFilter()
 
 void DCamera::Render()
 {
-	DGraphics::SetViewPort(m_viewPort);
+	
 	BeginRender();
 	if (m_replacementShader != NULL)
 		DScene::Draw(true, m_replacementShader);
@@ -282,12 +282,27 @@ void DCamera::BeginRender()
 
 	if (m_renderTexture != NULL)
 	{
+		float rtw, rth;
+		rtw = m_renderTexture->GetWidth();
+		rth = m_renderTexture->GetHeight();
+		float vx = rtw*m_viewPort.x;
+		float vy = rth*m_viewPort.y;
+		float vw = rtw*m_viewPort.width;
+		float vh = rth*m_viewPort.height;
+		DGraphics::SetViewPort(vx, vy, vw, vh);
 		DGraphics::BeginScene(true, false, m_backgroundColor, m_renderTexture);
 		//DGraphics::SetRenderTarget(m_renderTexture);
 		//DGraphics::ClearRenderTarget(m_renderTexture, true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f));
 	}
 	else
 	{
+		float screenw, screenh;
+		DSystem::GetGraphicsMgr()->GetResolution(screenw, screenh);
+		float vx = screenw*m_viewPort.x;
+		float vy = screenh*m_viewPort.y;
+		float vw = screenw*m_viewPort.width;
+		float vh = screenh*m_viewPort.height;
+		DGraphics::SetViewPort(vx, vy, vw, vh);
 		DGraphics::BeginScene(true, false, m_backgroundColor);
 		//DGraphics::SetDefaultRenderTarget();
 		//DGraphics::Clear(true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f));

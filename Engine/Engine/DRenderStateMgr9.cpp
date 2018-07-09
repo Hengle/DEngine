@@ -16,6 +16,7 @@ void DRenderStateMgr9::Init()
 		return;
 
 	ChangeCullMode(DCullMode_Back);
+	ChangeFillMode(DFillMode_Solid);
 	ChangeZTest(DRSCompareFunc_LEqual);
 	ChangeZWrite(true);
 	ChangeBlendEnable(false);
@@ -41,9 +42,18 @@ void DRenderStateMgr9::SetCullMode(DCullMode cullMode)
 {
 	if (m_device == NULL)
 		return;
-	if (m_currentMode == cullMode)
+	if (m_currentCullMode == cullMode)
 		return;
 	ChangeCullMode(cullMode);
+}
+
+void DRenderStateMgr9::SetFillMode(DFillMode fillMode)
+{
+	if (m_device == NULL)
+		return;
+	if (m_currentFillMode == fillMode)
+		return;
+	ChangeFillMode(fillMode);
 }
 
 void DRenderStateMgr9::SetZWriteEnable(bool zwrite)
@@ -180,7 +190,16 @@ void DRenderStateMgr9::ChangeCullMode(DCullMode cullMode)
 		m_device->SetRenderState(D3DRS_CULLMODE, D3DCULL_CW);
 	else if (cullMode == DCullMode_Off)
 		m_device->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
-	m_currentMode = cullMode;
+	m_currentCullMode = cullMode;
+}
+
+void DRenderStateMgr9::ChangeFillMode(DFillMode fillMode)
+{
+	if (fillMode == DFillMode_Solid)
+		m_device->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+	else if (fillMode == DFillMode_WireFrame)
+		m_device->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+	m_currentFillMode = fillMode;
 }
 
 void DRenderStateMgr9::ChangeZWrite(bool zwrite)

@@ -42,6 +42,7 @@ public:
 
 private:
 	void DrawMsg(DLogMsg*);
+	void SaveLog();
 
 private:
 	std::vector<DLogMsg*> *m_logMsgs;

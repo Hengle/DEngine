@@ -15,9 +15,12 @@ void DRenderStateMgr11::Init()
 {
 	if (m_device == NULL || m_deviceContext == NULL)
 		return;
-	InitRasterizerStates();
+	//InitRasterizerStates();
+	m_currentRasterizerState.fillMode = DFillMode_Solid;
+	m_currentRasterizerState.cullMode = DCullMode_Back;
 
-	ChangeCullMode(DCullMode_Back);
+	RefreshRasterizerState();
+	//ChangeCullMode(DCullMode_Back);
 
 	m_currentDepthStencilState.ztest = DRSCompareFunc_LEqual;
 	m_currentDepthStencilState.zwrite = true;
@@ -35,12 +38,12 @@ void DRenderStateMgr11::Release()
 {
 	m_device = NULL;
 	m_deviceContext = NULL;
-	std::map<DCullMode, ID3D11RasterizerState*>::iterator  iter;
-	for (iter = m_rasterizerStates.begin(); iter != m_rasterizerStates.end(); iter++)
+	std::map<unsigned int, ID3D11RasterizerState*>::iterator  riter;
+	for (riter = m_rasterizerStates.begin(); riter != m_rasterizerStates.end(); riter++)
 	{
-		if (iter->second != NULL)
+		if (riter->second != NULL)
 		{
-			iter->second->Release();
+			riter->second->Release();
 		}
 	}
 	m_rasterizerStates.clear();
@@ -76,9 +79,23 @@ void DRenderStateMgr11::SetCullMode(DCullMode cullMode)
 {
 	if (m_device == NULL || m_deviceContext == NULL)
 		return;
-	if (m_currentMode == cullMode)
+	if (m_currentRasterizerState.cullMode == cullMode)
 		return;
-	ChangeCullMode(cullMode);
+	m_currentRasterizerState.cullMode = cullMode;
+	//if (m_currentMode == cullMode)
+	//	return;
+	//ChangeCullMode(cullMode);
+	RefreshRasterizerState();
+}
+
+void DRenderStateMgr11::SetFillMode(DFillMode fillMode)
+{
+	if (m_device == NULL || m_deviceContext == NULL)
+		return;
+	if (m_currentRasterizerState.fillMode == fillMode)
+		return;
+	m_currentRasterizerState.fillMode = fillMode;
+	RefreshRasterizerState();
 }
 
 void DRenderStateMgr11::SetZWriteEnable(bool zwrite)
@@ -237,17 +254,6 @@ void DRenderStateMgr11::SetStencilZFailOp(DRSStencilOp stencilZFail)
 	RefreshDepthStencilState();
 }
 
-void DRenderStateMgr11::ChangeCullMode(DCullMode cullMode)
-{
-	if (m_rasterizerStates.find(cullMode) != m_rasterizerStates.end())
-	{
-		ID3D11RasterizerState* state = m_rasterizerStates.at(cullMode);
-		m_deviceContext->RSSetState(state);
-
-		m_currentMode = cullMode;
-	}
-}
-
 void DRenderStateMgr11::RefreshDepthStencilState()
 {
 	unsigned long key = m_currentDepthStencilState.GetKey();
@@ -316,28 +322,23 @@ void DRenderStateMgr11::RefreshBlendStencilState()
 	}
 }
 
-void DRenderStateMgr11::InitRasterizerStates()
+void DRenderStateMgr11::RefreshRasterizerState()
 {
-	HRESULT result;
-	ID3D11RasterizerState* state = 0;
-	result = CreateRasterizerState(D3D11_CULL_BACK, &state);
-	if (!FAILED(result))
+	unsigned int key = m_currentRasterizerState.GetKey();
+	if (m_rasterizerStates.find(key) != m_rasterizerStates.end())
 	{
-		m_rasterizerStates.insert(std::pair<DCullMode, ID3D11RasterizerState*>(DCullMode_Back, state));
+		ID3D11RasterizerState* state = m_rasterizerStates.at(key);
+		m_deviceContext->RSSetState(state);
 	}
-
-	state = 0;
-	result = CreateRasterizerState(D3D11_CULL_FRONT, &state);
-	if (!FAILED(result))
+	else
 	{
-		m_rasterizerStates.insert(std::pair<DCullMode, ID3D11RasterizerState*>(DCullMode_Front, state));
-	}
-
-	state = 0;
-	result = CreateRasterizerState(D3D11_CULL_NONE, &state);
-	if (!FAILED(result))
-	{
-		m_rasterizerStates.insert(std::pair<DCullMode, ID3D11RasterizerState*>(DCullMode_Off, state));
+		ID3D11RasterizerState* state;
+		HRESULT result = CreateRasterizerState(m_currentRasterizerState, &state);
+		if (!FAILED(result))
+		{
+			m_rasterizerStates.insert(std::pair<unsigned int, ID3D11RasterizerState*>(key, state));
+			m_deviceContext->RSSetState(state);
+		}
 	}
 }
 
@@ -439,27 +440,48 @@ D3D11_STENCIL_OP DRenderStateMgr11::GetStencilOp(DRSStencilOp op)
 	}
 }
 
-HRESULT DRenderStateMgr11::CreateRasterizerState(D3D11_CULL_MODE cullmode, ID3D11RasterizerState ** out)
+D3D11_FILL_MODE DRenderStateMgr11::GetFillMode(DFillMode fillMode)
+{
+	if (fillMode == DFillMode_Solid)
+		return D3D11_FILL_SOLID;
+	else if (fillMode == DFillMode_WireFrame)
+		return D3D11_FILL_WIREFRAME;
+	return D3D11_FILL_SOLID;
+}
+
+D3D11_CULL_MODE DRenderStateMgr11::GetCullMode(DCullMode cullMode)
+{
+	if (cullMode == DCullMode_Off)
+		return D3D11_CULL_NONE;
+	else if (cullMode == DCullMode_Back)
+		return D3D11_CULL_BACK;
+	else if (cullMode == DCullMode_Front)
+		return D3D11_CULL_FRONT;
+	return D3D11_CULL_BACK;
+}
+
+HRESULT DRenderStateMgr11::CreateRasterizerState(RasterizerState statedesc, ID3D11RasterizerState ** state)
 {
 	D3D11_RASTERIZER_DESC desc;
 	ZeroMemory(&desc, sizeof(desc));
 
 	desc.AntialiasedLineEnable = false;
-	desc.CullMode = cullmode;
+	desc.CullMode = GetCullMode(statedesc.cullMode);
 	desc.DepthBias = 0;
 	desc.DepthBiasClamp = 0.0f;
 	desc.DepthClipEnable = true;
-	desc.FillMode = D3D11_FILL_SOLID;
+	desc.FillMode = GetFillMode(statedesc.fillMode);
 	desc.FrontCounterClockwise = false;
 	desc.MultisampleEnable = false;
 	desc.ScissorEnable = false;
 	desc.SlopeScaledDepthBias = 0.0f;
 
-	HRESULT result = m_device->CreateRasterizerState(&desc, out);
+	HRESULT result = m_device->CreateRasterizerState(&desc, state);
+
 	return result;
 }
 
-HRESULT DRenderStateMgr11::CreateDepthStencilState(DepthStencilState11 desc, ID3D11DepthStencilState ** state)
+HRESULT DRenderStateMgr11::CreateDepthStencilState(DepthStencilState desc, ID3D11DepthStencilState ** state)
 {
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
 	ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
@@ -508,7 +530,7 @@ HRESULT DRenderStateMgr11::CreateDepthStencilState(DepthStencilState11 desc, ID3
 	return result;
 }
 
-HRESULT DRenderStateMgr11::CreateBlendState(BlendState11 desc, ID3D11BlendState ** state)
+HRESULT DRenderStateMgr11::CreateBlendState(BlendState desc, ID3D11BlendState ** state)
 {
 	D3D11_BLEND_DESC blenddesc;
 	ZeroMemory(&blenddesc, sizeof(blenddesc));
@@ -536,33 +558,4 @@ HRESULT DRenderStateMgr11::CreateDisableBlendState(ID3D11BlendState ** state)
 
 	HRESULT result = m_device->CreateBlendState(&blenddesc, state);
 	return result;
-}
-
-unsigned long DRenderStateMgr11::DepthStencilState11::GetKey()
-{
-	unsigned long key = 0;
-	if (zwrite)
-		key = 1L << 31;
-	unsigned long func = ztest << 28;
-	key = key | func;
-	if (enableStencil)
-	{
-		key = key | (stencilWriteMask << 20);
-		key = key | (stencilReadMask << 12);
-		key = key | (stencilComp << 9);
-		key = key | (stencilPassOp << 6);
-		key = key | (stencilFailOp << 3);
-		key = key | (stencilZFailOp);
-	}
-
-	return key;
-}
-
-unsigned long DRenderStateMgr11::BlendState11::GetKey()
-{
-	unsigned long key = 0;
-	key = blendOp << 8;
-	key = key | (srcfactor << 4);
-	key = key | dstfactor;
-	return key;
 }

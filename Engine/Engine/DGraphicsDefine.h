@@ -37,9 +37,15 @@ enum DMeshTopology
 
 enum DCullMode
 {
-	DCullMode_Back,
-	DCullMode_Front,
-	DCullMode_Off,
+	DCullMode_Back = 0,
+	DCullMode_Front = 1,
+	DCullMode_Off = 2,
+};
+
+enum DFillMode
+{
+	DFillMode_WireFrame = 0,
+	DFillMode_Solid = 1,
 };
 
 enum DRSCompareFunc

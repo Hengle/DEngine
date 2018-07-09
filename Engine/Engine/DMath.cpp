@@ -20,6 +20,47 @@ DRect::DRect(float x, float y, float width, float height)
 	this->height = height;
 }
 
+bool DRect::Contains(float x, float y) const
+{
+	return x >= this->x && x <= this->x + this->width && y >= this->y && y <= this->y + this->height;
+}
+
+bool DRect::Contains(const DRect & rect) const
+{
+	return rect.x >= this->x && rect.x + rect.width <= this->x + this->width && rect.y >= this->y && rect.y + rect.height <= this->y + this->height;
+}
+
+bool DRect::Overlaps(const DRect & rect) const
+{
+	return rect.GetMaxX() > this->GetMinX() && rect.GetMinX() < this->GetMaxX() && rect.GetMaxY() > this->GetMinY() && rect.GetMinY() < this->GetMaxY();
+}
+
+void DRect::GetCenter(float & x, float & y) const
+{
+	x = this->x + this->width*0.5f;
+	y = this->y + this->height*0.5f;
+}
+
+float DRect::GetMinX() const
+{
+	return x;
+}
+
+float DRect::GetMinY() const
+{
+	return y;
+}
+
+float DRect::GetMaxX() const
+{
+	return x + width;
+}
+
+float DRect::GetMaxY() const
+{
+	return y + height;
+}
+
 DVector2::DVector2()
 {
 	x = 0.0f;
@@ -1433,4 +1474,40 @@ void DMatrix4x4::Transpose(DMatrix4x4 * out, const DMatrix4x4 & target)
 	out->m30 = t03;
 	out->m31 = t13;
 	out->m32 = t23;
+}
+
+DBounds::DBounds()
+{
+	center = DVector3(0.0f, 0.0f, 0.0f);
+	size = DVector3(0.0f, 0.0f, 0.0f);
+}
+
+DBounds::DBounds(DVector3 center, DVector3 size)
+{
+	this->center = center;
+	this->size = size;
+}
+
+void DBounds::GetMin(DVector3 * min) const
+{
+	min->x = min(center.x + size.x*0.5f, center.x - size.x*0.5f);
+	min->y = min(center.y + size.y*0.5f, center.y - size.y*0.5f);
+	min->z = min(center.z + size.z*0.5f, center.z - size.z*0.5f);
+}
+
+void DBounds::GetMax(DVector3 * max) const
+{
+	max->x = max(center.x + size.x*0.5f, center.x - size.x*0.5f);
+	max->y = max(center.y + size.y*0.5f, center.y - size.y*0.5f);
+	max->z = max(center.z + size.z*0.5f, center.z - size.z*0.5f);
+}
+
+DRay::DRay()
+{
+}
+
+DRay::DRay(DVector3 origin, DVector3 direction)
+{
+	this->origin = origin;
+	this->direction = direction;
 }

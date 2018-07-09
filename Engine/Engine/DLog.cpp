@@ -1,7 +1,8 @@
 #include "DLog.h"
-//#include "DImGUI.h"
+#include "DGUI.h"
 #include "DSystem.h"
 #include "atlstr.h"
+#include <fstream>
 
 
 DLogMsg::DLogMsg(char * msg, DLogType type)
@@ -63,11 +64,15 @@ DLog::~DLog()
 
 void DLog::Init()
 {
+#if _DEBUG
 	m_logMsgs = new std::vector<DLogMsg*>();
+#endif
 }
 
 void DLog::Shutdown()
 {
+#if _DEBUG
+	SaveLog();
 	int i;
 	int size = m_logMsgs->size();
 	for (i = 0; i < size; i++) {
@@ -76,16 +81,18 @@ void DLog::Shutdown()
 	m_logMsgs->clear();
 	delete m_logMsgs;
 	m_logMsgs = NULL;
+#endif
 }
 
 void DLog::DrawMsgs()
 {
+#if _DEBUG
 	if (DLOG_SHOW == false)
 		return;
 	int i;
 	int size = m_logMsgs->size();
 
-	//ImGui::Begin("Console");
+	DGUI::BeginWindow("Console");
 	
 	for (i = 0; i < size && i <= DLOG_MAX_SHOW_LOG_NUMS; i++) {
 		DLogMsg* msg = m_logMsgs->at(i);
@@ -93,7 +100,8 @@ void DLog::DrawMsgs()
 			DrawMsg(msg);
 	}
 	
-	//ImGui::End();
+	DGUI::EndWindow();
+#endif
 }
 
 void DLog::AddLog(DLogMsg * msg)
@@ -106,50 +114,72 @@ void DLog::AddLog(DLogMsg * msg)
 
 void DLog::DrawMsg(DLogMsg * msg)
 {
-	//ImVec4 color;
+	DColor color;
 	
-	/*if (msg->type == DLogType::Info) {
-		color.x = 1;
-		color.y = 1;
-		color.z = 1;
-		color.w = 1;
+	if (msg->type == DLogType::Info) {
+		color.r = 1;
+		color.g = 1;
+		color.b = 1;
+		color.a = 1;
 	}
 	else if (msg->type == DLogType::Warning) {
-		color.x = 1;
-		color.y = 1;
-		color.z = 0;
-		color.w = 1;
+		color.r = 1;
+		color.g = 1;
+		color.b = 0;
+		color.a = 1;
 	}
 	else if (msg->type == DLogType::Error) {
-		color.x = 1;
-		color.y = 0;
-		color.z = 0;
-		color.w = 1;
-	}*/
-	//ImGui::TextColored(color, msg->msg.data());
+		color.r = 1;
+		color.g = 0;
+		color.b = 0;
+		color.a = 1;
+	}
+	DGUI::Label(color, msg->msg.data());
+}
+
+void DLog::SaveLog()
+{
+#if _DEBUG
+	std::ofstream fout;
+	fout.open("DLog-output.txt");
+
+	int i;
+	int size = m_logMsgs->size();
+	for (i = 0; i < size; i++) {
+		fout << m_logMsgs->at(i)->msg.data() << endl;
+	}
+
+	fout.close();
+#endif
 }
 
 
 void DLog::Info(char * msg)
 {
+#if _DEBUG
 	DLogMsg* lg = new DLogMsg(msg, DLogType::Info);
 	DSystem::GetLogMgr()->AddLog(lg);
 
 	OutputDebugString(CA2W(lg->msg.data()));
+#endif
 }
 
 void DLog::Warn(char * msg)
 {
+#if _DEBUG
 	DLogMsg* lg = new DLogMsg(msg, DLogType::Warning);
 	DSystem::GetLogMgr()->AddLog(lg);
 
 	OutputDebugString(CA2W(lg->msg.data()));
+#endif
 }
 
 void DLog::Err(char * msg)
 {
+#if _DEBUG
 	DLogMsg* lg = new DLogMsg(msg, DLogType::Error);
 	DSystem::GetLogMgr()->AddLog(lg);
 
 	OutputDebugString(CA2W(lg->msg.data()));
+#endif
 }

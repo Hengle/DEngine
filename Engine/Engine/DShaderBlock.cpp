@@ -305,6 +305,12 @@ void DShaderBlock::InterpretState(ifstream & ifile, DShaderPass* pass)
 				if (pass != NULL)
 					pass->SetBlendOp(state);
 			}
+			else if (strcmp(read, "fill") == 0)
+			{
+				ifile >> state;
+				if (pass != NULL)
+					pass->SetFillMode(state);
+			}
 			else if (strcmp(read, "stencil") == 0)
 			{
 				if (pass != NULL)
@@ -488,6 +494,7 @@ DShaderPass::DShaderPass()
 	m_zwrite = true;
 	m_ztest = DRSCompareFunc_LEqual;
 	m_cullmode = DCullMode_Back;
+	m_fillmode = DFillMode_Solid;
 	m_enableBlend = false;
 	m_blendOp = DRSBlendOp_Add;
 	m_blendSrc = DRSBlendFactor_SrcAlpha;
@@ -540,6 +547,14 @@ void DShaderPass::SetCullMode(char * state)
 		m_cullmode = DCullMode_Back;
 	else if (strcmp(state, "front") == 0)
 		m_cullmode = DCullMode_Front;
+}
+
+void DShaderPass::SetFillMode(char * state)
+{
+	if (strcmp(state, "solid") == 0)
+		m_fillmode = DFillMode_Solid;
+	else if (strcmp(state, "wireframe") == 0)
+		m_fillmode = DFillMode_WireFrame;
 }
 
 void DShaderPass::SetBlendOp(char * state)
@@ -640,6 +655,7 @@ DShaderRes * DShaderPass::GetShaderRes()
 void DShaderPass::ApplyStates()
 {
 	DGraphics::SetCullMode(m_cullmode);
+	DGraphics::SetFillMode(m_fillmode);
 	DGraphics::SetZTestFunc(m_ztest);
 	DGraphics::SetZWriteEnable(m_zwrite);
 	DGraphics::SetBlendEnable(m_enableBlend);

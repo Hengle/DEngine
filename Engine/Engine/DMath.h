@@ -13,6 +13,14 @@ typedef struct DRect
 public:
 	DRect();
 	DRect(float, float, float, float);
+	bool Contains(float x, float y) const;
+	bool Contains(const DRect& rect) const;
+	bool Overlaps(const DRect& rect) const;
+	void GetCenter(float& x, float& y) const;
+	float GetMinX() const;
+	float GetMinY() const;
+	float GetMaxX() const;
+	float GetMaxY() const;
 
 public:
 	float x, y, width, height;
@@ -208,6 +216,30 @@ public:
 	float m20, m21, m22, m23;
 	float m30, m31, m32, m33;
 } DMatrix4x4, *LPDMatrix4x4;
+
+typedef struct DRay
+{
+public:
+	DRay();
+	DRay(DVector3 origin, DVector3 direction);
+
+public:
+	DVector3 origin;
+	DVector3 direction;
+} DRay;
+
+typedef struct DBounds
+{
+public:
+	DBounds();
+	DBounds(DVector3 center, DVector3 size);
+	void GetMin(DVector3* min) const;
+	void GetMax(DVector3* max) const;
+
+public:
+	DVector3 center;
+	DVector3 size;
+} DBounds, *LPDBounds;
 
 const DVector2 dvec2_zero = DVector2(0.0f, 0.0f);
 const DVector2 dvec2_one = DVector2(1.0f, 1.0f);

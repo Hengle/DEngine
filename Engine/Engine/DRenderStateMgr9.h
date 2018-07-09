@@ -14,6 +14,7 @@ public:
 	virtual void Release();
 	/*设置Cull模式*/
 	virtual void SetCullMode(DCullMode cullmode);
+	virtual void SetFillMode(DFillMode);
 	/*开启/关闭深度写入*/
 	virtual void SetZWriteEnable(bool zwrite);
 	/*设置深度测试模式*/
@@ -33,6 +34,7 @@ public:
 
 private:
 	void ChangeCullMode(DCullMode);
+	void ChangeFillMode(DFillMode);
 	void ChangeZWrite(bool);
 	void ChangeZTest(DRSCompareFunc);
 	void ChangeBlendEnable(bool);
@@ -55,7 +57,8 @@ private:
 private:
 	IDirect3DDevice9* m_device;
 
-	DCullMode m_currentMode;
+	DCullMode m_currentCullMode;
+	DFillMode m_currentFillMode;
 	bool m_zwrite;
 	DRSCompareFunc m_ztest;
 	bool m_enableBlend;

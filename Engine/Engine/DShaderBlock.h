@@ -14,6 +14,7 @@ public:
 	void SetZWrite(char*);
 	void SetZTest(char*);
 	void SetCullMode(char*);
+	void SetFillMode(char*);
 	void SetBlendOp(char*);
 	void SetBlendSrcFactor(char*);
 	void SetBlendDstFactor(char*);
@@ -44,6 +45,7 @@ private:
 	bool m_enableStencil;
 	DRSCompareFunc m_ztest;
 	DCullMode m_cullmode;
+	DFillMode m_fillmode;
 	DShaderRes* m_shaderRes;
 	DRSBlendOp m_blendOp;
 	DRSBlendFactor m_blendSrc;

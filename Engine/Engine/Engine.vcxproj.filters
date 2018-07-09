@@ -240,6 +240,9 @@
     <ClInclude Include="DEngineDefine.h">
       <Filter>头文件\Core</Filter>
     </ClInclude>
+    <ClInclude Include="D3DCore.h">
+      <Filter>头文件\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DMath.cpp">
@@ -397,6 +400,9 @@
     </ClCompile>
     <ClCompile Include="DShaderBlock.cpp">
       <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="D3DCore.cpp">
+      <Filter>源文件\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

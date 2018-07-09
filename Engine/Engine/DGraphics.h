@@ -32,6 +32,7 @@ public:
 	static void DrawSkyBox(DMaterial*, const DCamera*);
 	
 	static void SetCullMode(DCullMode);
+	static void SetFillMode(DFillMode);
 	static void SetZWriteEnable(bool);
 	static void SetZTestFunc(DRSCompareFunc);
 	static void SetBlendOp(DRSBlendOp);

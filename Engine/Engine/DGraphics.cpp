@@ -319,6 +319,15 @@ void DGraphics::SetCullMode(DCullMode cullMode)
 	}
 }
 
+void DGraphics::SetFillMode(DFillMode fillMode)
+{
+	IRenderStateMgr* mgr = DSystem::GetGraphicsMgr()->GetGLCore()->GetRenderStateMgr();
+	if (mgr != NULL)
+	{
+		mgr->SetFillMode(fillMode);
+	}
+}
+
 void DGraphics::SetZWriteEnable(bool zwrite)
 {
 	IRenderStateMgr* mgr = DSystem::GetGraphicsMgr()->GetGLCore()->GetRenderStateMgr();

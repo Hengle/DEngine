@@ -176,6 +176,7 @@ public:
 	virtual void Init() = 0;
 	virtual void Release() = 0;
 	virtual void SetCullMode(DCullMode) = 0;
+	virtual void SetFillMode(DFillMode) = 0;
 	virtual void SetZWriteEnable(bool) = 0;
 	virtual void SetZTestFunc(DRSCompareFunc) = 0;
 	virtual void SetBlendOp(DRSBlendOp) = 0;

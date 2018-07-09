@@ -1,4 +1,4 @@
-#include "DTransform.h"
+﻿#include "DTransform.h"
 
 DTransform::DTransform()
 {
@@ -142,7 +142,7 @@ void DTransform::GetRight(DVector3 & right)
 	if (m_isMatrixChanged) {
 		RefreshMatrix();
 	}
-	DVector3::Cross(right, m_up, m_forward);
+	DVector3::Cross(m_forward, m_up, right);
 }
 
 void DTransform::GetLocalToWorld(DMatrix4x4 & localToWorld)

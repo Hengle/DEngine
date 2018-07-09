@@ -32,6 +32,8 @@ private:
 	//DMesh* obj;
 	DRenderTexture* m_rt;
 	DLight* m_light;
+	DVector3 m_lookAtPoint;
+	float m_lookDistance;
 	/*DMesh* testcolormesh;
 	DDisplayObject* testcolorobj;*/
 	

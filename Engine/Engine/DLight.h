@@ -10,6 +10,14 @@ enum DLightType
 	Point,
 };
 
+struct DLightNode
+{
+public:
+	DLight* light;
+	DLightNode* next;
+	DLightNode* pre;
+};
+
 class DLight : public DSceneObject
 {
 public:
@@ -24,10 +32,13 @@ public:
 	void SetFar(float);
 	void SetSize(float);
 	void SetIntensity(float);
-	void RenderShadow();
-	virtual void Init();
-	virtual void Destroy();
-	virtual void Update();
+
+protected:
+	virtual bool OnInit();
+	virtual void OnDestroy();
+	virtual void OnUpdate();
+	virtual void OnFixedUpdate();
+	virtual void OnRender();
 
 private:
 	void BeginRenderShadow();
@@ -44,5 +55,7 @@ private:
 	float m_far;
 	float m_size;
 	bool m_isProjChanged;
+
+	DLightNode* m_node;
 };
 

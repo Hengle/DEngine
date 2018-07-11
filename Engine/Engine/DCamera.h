@@ -14,6 +14,14 @@ public:
 	virtual void Release() = 0;
 };
 
+struct DCameraNode
+{
+public:
+	DCamera* camera;
+	DCameraNode* next;
+	DCameraNode* pre;
+};
+
 /*相机类*/
 class DCamera : public DSceneObject
 {
@@ -24,10 +32,6 @@ public:
 	//void EndRender();
 	/*渲染滤镜*/
 	void RenderFilter();
-	/*渲染当前相机*/
-	void Render();
-	virtual void Init();
-	virtual void Destroy();
 	/*返回当前相机的视空间矩阵*/
 	void GetViewMatrix(DMatrix4x4& out) const;
 	/*返回当前相机的投影空间矩阵*/
@@ -70,6 +74,13 @@ public:
 
 	static void GetCurrentCamera(DCamera** cam);
 
+protected:
+	virtual bool OnInit();
+	virtual void OnDestroy();
+	virtual void OnUpdate();
+	virtual void OnFixedUpdate();
+	virtual void OnRender();
+
 private:
 	void BeginRender();
 	void EndRender();
@@ -90,6 +101,8 @@ private:
 	DMaterial* m_skyBoxMaterial;
 	DRect m_viewPort;
 	DShader* m_replacementShader;
+
+	DCameraNode* m_node;
 };
 
 static DCamera* sCurrent;

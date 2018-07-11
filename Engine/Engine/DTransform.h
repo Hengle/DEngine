@@ -30,6 +30,8 @@ public:
 	void TransformPointToWorld(const DVector3 & point, DVector3 & out);
 	void TransformPointToLocal(const DVector3 & point, DVector3 & out);
 
+	DSceneObject* GetSceneObject();
+
 	void SetParent(DTransform* parent);
 	DTransform* GetParent();
 	void RemoveFromParent();

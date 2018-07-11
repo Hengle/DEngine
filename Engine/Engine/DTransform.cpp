@@ -210,6 +210,11 @@ void DTransform::TransformPointToLocal(const DVector3 & point, DVector3 & out)
 	tolocal.TransformPoint(point, out);
 }
 
+DSceneObject * DTransform::GetSceneObject()
+{
+	return m_sceneObj;
+}
+
 void DTransform::SetParent(DTransform * parent)
 {
 	if (m_parent != NULL)

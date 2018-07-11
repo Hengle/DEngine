@@ -27,6 +27,8 @@ DCamera::DCamera()
 	m_isProjectionChanged = true;
 	//m_position = D3DXVECTOR3(2.178069f, 3.102766f, -0.4222083f);
 	m_backgroundColor = dcol_blue;
+
+	m_node = 0;
 }
 
 
@@ -46,33 +48,6 @@ void DCamera::RenderFilter()
 		m_filter->Render(m_renderTexture);
 		DGraphics::EndScene();
 	}
-}
-
-void DCamera::Render()
-{
-	
-	BeginRender();
-	if (m_replacementShader != NULL)
-		DScene::Draw(true, m_replacementShader);
-	else
-		DScene::Draw(true);
-	EndRender();
-
-}
-
-void DCamera::Init()
-{
-	DSceneObject::Init();
-
-}
-
-void DCamera::Destroy()
-{
-	DSceneObject::Destroy();
-	m_renderTexture = NULL;
-	m_replacementShader = NULL;
-	m_skyBoxMaterial = NULL;
-	m_filter = NULL;
 }
 
 void DCamera::GetViewMatrix(DMatrix4x4& mOut) const
@@ -246,6 +221,63 @@ void DCamera::GetCurrentCamera(DCamera ** cam)
 	(*cam) = sCurrent;
 }
 
+bool DCamera::OnInit()
+{
+	DCameraNode* camNode = DSystem::GetSceneMgr()->GetCurrentScene()->GetCameraNode();
+	m_node = new DCameraNode();
+	m_node->camera = this;
+	if (camNode == NULL)
+		camNode = m_node;
+	else {
+		camNode->next = m_node;
+		m_node->pre = camNode;
+	}
+	DSystem::GetSceneMgr()->GetCurrentScene()->SetCameraNode(camNode);
+	return true;
+}
+
+void DCamera::OnDestroy()
+{
+	m_renderTexture = NULL;
+	m_replacementShader = NULL;
+	m_skyBoxMaterial = NULL;
+	m_filter = NULL;
+
+	if (m_node != NULL)
+	{
+		if (m_node->pre == NULL)
+		{
+			DSystem::GetSceneMgr()->GetCurrentScene()->SetCameraNode(m_node->next);
+		}
+		else
+		{
+			m_node->pre->next = m_node->next;
+		}
+		m_node->pre = NULL;
+		m_node->next = NULL;
+		delete m_node;
+		m_node = NULL;
+	}
+}
+
+void DCamera::OnUpdate()
+{
+}
+
+void DCamera::OnFixedUpdate()
+{
+}
+
+void DCamera::OnRender()
+{
+	BeginRender();
+	if (m_replacementShader != NULL)
+		DScene::Draw(true, m_replacementShader);
+	else
+		DScene::Draw(true);
+	EndRender();
+}
+
 void DCamera::BeginRender()
 {
 	//context->RSSetViewports(1, &m_viewPort);
@@ -263,12 +295,12 @@ void DCamera::BeginRender()
 		}
 		m_isProjectionChanged = false;
 	}
-	if (m_Transform->IsMatrixWillChange())
+	if (m_transform->IsMatrixWillChange())
 	{
 		DVector3 up, lookAt, position;
-		m_Transform->GetForward(lookAt);
-		m_Transform->GetUp(up);
-		m_Transform->GetPosition(position);
+		m_transform->GetForward(lookAt);
+		m_transform->GetUp(up);
+		m_transform->GetPosition(position);
 
 		lookAt = position + lookAt;
 

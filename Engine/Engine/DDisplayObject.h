@@ -11,12 +11,18 @@ public:
 	DDisplayObject(DMesh*, DMaterial*);
 	~DDisplayObject();
 	virtual void Render(DShader* replaceShader);
-	virtual void Init();
-	virtual void Destroy();
 	/*设置可见性*/
 	void SetVisible(bool visible /*是否可见*/);
 	/*获取可见性*/
 	bool GetVisible();
+
+protected:
+	virtual bool OnInit();
+	virtual void OnDestroy();
+	virtual void OnUpdate();
+	virtual void OnFixedUpdate();
+	virtual void OnRender();
+	virtual void OnCull();
 
 protected:
 	DMesh* m_mesh;

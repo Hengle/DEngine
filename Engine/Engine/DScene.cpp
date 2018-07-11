@@ -8,17 +8,18 @@ DScene::DScene(SCENEID sceneId, char * sceneName)
 	m_sceneName = sceneName;
 	m_isLoaded = false;
 	m_isEnter = false;
-	m_displayObjects = 0;
-	m_camera = 0;
-	m_light = 0;
+	//m_displayObjects = 0;
+	//m_camera = 0;
+	//m_light = 0;
+	m_transforms = 0;
 }
 
 DScene::~DScene()
 {
 	m_sceneName = 0;
-	m_displayObjects->clear();
-	delete m_displayObjects;
-	m_displayObjects = 0;
+	m_transforms->clear();
+	delete m_transforms;
+	m_transforms = 0;
 }
 
 void DScene::DrawGUI()
@@ -36,10 +37,17 @@ void DScene::Render()
 		return;
 	if (!m_isLoaded)
 		return;
-	if (m_camera != NULL)
+	/*if (m_camera != NULL)
 	{
 		m_camera->Render();
 		m_camera->RenderFilter();
+	}*/
+	DCameraNode* node = m_cameraNode;
+	while (node != NULL)
+	{
+		node->camera->Render();
+		node->camera->RenderFilter();
+		node = node->next;
 	}
 	/*if (m_camera != NULL)
 		m_camera->BeginRender();
@@ -65,16 +73,17 @@ void DScene::Update()
 		return;
 	if (!m_isLoaded)
 		return;
-	if (m_camera != NULL)
-		m_camera->Update();
-	if (m_light != NULL)
-		m_light->Update();
-	if (m_displayObjects != NULL) {
+	//if (m_camera != NULL)
+	//	m_camera->Update();
+	//if (m_light != NULL)
+	//	m_light->Update();
+	if (m_transforms != NULL) {
 		int i, size;
-		size = m_displayObjects->size();
+		size = m_transforms->size();
 		for (int i = 0; i < size; i++) {
-			DDisplayObject* obj = m_displayObjects->at(i);
-			obj->Update();
+			DTransform* trans = m_transforms->at(i);
+			DSceneObject* sceneObj = trans->GetSceneObject();
+			sceneObj->Update();
 		}
 	}
 	OnUpdate();
@@ -86,16 +95,17 @@ void DScene::FixedUpdate()
 		return;
 	if (!m_isLoaded)
 		return;
-	if (m_camera != NULL)
-		m_camera->FixedUpdate();
-	if (m_light != NULL)
-		m_light->FixedUpdate();
-	if (m_displayObjects != NULL) {
+	//if (m_camera != NULL)
+	//	m_camera->FixedUpdate();
+	//if (m_light != NULL)
+	//	m_light->FixedUpdate();
+	if (m_transforms != NULL) {
 		int i, size;
-		size = m_displayObjects->size();
+		size = m_transforms->size();
 		for (int i = 0; i < size; i++) {
-			DDisplayObject* obj = m_displayObjects->at(i);
-			obj->FixedUpdate();
+			DTransform* trans = m_transforms->at(i);
+			DSceneObject* sceneObj = trans->GetSceneObject();
+			sceneObj->FixedUpdate();
 		}
 	}
 	OnFixedUpdate();
@@ -106,20 +116,20 @@ void DScene::Enter()
 	if (m_isEnter)
 		return;
 	Load();
-	if (m_camera != NULL) {
-		m_camera->Init();
-	}
-	if (m_light != NULL) {
-		m_light->Init();
-	}
-	if (m_displayObjects != NULL) {
+	//if (m_camera != NULL) {
+	//	m_camera->Init();
+	//}
+	//if (m_light != NULL) {
+	//	m_light->Init();
+	//}
+	/*if (m_displayObjects != NULL) {
 		int i, size;
 		size = m_displayObjects->size();
 		for (int i = 0; i < size; i++) {
 			DDisplayObject* obj = m_displayObjects->at(i);
 			obj->Init();
 		}
-	}
+	}*/
 	OnEnter();
 	m_isEnter = true;
 }
@@ -137,8 +147,8 @@ void DScene::Load()
 {
 	if (m_isLoaded)
 		return;
-	if (m_displayObjects == NULL) {
-		m_displayObjects = new std::vector<DDisplayObject*>();
+	if (m_transforms == NULL) {
+		m_transforms = new std::vector<DTransform*>();
 	}
 	OnLoad();
 	m_isLoaded = true;
@@ -148,30 +158,31 @@ void DScene::UnLoad()
 {
 	if (!m_isLoaded)
 		return;
-	if (m_displayObjects != NULL) 
+	if (m_transforms != NULL)
 	{
 		int i, size;
-		size = m_displayObjects->size();
+		size = m_transforms->size();
 		for (int i = 0; i < size; i++) 
 		{
-			DDisplayObject* obj = m_displayObjects->at(i);
+			DTransform* trans = m_transforms->at(i);
+			DSceneObject* obj = trans->GetSceneObject();
 			obj->Destroy();
 			delete obj;
 		}
-		m_displayObjects->clear();
+		m_transforms->clear();
 	}
-	if (m_camera != NULL)
-	{
-		m_camera->Destroy();
-		delete m_camera;
-		m_camera = NULL;
-	}
-	if (m_light != NULL)
-	{
-		m_light->Destroy();
-		delete m_light;
-		m_light = NULL;
-	}
+	//if (m_camera != NULL)
+	//{
+	//	m_camera->Destroy();
+	//	delete m_camera;
+	//	m_camera = NULL;
+	//}
+	//if (m_light != NULL)
+	//{
+	//	m_light->Destroy();
+	//	delete m_light;
+	//	m_light = NULL;
+	//}
 	OnUnLoad();
 	m_isLoaded = false;
 }
@@ -201,6 +212,34 @@ void DScene::Destroy()
 	Exit();
 }
 
+void DScene::AddTransform(DTransform * transform)
+{
+	if (m_transforms == NULL)
+		return;
+	transform->RemoveFromParent();
+	m_transforms->push_back(transform);
+}
+
+DCameraNode * DScene::GetCameraNode()
+{
+	return m_cameraNode;
+}
+
+void DScene::SetCameraNode(DCameraNode * cameraNode)
+{
+	m_cameraNode = cameraNode;
+}
+
+DLightNode * DScene::GetLightNode()
+{
+	return m_lightNode;
+}
+
+void DScene::SetLightNode(DLightNode * lightNode)
+{
+	m_lightNode = lightNode;
+}
+
 void DScene::Draw(bool callOnRender, DShader* replaceShader)
 {
 	DScene* current = DSystem::GetSceneMgr()->GetCurrentScene();
@@ -211,8 +250,14 @@ void DScene::Draw(bool callOnRender, DShader* replaceShader)
 void DScene::DrawShadow()
 {
 	DScene* current = DSystem::GetSceneMgr()->GetCurrentScene();
-	if (current != NULL && current->m_light != NULL)
-		current->m_light->RenderShadow();
+	//if (current != NULL && current->m_light != NULL)
+	//	current->m_light->RenderShadow();
+	DLightNode* node = current->m_lightNode;
+	while (node != NULL)
+	{
+		node->light->Render();
+		node = node->next;
+	}
 }
 
 void DScene::OnGUI()
@@ -247,43 +292,43 @@ void DScene::OnUnLoad()
 {
 }
 
-void DScene::AddDisplayObject(DDisplayObject * displayObject)
-{
-	if (m_displayObjects == NULL)
-		return;
-	m_displayObjects->push_back(displayObject);
-}
-
-void DScene::SetCamera(DCamera * camera)
-{
-	m_camera = camera;
-}
-
-DCamera * DScene::GetCamera()
-{
-	return m_camera;
-}
-
-void DScene::SetLight(DLight * light)
-{
-	m_light = light;
-}
-
-DLight * DScene::GetLight()
-{
-	return m_light;
-}
+//void DScene::AddDisplayObject(DDisplayObject * displayObject)
+//{
+//	if (m_displayObjects == NULL)
+//		return;
+//	m_displayObjects->push_back(displayObject);
+//}
+//
+//void DScene::SetCamera(DCamera * camera)
+//{
+//	m_camera = camera;
+//}
+//
+//DCamera * DScene::GetCamera()
+//{
+//	return m_camera;
+//}
+//
+//void DScene::SetLight(DLight * light)
+//{
+//	m_light = light;
+//}
+//
+//DLight * DScene::GetLight()
+//{
+//	return m_light;
+//}
 
 void DScene::DrawScene(bool callOnRender, DShader* replaceShader)
 {
-	if (m_displayObjects != NULL) 
+	if (m_transforms != NULL) 
 	{
 		int i, size;
-		size = m_displayObjects->size();
+		size = m_transforms->size();
 		for (int i = 0; i < size; i++) 
 		{
-			DDisplayObject* obj = m_displayObjects->at(i);
-			obj->Render(replaceShader);
+			DTransform* trans = m_transforms->at(i);
+			trans->GetSceneObject()->Cull(replaceShader);
 		}
 	}
 	if (callOnRender)

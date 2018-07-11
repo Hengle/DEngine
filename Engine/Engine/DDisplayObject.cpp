@@ -20,7 +20,7 @@ void DDisplayObject::Render(DShader* replaceShader)
 		DMatrix4x4 world;
 		//DCamera* cur;
 		//DCamera::GetCurrentCamera(&cur);
-		m_Transform->GetLocalToWorld(world);
+		m_transform->GetLocalToWorld(world);
 		if (replaceShader != NULL)
 		{
 			DShader* current = m_material->GetShader();
@@ -35,18 +35,23 @@ void DDisplayObject::Render(DShader* replaceShader)
 	}
 }
 
-void DDisplayObject::Init()
+void DDisplayObject::SetVisible(bool visible)
 {
-	DSceneObject::Init();
-	if (m_material != NULL)
-	{
-		//m_shader->Init(DSystem::GetGraphicsMgr()->GetDevice());
-	}
+	m_isVisible = visible;
 }
 
-void DDisplayObject::Destroy()
+bool DDisplayObject::GetVisible()
 {
-	DSceneObject::Destroy();
+	return m_isVisible;
+}
+
+bool DDisplayObject::OnInit()
+{
+	return true;
+}
+
+void DDisplayObject::OnDestroy()
+{
 	if (m_material != NULL) {
 		m_material->Destroy();
 		delete m_material;
@@ -60,12 +65,24 @@ void DDisplayObject::Destroy()
 	}
 }
 
-void DDisplayObject::SetVisible(bool visible)
+void DDisplayObject::OnUpdate()
 {
-	m_isVisible = visible;
 }
 
-bool DDisplayObject::GetVisible()
+void DDisplayObject::OnFixedUpdate()
 {
-	return m_isVisible;
+}
+
+void DDisplayObject::OnRender()
+{
+}
+
+void DDisplayObject::OnCull()
+{
+	if (m_mesh != NULL && m_material != NULL && m_isVisible)
+	{
+		DMatrix4x4 world;
+		m_transform->GetLocalToWorld(world);
+		DGraphics::PushRenderCommand(m_mesh, world, m_material);
+	}
 }

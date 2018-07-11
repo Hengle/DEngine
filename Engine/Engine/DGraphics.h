@@ -28,6 +28,7 @@ public:
 	static void EndSetRenderTarget(DRenderTexture* = NULL);
 
 	static void DrawMesh(DMesh*, const DMatrix4x4&, DMaterial*);
+	static void PushRenderCommand();
 	static void DrawTexture(DTexture*, DMaterial*);
 	static void DrawSkyBox(DMaterial*, const DCamera*);
 	

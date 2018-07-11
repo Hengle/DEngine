@@ -9,6 +9,8 @@ DLight::DLight()
 	m_far = 100.0f;
 	m_size = 30.0f;
 	m_isProjChanged = false;
+
+	m_node = 0;
 }
 
 
@@ -66,20 +68,18 @@ void DLight::SetIntensity(float intensity)
 	m_intensity = intensity;
 }
 
-void DLight::RenderShadow()
+bool DLight::OnInit()
 {
-	float w = m_shadowMap->GetWidth();
-	float h = m_shadowMap->GetHeight();
-	//DGraphics::ResetViewPort();
-	DGraphics::SetViewPort(0, 0, w, h);
-	BeginRenderShadow();
-	DScene::Draw(false, m_shadowShader);
-	EndRenderShadow();
-}
-
-void DLight::Init()
-{
-	DSceneObject::Init();
+	DLightNode* lightNode = DSystem::GetSceneMgr()->GetCurrentScene()->GetLightNode();
+	m_node = new DLightNode();
+	m_node->light = this;
+	if (lightNode == NULL)
+		lightNode = m_node;
+	else {
+		lightNode->next = m_node;
+		m_node->pre = lightNode;
+	}
+	DSystem::GetSceneMgr()->GetCurrentScene()->SetLightNode(lightNode);
 	//float w, h;
 	//DSystem::GetGraphicsMgr()->GetResolution(w, h);
 	m_shadowMap = DRenderTexture::Create(1024, 1024);
@@ -87,11 +87,11 @@ void DLight::Init()
 
 	DMatrix4x4::Ortho(&m_proj, m_size, m_size, 0.0f, m_far);
 	//DMatrix4x4::Perspective(&m_proj, D_PI / 3.0f, 1.0f, 0.03f, 34.0f);
+	return true;
 }
 
-void DLight::Destroy()
+void DLight::OnDestroy()
 {
-	DSceneObject::Destroy();
 	if (m_shadowMap != NULL)
 	{
 		m_shadowMap->Destroy();
@@ -105,10 +105,41 @@ void DLight::Destroy()
 		delete m_shadowShader;
 		m_shadowShader = NULL;
 	}
+
+	if (m_node != NULL)
+	{
+		if (m_node->pre == NULL)
+		{
+			DSystem::GetSceneMgr()->GetCurrentScene()->SetLightNode(m_node->next);
+		}
+		else
+		{
+			m_node->pre->next = m_node->next;
+		}
+		m_node->pre = NULL;
+		m_node->next = NULL;
+		delete m_node;
+		m_node = NULL;
+	}
 }
 
-void DLight::Update()
+void DLight::OnUpdate()
 {
+}
+
+void DLight::OnFixedUpdate()
+{
+}
+
+void DLight::OnRender()
+{
+	float w = m_shadowMap->GetWidth();
+	float h = m_shadowMap->GetHeight();
+	//DGraphics::ResetViewPort();
+	DGraphics::SetViewPort(0, 0, w, h);
+	BeginRenderShadow();
+	DScene::Draw(false, m_shadowShader);
+	EndRenderShadow();
 }
 
 void DLight::BeginRenderShadow()
@@ -131,12 +162,12 @@ void DLight::BeginRenderShadow()
 	float fparam = bsize.z * 2;
 	DMatrix4x4::Ortho(&m_proj, bsize.x * 2, bsize.y * 2, 0, fparam);*/
 
-	if (m_Transform->IsMatrixWillChange())
+	if (m_transform->IsMatrixWillChange())
 	{
 		DVector3 up, lookAt, position;
-		m_Transform->GetUp(up);
-		m_Transform->GetPosition(position);
-		m_Transform->GetForward(lookAt);
+		m_transform->GetUp(up);
+		m_transform->GetPosition(position);
+		m_transform->GetForward(lookAt);
 
 		DShader::SetGlobalVector3("g_sundir", lookAt);
 

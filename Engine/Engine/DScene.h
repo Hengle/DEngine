@@ -24,6 +24,12 @@ public:
 	bool IsEnter();
 	virtual void Destroy();
 
+	void AddTransform(DTransform*);
+	DCameraNode* GetCameraNode();
+	void SetCameraNode(DCameraNode*);
+	DLightNode* GetLightNode();
+	void SetLightNode(DLightNode*);
+
 	static void Draw(bool callOnRender, DShader* replaceShader = NULL);
 	static void DrawShadow();
 
@@ -37,19 +43,20 @@ protected:
 	virtual void OnLoad();
 	virtual void OnUnLoad();
 
-	void AddDisplayObject(DDisplayObject*);
-	void SetCamera(DCamera*);
-	DCamera* GetCamera();
-	void SetLight(DLight*);
-	DLight* GetLight();
+	//void SetCamera(DCamera*);
+	//DCamera* GetCamera();
+	//void SetLight(DLight*);
+	//DLight* GetLight();
 
 private:
 	void DrawScene(bool callOnRender, DShader* replaceShader);
 
 protected:
-	std::vector<DDisplayObject*>* m_displayObjects;
-	DCamera* m_camera;
-	DLight* m_light;
+	std::vector<DTransform*>* m_transforms;
+	DCameraNode* m_cameraNode;
+	DLightNode* m_lightNode;
+	//DCamera* m_camera;
+	//DLight* m_light;
 
 private:
 	bool m_isLoaded;

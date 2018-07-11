@@ -104,3 +104,9 @@ enum DVertexBufferType
 	DVERTEX_BUFFER_TYPE_UV1 = 16,
 	DVERTEX_BUFFER_TYPE_UV2 = 32,
 };
+
+enum DShaderProgramType
+{
+	DShaderProgram_Vertex = 0,
+	DShaderProgram_Pixel = 1,
+};

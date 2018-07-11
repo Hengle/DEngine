@@ -208,8 +208,10 @@ void TestScene::TestLoad()
 
 	m_light = new DLight();
 	m_light->SetColor(1, 1, 1, 1);
+	m_light->SetFar(60.0f);
 	transform = m_light->GetTransform();
 	transform->SetEuler(50, -30, 0);
+	transform->SetPosition(5.05f, 12.04f, -8.74f);
 	SetLight(m_light);
 
 	//DMesh* mesh = DMesh::Create("../Res/eboy.obj");
@@ -450,7 +452,7 @@ void TestScene::OnUpdate()
 		transform->GetUp(camUp);
 
 		m_lookAtPoint = camUp*dty*0.1f + m_lookAtPoint;
-		m_lookAtPoint = camRight*dtx*0.1f + m_lookAtPoint;
+		m_lookAtPoint = camRight*dtx*-0.1f + m_lookAtPoint;
 
 		DVector3 forward;
 		m_camera->GetTransform()->GetForward(forward);

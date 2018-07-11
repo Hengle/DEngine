@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "DObject.h"
 #include "DTransform.h"
 
@@ -15,5 +15,8 @@ public:
 
 protected:
 	DTransform* m_Transform;
+
+private:
+	bool m_isPrepareDestroy;
 };
 

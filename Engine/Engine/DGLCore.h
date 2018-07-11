@@ -139,15 +139,15 @@ public:
 	virtual DRenderBuffer* GetDepthBuffer() = 0;
 };
 
-//抽象shader资源-用于实现不同API下的shader
-class DShaderRes
+//抽象shader program-用于实现不同API下的不同shader
+class DShaderProgram
 {
 public:
-	DShaderRes();
+	DShaderProgram();
 	/*获得属性数量*/
 	unsigned int GetPropertyCount() const;
 	/*初始化*/
-	void Init(const char* content /*shader内容*/, char* vsfunc /*顶点函数名*/, char* psfunc /*片段函数名*/);
+	void Init(const char* content /*shader内容*/, char* funcName /*函数名*/);
 	/*获得shader资源属性数量*/
 	unsigned int GetResCount() const; 
 	/*应用shader参数*/
@@ -160,7 +160,7 @@ public:
 	virtual void Release() = 0;
 
 protected:
-	virtual bool OnInit(const char* content, char* vsfunc, char* psfunc) = 0;
+	virtual bool OnInit(const char* content, char* funcName) = 0;
 	virtual void OnApplyParams(std::map<std::string, float*>&params, std::map<std::string, float*>&gparams) = 0;
 	virtual void OnDraw() = 0;
 
@@ -214,7 +214,7 @@ public:
 	virtual DMeshRes* CreateMeshRes(int, bool) = 0;
 	virtual DTextureRes* CreateTextureRes(WCHAR*) = 0;
 	virtual DRenderTextureViewRes* CreateRenderTextureRes(float, float) = 0;
-	virtual DShaderRes* CreateShaderRes() = 0;
+	virtual DShaderProgram* CreateShaderProgram(DShaderProgramType) = 0;
 	virtual void ApplySamplerState(UINT, DWrapMode) = 0;
 	virtual IRenderStateMgr* GetRenderStateMgr() = 0;
 	void GetResolution(float&, float&);

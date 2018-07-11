@@ -518,11 +518,23 @@ void DShaderPass::Release()
 		delete[] m_pixelFuncName;
 	m_vertexFuncName = 0;
 	m_pixelFuncName = 0;
-	if (m_shaderRes != NULL)
+	/*if (m_shaderRes != NULL)
 	{
 		m_shaderRes->Release();
 		delete m_shaderRes;
 		m_shaderRes = NULL;
+	}*/
+	if (m_vertexShader != NULL)
+	{
+		m_vertexShader->Release();
+		delete m_vertexShader;
+		m_vertexShader = NULL;
+	}
+	if (m_pixelShader != NULL)
+	{
+		m_pixelShader->Release();
+		delete m_pixelShader;
+		m_pixelShader = NULL;
 	}
 }
 
@@ -639,18 +651,40 @@ void DShaderPass::SetPixelFuncName(char *pixelFuncName)
 
 void DShaderPass::CompileShader(const char * content)
 {
-	DShaderRes* res = DSystem::GetGraphicsMgr()->GetGLCore()->CreateShaderRes();
+	/*DShaderRes* res = DSystem::GetGraphicsMgr()->GetGLCore()->CreateShaderRes();
 	if (res != NULL)
 	{
 		res->Init(content, m_vertexFuncName, m_pixelFuncName);
 		m_shaderRes = res;
+	}*/
+	DShaderProgram* vshader = DSystem::GetGraphicsMgr()->GetGLCore()->CreateShaderProgram(DShaderProgram_Vertex);
+	DShaderProgram* pshader = DSystem::GetGraphicsMgr()->GetGLCore()->CreateShaderProgram(DShaderProgram_Pixel);
+	if (vshader != NULL)
+	{
+		vshader->Init(content, m_vertexFuncName);
+		m_vertexShader = vshader;
+	}
+	if (pshader != NULL)
+	{
+		pshader->Init(content, m_pixelFuncName);
+		m_pixelShader = pshader;
 	}
 }
 
-DShaderRes * DShaderPass::GetShaderRes()
+DShaderProgram * DShaderPass::GetVertexShader()
 {
-	return m_shaderRes;
+	return m_vertexShader;
 }
+
+DShaderProgram * DShaderPass::GetPixelShader()
+{
+	return m_pixelShader;
+}
+
+//DShaderRes * DShaderPass::GetShaderRes()
+//{
+//	return m_shaderRes;
+//}
 
 void DShaderPass::ApplyStates()
 {

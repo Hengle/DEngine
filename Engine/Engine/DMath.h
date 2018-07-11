@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <math.h>
 
 #define EPSILNON 0.000001f
@@ -195,6 +195,7 @@ public:
 	void TransformPoint(const DVector3&, DVector3&) const;
 	void GetTranspose(DMatrix4x4&) const; 
 	void Transpose();
+	void Inverse();
 
 	static void Perspective(DMatrix4x4*, float fov, float aspect, float near, float far);
 	static void Ortho(DMatrix4x4*, float width, float height, float near, float far);
@@ -209,6 +210,7 @@ public:
 	static void TRS(DMatrix4x4*, DVector3* forward, DVector3* up, const DVector3&, const DQuaterion&, const DVector3&);
 	static void LookAt(DMatrix4x4*, const DVector3&, const DVector3&, const DVector3&);
 	static void Transpose(DMatrix4x4* out, const DMatrix4x4& target);
+	static void Inverse(DMatrix4x4* out, const DMatrix4x4& target);
 
 public:
 	float m00, m01, m02, m03;

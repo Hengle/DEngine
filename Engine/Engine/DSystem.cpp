@@ -33,7 +33,7 @@ bool DSystem::Init()
 	m_timeMgr->Init();
 
 	m_graphicsMgr = new DGraphics();
-	if (!m_graphicsMgr->Init(width, height, false, m_hwnd, DGRAPHICS_API_D3D9))
+	if (!m_graphicsMgr->Init(width, height, false, m_hwnd, DGRAPHICS_API_D3D11))
 	{
 		return false;
 	}

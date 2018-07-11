@@ -32,8 +32,8 @@ public:
 	virtual DTextureRes* CreateTextureRes(WCHAR*);
 	/*创建RenderTexture资源*/
 	virtual DRenderTextureViewRes* CreateRenderTextureRes(float width, float height);
-	/*创建shader资源*/
-	virtual DShaderRes* CreateShaderRes();
+	/*创建shader程序*/
+	virtual DShaderProgram* CreateShaderProgram(DShaderProgramType);
 	virtual void ApplySamplerState(UINT, DWrapMode);
 	virtual IRenderStateMgr* GetRenderStateMgr();
 	ID3D11Device* GetDevice() const;

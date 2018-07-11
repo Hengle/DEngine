@@ -19,6 +19,10 @@ public:
 	void SetColor(float, float, float, float);
 	void SetColor(DColor);
 	float GetIntensity();
+	float GetFar();
+	float GetSize();
+	void SetFar(float);
+	void SetSize(float);
 	void SetIntensity(float);
 	void RenderShadow();
 	virtual void Init();
@@ -28,6 +32,7 @@ public:
 private:
 	void BeginRenderShadow();
 	void EndRenderShadow();
+	//void GetCameraBounds(DCamera* cam, DVector3* outCenter, DVector3* outSize);
 
 private:
 	DColor m_color;
@@ -36,5 +41,8 @@ private:
 	DShader* m_shadowShader;
 	DMatrix4x4 m_view;
 	DMatrix4x4 m_proj;
+	float m_far;
+	float m_size;
+	bool m_isProjChanged;
 };
 

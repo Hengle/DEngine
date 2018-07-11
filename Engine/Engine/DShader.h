@@ -51,6 +51,9 @@ public:
 	static void SetGlobalTexture(const LPCSTR key, DTexture*);
 
 private:
+	void ApplyShaderProgramParams(DShaderProgram* program, DShaderConstantTable*);
+
+private:
 	DShaderBlock* m_shaderBlock;
 };
 

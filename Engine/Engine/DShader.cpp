@@ -239,6 +239,37 @@ void DShader::SetGlobalTexture(const LPCSTR key, DTexture * texture)
 	sGlobalShaderConstants->SetTexture(key, texture);
 }
 
+void DShader::ApplyShaderProgramParams(DShaderProgram * program, DShaderConstantTable * constantTable)
+{
+	if (constantTable != nullptr) {
+		if (sGlobalShaderConstants == nullptr)
+			sGlobalShaderConstants = new DShaderConstantTable();
+		program->ApplyParams(constantTable->params, sGlobalShaderConstants->params);
+
+		unsigned int rescount = program->GetResCount();
+		if (rescount > 0)
+		{
+			int i;
+			DShaderResDesc rdesc;
+			DTexture* tex;
+			for (i = 0; i < rescount; i++)
+			{
+				program->GetResDesc(i, rdesc);
+				if (constantTable->textures.find(rdesc.resName) != constantTable->textures.end())
+				{
+					tex = constantTable->textures.at(rdesc.resName);
+					tex->Apply(rdesc.offset);
+				}
+				else if (rdesc.isGlobal && sGlobalShaderConstants->textures.find(rdesc.resName) != sGlobalShaderConstants->textures.end())
+				{
+					tex = sGlobalShaderConstants->textures.at(rdesc.resName);
+					tex->Apply(rdesc.offset);
+				}
+			}
+		}
+	}
+}
+
 void DShader::Destroy()
 {
 	if (m_shaderBlock != NULL)
@@ -256,17 +287,22 @@ bool DShader::HasProperty(const LPCSTR key) const
 		int scount,i;
 		scount = m_shaderBlock->GetPassCount();
 		DShaderPass* pass;
-		DShaderRes* res;
+		DShaderProgram* prog;
 		for (i = 0; i < scount; i++)
 		{
 			pass = m_shaderBlock->GetPass(i);
 			if (pass == NULL)
 				continue;
-			res = pass->GetShaderRes();
-			if (res == NULL)
-				continue;
-			if (res->HasProperty(key))
-				return true;
+			prog = pass->GetVertexShader();
+			if (prog != NULL) {
+				if (prog->HasProperty(key))
+					return true;
+			}
+			prog = pass->GetPixelShader();
+			if (prog != NULL) {
+				if (prog->HasProperty(key))
+					return true;
+			}
 		}
 	}
 	return false;
@@ -282,34 +318,12 @@ void DShader::ApplyParams(DShaderConstantTable * constantTable, int index)
 		DShaderPass* pass = m_shaderBlock->GetPass(index);
 		if (pass == NULL)
 			return;
-		DShaderRes* res = pass->GetShaderRes();
-		if (res != NULL && constantTable != nullptr) {
-			if (sGlobalShaderConstants == nullptr)
-				sGlobalShaderConstants = new DShaderConstantTable();
-			res->ApplyParams(constantTable->params, sGlobalShaderConstants->params);
-
-			unsigned int rescount = res->GetResCount();
-			if (rescount > 0)
-			{
-				int i;
-				DShaderResDesc rdesc;
-				DTexture* tex;
-				for (i = 0; i < rescount; i++)
-				{
-					res->GetResDesc(i, rdesc);
-					if (constantTable->textures.find(rdesc.resName) != constantTable->textures.end())
-					{
-						tex = constantTable->textures.at(rdesc.resName);
-						tex->Apply(rdesc.offset);
-					}
-					else if (rdesc.isGlobal && sGlobalShaderConstants->textures.find(rdesc.resName) != sGlobalShaderConstants->textures.end())
-					{
-						tex = sGlobalShaderConstants->textures.at(rdesc.resName);
-						tex->Apply(rdesc.offset);
-					}
-				}
-			}
-		}
+		DShaderProgram* program = pass->GetVertexShader();
+		if (program != NULL)
+			ApplyShaderProgramParams(program, constantTable);
+		program = pass->GetPixelShader();
+		if (program != NULL)
+			ApplyShaderProgramParams(program, constantTable);
 	}
 }
 
@@ -337,9 +351,12 @@ void DShader::Draw(int index)
 		DShaderPass* pass = m_shaderBlock->GetPass(index);
 		if (pass == NULL)
 			return;
-		DShaderRes* res = pass->GetShaderRes();
-		if (res != NULL)
-			res->Draw();
+		DShaderProgram* prog = pass->GetVertexShader();
+		if (prog != NULL)
+			prog->Draw();
+		prog = pass->GetPixelShader();
+		if (prog != NULL)
+			prog->Draw();
 	}
 }
 
@@ -353,9 +370,9 @@ int DShader::GetVertexUsage(int index)
 		DShaderPass* pass = m_shaderBlock->GetPass(index);
 		if (pass == NULL)
 			return 0;
-		DShaderRes* res = pass->GetShaderRes();
-		if (res != NULL)
-			return res->GetVertexUsage();
+		DShaderProgram* vprog = pass->GetVertexShader();
+		if (vprog != NULL)
+			return vprog->GetVertexUsage();
 	}
 	return 0;
 }

@@ -1104,6 +1104,133 @@ void DMatrix4x4::Transpose()
 	m32 = t23;
 }
 
+void DMatrix4x4::Inverse()
+{
+	DMatrix4x4 tmp;
+
+	tmp[0] = m11 * m22 * m33 -
+		m11 * m23 * m32 -
+		m21 * m12 * m33 +
+		m21 * m13 * m32 +
+		m31 * m12 * m23 -
+		m31 * m13 * m22;
+
+	tmp[4] = -m10 * m22 * m33 +
+		m10 * m23 * m32 +
+		m20 * m12 * m33 -
+		m20 * m13 * m32 -
+		m30 * m12 * m23 +
+		m30 * m13 * m22;
+
+	tmp[8] = m10 * m21 * m33 -
+		m10 * m23 * m31 -
+		m20 * m11 * m33 +
+		m20 * m13 * m31 +
+		m30 * m11 * m23 -
+		m30 * m13 * m21;
+
+	tmp[12] = -m10 * m21 * m32 +
+		m10 * m22 * m31 +
+		m20 * m11 * m32 -
+		m20 * m12 * m31 -
+		m30 * m11 * m22 +
+		m30 * m12 * m21;
+
+	tmp[1] = -m01 * m22 * m33 +
+		m01 * m23 * m32 +
+		m21 * m02 * m33 -
+		m21 * m03 * m32 -
+		m31 * m02 * m23 +
+		m31 * m03 * m22;
+
+	tmp[5] = m00 * m22 * m33 -
+		m00 * m23 * m32 -
+		m20 * m02 * m33 +
+		m20 * m03 * m32 +
+		m30 * m02 * m23 -
+		m30 * m03 * m22;
+
+	tmp[9] = -m00 * m21 * m33 +
+		m00 * m23 * m31 +
+		m20 * m01 * m33 -
+		m20 * m03 * m31 -
+		m30 * m01 * m23 +
+		m30 * m03 * m21;
+
+	tmp[13] = m00 * m21 * m32 -
+		m00 * m22 * m31 -
+		m20 * m01 * m32 +
+		m20 * m02 * m31 +
+		m30 * m01 * m22 -
+		m30 * m02 * m21;
+
+	tmp[2] = m01 * m12 * m33 -
+		m01 * m13 * m32 -
+		m11 * m02 * m33 +
+		m11 * m03 * m32 +
+		m31 * m02 * m13 -
+		m31 * m03 * m12;
+
+	tmp[6] = -m00 * m12 * m33 +
+		m00 * m13 * m32 +
+		m10 * m02 * m33 -
+		m10 * m03 * m32 -
+		m30 * m02 * m13 +
+		m30 * m03 * m12;
+
+	tmp[10] = m00 * m11 * m33 -
+		m00 * m13 * m31 -
+		m10 * m01 * m33 +
+		m10 * m03 * m31 +
+		m30 * m01 * m13 -
+		m30 * m03 * m11;
+
+	tmp[14] = -m00 * m11 * m32 +
+		m00 * m12 * m31 +
+		m10 * m01 * m32 -
+		m10 * m02 * m31 -
+		m30 * m01 * m12 +
+		m30 * m02 * m11;
+
+	tmp[3] = -m01 * m12 * m23 +
+		m01 * m13 * m22 +
+		m11 * m02 * m23 -
+		m11 * m03 * m22 -
+		m21 * m02 * m13 +
+		m21 * m03 * m12;
+
+	tmp[7] = m00 * m12 * m23 -
+		m00 * m13 * m22 -
+		m10 * m02 * m23 +
+		m10 * m03 * m22 +
+		m20 * m02 * m13 -
+		m20 * m03 * m12;
+
+	tmp[11] = -m00 * m11 * m23 +
+		m00 * m13 * m21 +
+		m10 * m01 * m23 -
+		m10 * m03 * m21 -
+		m20 * m01 * m13 +
+		m20 * m03 * m11;
+
+	tmp[15] = m00 * m11 * m22 -
+		m00 * m12 * m21 -
+		m10 * m01 * m22 +
+		m10 * m02 * m21 +
+		m20 * m01 * m12 -
+		m20 * m02 * m11;
+
+	float det = m00 * tmp[0] + m01 * tmp[4] + m02 * tmp[8] + m03 * tmp[12];
+
+	if (det == 0)
+		throw std::exception("不可逆矩阵");
+
+	det = 1.0f / det;
+
+	for (int i = 0; i < 16; i++)
+		this->operator[](i) = tmp[i] * det;
+}
+
 void DMatrix4x4::Perspective(DMatrix4x4 * matrix, float fov, float aspect, float nearplane, float farplane)
 {
 	float cotfov = 1.0f/tanf(fov*0.5f);
@@ -1474,6 +1601,133 @@ void DMatrix4x4::Transpose(DMatrix4x4 * out, const DMatrix4x4 & target)
 	out->m30 = t03;
 	out->m31 = t13;
 	out->m32 = t23;
+}
+
+void DMatrix4x4::Inverse(DMatrix4x4 * out, const DMatrix4x4 & target)
+{
+	DMatrix4x4 tmp;
+
+	tmp[0] = target.m11 * target.m22 * target.m33 -
+		target.m11 * target.m23 * target.m32 -
+		target.m21 * target.m12 * target.m33 +
+		target.m21 * target.m13 * target.m32 +
+		target.m31 * target.m12 * target.m23 -
+		target.m31 * target.m13 * target.m22;
+
+	tmp[4] = -target.m10 * target.m22 * target.m33 +
+		target.m10 * target.m23 * target.m32 +
+		target.m20 * target.m12 * target.m33 -
+		target.m20 * target.m13 * target.m32 -
+		target.m30 * target.m12 * target.m23 +
+		target.m30 * target.m13 * target.m22;
+
+	tmp[8] = target.m10 * target.m21 * target.m33 -
+		target.m10 * target.m23 * target.m31 -
+		target.m20 * target.m11 * target.m33 +
+		target.m20 * target.m13 * target.m31 +
+		target.m30 * target.m11 * target.m23 -
+		target.m30 * target.m13 * target.m21;
+
+	tmp[12] = -target.m10 * target.m21 * target.m32 +
+		target.m10 * target.m22 * target.m31 +
+		target.m20 * target.m11 * target.m32 -
+		target.m20 * target.m12 * target.m31 -
+		target.m30 * target.m11 * target.m22 +
+		target.m30 * target.m12 * target.m21;
+
+	tmp[1] = -target.m01 * target.m22 * target.m33 +
+		target.m01 * target.m23 * target.m32 +
+		target.m21 * target.m02 * target.m33 -
+		target.m21 * target.m03 * target.m32 -
+		target.m31 * target.m02 * target.m23 +
+		target.m31 * target.m03 * target.m22;
+
+	tmp[5] = target.m00 * target.m22 * target.m33 -
+		target.m00 * target.m23 * target.m32 -
+		target.m20 * target.m02 * target.m33 +
+		target.m20 * target.m03 * target.m32 +
+		target.m30 * target.m02 * target.m23 -
+		target.m30 * target.m03 * target.m22;
+
+	tmp[9] = -target.m00 * target.m21 * target.m33 +
+		target.m00 * target.m23 * target.m31 +
+		target.m20 * target.m01 * target.m33 -
+		target.m20 * target.m03 * target.m31 -
+		target.m30 * target.m01 * target.m23 +
+		target.m30 * target.m03 * target.m21;
+
+	tmp[13] = target.m00 * target.m21 * target.m32 -
+		target.m00 * target.m22 * target.m31 -
+		target.m20 * target.m01 * target.m32 +
+		target.m20 * target.m02 * target.m31 +
+		target.m30 * target.m01 * target.m22 -
+		target.m30 * target.m02 * target.m21;
+
+	tmp[2] = target.m01 * target.m12 * target.m33 -
+		target.m01 * target.m13 * target.m32 -
+		target.m11 * target.m02 * target.m33 +
+		target.m11 * target.m03 * target.m32 +
+		target.m31 * target.m02 * target.m13 -
+		target.m31 * target.m03 * target.m12;
+
+	tmp[6] = -target.m00 * target.m12 * target.m33 +
+		target.m00 * target.m13 * target.m32 +
+		target.m10 * target.m02 * target.m33 -
+		target.m10 * target.m03 * target.m32 -
+		target.m30 * target.m02 * target.m13 +
+		target.m30 * target.m03 * target.m12;
+
+	tmp[10] = target.m00 * target.m11 * target.m33 -
+		target.m00 * target.m13 * target.m31 -
+		target.m10 * target.m01 * target.m33 +
+		target.m10 * target.m03 * target.m31 +
+		target.m30 * target.m01 * target.m13 -
+		target.m30 * target.m03 * target.m11;
+
+	tmp[14] = -target.m00 * target.m11 * target.m32 +
+		target.m00 * target.m12 * target.m31 +
+		target.m10 * target.m01 * target.m32 -
+		target.m10 * target.m02 * target.m31 -
+		target.m30 * target.m01 * target.m12 +
+		target.m30 * target.m02 * target.m11;
+
+	tmp[3] = -target.m01 * target.m12 * target.m23 +
+		target.m01 * target.m13 * target.m22 +
+		target.m11 * target.m02 * target.m23 -
+		target.m11 * target.m03 * target.m22 -
+		target.m21 * target.m02 * target.m13 +
+		target.m21 * target.m03 * target.m12;
+
+	tmp[7] = target.m00 * target.m12 * target.m23 -
+		target.m00 * target.m13 * target.m22 -
+		target.m10 * target.m02 * target.m23 +
+		target.m10 * target.m03 * target.m22 +
+		target.m20 * target.m02 * target.m13 -
+		target.m20 * target.m03 * target.m12;
+
+	tmp[11] = -target.m00 * target.m11 * target.m23 +
+		target.m00 * target.m13 * target.m21 +
+		target.m10 * target.m01 * target.m23 -
+		target.m10 * target.m03 * target.m21 -
+		target.m20 * target.m01 * target.m13 +
+		target.m20 * target.m03 * target.m11;
+
+	tmp[15] = target.m00 * target.m11 * target.m22 -
+		target.m00 * target.m12 * target.m21 -
+		target.m10 * target.m01 * target.m22 +
+		target.m10 * target.m02 * target.m21 +
+		target.m20 * target.m01 * target.m12 -
+		target.m20 * target.m02 * target.m11;
+
+	float det = target.m00 * tmp[0] + target.m01 * tmp[4] + target.m02 * tmp[8] + target.m03 * tmp[12];
+
+	if (det == 0)
+		throw std::exception("不可逆矩阵");
+
+	det = 1.0f / det;
+
+	for (int i = 0; i < 16; i++)
+		out->operator[](i) = tmp[i] * det;
 }
 
 DBounds::DBounds()

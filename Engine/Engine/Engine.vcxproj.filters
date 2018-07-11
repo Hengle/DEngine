@@ -135,15 +135,6 @@
     <ClInclude Include="DMeshRes11.h">
       <Filter>头文件\Core\D3D11Core</Filter>
     </ClInclude>
-    <ClInclude Include="DShaderRes9.h">
-      <Filter>头文件\Core\D3D9Core</Filter>
-    </ClInclude>
-    <ClInclude Include="DShaderRes10.h">
-      <Filter>头文件\Core\D3D10Core</Filter>
-    </ClInclude>
-    <ClInclude Include="DShaderRes11.h">
-      <Filter>头文件\Core\D3D11Core</Filter>
-    </ClInclude>
     <ClInclude Include="DGUI.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
@@ -243,6 +234,15 @@
     <ClInclude Include="D3DCore.h">
       <Filter>头文件\Core</Filter>
     </ClInclude>
+    <ClInclude Include="DShaderProgram11.h">
+      <Filter>头文件\Core\D3D11Core</Filter>
+    </ClInclude>
+    <ClInclude Include="DShaderProgram10.h">
+      <Filter>头文件\Core\D3D10Core</Filter>
+    </ClInclude>
+    <ClInclude Include="DShaderProgram9.h">
+      <Filter>头文件\Core\D3D9Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DMath.cpp">
@@ -282,15 +282,6 @@
       <Filter>源文件\Core\D3D10Core</Filter>
     </ClCompile>
     <ClCompile Include="DMeshRes11.cpp">
-      <Filter>源文件\Core\D3D11Core</Filter>
-    </ClCompile>
-    <ClCompile Include="DShaderRes9.cpp">
-      <Filter>源文件\Core\D3D9Core</Filter>
-    </ClCompile>
-    <ClCompile Include="DShaderRes10.cpp">
-      <Filter>源文件\Core\D3D10Core</Filter>
-    </ClCompile>
-    <ClCompile Include="DShaderRes11.cpp">
       <Filter>源文件\Core\D3D11Core</Filter>
     </ClCompile>
     <ClCompile Include="DCamera.cpp">
@@ -403,6 +394,15 @@
     </ClCompile>
     <ClCompile Include="D3DCore.cpp">
       <Filter>源文件\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DShaderProgram11.cpp">
+      <Filter>源文件\Core\D3D11Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DShaderProgram10.cpp">
+      <Filter>源文件\Core\D3D10Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DShaderProgram9.cpp">
+      <Filter>源文件\Core\D3D9Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

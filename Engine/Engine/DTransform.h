@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "DMath.h"
 
 class DTransform
@@ -23,11 +23,15 @@ public:
 	void GetForward(DVector3&);
 	void GetRight(DVector3&);
 	void GetLocalToWorld(DMatrix4x4&);
+	void GetWorldToLocal(DMatrix4x4&);
+	void TransformPointToWorld(const DVector3 & point, DVector3 & out);
+	void TransformPointToLocal(const DVector3 & point, DVector3 & out);
 
 	bool IsMatrixWillChange();
 
 private:
-	void RefreshMatrix();
+	void RefreshLocalToWorldMatrix();
+	void RefreshWorldToLocalMatrix();
 	void RefreshEuler();
 private:
 	DVector3 m_position;
@@ -37,9 +41,14 @@ private:
 	DVector3 m_forward;
 	DQuaterion m_rotation;
 
-	bool m_isMatrixChanged;
+	//DTransform* m_parent;
+	//DTransform* 
+
+	bool m_isL2WMatrixChanged;
+	bool m_isW2LMatrixChanged;
 	bool m_isEulerChanged;
 
 	DMatrix4x4 m_localToWorld;
+	DMatrix4x4 m_worldToLocal;
 };
 

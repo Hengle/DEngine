@@ -1,7 +1,7 @@
 ﻿#include "D3D9Core.h"
 #include <fstream>
 #include "DMeshRes9.h"
-#include "DShaderRes9.h"
+#include "DShaderProgram9.h"
 #include "DTextureRes9.h"
 #include "DRenderStateMgr9.h"
 
@@ -186,9 +186,12 @@ DRenderTextureViewRes * D3D9Core::CreateRenderTextureRes(float width, float heig
 	return new DRenderTextureViewRes9(m_device, width, height);
 }
 
-DShaderRes * D3D9Core::CreateShaderRes()
+DShaderProgram * D3D9Core::CreateShaderProgram(DShaderProgramType programType)
 {
-	return new DShaderRes9(m_device);
+	if(programType == DShaderProgram_Vertex)
+		return new DShaderVertexProgram9(m_device);
+	else if (programType == DShaderProgram_Pixel)
+		return new DShaderPixelProgram9(m_device);
 }
 
 void D3D9Core::ApplySamplerState(UINT index, DWrapMode warpmode)

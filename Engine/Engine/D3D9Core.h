@@ -32,7 +32,7 @@ public:
 	/*创建RenderTexture资源*/
 	virtual DRenderTextureViewRes* CreateRenderTextureRes(float width, float height);
 	/*创建shader资源*/
-	virtual DShaderRes* CreateShaderRes();
+	virtual DShaderProgram* CreateShaderProgram(DShaderProgramType);
 	virtual void ApplySamplerState(UINT, DWrapMode);
 	virtual IRenderStateMgr* GetRenderStateMgr();
 

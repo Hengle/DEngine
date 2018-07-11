@@ -1,50 +1,18 @@
-﻿#include "DShaderRes10.h"
+﻿#include "DShaderProgram10.h"
 #include <D3DX10.h>
 #include <d3dcompiler.h>
 
-DShaderRes10::DShaderRes10(ID3D10Device * device) : DShaderRes()
+DShaderProgram10::DShaderProgram10(ID3D10Device * device)
 {
 	m_device = device;
-	m_vertexShader = 0;
-	m_pixelShader = 0;
 	m_layout = 0;
 }
 
-DShaderRes10::~DShaderRes10()
+DShaderProgram10::~DShaderProgram10()
 {
 }
 
-//void DShaderRes10::GetPropertyInfo(const LPCSTR key, DShaderParamDesc * desc) const
-//{
-//	if (m_params.find(key) != m_params.end())
-//	{
-//		DShaderParamDesc pm = m_params.at(key);
-//		desc->cbufferIndex = pm.cbufferIndex;
-//		desc->cbufferOffset = pm.cbufferOffset;
-//		desc->cbufferLength = pm.cbufferLength;
-//		desc->propertySize = pm.propertySize;
-//		desc->propertyOffset = pm.propertyOffset;
-//		desc->shaderType = pm.shaderType;
-//		return;
-//	}
-//	desc->cbufferIndex = -1;
-//	desc->cbufferOffset = -1;
-//	desc->cbufferLength = 0;
-//	desc->propertySize = 0;
-//	desc->propertyOffset = -1;
-//	desc->shaderType = 0;
-//}
-//
-//UINT DShaderRes10::GetResOffset(const LPCSTR key) const
-//{
-//	if (m_resParams.find(key) != m_resParams.end())
-//	{
-//		return m_resParams.at(key);
-//	}
-//	return NAN;
-//}
-
-void DShaderRes10::GetResDesc(unsigned int index, DShaderResDesc & res) const
+void DShaderProgram10::GetResDesc(unsigned int index, DShaderResDesc & res) const
 {
 	if (index < m_resParams.size())
 	{
@@ -52,7 +20,7 @@ void DShaderRes10::GetResDesc(unsigned int index, DShaderResDesc & res) const
 	}
 }
 
-bool DShaderRes10::HasProperty(const LPCSTR key) const
+bool DShaderProgram10::HasProperty(const LPCSTR key) const
 {
 	size_t size = m_cbuffers.size();
 	int i;
@@ -80,7 +48,7 @@ bool DShaderRes10::HasProperty(const LPCSTR key) const
 	return false;
 }
 
-void DShaderRes10::Release()
+void DShaderProgram10::Release()
 {
 	int i;
 	if (m_paramBuffers.size() > 0)
@@ -113,21 +81,97 @@ void DShaderRes10::Release()
 		m_layout = 0;
 	}
 
-	if (m_pixelShader)
+	m_device = NULL;
+}
+
+void DShaderProgram10::OnDraw()
+{
+	m_device->IASetInputLayout(m_layout);
+
+	//deviceContext->PSSetSamplers(0, 1, &m_samplerState);
+}
+
+void DShaderProgram10::OnApplyParams(std::map<std::string, float*>& params, std::map<std::string, float*>&gparams)
+{
+	int i, j, k;
+	HRESULT result;
+	float* dataPtr = 0, *paramvalue = 0;
+	unsigned int bufferNumber = 0;
+	ID3D10Buffer* pbuffer = 0;
+	DShaderCBufferDesc* desc = 0;
+	std::map<std::string, DShaderPropertyDesc>::iterator iter;
+
+	if (m_cbuffers.size() > 0)
 	{
-		m_pixelShader->Release();
-		m_pixelShader = 0;
+		for (i = 0; i < m_cbuffers.size(); i++)
+		{
+			desc = m_cbuffers.at(i);
+			pbuffer = m_paramBuffers[desc->cbufferIndex];
+			if (pbuffer == NULL)
+				continue;
+			bufferNumber = desc->cbufferStartSlot;
+			result = pbuffer->Map(D3D10_MAP_WRITE_DISCARD, 0, (void**)&dataPtr);
+			if (FAILED(result))
+			{
+				continue;
+			}
+
+			paramvalue = 0;
+			for (iter = desc->properties.begin(); iter != desc->properties.end(); iter++)
+			{
+				if (params.find(iter->first) != params.end())
+				{
+					paramvalue = params.at(iter->first);
+					for (k = 0; k < iter->second.propertySize; k++)
+					{
+						dataPtr[k + iter->second.propertyOffset] = paramvalue[k];
+					}
+				}
+				else if (iter->second.isGlobal && gparams.find(iter->first) != gparams.end())
+				{
+					paramvalue = gparams.at(iter->first);
+					for (k = 0; k < iter->second.propertySize; k++)
+					{
+						dataPtr[k + iter->second.propertyOffset] = paramvalue[k];
+					}
+				}
+			}
+
+			pbuffer->Unmap();
+
+			if (desc->shaderType == 0)
+			{
+				m_device->VSSetConstantBuffers(bufferNumber, 1, &pbuffer);
+			}
+			else
+			{
+				m_device->PSSetConstantBuffers(bufferNumber, 1, &pbuffer);
+			}
+		}
 	}
+}
+
+DShaderVertexProgram10::DShaderVertexProgram10(ID3D10Device * device) : DShaderProgram10(device)
+{
+	m_vertexShader = 0;
+}
+
+DShaderVertexProgram10::~DShaderVertexProgram10()
+{
+}
+
+void DShaderVertexProgram10::Release()
+{
+	DShaderProgram10::Release();
 
 	if (m_vertexShader)
 	{
 		m_vertexShader->Release();
 		m_vertexShader = 0;
 	}
-	m_device = NULL;
 }
 
-HRESULT DShaderRes10::InitVertexShader(ID3DBlob * pShaderBlob, ID3D10Device *pD3DDevice, ID3D10InputLayout **pInputLayout, int * inputLayoutByteLength)
+HRESULT DShaderVertexProgram10::InitVertexShader(ID3DBlob * pShaderBlob, ID3D10Device *pD3DDevice, ID3D10InputLayout **pInputLayout, int * inputLayoutByteLength)
 {
 	ID3D10ShaderReflection* pVertexShaderReflection = nullptr;
 	D3D10_BUFFER_DESC paramBufferDesc;
@@ -319,7 +363,91 @@ HRESULT DShaderRes10::InitVertexShader(ID3DBlob * pShaderBlob, ID3D10Device *pD3
 	return hr;
 }
 
-HRESULT DShaderRes10::InitPixelShader(ID3DBlob * pShaderBlob, ID3D10Device * pD3DDevice)
+bool DShaderVertexProgram10::OnInit(const char * content, char * funcName)
+{
+	HRESULT result;
+	ID3D10Blob* errorMessage;
+	ID3D10Blob* vertexShaderBuffer;
+
+
+	errorMessage = 0;
+	vertexShaderBuffer = 0;
+
+	result = D3DCompile(content, strlen(content), NULL, NULL, NULL, funcName, "vs_4_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &vertexShaderBuffer, &errorMessage);
+	if (FAILED(result))
+	{
+		if (errorMessage)
+		{
+			//OutputShaderErrorMessage(errorMessage, vsFilename);
+		}
+		else
+		{
+			/*char s[1024];
+			_bstr_t b(vsFilename);
+			char* fname = b;
+			sprintf_s(s, "Missing Vertex Shader File:%s", fname);
+			DLog::Err(s);*/
+		}
+
+		return false;
+	}
+
+	result = m_device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), &m_vertexShader);
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	// Create the vertex input layout.
+
+	int byteLength = 0;
+	m_cbufferCount = 0;
+	m_propertyCount = 0;
+
+	result = InitVertexShader(vertexShaderBuffer, m_device, &m_layout, &byteLength);
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	vertexShaderBuffer->Release();
+	vertexShaderBuffer = 0;
+
+	/*char s[1024];
+	_bstr_t b(vsFilename);
+	char* fname = b;
+	sprintf_s(s, "Shader Load Complie Success! (%s)", fname);
+	DLog::Info(s);*/
+
+	return true;
+}
+
+void DShaderVertexProgram10::OnDraw()
+{
+	DShaderProgram10::OnDraw();
+	m_device->VSSetShader(m_vertexShader);
+}
+
+DShaderPixelProgram10::DShaderPixelProgram10(ID3D10Device * device) : DShaderProgram10(device)
+{
+	m_pixelShader = 0;
+}
+
+DShaderPixelProgram10::~DShaderPixelProgram10()
+{
+}
+
+void DShaderPixelProgram10::Release()
+{
+	DShaderProgram10::Release();
+	if (m_pixelShader)
+	{
+		m_pixelShader->Release();
+		m_pixelShader = 0;
+	}
+}
+
+HRESULT DShaderPixelProgram10::InitPixelShader(ID3DBlob * pShaderBlob, ID3D10Device * pD3DDevice)
 {
 	// Reflect shader info
 	ID3D10ShaderReflection* pPixelShaderReflection = nullptr;
@@ -444,297 +572,67 @@ HRESULT DShaderRes10::InitPixelShader(ID3DBlob * pShaderBlob, ID3D10Device * pD3
 	return hr;
 }
 
-//bool DShaderRes10::OnInit(WCHAR * vsFilename, WCHAR * psFilename)
-//{
-//	HRESULT result;
-//	ID3D10Blob* errorMessage;
-//	ID3D10Blob* vertexShaderBuffer;
-//	ID3D10Blob* pixelShaderBuffer;
-//
-//
-//	errorMessage = 0;
-//	vertexShaderBuffer = 0;
-//	pixelShaderBuffer = 0;
-//
-//	result = D3DX10CompileFromFile(vsFilename, NULL, NULL, "TextureVertexShader", "vs_4_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
-//		&vertexShaderBuffer, &errorMessage, NULL);
-//	if (FAILED(result))
-//	{
-//		if (errorMessage)
-//		{
-//			//OutputShaderErrorMessage(errorMessage, vsFilename);
-//		}
-//		else
-//		{
-//			/*char s[1024];
-//			_bstr_t b(vsFilename);
-//			char* fname = b;
-//			sprintf_s(s, "Missing Vertex Shader File:%s", fname);
-//			DLog::Err(s);*/
-//		}
-//
-//		return false;
-//	}
-//
-//	result = D3DX10CompileFromFile(psFilename, NULL, NULL, "TexturePixelShader", "ps_4_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
-//		&pixelShaderBuffer, &errorMessage, NULL);
-//	if (FAILED(result))
-//	{
-//		if (errorMessage)
-//		{
-//			//OutputShaderErrorMessage(errorMessage, psFilename);
-//		}
-//		else
-//		{
-//			/*char s[1024];
-//			_bstr_t b(psFilename);
-//			char* fname = b;
-//			sprintf_s(s, "Missing Pixel Shader File:%s", fname);
-//			DLog::Err(s);*/
-//		}
-//
-//		return false;
-//	}
-//
-//	result = m_device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), &m_vertexShader);
-//	if (FAILED(result))
-//	{
-//		return false;
-//	}
-//
-//	result = m_device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), &m_pixelShader);
-//	if (FAILED(result))
-//	{
-//		return false;
-//	}
-//
-//	// Create the vertex input layout.
-//
-//	int byteLength = 0;
-//	m_cbufferCount = 0;
-//	m_propertyCount = 0;
-//
-//	result = InitVertexShader(vertexShaderBuffer, m_device, &m_layout, &byteLength);
-//	if (FAILED(result))
-//	{
-//		return false;
-//	}
-//
-//	result = InitPixelShader(pixelShaderBuffer, m_device);
-//	if (FAILED(result))
-//	{
-//		return false;
-//	}
-//
-//	vertexShaderBuffer->Release();
-//	vertexShaderBuffer = 0;
-//
-//	pixelShaderBuffer->Release();
-//	pixelShaderBuffer = 0;
-//
-//	/*char s[1024];
-//	_bstr_t b(vsFilename);
-//	char* fname = b;
-//	sprintf_s(s, "Shader Load Complie Success! (%s)", fname);
-//	DLog::Info(s);*/
-//
-//	return true;
-//}
-
-bool DShaderRes10::OnInit(const char * content, char * vsfunc, char * psfunc)
+bool DShaderPixelProgram10::OnInit(const char * content, char * funcName)
 {
-		HRESULT result;
-		ID3D10Blob* errorMessage;
-		ID3D10Blob* vertexShaderBuffer;
-		ID3D10Blob* pixelShaderBuffer;
-	
-	
-		errorMessage = 0;
-		vertexShaderBuffer = 0;
-		pixelShaderBuffer = 0;
-	
-		result = D3DCompile(content, strlen(content), NULL, NULL, NULL, vsfunc, "vs_4_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &vertexShaderBuffer, &errorMessage);
-		if (FAILED(result))
-		{
-			if (errorMessage)
-			{
-				//OutputShaderErrorMessage(errorMessage, vsFilename);
-			}
-			else
-			{
-				/*char s[1024];
-				_bstr_t b(vsFilename);
-				char* fname = b;
-				sprintf_s(s, "Missing Vertex Shader File:%s", fname);
-				DLog::Err(s);*/
-			}
-	
-			return false;
-		}
-
-		result = D3DCompile(content, strlen(content), NULL, NULL, NULL, psfunc, "ps_4_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &pixelShaderBuffer, &errorMessage);
-		if (FAILED(result))
-		{
-			if (errorMessage)
-			{
-				//OutputShaderErrorMessage(errorMessage, psFilename);
-			}
-			else
-			{
-				/*char s[1024];
-				_bstr_t b(psFilename);
-				char* fname = b;
-				sprintf_s(s, "Missing Pixel Shader File:%s", fname);
-				DLog::Err(s);*/
-			}
-	
-			return false;
-		}
-	
-		result = m_device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), &m_vertexShader);
-		if (FAILED(result))
-		{
-			return false;
-		}
-	
-		result = m_device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), &m_pixelShader);
-		if (FAILED(result))
-		{
-			return false;
-		}
-	
-		// Create the vertex input layout.
-	
-		int byteLength = 0;
-		m_cbufferCount = 0;
-		m_propertyCount = 0;
-	
-		result = InitVertexShader(vertexShaderBuffer, m_device, &m_layout, &byteLength);
-		if (FAILED(result))
-		{
-			return false;
-		}
-	
-		result = InitPixelShader(pixelShaderBuffer, m_device);
-		if (FAILED(result))
-		{
-			return false;
-		}
-	
-		vertexShaderBuffer->Release();
-		vertexShaderBuffer = 0;
-	
-		pixelShaderBuffer->Release();
-		pixelShaderBuffer = 0;
-	
-		/*char s[1024];
-		_bstr_t b(vsFilename);
-		char* fname = b;
-		sprintf_s(s, "Shader Load Complie Success! (%s)", fname);
-		DLog::Info(s);*/
-	
-		return true;
-}
-
-void DShaderRes10::OnDraw()
-{
-	m_device->IASetInputLayout(m_layout);
-
-	m_device->VSSetShader(m_vertexShader);
-	m_device->PSSetShader(m_pixelShader);
-
-	//deviceContext->PSSetSamplers(0, 1, &m_samplerState);
-}
-
-void DShaderRes10::OnApplyParams(std::map<std::string, float*>& params, std::map<std::string, float*>&gparams)
-{
-	int i, j, k;
 	HRESULT result;
-	float* dataPtr = 0, *paramvalue = 0;
-	unsigned int bufferNumber = 0;
-	ID3D10Buffer* pbuffer = 0;
-	DShaderCBufferDesc* desc = 0;
-	std::map<std::string, DShaderPropertyDesc>::iterator iter;
+	ID3D10Blob* errorMessage;
+	ID3D10Blob* pixelShaderBuffer;
 
-	if (m_cbuffers.size() > 0)
+
+	errorMessage = 0;
+	pixelShaderBuffer = 0;
+
+	result = D3DCompile(content, strlen(content), NULL, NULL, NULL, funcName, "ps_4_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &pixelShaderBuffer, &errorMessage);
+	if (FAILED(result))
 	{
-		for (i = 0; i < m_cbuffers.size(); i++)
+		if (errorMessage)
 		{
-			desc = m_cbuffers.at(i);
-			pbuffer = m_paramBuffers[desc->cbufferIndex];
-			if (pbuffer == NULL)
-				continue;
-			bufferNumber = desc->cbufferStartSlot;
-			result = pbuffer->Map(D3D10_MAP_WRITE_DISCARD, 0, (void**)&dataPtr);
-			if (FAILED(result))
-			{
-				continue;
-			}
-
-			paramvalue = 0;
-			for (iter = desc->properties.begin(); iter != desc->properties.end(); iter++)
-			{
-				if (params.find(iter->first) != params.end())
-				{
-					paramvalue = params.at(iter->first);
-					for (k = 0; k < iter->second.propertySize; k++)
-					{
-						dataPtr[k + iter->second.propertyOffset] = paramvalue[k];
-					}
-				}
-				else if (iter->second.isGlobal && gparams.find(iter->first) != gparams.end())
-				{
-					paramvalue = gparams.at(iter->first);
-					for (k = 0; k < iter->second.propertySize; k++)
-					{
-						dataPtr[k + iter->second.propertyOffset] = paramvalue[k];
-					}
-				}
-			}
-
-			pbuffer->Unmap();
-
-			if (desc->shaderType == 0)
-			{
-				m_device->VSSetConstantBuffers(bufferNumber, 1, &pbuffer);
-			}
-			else
-			{
-				m_device->PSSetConstantBuffers(bufferNumber, 1, &pbuffer);
-			}
+			//OutputShaderErrorMessage(errorMessage, psFilename);
 		}
+		else
+		{
+			/*char s[1024];
+			_bstr_t b(psFilename);
+			char* fname = b;
+			sprintf_s(s, "Missing Pixel Shader File:%s", fname);
+			DLog::Err(s);*/
+		}
+
+		return false;
 	}
+
+	result = m_device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), &m_pixelShader);
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	// Create the vertex input layout.
+
+	m_cbufferCount = 0;
+	m_propertyCount = 0;
+
+	result = InitPixelShader(pixelShaderBuffer, m_device);
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	pixelShaderBuffer->Release();
+	pixelShaderBuffer = 0;
+
+	/*char s[1024];
+	_bstr_t b(vsFilename);
+	char* fname = b;
+	sprintf_s(s, "Shader Load Complie Success! (%s)", fname);
+	DLog::Info(s);*/
+
+	return true;
 }
 
-//void DShaderRes10::OnApplyParams(int cindex, int coffset, int csize, int stype, float* params)
-//{
-//	HRESULT result;
-//
-//	float* dataPtr;
-//	unsigned int bufferNumber = coffset;
-//
-//	ID3D10Buffer* pbuffer = m_paramBuffers[cindex];
-//
-//	result = pbuffer->Map(D3D10_MAP_WRITE_DISCARD, 0, (void**)&dataPtr);
-//	if (FAILED(result))
-//	{
-//		return;
-//	}
-//
-//	int i;
-//	for (i = 0; i < csize; i++)
-//	{
-//		dataPtr[i] = params[i];
-//	}
-//
-//	pbuffer->Unmap();
-//
-//	if (stype == 0)
-//	{
-//		m_device->VSSetConstantBuffers(bufferNumber, 1, &pbuffer);
-//	}
-//	else
-//	{
-//		m_device->PSSetConstantBuffers(bufferNumber, 1, &pbuffer);
-//	}
-//}
+void DShaderPixelProgram10::OnDraw()
+{
+	DShaderProgram10::OnDraw();
+	
+	m_device->PSSetShader(m_pixelShader);
+}

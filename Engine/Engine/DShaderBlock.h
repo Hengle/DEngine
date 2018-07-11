@@ -29,7 +29,9 @@ public:
 	void SetVertexFuncName(char*);
 	void SetPixelFuncName(char*);
 	void CompileShader(const char*);
-	DShaderRes* GetShaderRes();
+	//DShaderRes* GetShaderRes();
+	DShaderProgram* GetVertexShader();
+	DShaderProgram* GetPixelShader();
 	void ApplyStates();
 
 	void SetPassEnable(bool);
@@ -46,7 +48,9 @@ private:
 	DRSCompareFunc m_ztest;
 	DCullMode m_cullmode;
 	DFillMode m_fillmode;
-	DShaderRes* m_shaderRes;
+	//DShaderRes* m_shaderRes;
+	DShaderProgram* m_vertexShader;
+	DShaderProgram* m_pixelShader;
 	DRSBlendOp m_blendOp;
 	DRSBlendFactor m_blendSrc;
 	DRSBlendFactor m_blendDst;

@@ -58,7 +58,6 @@ void DCamera::Render()
 		DScene::Draw(true);
 	EndRender();
 
-	
 }
 
 void DCamera::Init()
@@ -256,7 +255,7 @@ void DCamera::BeginRender()
 	{
 		if (m_ortho)
 		{
-			DMatrix4x4::Ortho(&m_projection, m_aspect*m_orthoSize, m_orthoSize, m_near, m_far);
+			DMatrix4x4::Ortho(&m_projection, m_aspect*m_orthoSize*2, m_orthoSize*2, m_near, m_far);
 		}
 		else
 		{

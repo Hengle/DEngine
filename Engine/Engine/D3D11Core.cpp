@@ -1,7 +1,7 @@
 ﻿#include "D3D11Core.h"
 #include "DSystem.h"
 #include "DMeshRes11.h"
-#include "DShaderRes11.h"
+#include "DShaderProgram11.h"
 #include "DTextureRes11.h"
 #include "DRenderStateMgr11.h"
 #include "DRenderBuffer11.h"
@@ -429,10 +429,12 @@ DRenderTextureViewRes * D3D11Core::CreateRenderTextureRes(float width, float hei
 	return new DRenderTextureViewRes11(m_device, m_deviceContext, width, height);
 }
 
-DShaderRes * D3D11Core::CreateShaderRes()
+DShaderProgram * D3D11Core::CreateShaderProgram(DShaderProgramType programType)
 {
-	
-	return new DShaderRes11(m_device, m_deviceContext);
+	if(programType == DShaderProgram_Vertex)
+		return new DShaderVertexProgram11(m_device, m_deviceContext);
+	else if(programType == DShaderProgram_Pixel)
+		return new DShaderPixelProgram11(m_device, m_deviceContext);
 }
 
 void D3D11Core::ApplySamplerState(UINT startSlot, DWrapMode mode)

@@ -161,7 +161,7 @@ bool DMeshRes::IsInitialized()
 	return m_isInitialized;
 }
 
-DShaderRes::DShaderRes()
+DShaderProgram::DShaderProgram()
 {
 	m_isInitialized = false;
 	m_cbufferCount = 0;
@@ -175,7 +175,7 @@ DShaderRes::DShaderRes()
 //	return m_cbufferCount;
 //}
 
-unsigned int DShaderRes::GetPropertyCount() const
+unsigned int DShaderProgram::GetPropertyCount() const
 {
 	return m_propertyCount;
 }
@@ -185,17 +185,17 @@ unsigned int DShaderRes::GetPropertyCount() const
 //	m_isInitialized = OnInit(vsfile, psfile);
 //}
 
-void DShaderRes::Init(const char * content, char * vsfunc, char * psfunc)
+void DShaderProgram::Init(const char * content, char * funcName)
 {
-	m_isInitialized = OnInit(content, vsfunc, psfunc);
+	m_isInitialized = OnInit(content, funcName);
 }
 
-unsigned int DShaderRes::GetResCount() const
+unsigned int DShaderProgram::GetResCount() const
 {
 	return m_resCount;
 }
 
-void DShaderRes::ApplyParams(std::map<std::string, float*>& params, std::map<std::string, float*>&gparams)
+void DShaderProgram::ApplyParams(std::map<std::string, float*>& params, std::map<std::string, float*>&gparams)
 {
 	if (m_isInitialized)
 		OnApplyParams(params, gparams);
@@ -207,18 +207,18 @@ void DShaderRes::ApplyParams(std::map<std::string, float*>& params, std::map<std
 //		OnApplyParams(cindex, coffset, csize, stype, params);
 //}
 
-void DShaderRes::Draw()
+void DShaderProgram::Draw()
 {
 	if (m_isInitialized)
 		OnDraw();
 }
 
-bool DShaderRes::IsInitialized()
+bool DShaderProgram::IsInitialized()
 {
 	return m_isInitialized;
 }
 
-int DShaderRes::GetVertexUsage()
+int DShaderProgram::GetVertexUsage()
 {
 	return m_vertexUsage;
 }

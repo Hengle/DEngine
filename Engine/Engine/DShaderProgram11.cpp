@@ -1,50 +1,20 @@
-﻿#include "DShaderRes11.h"
+﻿#include "DShaderProgram11.h"
 #include "DTextureRes11.h"
 #include <d3dcompiler.h>
 #include <fstream>
 
-DShaderRes11::DShaderRes11(ID3D11Device * device, ID3D11DeviceContext * deviceContext) : DShaderRes()
+DShaderProgram11::DShaderProgram11(ID3D11Device * device, ID3D11DeviceContext * deviceContext) : DShaderProgram()
 {
 	m_device = device;
 	m_deviceContext = deviceContext;
-	m_vertexShader = 0;
-	m_pixelShader = 0;
 	m_layout = 0;
 }
 
-DShaderRes11::~DShaderRes11()
+DShaderProgram11::~DShaderProgram11()
 {
 }
 
-//void DShaderRes11::GetPropertyInfo(const LPCSTR key, DShaderParamDesc * desc) const
-//{
-//	if (m_params.find(key) != m_params.end())
-//	{
-//		DShaderParamDesc pm = m_params.at(key);
-//		desc->cbufferIndex = pm.cbufferIndex;
-//		desc->cbufferOffset = pm.cbufferOffset;
-//		desc->cbufferLength = pm.cbufferLength;
-//		desc->propertySize = pm.propertySize;
-//		desc->propertyOffset = pm.propertyOffset;
-//		desc->shaderType = pm.shaderType;
-//		return;
-//	}
-//	desc->cbufferIndex = -1;
-//	desc->cbufferOffset = -1;
-//	desc->cbufferLength = 0;
-//	desc->propertySize = 0;
-//	desc->propertyOffset = -1;
-//	desc->shaderType = 0;
-//}
-
-//UINT DShaderRes11::GetResOffset(const LPCSTR key) const
-//{
-//	if (m_resParams.find(key) != m_resParams.end())
-//		return m_resParams.at(key);
-//	return NAN;
-//}
-
-void DShaderRes11::GetResDesc(unsigned int index, DShaderResDesc & res) const
+void DShaderProgram11::GetResDesc(unsigned int index, DShaderResDesc & res) const
 {
 	if (index < m_resParams.size())
 	{
@@ -52,7 +22,7 @@ void DShaderRes11::GetResDesc(unsigned int index, DShaderResDesc & res) const
 	}
 }
 
-bool DShaderRes11::HasProperty(const LPCSTR key) const
+bool DShaderProgram11::HasProperty(const LPCSTR key) const
 {
 	size_t size = m_cbuffers.size();
 	int i;
@@ -71,16 +41,11 @@ bool DShaderRes11::HasProperty(const LPCSTR key) const
 		if (rdesc.resName.compare(key) == 0)
 			return true;
 	}
-	/*if (m_cbuffers.find(key) != m_cbuffers.end())
-	{
-		return true;
-	}*/
-	/*if (m_resParams.find(key) != m_resParams.end())
-		return true;*/
+	
 	return false;
 }
 
-void DShaderRes11::Release()
+void DShaderProgram11::Release()
 {
 	int i;
 	if (m_paramBuffers.size() > 0)
@@ -112,226 +77,16 @@ void DShaderRes11::Release()
 		m_layout->Release();
 		m_layout = 0;
 	}
-
-	if (m_pixelShader)
-	{
-		m_pixelShader->Release();
-		m_pixelShader = 0;
-	}
-
-	if (m_vertexShader)
-	{
-		m_vertexShader->Release();
-		m_vertexShader = 0;
-	}
 	m_device = NULL;
 	m_deviceContext = NULL;
 }
 
-//bool DShaderRes11::OnInit(WCHAR * vsFilename, WCHAR * psFilename)
-//{
-//	HRESULT result;
-//	ID3D10Blob* errorMessage;
-//	ID3D10Blob* vertexShaderBuffer;
-//	ID3D10Blob* pixelShaderBuffer;
-//
-//
-//	errorMessage = 0;
-//	vertexShaderBuffer = 0;
-//	pixelShaderBuffer = 0;
-//	result = D3DX11CompileFromFile(vsFilename, NULL, NULL, "TextureVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
-//		&vertexShaderBuffer, &errorMessage, NULL);
-//	if (FAILED(result))
-//	{
-//		if (errorMessage)
-//		{
-//			//OutputShaderErrorMessage(errorMessage, vsFilename);
-//		}
-//		else
-//		{
-//			/*char s[1024];
-//			_bstr_t b(vsFilename);
-//			char* fname = b;
-//			sprintf_s(s, "Missing Vertex Shader File:%s", fname);
-//			DLog::Err(s);*/
-//		}
-//
-//		return false;
-//	}
-//
-//	result = D3DX11CompileFromFile(psFilename, NULL, NULL, "TexturePixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL,
-//		&pixelShaderBuffer, &errorMessage, NULL);
-//	if (FAILED(result))
-//	{
-//		if (errorMessage)
-//		{
-//			//OutputShaderErrorMessage(errorMessage, psFilename);
-//		}
-//		else
-//		{
-//			/*char s[1024];
-//			_bstr_t b(psFilename);
-//			char* fname = b;
-//			sprintf_s(s, "Missing Pixel Shader File:%s", fname);
-//			DLog::Err(s);*/
-//		}
-//
-//		return false;
-//	}
-//
-//	result = m_device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &m_vertexShader);
-//	if (FAILED(result))
-//	{
-//		return false;
-//	}
-//
-//	result = m_device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &m_pixelShader);
-//	if (FAILED(result))
-//	{
-//		return false;
-//	}
-//
-//	// Create the vertex input layout.
-//
-//	int byteLength = 0;
-//	m_cbufferCount = 0;
-//	m_propertyCount = 0;
-//
-//	result = InitVertexShader(vertexShaderBuffer, m_device, &m_layout, &byteLength);
-//	if (FAILED(result))
-//	{
-//		return false;
-//	}
-//
-//	result = InitPixelShader(pixelShaderBuffer, m_device);
-//	if (FAILED(result))
-//	{
-//		return false;
-//	}
-//
-//	vertexShaderBuffer->Release();
-//	vertexShaderBuffer = 0;
-//
-//	pixelShaderBuffer->Release();
-//	pixelShaderBuffer = 0;
-//
-//	/*char s[1024];
-//	_bstr_t b(vsFilename);
-//	char* fname = b;
-//	sprintf_s(s, "Shader Load Complie Success! (%s)", fname);
-//	DLog::Info(s);*/
-//
-//	return true;
-//}
-
-bool DShaderRes11::OnInit(const char * content, char * vsfunc, char * psfunc)
-{
-	HRESULT result;
-	ID3D10Blob* errorMessage;
-	ID3D10Blob* vertexShaderBuffer;
-	ID3D10Blob* pixelShaderBuffer;
-
-
-	errorMessage = 0;
-	vertexShaderBuffer = 0;
-	pixelShaderBuffer = 0;
-	result = D3DCompile(content, strlen(content), NULL, NULL, NULL, vsfunc, "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &vertexShaderBuffer, &errorMessage);
-	if (FAILED(result))
-	{
-		if (errorMessage)
-		{
-			OutputShaderErrorMessage(errorMessage);
-			errorMessage->Release();
-			errorMessage = 0;
-		}
-		else
-		{
-			/*char s[1024];
-			_bstr_t b(vsFilename);
-			char* fname = b;
-			sprintf_s(s, "Missing Vertex Shader File:%s", fname);
-			DLog::Err(s);*/
-		}
-
-		return false;
-	}
-	result = D3DCompile(content, strlen(content), NULL, NULL, NULL, psfunc, "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &pixelShaderBuffer, &errorMessage);
-	if (FAILED(result))
-	{
-		if (errorMessage)
-		{
-			errorMessage->Release();
-			errorMessage = 0;
-		}
-		else
-		{
-			/*char s[1024];
-			_bstr_t b(psFilename);
-			char* fname = b;
-			sprintf_s(s, "Missing Pixel Shader File:%s", fname);
-			DLog::Err(s);*/
-		}
-
-		return false;
-	}
-
-	result = m_device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &m_vertexShader);
-	if (FAILED(result))
-	{
-		return false;
-	}
-
-	result = m_device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &m_pixelShader);
-	if (FAILED(result))
-	{
-		return false;
-	}
-
-	// Create the vertex input layout.
-
-	int byteLength = 0;
-	m_cbufferCount = 0;
-	m_propertyCount = 0;
-
-	result = InitVertexShader(vertexShaderBuffer, m_device, &m_layout, &byteLength);
-	if (FAILED(result))
-	{
-		return false;
-	}
-
-	result = InitPixelShader(pixelShaderBuffer, m_device);
-	if (FAILED(result))
-	{
-		return false;
-	}
-
-	vertexShaderBuffer->Release();
-	vertexShaderBuffer = 0;
-
-	pixelShaderBuffer->Release();
-	pixelShaderBuffer = 0;
-
-	/*char s[1024];
-	_bstr_t b(vsFilename);
-	char* fname = b;
-	sprintf_s(s, "Shader Load Complie Success! (%s)", fname);
-	DLog::Info(s);*/
-
-	return true;
-}
-
-void DShaderRes11::OnDraw()
+void DShaderProgram11::OnDraw()
 {
 	m_deviceContext->IASetInputLayout(m_layout);
-
-	m_deviceContext->VSSetShader(m_vertexShader, NULL, 0);
-	m_deviceContext->PSSetShader(m_pixelShader, NULL, 0);
-
-	//deviceContext->PSSetSamplers(0, 1, &m_samplerState);
-
 }
 
-void DShaderRes11::OnApplyParams(std::map<std::string, float*>& params, std::map<std::string, float*>&gparams)
+void DShaderProgram11::OnApplyParams(std::map<std::string, float*>& params, std::map<std::string, float*>&gparams)
 {
 
 	int i,j,k;
@@ -394,54 +149,125 @@ void DShaderRes11::OnApplyParams(std::map<std::string, float*>& params, std::map
 		}
 	}
 
-	/*std::map<const std::string, UINT>::iterator riter;
-	DTexture* tex = 0;
-	for (riter = m_resParams.begin(); riter != m_resParams.end(); riter++)
-	{
-		if (textures.find(riter->first) != textures.end())
-		{
-			tex = textures.at(riter->first);
-			tex->Apply(riter->second);
-		}
-	}*/
 }
 
-//void DShaderRes11::OnApplyParams(int cindex, int coffset, int csize, int stype, float* params)
-//{
-//	HRESULT result;
-//	D3D11_MAPPED_SUBRESOURCE mappedResource;
-//	float* dataPtr;
-//	unsigned int bufferNumber = coffset;
-//
-//	ID3D11Buffer* pbuffer = m_paramBuffers[cindex];
-//
-//	result = m_deviceContext->Map(pbuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-//	if (FAILED(result))
-//	{
-//		return;
-//	}
-//
-//	dataPtr = (float*)mappedResource.pData;
-//
-//	int i;
-//	for (i = 0; i < csize; i++)
-//	{
-//		dataPtr[i] = params[i];
-//	}
-//
-//	m_deviceContext->Unmap(pbuffer, 0);
-//
-//	if (stype == 0)
-//	{
-//		m_deviceContext->VSSetConstantBuffers(bufferNumber, 1, &pbuffer);
-//	}
-//	else
-//	{
-//		m_deviceContext->PSSetConstantBuffers(bufferNumber, 1, &pbuffer);
-//	}
-//}
+void DShaderProgram11::OutputShaderErrorMessage(ID3D10Blob * errorMessage)
+{
+	char* compileErrors;
+	unsigned long bufferSize, i;
+	std::ofstream fout;
 
-HRESULT DShaderRes11::InitVertexShader(ID3DBlob* pShaderBlob, ID3D11Device* pD3DDevice, ID3D11InputLayout** pInputLayout, int* inputLayoutByteLength)
+
+	// Get a pointer to the error message text buffer.
+	compileErrors = (char*)(errorMessage->GetBufferPointer());
+
+	// Get the length of the message.
+	bufferSize = errorMessage->GetBufferSize();
+
+	// Open a file to write the error message to.
+	fout.open("shader-error.txt");
+
+	// Write out the error message.
+	for (i = 0; i<bufferSize; i++)
+	{
+		fout << compileErrors[i];
+	}
+
+	// Close the file.
+	fout.close();
+
+	// Release the error message.
+	errorMessage->Release();
+	errorMessage = 0;
+
+	return;
+}
+
+DShaderVertexProgram11::DShaderVertexProgram11(ID3D11Device * device, ID3D11DeviceContext * deviceContext) : DShaderProgram11(device, deviceContext)
+{
+	m_vertexShader = 0;
+}
+
+DShaderVertexProgram11::~DShaderVertexProgram11()
+{
+}
+
+void DShaderVertexProgram11::Release()
+{
+	DShaderProgram11::Release();
+	if (m_vertexShader != NULL)
+	{
+		m_vertexShader->Release();
+		m_vertexShader = NULL;
+	}
+}
+
+bool DShaderVertexProgram11::OnInit(const char * content, char * funcName)
+{
+	HRESULT result;
+	ID3D10Blob* errorMessage;
+	ID3D10Blob* vertexShaderBuffer;
+
+	errorMessage = 0;
+	vertexShaderBuffer = 0;
+	result = D3DCompile(content, strlen(content), NULL, NULL, NULL, funcName, "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &vertexShaderBuffer, &errorMessage);
+	if (FAILED(result))
+	{
+		if (errorMessage)
+		{
+			OutputShaderErrorMessage(errorMessage);
+			errorMessage->Release();
+			errorMessage = 0;
+		}
+		else
+		{
+			/*char s[1024];
+			_bstr_t b(vsFilename);
+			char* fname = b;
+			sprintf_s(s, "Missing Vertex Shader File:%s", fname);
+			DLog::Err(s);*/
+		}
+
+		return false;
+	}
+
+	result = m_device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &m_vertexShader);
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	// Create the vertex input layout.
+
+	int byteLength = 0;
+	m_cbufferCount = 0;
+	m_propertyCount = 0;
+
+	result = InitVertexShader(vertexShaderBuffer, m_device, &m_layout, &byteLength);
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	vertexShaderBuffer->Release();
+	vertexShaderBuffer = 0;
+
+	/*char s[1024];
+	_bstr_t b(vsFilename);
+	char* fname = b;
+	sprintf_s(s, "Shader Load Complie Success! (%s)", fname);
+	DLog::Info(s);*/
+
+	return true;
+}
+
+void DShaderVertexProgram11::OnDraw()
+{
+	DShaderProgram11::OnDraw();
+	m_deviceContext->VSSetShader(m_vertexShader, NULL, 0);
+}
+
+HRESULT DShaderVertexProgram11::InitVertexShader(ID3DBlob* pShaderBlob, ID3D11Device* pD3DDevice, ID3D11InputLayout** pInputLayout, int* inputLayoutByteLength)
 {
 	// Reflect shader info
 	ID3D11ShaderReflection* pVertexShaderReflection = nullptr;
@@ -542,35 +368,35 @@ HRESULT DShaderRes11::InitVertexShader(ID3DBlob* pShaderBlob, ID3D11Device* pD3D
 		//// determine DXGI format
 		/*else if (paramDesc.Mask == 1)
 		{
-			elementDesc.AlignedByteOffset = byteOffset;
-			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32_UINT;
-			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32_SINT;
-			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32_FLOAT;
-			byteOffset += 4;
+		elementDesc.AlignedByteOffset = byteOffset;
+		if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32_UINT;
+		else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32_SINT;
+		else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32_FLOAT;
+		byteOffset += 4;
 		}
 		else if (paramDesc.Mask <= 3)
 		{
-			elementDesc.AlignedByteOffset = byteOffset;
-			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32_UINT;
-			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32_SINT;
-			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32_FLOAT;
-			byteOffset += 8;
+		elementDesc.AlignedByteOffset = byteOffset;
+		if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32_UINT;
+		else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32_SINT;
+		else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32_FLOAT;
+		byteOffset += 8;
 		}
 		else if (paramDesc.Mask <= 7)
 		{
-			elementDesc.AlignedByteOffset = byteOffset;
-			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_UINT;
-			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_SINT;
-			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
-			byteOffset += 12;
+		elementDesc.AlignedByteOffset = byteOffset;
+		if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_UINT;
+		else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_SINT;
+		else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
+		byteOffset += 12;
 		}
 		else if (paramDesc.Mask <= 15)
 		{
-			elementDesc.AlignedByteOffset = byteOffset;
-			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_UINT;
-			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_SINT;
-			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-			byteOffset += 16;
+		elementDesc.AlignedByteOffset = byteOffset;
+		if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_UINT;
+		else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_SINT;
+		else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		byteOffset += 16;
 		}*/
 
 		//save element desc
@@ -584,7 +410,7 @@ HRESULT DShaderRes11::InitVertexShader(ID3DBlob* pShaderBlob, ID3D11Device* pD3D
 
 	for (i = 0; i < shaderDesc.ConstantBuffers; ++i)
 	{
-		
+
 		ID3D11ShaderReflectionConstantBuffer* bf = pVertexShaderReflection->GetConstantBufferByIndex(i);
 		D3D11_SHADER_BUFFER_DESC desc;
 		bf->GetDesc(&desc);
@@ -631,7 +457,7 @@ HRESULT DShaderRes11::InitVertexShader(ID3DBlob* pShaderBlob, ID3D11Device* pD3D
 			param.propertyOffset = offset;
 			param.propertySize = size;
 			param.shaderType = 0;
-			
+
 			m_params.insert(std::pair<const LPCSTR, DShaderParamDesc>(vdesc.Name, param));*/
 			propertydesc.isGlobal = false;
 			if (strlen(vdesc.Name) >= 2 && vdesc.Name[0] == 'g' && vdesc.Name[1] == '_')
@@ -666,7 +492,93 @@ HRESULT DShaderRes11::InitVertexShader(ID3DBlob* pShaderBlob, ID3D11Device* pD3D
 	return hr;
 }
 
-HRESULT DShaderRes11::InitPixelShader(ID3DBlob* pShaderBlob, ID3D11Device* pD3DDevice)
+DShaderPixelProgram11::DShaderPixelProgram11(ID3D11Device * device, ID3D11DeviceContext * deviceContext) : DShaderProgram11(device, deviceContext)
+{
+	m_pixelShader = 0;
+}
+
+DShaderPixelProgram11::~DShaderPixelProgram11()
+{
+}
+
+void DShaderPixelProgram11::Release()
+{
+	DShaderProgram11::Release();
+	if (m_pixelShader != NULL)
+	{
+		m_pixelShader->Release();
+		m_pixelShader = NULL;
+	}
+}
+
+bool DShaderPixelProgram11::OnInit(const char * content, char * funcName)
+{
+	HRESULT result;
+	ID3D10Blob* errorMessage;
+	ID3D10Blob* pixelShaderBuffer;
+
+
+	errorMessage = 0;
+	pixelShaderBuffer = 0;
+	
+	result = D3DCompile(content, strlen(content), NULL, NULL, NULL, funcName, "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &pixelShaderBuffer, &errorMessage);
+	if (FAILED(result))
+	{
+		if (errorMessage)
+		{
+			errorMessage->Release();
+			errorMessage = 0;
+		}
+		else
+		{
+			/*char s[1024];
+			_bstr_t b(psFilename);
+			char* fname = b;
+			sprintf_s(s, "Missing Pixel Shader File:%s", fname);
+			DLog::Err(s);*/
+		}
+
+		return false;
+	}
+
+	result = m_device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &m_pixelShader);
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	// Create the vertex input layout.
+
+	int byteLength = 0;
+	m_cbufferCount = 0;
+	m_propertyCount = 0;
+
+	result = InitPixelShader(pixelShaderBuffer, m_device);
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	pixelShaderBuffer->Release();
+	pixelShaderBuffer = 0;
+
+	/*char s[1024];
+	_bstr_t b(vsFilename);
+	char* fname = b;
+	sprintf_s(s, "Shader Load Complie Success! (%s)", fname);
+	DLog::Info(s);*/
+
+	return true;
+}
+
+void DShaderPixelProgram11::OnDraw()
+{
+	DShaderProgram11::OnDraw();
+
+	m_deviceContext->PSSetShader(m_pixelShader, NULL, 0);
+}
+
+HRESULT DShaderPixelProgram11::InitPixelShader(ID3DBlob * pShaderBlob, ID3D11Device * pD3DDevice)
 {
 	// Reflect shader info
 	ID3D11ShaderReflection* pPixelShaderReflection = nullptr;
@@ -788,36 +700,4 @@ HRESULT DShaderRes11::InitPixelShader(ID3DBlob* pShaderBlob, ID3D11Device* pD3DD
 	pPixelShaderReflection->Release();
 
 	return hr;
-}
-
-void DShaderRes11::OutputShaderErrorMessage(ID3D10Blob * errorMessage)
-{
-	char* compileErrors;
-	unsigned long bufferSize, i;
-	std::ofstream fout;
-
-
-	// Get a pointer to the error message text buffer.
-	compileErrors = (char*)(errorMessage->GetBufferPointer());
-
-	// Get the length of the message.
-	bufferSize = errorMessage->GetBufferSize();
-
-	// Open a file to write the error message to.
-	fout.open("shader-error.txt");
-
-	// Write out the error message.
-	for (i = 0; i<bufferSize; i++)
-	{
-		fout << compileErrors[i];
-	}
-
-	// Close the file.
-	fout.close();
-
-	// Release the error message.
-	errorMessage->Release();
-	errorMessage = 0;
-
-	return;
 }

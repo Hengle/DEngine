@@ -6,6 +6,9 @@ DLight::DLight()
 {
 	m_shadowMap = 0;
 	m_shadowShader = 0;
+	m_far = 100.0f;
+	m_size = 30.0f;
+	m_isProjChanged = false;
 }
 
 
@@ -36,6 +39,28 @@ float DLight::GetIntensity()
 	return m_intensity;
 }
 
+float DLight::GetFar()
+{
+	return m_far;
+}
+
+float DLight::GetSize()
+{
+	return m_size;
+}
+
+void DLight::SetFar(float farClipPlane)
+{
+	m_isProjChanged = true;
+	m_far = farClipPlane;
+}
+
+void DLight::SetSize(float size)
+{
+	m_isProjChanged = true;
+	m_size = size;
+}
+
 void DLight::SetIntensity(float intensity)
 {
 	m_intensity = intensity;
@@ -60,7 +85,7 @@ void DLight::Init()
 	m_shadowMap = DRenderTexture::Create(1024, 1024);
 	m_shadowShader = DShader::Create("../Res/shadow.shader");
 
-	DMatrix4x4::Ortho(&m_proj, 30.0f, 30.0f, 0.0f, 34.0f);
+	DMatrix4x4::Ortho(&m_proj, m_size, m_size, 0.0f, m_far);
 	//DMatrix4x4::Perspective(&m_proj, D_PI / 3.0f, 1.0f, 0.03f, 34.0f);
 }
 
@@ -88,28 +113,52 @@ void DLight::Update()
 
 void DLight::BeginRenderShadow()
 {
+	//DVector3 bcenter, bsize;
+	//GetCameraBounds(target, &bcenter, &bsize);
+
+	/*DVector3 up, forward, right, position;
+	m_Transform->GetUp(up);
+	m_Transform->GetForward(forward);
+	m_Transform->GetRight(right);
+	m_Transform->GetPosition(position);
+
+	position = position + up*bcenter.y + forward*bcenter.z + right*bcenter.x;
+
+	DVector3 lookAt = position + forward;
+
+	DMatrix4x4::LookAt(&m_view, position, lookAt, up);
+
+	float fparam = bsize.z * 2;
+	DMatrix4x4::Ortho(&m_proj, bsize.x * 2, bsize.y * 2, 0, fparam);*/
 
 	if (m_Transform->IsMatrixWillChange())
 	{
-		DVector3 up = DVector3(-0.4196f, 0.6816f, -0.5994f);
-		DVector3 lookAt = DVector3(-0.3909f, -0.7317f, -0.5584f);
-		DVector3 position = DVector3(6.3220f, 13.5694f, 9.0078f);
+		DVector3 up, lookAt, position;
+		m_Transform->GetUp(up);
+		m_Transform->GetPosition(position);
+		m_Transform->GetForward(lookAt);
+
+		DShader::SetGlobalVector3("g_sundir", lookAt);
 
 		lookAt = position + lookAt;
 
 		DMatrix4x4::LookAt(&m_view, position, lookAt, up);
 	}
 
-	DVector3 forward;
-	m_Transform->GetForward(forward);
-	DShader::SetGlobalVector3("g_sundir", forward);
+	if (m_isProjChanged)
+	{
+		m_isProjChanged = false;
+		DMatrix4x4::Ortho(&m_proj, m_size, m_size, 0.0f, m_far);
+	}
+	
+	
 
 	DGraphics::GlPushMatrix();
 	DGraphics::GlLoadIndentity();
 	DGraphics::GlMultiMatrix(m_view);
 	DGraphics::GlLoadProjectionMatrix(m_proj);
 
-	DShader::SetGlobalVector4("g_shadowParams", DVector4(1.0f, 0.0f, 34.0f, 1.0f / 34.0f));
+	DShader::SetGlobalVector4("g_shadowParams", DVector4(1.0f, 0.0f, m_far, 1.0f / m_far));
 
 	DGraphics::BeginScene(true, false, DColor(1,1,1,1.0f), m_shadowMap);
 }
@@ -123,3 +172,99 @@ void DLight::EndRenderShadow()
 	DShader::SetGlobalMatrix("g_shadowView", m_view);
 	DShader::SetGlobalMatrix("g_shadowProj", m_proj);
 }
+
+//void DLight::GetCameraBounds(DCamera * cam, DVector3 * outCenter, DVector3 * outSize)
+//{
+//	DTransform* transform = cam->GetTransform();
+//	DVector3 camPos,camUp,camForward,camRight;
+//	transform->GetPosition(camPos);
+//	transform->GetUp(camUp);
+//	transform->GetForward(camForward);
+//	transform->GetRight(camRight);
+//
+//	DVector3 max, min;
+//
+//	float f = min(m_far, cam->GetFar());
+//	if (cam->IsOrthographic())
+//	{
+//		float w = cam->GetOrthoSize()*cam->GetAspect();
+//		float h = cam->GetOrthoSize();
+//		float n = cam->GetNear();
+//
+//		DVector3 p0 = camPos - camUp*h - camRight*w + camForward*n;
+//		DVector3 p1 = camPos + camUp*h - camRight*w + camForward*n;
+//		DVector3 p2 = camPos + camUp*h + camRight*w + camForward*n;
+//		DVector3 p3 = camPos - camUp*h + camRight*w + camForward*n;
+//
+//		DVector3 p4 = camPos - camUp*h - camRight*w + camForward*f;
+//		DVector3 p5 = camPos + camUp*h - camRight*w + camForward*f;
+//		DVector3 p6 = camPos + camUp*h + camRight*w + camForward*f;
+//		DVector3 p7 = camPos - camUp*h + camRight*w + camForward*f;
+//
+//		DVector3 r0, r1, r2, r3, r4, r5, r6, r7;
+//
+//		m_Transform->TransformPointToLocal(p0, r0);
+//		m_Transform->TransformPointToLocal(p1, r1);
+//		m_Transform->TransformPointToLocal(p2, r2);
+//		m_Transform->TransformPointToLocal(p3, r3);
+//		m_Transform->TransformPointToLocal(p4, r4);
+//		m_Transform->TransformPointToLocal(p5, r5);
+//		m_Transform->TransformPointToLocal(p6, r6);
+//		m_Transform->TransformPointToLocal(p7, r7);
+//
+//		max = r0, min = r0;
+//		DVector3::Max(max, r1, max);
+//		DVector3::Max(max, r2, max);
+//		DVector3::Max(max, r3, max);
+//		DVector3::Max(max, r4, max);
+//		DVector3::Max(max, r5, max);
+//		DVector3::Max(max, r6, max);
+//		DVector3::Max(max, r7, max);
+//
+//		DVector3::Min(min, r1, min);
+//		DVector3::Min(min, r2, min);
+//		DVector3::Min(min, r3, min);
+//		DVector3::Min(min, r4, min);
+//		DVector3::Min(min, r5, min);
+//		DVector3::Min(min, r6, min);
+//		DVector3::Min(min, r7, min);
+//	}
+//	else
+//	{
+//		float h = tan(cam->GetFieldOfView()*0.5f)*f;
+//		float w = h*cam->GetAspect();
+//
+//		DVector3 p0 = camPos;
+//		DVector3 p1 = camPos - camUp*h - camRight*w + camForward*f;
+//		DVector3 p2 = camPos + camUp*h - camRight*w + camForward*f;
+//		DVector3 p3 = camPos + camUp*h + camRight*w + camForward*f;
+//		DVector3 p4 = camPos - camUp*h + camRight*w + camForward*f;
+//
+//		DVector3 r0, r1, r2, r3, r4;
+//
+//		m_Transform->TransformPointToLocal(p0, r0);
+//		m_Transform->TransformPointToLocal(p1, r1);
+//		m_Transform->TransformPointToLocal(p2, r2);
+//		m_Transform->TransformPointToLocal(p3, r3);
+//		m_Transform->TransformPointToLocal(p4, r4);
+//
+//		max = r0, min = r0;
+//		DVector3::Max(max, r1, max);
+//		DVector3::Max(max, r2, max);
+//		DVector3::Max(max, r3, max);
+//		DVector3::Max(max, r4, max);
+//
+//		DVector3::Min(min, r1, min);
+//		DVector3::Min(min, r2, min);
+//		DVector3::Min(min, r3, min);
+//		DVector3::Min(min, r4, min);
+//	}
+//
+//	outSize->x = (max.x - min.x)*0.5f;
+//	outSize->y = (max.y - min.y)*0.5f;
+//	outSize->z = (max.z - min.z)*0.5f;
+//
+//	outCenter->x = min.x + outSize->x;
+//	outCenter->y = min.y + outSize->y;
+//	outCenter->z = min.z + outSize->z;
+//}

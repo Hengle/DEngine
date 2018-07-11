@@ -14,7 +14,22 @@ DTransform::DTransform()
 	m_isW2LMatrixChanged = false;
 	m_isEulerChanged = false;
 
+	m_childCount = 0;
+
 	m_localToWorld = dmat_identity;
+
+	m_sceneObj = NULL;
+
+	m_parent = NULL;
+	m_preNeighbor = NULL;
+	m_nextNeighbor = NULL;
+
+	m_firstChild = NULL;
+}
+
+DTransform::DTransform(DSceneObject * data) : DTransform()
+{
+	m_sceneObj = data;
 }
 
 DTransform::~DTransform()
@@ -195,9 +210,73 @@ void DTransform::TransformPointToLocal(const DVector3 & point, DVector3 & out)
 	tolocal.TransformPoint(point, out);
 }
 
+void DTransform::SetParent(DTransform * parent)
+{
+	if (m_parent != NULL)
+	{
+		RemoveFromParent();
+	}
+	m_parent = parent;
+	m_nextNeighbor = parent->m_firstChild;
+	parent->m_firstChild = this;
+	parent->m_childCount += 1;
+
+	m_isL2WMatrixChanged = true;
+	m_isW2LMatrixChanged = true;
+}
+
+DTransform * DTransform::GetParent()
+{
+	return m_parent;
+}
+
+void DTransform::RemoveFromParent()
+{
+	if (m_parent == NULL)
+		return;
+	if (m_parent->m_firstChild == this)
+	{
+		m_parent->m_firstChild = this->m_nextNeighbor;
+	}
+	else if (m_preNeighbor != NULL)
+	{
+		m_preNeighbor->m_nextNeighbor = m_nextNeighbor;
+	}
+	m_parent->m_childCount -= 1;
+	m_preNeighbor = NULL;
+	m_nextNeighbor = NULL;
+	m_parent = NULL;
+
+	m_isL2WMatrixChanged = true;
+	m_isW2LMatrixChanged = true;
+}
+
+unsigned int DTransform::GetChildCount()
+{
+	return m_childCount;
+}
+
+DTransform * DTransform::GetFirstChild()
+{
+	return m_firstChild;
+}
+
+DTransform * DTransform::GetNextNegibhor()
+{
+	return m_nextNeighbor;
+}
+
 bool DTransform::IsMatrixWillChange()
 {
 	return m_isL2WMatrixChanged;
+}
+
+void DTransform::Release()
+{
+	m_sceneObj = NULL;
+	m_firstChild = NULL;
+	m_nextNeighbor = NULL;
+	m_parent = NULL;
 }
 
 void DTransform::RefreshLocalToWorldMatrix()
@@ -206,6 +285,20 @@ void DTransform::RefreshLocalToWorldMatrix()
 
 	DMatrix4x4::TRS(&m_localToWorld, &m_forward, &m_up, m_position, m_rotation, m_scale);
 	//m_worldToLocal = m_localToWorld
+
+	if (m_parent != NULL)
+	{
+		DMatrix4x4 parentL2W;
+		m_parent->GetLocalToWorld(parentL2W);
+		m_localToWorld = m_localToWorld*parentL2W;
+	}
+
+	DTransform* node = m_firstChild;
+	while (node != NULL)
+	{
+		node->m_isL2WMatrixChanged = true;
+		node = node->m_nextNeighbor;
+	}
 }
 
 void DTransform::RefreshWorldToLocalMatrix()

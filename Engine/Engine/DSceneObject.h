@@ -2,6 +2,7 @@
 #include "DObject.h"
 #include "DTransform.h"
 
+class DTransform;
 class DSceneObject : public DObject
 {
 public:

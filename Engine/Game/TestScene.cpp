@@ -88,6 +88,13 @@ void TestScene::OnGUI()
 
 
 	transform->SetEuler(euler.x, euler.y, euler.z);
+
+	transform = m_obj0->GetTransform();
+	transform->GetEuler(euler);
+
+	ImGui::SliderFloat("objY", &euler.y, 0.0f, 360.0f);
+
+	transform->SetEuler(euler.x, euler.y, euler.z);
 	//transform->GetForward(forward);
 	//DShader::SetGlobalVector3("g_sundir", forward);
 }
@@ -263,6 +270,9 @@ void TestScene::TestLoad()
 	m_cube = new DDisplayObject(cube, mat3);
 	transform = m_cube->GetTransform();
 	transform->SetPosition(2.64f, 2.61f, 0.0f);
+
+	DTransform* objtr = m_obj0->GetTransform();
+	transform->SetParent(objtr);
 	AddDisplayObject(m_cube);
 }
 

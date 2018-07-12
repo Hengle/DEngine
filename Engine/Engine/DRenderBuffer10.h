@@ -1,7 +1,7 @@
 #pragma once
 #include "D3D10Core.h"
 
-class DColorBuffer10 : public DRenderBuffer
+class DColorBuffer10 : public IRenderBuffer
 {
 public:
 	DColorBuffer10();
@@ -14,7 +14,7 @@ private:
 	ID3D10RenderTargetView* m_renderTargetView;
 };
 
-class DDepthBuffer10 : public DRenderBuffer
+class DDepthBuffer10 : public IRenderBuffer
 {
 public:
 	DDepthBuffer10();

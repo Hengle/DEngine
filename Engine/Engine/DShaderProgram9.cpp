@@ -195,7 +195,6 @@ HRESULT DShaderVertexProgram9::InitVertexShader(ID3DXBuffer * vertexShaderBuffer
 		pdesc.propertyName = cdesc.Name;
 		pdesc.propertySize = cdesc.Bytes;
 		pdesc.propertyOffset = m_cbufferCount;
-		pdesc.shaderType = 0;
 
 		//m_params.insert(std::pair<std::string, DShaderParamDesc>(cdesc.Name, param));
 		m_properties.push_back(pdesc);
@@ -400,7 +399,6 @@ HRESULT DShaderPixelProgram9::InitPixelShader()
 			pdesc.propertyName = cdesc.Name;
 			pdesc.propertySize = cdesc.Bytes;
 			pdesc.propertyOffset = m_cbufferCount;
-			pdesc.shaderType = 1;
 			m_properties.push_back(pdesc);
 
 			m_handles.push_back(handle);

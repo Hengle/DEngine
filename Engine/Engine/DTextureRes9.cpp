@@ -89,12 +89,12 @@ void DRenderTextureViewRes9::Release()
 	m_device = NULL;
 }
 
-DRenderBuffer * DRenderTextureViewRes9::GetColorBuffer()
+IRenderBuffer * DRenderTextureViewRes9::GetColorBuffer()
 {
 	return nullptr;
 }
 
-DRenderBuffer * DRenderTextureViewRes9::GetDepthBuffer()
+IRenderBuffer * DRenderTextureViewRes9::GetDepthBuffer()
 {
 	return nullptr;
 }

@@ -3,6 +3,7 @@
 #include <d3d10_1.h>
 #include <d3d10.h>
 
+/*Direct3d10 ImGUI渲染与管理模块*/
 class DImGUICore10 : public DImGUICore
 {
 public:

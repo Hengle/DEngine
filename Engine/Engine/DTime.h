@@ -1,6 +1,7 @@
 #pragma once
 #include <time.h>
 
+/*时间模块*/
 class DTime
 {
 public:
@@ -8,6 +9,7 @@ public:
 	~DTime();
 	void Init();
 	void Update();
+	/*等待fixedupdate*/
 	void Wait();
 	void Shutdown();
 	bool BeginFixedUpdateLoop();

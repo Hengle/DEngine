@@ -45,13 +45,24 @@ public:
 	
 } DColor;
 
-const DColor dcol_red        = DColor(1.0f, 0.0f, 0.0f, 1.0f);
-const DColor dcol_green      = DColor(0.0f, 1.0f, 0.0f, 1.0f);
-const DColor dcol_blue       = DColor(0.0f, 0.0f, 1.0f, 1.0f);
-const DColor dcol_white      = DColor(1.0f, 1.0f, 1.0f, 1.0f);
-const DColor dcol_black      = DColor(0.0f, 0.0f, 0.0f, 1.0f);
-const DColor dcol_yellow     = DColor(1.0f, 1.0f, 0.0f, 1.0f);
-const DColor dcol_cyan       = DColor(0.0f, 1.0f, 1.0f, 1.0f);
-const DColor dcol_magenta    = DColor(1.0f, 0.0f, 1.0f, 1.0f);
-const DColor dcol_gray       = DColor(0.5f, 0.5f, 0.5f, 1.0f);
-const DColor dcol_clear      = DColor(0.0f, 0.0f, 0.0f, 0.0f);
+#define DCOLOR_RED      DColor(1.0f, 0.0f, 0.0f, 1.0f)
+#define DCOLOR_GREEN    DColor(0.0f, 1.0f, 0.0f, 1.0f);
+#define DCOLOR_BLUE     DColor(0.0f, 0.0f, 1.0f, 1.0f);
+#define DCOLOR_WHITE    DColor(1.0f, 1.0f, 1.0f, 1.0f);
+#define DCOLOR_BLACK    DColor(0.0f, 0.0f, 0.0f, 1.0f);
+#define DCOLOR_YELLOW   DColor(1.0f, 1.0f, 0.0f, 1.0f);
+#define DCOLOR_CYAN     DColor(0.0f, 1.0f, 1.0f, 1.0f);
+#define DCOLOR_MAGENTA  DColor(1.0f, 0.0f, 1.0f, 1.0f);
+#define DCOLOR_GRAY     DColor(0.5f, 0.5f, 0.5f, 1.0f);
+#define DCOLOR_CLEAR    DColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+const DColor dcol_red     = DColor(1.0f, 0.0f, 0.0f, 1.0f);
+const DColor dcol_green   = DColor(0.0f, 1.0f, 0.0f, 1.0f);
+const DColor dcol_blue    = DColor(0.0f, 0.0f, 1.0f, 1.0f);
+const DColor dcol_white   = DColor(1.0f, 1.0f, 1.0f, 1.0f);
+const DColor dcol_black   = DColor(0.0f, 0.0f, 0.0f, 1.0f);
+const DColor dcol_yellow  = DColor(1.0f, 1.0f, 0.0f, 1.0f);
+const DColor dcol_cyan    = DColor(0.0f, 1.0f, 1.0f, 1.0f);
+const DColor dcol_magenta = DColor(1.0f, 0.0f, 1.0f, 1.0f);
+const DColor dcol_gray    = DColor(0.5f, 0.5f, 0.5f, 1.0f);
+const DColor dcol_clear   = DColor(0.0f, 0.0f, 0.0f, 0.0f);

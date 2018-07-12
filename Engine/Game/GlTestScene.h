@@ -19,6 +19,6 @@ protected:
 private:
 	//DShader* m_testcolorshader;
 	DMaterial* m_testcolormat;
-
+	DCamera* cam;
 };
 

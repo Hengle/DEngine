@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "DColor.h"
-#include "DMesh.h"
+#include "DGeometry.h"
 #include "DMaterial.h"
 #include <stack>
 #include <vector>
@@ -21,7 +21,7 @@ private:
 	float* m_vertices;
 	unsigned long* m_indices;
 	DColor m_currentColor;
-	DMeshRes* m_meshRes;
+	DGeometryRes* m_geometryRes;
 	unsigned long m_currentIndex, m_preIndex;
 	bool m_hasDrawCommand;
 };
@@ -55,7 +55,9 @@ private:
 	DMatrix4x4 m_currentMV;
 	DMatrix4x4 m_currentP;
 	unsigned int m_currentPLen, m_prePLen;
+	/*modelview矩阵栈*/
 	std::stack<DMatrix4x4> m_MVMatrixStack;
+	/*投影矩阵栈*/
 	std::stack<DMatrix4x4> m_PMatrixStack;
 	std::vector<DGLDrawerProcess*> m_processVector;
 

@@ -39,8 +39,8 @@ DScene * DSceneManager::ChangeScene(SCENEID sceneId)
 	}
 	DScene* scene = m_sceneMap->at(sceneId);
 	if (scene != NULL) {
-		scene->Enter();
 		m_currentScene = scene;
+		scene->Enter();
 		return m_currentScene;
 	}
 	return NULL;

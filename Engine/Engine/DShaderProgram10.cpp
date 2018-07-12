@@ -139,14 +139,7 @@ void DShaderProgram10::OnApplyParams(std::map<std::string, float*>& params, std:
 
 			pbuffer->Unmap();
 
-			if (desc->shaderType == 0)
-			{
-				m_device->VSSetConstantBuffers(bufferNumber, 1, &pbuffer);
-			}
-			else
-			{
-				m_device->PSSetConstantBuffers(bufferNumber, 1, &pbuffer);
-			}
+			OnSetValue(bufferNumber, 1, &pbuffer);
 		}
 	}
 }
@@ -309,7 +302,6 @@ HRESULT DShaderVertexProgram10::InitVertexShader(ID3DBlob * pShaderBlob, ID3D10D
 		cbufferdesc->cbufferIndex = m_cbufferCount;
 		cbufferdesc->cbufferStartSlot = i;
 		cbufferdesc->cbufferSize = clength;
-		cbufferdesc->shaderType = 0;
 
 		for (unsigned int j = 0; j < desc.Variables; j++)
 		{
@@ -428,6 +420,11 @@ void DShaderVertexProgram10::OnDraw()
 	m_device->VSSetShader(m_vertexShader);
 }
 
+void DShaderVertexProgram10::OnSetValue(UINT startSlot, UINT numBuffers, ID3D10Buffer * const * buffers)
+{
+	m_device->VSSetConstantBuffers(startSlot, numBuffers, buffers);
+}
+
 DShaderPixelProgram10::DShaderPixelProgram10(ID3D10Device * device) : DShaderProgram10(device)
 {
 	m_pixelShader = 0;
@@ -502,7 +499,6 @@ HRESULT DShaderPixelProgram10::InitPixelShader(ID3DBlob * pShaderBlob, ID3D10Dev
 		cbufferdesc->cbufferIndex = m_cbufferCount;
 		cbufferdesc->cbufferSize = clength;
 		cbufferdesc->cbufferStartSlot = i;
-		cbufferdesc->shaderType = 1;
 
 		for (unsigned int j = 0; j < desc.Variables; j++)
 		{
@@ -635,4 +631,9 @@ void DShaderPixelProgram10::OnDraw()
 	DShaderProgram10::OnDraw();
 	
 	m_device->PSSetShader(m_pixelShader);
+}
+
+void DShaderPixelProgram10::OnSetValue(UINT startSlot, UINT numBuffers, ID3D10Buffer * const * buffers)
+{
+	m_device->PSSetConstantBuffers(startSlot, numBuffers, buffers);
 }

@@ -4,6 +4,7 @@
 #include <vector>
 #include <map>
 
+/*Shader程序Direct3d9实现*/
 class DShaderProgram9 : public DShaderProgram
 {
 protected:
@@ -14,11 +15,9 @@ protected:
 		DShaderPropertyDesc9() :DShaderPropertyDesc()
 		{
 			isGlobal = false;
-			shaderType = 0;
 		}
 	public:
 		bool isGlobal;
-		int shaderType;
 	};
 
 public:
@@ -35,10 +34,12 @@ protected:
 protected:
 	LPDIRECT3DDEVICE9 m_device;
 	std::vector<DShaderResDesc> m_resParams;
-	std::vector<DShaderPropertyDesc9> m_properties;
+	/*属性列表*/
+	std::vector<DShaderPropertyDesc9> m_properties; 
 	std::vector<D3DXHANDLE> m_handles;
 };
 
+/*顶点着色器direct3d9实现*/
 class DShaderVertexProgram9 : public DShaderProgram9
 {
 public:
@@ -56,9 +57,11 @@ private:
 
 private:
 	IDirect3DVertexShader9* m_vertexShader;
+	/*常量表*/
 	ID3DXConstantTable* m_vertexConstable;
 };
 
+/*像素着色器direct3d9实现*/
 class DShaderPixelProgram9 : public DShaderProgram9
 {
 public:
@@ -76,6 +79,7 @@ private:
 
 private:
 	IDirect3DPixelShader9* m_pixelShader;
+	/*常量表*/
 	ID3DXConstantTable* m_pixelConstable;
 };
 

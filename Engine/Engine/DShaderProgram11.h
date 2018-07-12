@@ -2,6 +2,7 @@
 #include "D3D11Core.h"
 #include <vector>
 
+/*Shader程序Direct3d11实现*/
 class DShaderProgram11 : public DShaderProgram
 {
 public:
@@ -14,6 +15,7 @@ public:
 protected:
 	virtual void OnDraw();
 	virtual void OnApplyParams(std::map<std::string, float*>&params, std::map<std::string, float*>&gparams);
+	virtual void OnSetValue(UINT, UINT, ID3D11Buffer* const *) = 0;
 	void OutputShaderErrorMessage(ID3D10Blob*);
 
 protected:
@@ -25,6 +27,7 @@ protected:
 	std::vector<ID3D11Buffer*> m_paramBuffers;
 };
 
+/*顶点着色器direct3d11实现*/
 class DShaderVertexProgram11 : public DShaderProgram11
 {
 public:
@@ -35,6 +38,7 @@ public:
 protected:
 	virtual bool OnInit(const char* content, char* funcName);
 	virtual void OnDraw();
+	virtual void OnSetValue(UINT, UINT, ID3D11Buffer* const *);
 
 private:
 	HRESULT InitVertexShader(ID3DBlob*, ID3D11Device*, ID3D11InputLayout**, int*);
@@ -43,6 +47,7 @@ private:
 	ID3D11VertexShader* m_vertexShader;
 };
 
+/*像素着色器direct3d11实现*/
 class DShaderPixelProgram11 : public DShaderProgram11
 {
 public:
@@ -53,6 +58,7 @@ public:
 protected:
 	virtual bool OnInit(const char* content, char* funcName);
 	virtual void OnDraw();
+	virtual void OnSetValue(UINT, UINT, ID3D11Buffer* const *);
 
 private:
 	HRESULT InitPixelShader(ID3DBlob*, ID3D11Device*);

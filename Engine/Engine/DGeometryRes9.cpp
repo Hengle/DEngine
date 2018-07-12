@@ -1,7 +1,7 @@
-﻿#include "DMeshRes9.h"
+﻿#include "DGeometryRes9.h"
 #include <vector>
 
-DMeshRes9::DMeshRes9(LPDIRECT3DDEVICE9 device, int vertexUsage, bool dynamic) : DMeshRes(vertexUsage, dynamic)
+DGeometryRes9::DGeometryRes9(LPDIRECT3DDEVICE9 device, int vertexUsage, bool dynamic) : DGeometryRes(vertexUsage, dynamic)
 {
 	m_device = device;
 	m_vertexBuffer = 0;
@@ -9,11 +9,11 @@ DMeshRes9::DMeshRes9(LPDIRECT3DDEVICE9 device, int vertexUsage, bool dynamic) : 
 	m_vertexDeclaration = 0;
 }
 
-DMeshRes9::~DMeshRes9()
+DGeometryRes9::~DGeometryRes9()
 {
 }
 
-void DMeshRes9::OnRefresh(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
+void DGeometryRes9::OnRefresh(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
 {
 	return;
 	float* vertices;
@@ -36,7 +36,7 @@ void DMeshRes9::OnRefresh(float * vertexbuffer, unsigned long * indexbuffer, int
 	m_indexBuffer->Unlock();
 }
 
-bool DMeshRes9::OnInit(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
+bool DGeometryRes9::OnInit(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
 {
 	std::vector<D3DVERTEXELEMENT9> elements;
 	WORD offset = 0;
@@ -93,27 +93,27 @@ bool DMeshRes9::OnInit(float * vertexbuffer, unsigned long * indexbuffer, int ve
 	return true;
 }
 
-void DMeshRes9::OnDraw(DMeshTopology topology)
+void DGeometryRes9::OnDraw(DGeometryTopology topology)
 {
 	m_device->SetStreamSource(0, m_vertexBuffer, 0, m_dataSize);
 	m_device->SetIndices(m_indexBuffer);
 	m_device->SetVertexDeclaration(m_vertexDeclaration);
 
-	if (topology == DMeshTopology_LineList)
+	if (topology == DGeometryTopology_LineList)
 		m_device->DrawIndexedPrimitive(D3DPT_LINELIST, 0, 0, m_vertexCount, 0, m_indexCount / 2);
-	else if (topology == DMeshTopology_LineStrip)
+	else if (topology == DGeometryTopology_LineStrip)
 		m_device->DrawIndexedPrimitive(D3DPT_LINESTRIP, 0, 0, m_vertexCount, 0, m_indexCount / 2);
-	else if (topology == DMeshTopology_PointList)
+	else if (topology == DGeometryTopology_PointList)
 		m_device->DrawIndexedPrimitive(D3DPT_POINTLIST, 0, 0, m_vertexCount, 0, m_indexCount);
-	else if (topology == DMeshTopology_TriangleList) {
+	else if (topology == DGeometryTopology_TriangleList) {
 		m_device->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, m_vertexCount, 0, m_indexCount / 3);
 	}
-	else if (topology == DMeshTopology_TriangleStrip)
+	else if (topology == DGeometryTopology_TriangleStrip)
 		m_device->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0, m_vertexCount, 0, m_indexCount / 3);
 
 }
 
-void DMeshRes9::Release()
+void DGeometryRes9::Release()
 {
 	m_device = NULL;
 

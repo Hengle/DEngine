@@ -1,6 +1,6 @@
-﻿#include "DMeshRes11.h"
+﻿#include "DGeometryRes11.h"
 
-DMeshRes11::DMeshRes11(ID3D11Device* device,ID3D11DeviceContext * deviceContext, int vertexUsage, bool dynamic) : DMeshRes(vertexUsage, dynamic)
+DGeometryRes11::DGeometryRes11(ID3D11Device* device,ID3D11DeviceContext * deviceContext, int vertexUsage, bool dynamic) : DGeometryRes(vertexUsage, dynamic)
 {
 	m_vertexBuffer = 0;
 	m_indexBuffer = 0;
@@ -62,11 +62,11 @@ DMeshRes11::DMeshRes11(ID3D11Device* device,ID3D11DeviceContext * deviceContext,
 	}*/
 }
 
-DMeshRes11::~DMeshRes11()
+DGeometryRes11::~DGeometryRes11()
 {
 }
 
-void DMeshRes11::Release()
+void DGeometryRes11::Release()
 {
 	if (m_vertexBuffer != NULL)
 	{
@@ -82,7 +82,7 @@ void DMeshRes11::Release()
 	m_deviceContext = NULL;
 }
 
-void DMeshRes11::OnRefresh(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
+void DGeometryRes11::OnRefresh(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
 {
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	float* dataPtr;
@@ -108,7 +108,7 @@ void DMeshRes11::OnRefresh(float * vertexbuffer, unsigned long * indexbuffer, in
 	m_deviceContext->Unmap(m_indexBuffer, 0);
 }
 
-bool DMeshRes11::OnInit(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
+bool DGeometryRes11::OnInit(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
 {
 	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
 	D3D11_SUBRESOURCE_DATA vertexData, indexData;
@@ -150,7 +150,7 @@ bool DMeshRes11::OnInit(float * vertexbuffer, unsigned long * indexbuffer, int v
 	return true;
 }
 
-void DMeshRes11::OnDraw(DMeshTopology topology)
+void DGeometryRes11::OnDraw(DGeometryTopology topology)
 {
 	unsigned int stride;
 	unsigned int offset;
@@ -166,15 +166,15 @@ void DMeshRes11::OnDraw(DMeshTopology topology)
 
 	m_deviceContext->IASetIndexBuffer(ibuffer, DXGI_FORMAT_R32_UINT, 0);
 
-	if(topology == DMeshTopology_LineList)
+	if(topology == DGeometryTopology_LineList)
 		m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-	else if(topology == DMeshTopology_LineStrip)
+	else if(topology == DGeometryTopology_LineStrip)
 		m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
-	else if (topology == DMeshTopology_PointList)
+	else if (topology == DGeometryTopology_PointList)
 		m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
-	else if (topology == DMeshTopology_TriangleList)
+	else if (topology == DGeometryTopology_TriangleList)
 		m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	else if (topology == DMeshTopology_TriangleStrip)
+	else if (topology == DGeometryTopology_TriangleStrip)
 		m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
 	

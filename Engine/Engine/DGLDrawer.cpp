@@ -176,17 +176,17 @@ DGLDrawerProcess::DGLDrawerProcess()
 	m_preIndex = 0;
 	m_vertices = 0;
 	m_indices = 0;
-	m_meshRes = 0;
+	m_geometryRes = 0;
 	m_hasDrawCommand = false;
 }
 
 void DGLDrawerProcess::Release()
 {
-	if (m_meshRes != NULL)
+	if (m_geometryRes != NULL)
 	{
-		m_meshRes->Release();
-		delete m_meshRes;
-		m_meshRes = 0;
+		m_geometryRes->Release();
+		delete m_geometryRes;
+		m_geometryRes = 0;
 	}
 	if (m_vertices != 0)
 	{
@@ -228,12 +228,12 @@ void DGLDrawerProcess::PostProcess(DMatrix4x4& modelview, DMatrix4x4& projection
 {
 	if (m_vertices != 0 && m_indices != 0 && m_hasDrawCommand)
 	{
-		if (m_meshRes == NULL)
+		if (m_geometryRes == NULL)
 		{
 			int vusage = (1UL << DVertexUsage_POSITION) | (1UL << DVertexUsage_COLOR);
-			m_meshRes = DSystem::GetGraphicsMgr()->GetGLCore()->CreateMeshRes(vusage, true);
+			m_geometryRes = DSystem::GetGraphicsMgr()->GetGLCore()->CreateGeometryRes(vusage, true);
 		}
-		m_meshRes->Refresh(m_vertices, m_indices, m_currentIndex * 3, m_currentIndex);
+		m_geometryRes->Refresh(m_vertices, m_indices, m_currentIndex * 3, m_currentIndex);
 		ProcessDraw(modelview, projection);
 		m_hasDrawCommand = false;
 	}
@@ -266,5 +266,5 @@ void DGLDrawerProcess::ProcessDraw(DMatrix4x4& modelview, DMatrix4x4& projection
 	DShader::SetGlobalMatrix("g_viewMatrix", modelview);
 	DShader::SetGlobalMatrix("g_projectionMatrix", projection);
 
-	m_meshRes->DrawPrimitive(DMeshTopology_LineList);
+	m_geometryRes->DrawPrimitive(DGeometryTopology_LineList);
 }

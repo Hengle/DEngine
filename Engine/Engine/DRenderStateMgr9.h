@@ -14,14 +14,19 @@ public:
 	virtual void Release();
 	/*设置Cull模式*/
 	virtual void SetCullMode(DCullMode cullmode);
+	/*设置填充模式*/
 	virtual void SetFillMode(DFillMode);
 	/*开启/关闭深度写入*/
 	virtual void SetZWriteEnable(bool zwrite);
 	/*设置深度测试模式*/
 	virtual void SetZTestFunc(DRSCompareFunc ztest);
+	/*设置混合Operation*/
 	virtual void SetBlendOp(DRSBlendOp);
+	/*设置开启/关闭混合*/
 	virtual void SetBlendEnable(bool);
+	/*设置混合源因子*/
 	virtual void SetBlendSrcFactor(DRSBlendFactor);
+	/*设置混合目标因子*/
 	virtual void SetBlendDstFactor(DRSBlendFactor);
 	virtual void SetStencilRefId(UINT);
 	virtual void SetStencilEnable(bool);

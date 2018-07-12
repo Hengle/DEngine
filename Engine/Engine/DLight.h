@@ -6,9 +6,11 @@
 
 enum DLightType
 {
-	Directional,
-	Point,
+	DLightType_Directional,
+	DLightType_Point,
 };
+
+class DLight;
 
 struct DLightNode
 {

@@ -1,5 +1,5 @@
 ﻿#include "D3D10Core.h"
-#include "DMeshRes10.h"
+#include "DGeometryRes10.h"
 #include "DShaderProgram10.h"
 #include "DTextureRes10.h"
 #include "DRenderStateMgr10.h"
@@ -353,7 +353,7 @@ void D3D10Core::Present()
 		m_swapChain->Present(0, 0);
 }
 
-void D3D10Core::Clear(bool clearDepth, bool clearStencil, DColor & color, DRenderTextureViewRes * res)
+void D3D10Core::Clear(bool clearDepth, bool clearStencil, DColor & color, IRenderTextureViewRes * res)
 {
 	int flag = 0;
 	if (clearDepth && clearStencil)
@@ -384,7 +384,7 @@ void D3D10Core::Clear(bool clearDepth, bool clearStencil, DColor & color, DRende
 	}
 }
 
-void D3D10Core::SetRenderTarget(DRenderTextureViewRes *res)
+void D3D10Core::SetRenderTarget(IRenderTextureViewRes *res)
 {
 	if (res != NULL)
 	{
@@ -412,21 +412,21 @@ void D3D10Core::SetViewPort(float x, float y, float width, float height)
 	m_device->RSSetViewports(1, &m_viewPort);
 }
 
-void D3D10Core::EndSetRenderTarget(DRenderTextureViewRes *)
+void D3D10Core::EndSetRenderTarget(IRenderTextureViewRes *)
 {
 }
 
-DMeshRes * D3D10Core::CreateMeshRes(int vertexUsage, bool dynamic)
+DGeometryRes * D3D10Core::CreateGeometryRes(int vertexUsage, bool dynamic)
 {
-	return new DMeshRes10(m_device, vertexUsage, dynamic);
+	return new DGeometryRes10(m_device, vertexUsage, dynamic);
 }
 
-DTextureRes * D3D10Core::CreateTextureRes(WCHAR* filename)
+ITextureRes * D3D10Core::CreateTextureRes(WCHAR* filename)
 {
 	return new DTextureRes10(m_device, filename);;
 }
 
-DRenderTextureViewRes * D3D10Core::CreateRenderTextureRes(float width, float height)
+IRenderTextureViewRes * D3D10Core::CreateRenderTextureRes(float width, float height)
 {
 	return new DRenderTextureViewRes10(m_device, width, height);
 }

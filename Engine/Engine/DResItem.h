@@ -3,6 +3,7 @@
 #include <fstream>
 #include <map>
 
+/*资源项*/
 class DResItem
 {
 public:
@@ -20,6 +21,7 @@ private:
 	DResObject* m_res;
 };
 
+/*shader资源项*/
 class DShaderResItem : public DResItem
 {
 public:
@@ -34,6 +36,7 @@ private:
 	char* m_path;
 };
 
+/*纹理资源项*/
 class DTexture2DResItem : public DResItem
 {
 public:
@@ -49,6 +52,7 @@ private:
 	int m_wrapMode;
 };
 
+/*材质资源项*/
 class DMaterialResItem : public DResItem
 {
 private:

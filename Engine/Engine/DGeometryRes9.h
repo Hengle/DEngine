@@ -2,19 +2,19 @@
 #include "D3D9Core.h"
 
 /*
-	Mesh资源Direct3D9底层
+	Geometry资源Direct3D9底层
 */
-class DMeshRes9 : public DMeshRes
+class DGeometryRes9 : public DGeometryRes
 {
 public:
-	DMeshRes9(LPDIRECT3DDEVICE9, int vertexUsage, bool dynamic);
-	~DMeshRes9();
+	DGeometryRes9(LPDIRECT3DDEVICE9, int vertexUsage /*顶点用法*/, bool dynamic);
+	~DGeometryRes9();
 	virtual void Release();
 
 protected:
 	virtual void OnRefresh(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount);
 	virtual bool OnInit(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount);
-	virtual void OnDraw(DMeshTopology);
+	virtual void OnDraw(DGeometryTopology);
 
 private:
 	LPDIRECT3DDEVICE9 m_device;

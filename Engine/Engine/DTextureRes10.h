@@ -4,7 +4,7 @@
 /*
 	纹理资源Direct3D10底层
 */
-class DTextureRes10 : public DTextureRes
+class DTextureRes10 : public ITextureRes
 {
 public:
 	DTextureRes10(ID3D10Device* device, WCHAR* filename);
@@ -21,15 +21,15 @@ private:
 /*
 	RenderTexture Direct3D10底层
 */
-class DRenderTextureViewRes10 : public DRenderTextureViewRes
+class DRenderTextureViewRes10 : public IRenderTextureViewRes
 {
 public:
 	DRenderTextureViewRes10(ID3D10Device* device, float, float);
 	~DRenderTextureViewRes10();
 	virtual void Apply(UINT, DWrapMode);
 	virtual void Release();
-	virtual DRenderBuffer* GetColorBuffer();
-	virtual DRenderBuffer* GetDepthBuffer();
+	virtual IRenderBuffer* GetColorBuffer();
+	virtual IRenderBuffer* GetDepthBuffer();
 
 private:
 	ID3D10ShaderResourceView* m_texture;
@@ -37,8 +37,8 @@ private:
 	ID3D10Texture2D* m_depthTexture;
 	bool m_isSuccess;
 	ID3D10Device* m_device;
-	DRenderBuffer* m_colorBuffer;
-	DRenderBuffer* m_depthBuffer;
+	IRenderBuffer* m_colorBuffer;
+	IRenderBuffer* m_depthBuffer;
 };
 
 

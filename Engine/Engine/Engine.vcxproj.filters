@@ -117,23 +117,11 @@
     <ClInclude Include="DMaterial.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="DMesh.h">
-      <Filter>头文件\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="DModelLoader.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
     <ClInclude Include="DObject.h">
       <Filter>头文件\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="DMeshRes9.h">
-      <Filter>头文件\Core\D3D9Core</Filter>
-    </ClInclude>
-    <ClInclude Include="DMeshRes10.h">
-      <Filter>头文件\Core\D3D10Core</Filter>
-    </ClInclude>
-    <ClInclude Include="DMeshRes11.h">
-      <Filter>头文件\Core\D3D11Core</Filter>
     </ClInclude>
     <ClInclude Include="DGUI.h">
       <Filter>头文件\Engine</Filter>
@@ -243,6 +231,18 @@
     <ClInclude Include="DShaderProgram9.h">
       <Filter>头文件\Core\D3D9Core</Filter>
     </ClInclude>
+    <ClInclude Include="DGeometry.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="DGeometryRes9.h">
+      <Filter>头文件\Core\D3D9Core</Filter>
+    </ClInclude>
+    <ClInclude Include="DGeometryRes10.h">
+      <Filter>头文件\Core\D3D10Core</Filter>
+    </ClInclude>
+    <ClInclude Include="DGeometryRes11.h">
+      <Filter>头文件\Core\D3D11Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DMath.cpp">
@@ -275,15 +275,6 @@
     <ClCompile Include="D3D11Core.cpp">
       <Filter>源文件\Core\D3D11Core</Filter>
     </ClCompile>
-    <ClCompile Include="DMeshRes9.cpp">
-      <Filter>源文件\Core\D3D9Core</Filter>
-    </ClCompile>
-    <ClCompile Include="DMeshRes10.cpp">
-      <Filter>源文件\Core\D3D10Core</Filter>
-    </ClCompile>
-    <ClCompile Include="DMeshRes11.cpp">
-      <Filter>源文件\Core\D3D11Core</Filter>
-    </ClCompile>
     <ClCompile Include="DCamera.cpp">
       <Filter>源文件\Engine</Filter>
     </ClCompile>
@@ -294,9 +285,6 @@
       <Filter>源文件\Engine</Filter>
     </ClCompile>
     <ClCompile Include="DMaterial.cpp">
-      <Filter>源文件\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="DMesh.cpp">
       <Filter>源文件\Engine</Filter>
     </ClCompile>
     <ClCompile Include="DModelLoader.cpp">
@@ -403,6 +391,18 @@
     </ClCompile>
     <ClCompile Include="DShaderProgram9.cpp">
       <Filter>源文件\Core\D3D9Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DGeometryRes9.cpp">
+      <Filter>源文件\Core\D3D9Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DGeometryRes10.cpp">
+      <Filter>源文件\Core\D3D10Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DGeometryRes11.cpp">
+      <Filter>源文件\Core\D3D11Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DGeometry.cpp">
+      <Filter>源文件\Engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

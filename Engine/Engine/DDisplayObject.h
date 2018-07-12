@@ -1,14 +1,14 @@
 ﻿#pragma once
 #include "DSceneObject.h"
 #include "DMaterial.h"
-#include "DMesh.h"
+#include "DGeometry.h"
 #include "DLight.h"
 
 /*显示对象*/
 class DDisplayObject : public DSceneObject
 {
 public:
-	DDisplayObject(DMesh*, DMaterial*);
+	DDisplayObject(DGeometry*, DMaterial*);
 	~DDisplayObject();
 	virtual void Render(DShader* replaceShader);
 	/*设置可见性*/
@@ -25,7 +25,7 @@ protected:
 	virtual void OnCull();
 
 protected:
-	DMesh* m_mesh;
+	DGeometry* m_geometry;
 	DMaterial* m_material;
 
 private:

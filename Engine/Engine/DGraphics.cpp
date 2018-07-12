@@ -12,6 +12,8 @@ DGraphics::DGraphics()
 	m_GL = 0;
 	m_GUI = 0;
 	m_glDrawer = 0;
+	m_globalRenderShader = 0;
+	m_drawCall = 0;
 }
 
 
@@ -61,7 +63,7 @@ bool DGraphics::Init(int width, int height, bool fullScreen, HWND hwnd, DGraphic
 	return true;
 }
 
-bool DGraphics::Execute()
+bool DGraphics::Frame()
 {
 	DTime* time = DSystem::GetTimeMgr();
 	DSceneManager* sceneManager = DSystem::GetSceneMgr();
@@ -85,7 +87,7 @@ bool DGraphics::Execute()
 	sceneManager->UpdateScene();
 
 	//m_GL->BeginRender();
-
+	m_drawCall = 0;
 	sceneManager->RenderScene();
 
 	m_GUI->Render();
@@ -121,11 +123,11 @@ void DGraphics::Shutdown()
 		delete m_screenPlane;
 		m_screenPlane = NULL;
 	}
-	if (m_skyMesh != NULL)
+	if (m_skyGeometry != NULL)
 	{
-		m_skyMesh->Destroy();
-		delete m_skyMesh;
-		m_skyMesh = NULL;
+		m_skyGeometry->Destroy();
+		delete m_skyGeometry;
+		m_skyGeometry = NULL;
 	}
 	if (m_glDrawer != NULL)
 	{
@@ -133,6 +135,7 @@ void DGraphics::Shutdown()
 		delete m_glDrawer;
 		m_glDrawer = NULL;
 	}
+	m_globalRenderShader = NULL;
 }
 DGLCore * DGraphics::GetGLCore()
 {
@@ -196,7 +199,7 @@ void DGraphics::Clear(bool clearDepth, bool clearStencil, DColor & color, DRende
 {
 	if (renderTexture != NULL)
 	{
-		DRenderTextureViewRes* res = renderTexture->GetTextureRes();
+		IRenderTextureViewRes* res = renderTexture->GetTextureRes();
 		if(res != NULL)
 			DSystem::GetGraphicsMgr()->GetGLCore()->Clear(clearDepth, clearStencil, color, res);
 	}
@@ -230,9 +233,9 @@ void DGraphics::EndSetRenderTarget(DRenderTexture * res)
 	}
 }
 
-void DGraphics::DrawMesh(DMesh * mesh, const DMatrix4x4 & matrix, DMaterial * material)
+void DGraphics::DrawGeometry(DGeometry * geometry, const DMatrix4x4 & matrix, DMaterial * material)
 {
-	if (mesh == NULL || material == NULL)
+	if (geometry == NULL || material == NULL)
 		return;
 	DMatrix4x4 view, proj;
 	/*camera->GetViewMatrix(view);
@@ -251,12 +254,14 @@ void DGraphics::DrawMesh(DMesh * mesh, const DMatrix4x4 & matrix, DMaterial * ma
 	int i;
 	for (i = 0; i < passcount; i++)
 	{
-		material->SetPass(i);
-		mesh->Draw(material->GetVertexUsage(i));
+		if (material->SetPass(i))
+		{
+			geometry->Draw(material->GetVertexUsage(i));
+
+			DSystem::GetGraphicsMgr()->m_drawCall += 1;
+		}
 	}
 
-	
-	
 }
 
 void DGraphics::DrawTexture(DTexture * texture, DMaterial * material)
@@ -285,16 +290,21 @@ void DGraphics::DrawTexture(DTexture * texture, DMaterial * material)
 
 	for (i = 0; i < passcount; i++)
 	{
-		material->SetPass(i);
-		DSystem::GetGraphicsMgr()->m_screenPlane->Draw(material->GetVertexUsage(i));
+		if (material->SetPass(i))
+		{
+			DSystem::GetGraphicsMgr()->m_screenPlane->Draw(material->GetVertexUsage(i));
+
+			DSystem::GetGraphicsMgr()->m_drawCall += 1;
+		}
 	}
+
 }
 
 void DGraphics::DrawSkyBox(DMaterial * material, const DCamera * camera)
 {
 	if (material == NULL || camera == NULL)
 		return;
-	if (DSystem::GetGraphicsMgr()->m_skyMesh == NULL)
+	if (DSystem::GetGraphicsMgr()->m_skyGeometry == NULL)
 	{
 		DSystem::GetGraphicsMgr()->InitSkyBox();
 	}
@@ -307,7 +317,7 @@ void DGraphics::DrawSkyBox(DMaterial * material, const DCamera * camera)
 	//material->SetZWrite(false);
 	//material->SetCullMode(DCullMode_Off);
 
-	DrawMesh(DSystem::GetGraphicsMgr()->m_skyMesh, world, material);
+	DrawGeometry(DSystem::GetGraphicsMgr()->m_skyGeometry, world, material);
 }
 
 void DGraphics::SetCullMode(DCullMode cullMode)
@@ -398,6 +408,34 @@ void DGraphics::ResetViewPort()
 	gl->GetResolution(w, h);
 
 	gl->SetViewPort(0, 0, w, h);
+}
+
+void DGraphics::SetGlobalRenderShader(DShader * shader)
+{
+	DGraphics* mgr = DSystem::GetGraphicsMgr();
+	if (mgr != NULL)
+	{
+		mgr->m_globalRenderShader = shader;
+	}
+}
+
+DShader * DGraphics::GetGlobalRenderShader()
+{
+	DGraphics* mgr = DSystem::GetGraphicsMgr();
+	if (mgr != NULL)
+	{
+		return mgr->m_globalRenderShader;
+	}
+	return NULL;
+}
+
+void DGraphics::ClearGlobalRenderShader()
+{
+	DGraphics* mgr = DSystem::GetGraphicsMgr();
+	if (mgr != NULL)
+	{
+		mgr->m_globalRenderShader = NULL;
+	}
 }
 
 void DGraphics::GlBegin()
@@ -517,6 +555,11 @@ void DGraphics::GetProjection(DMatrix4x4 & projection)
 	}
 }
 
+unsigned int DGraphics::GetDrawCall()
+{
+	return DSystem::GetGraphicsMgr()->m_drawCall;
+}
+
 void DGraphics::InitScreenPlane()
 {
 	//DMeshBufferDesc desc;
@@ -549,7 +592,7 @@ void DGraphics::InitScreenPlane()
 	indexBuffer[0] = 0; indexBuffer[1] = 1; indexBuffer[2] = 2;
 	indexBuffer[3] = 0; indexBuffer[4] = 2; indexBuffer[5] = 3;
 
-	m_screenPlane = new DMesh();
+	m_screenPlane = new DGeometry();
 	m_screenPlane->SetVertices(vertices, 4);
 	m_screenPlane->SetUVs(0, uvs, 4);
 	m_screenPlane->SetIndices(indexBuffer, 6);
@@ -558,7 +601,7 @@ void DGraphics::InitScreenPlane()
 
 void DGraphics::InitSkyBox()
 {
-	m_skyMesh = new DMesh();
+	m_skyGeometry = new DGeometry();
 	float *vertices = new float[108];
 	unsigned long* indices = new unsigned long[36];
 
@@ -630,7 +673,7 @@ void DGraphics::InitSkyBox()
 	indices[30] = 30; indices[31] = 31; indices[32] = 32;
 	indices[33] = 33; indices[34] = 34; indices[35] = 35;
 
-	m_skyMesh->SetVertices(vertices, 36);
-	m_skyMesh->SetIndices(indices, 36);
+	m_skyGeometry->SetVertices(vertices, 36);
+	m_skyGeometry->SetIndices(indices, 36);
 }
 

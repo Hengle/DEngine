@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>c:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>c:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>e:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>e:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>E:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
@@ -158,10 +158,10 @@
     <ClInclude Include="DLog.h" />
     <ClInclude Include="DMaterial.h" />
     <ClInclude Include="DMath.h" />
-    <ClInclude Include="DMesh.h" />
-    <ClInclude Include="DMeshRes10.h" />
-    <ClInclude Include="DMeshRes11.h" />
-    <ClInclude Include="DMeshRes9.h" />
+    <ClInclude Include="DGeometry.h" />
+    <ClInclude Include="DGeometryRes10.h" />
+    <ClInclude Include="DGeometryRes11.h" />
+    <ClInclude Include="DGeometryRes9.h" />
     <ClInclude Include="DModelLoader.h" />
     <ClInclude Include="DObject.h" />
     <ClInclude Include="DRenderBuffer10.h" />
@@ -220,10 +220,10 @@
     <ClCompile Include="DLog.cpp" />
     <ClCompile Include="DMaterial.cpp" />
     <ClCompile Include="DMath.cpp" />
-    <ClCompile Include="DMesh.cpp" />
-    <ClCompile Include="DMeshRes10.cpp" />
-    <ClCompile Include="DMeshRes11.cpp" />
-    <ClCompile Include="DMeshRes9.cpp" />
+    <ClCompile Include="DGeometry.cpp" />
+    <ClCompile Include="DGeometryRes10.cpp" />
+    <ClCompile Include="DGeometryRes11.cpp" />
+    <ClCompile Include="DGeometryRes9.cpp" />
     <ClCompile Include="DModelLoader.cpp" />
     <ClCompile Include="DObject.cpp" />
     <ClCompile Include="DRenderBuffer10.cpp" />

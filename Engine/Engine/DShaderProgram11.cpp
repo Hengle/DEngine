@@ -138,14 +138,7 @@ void DShaderProgram11::OnApplyParams(std::map<std::string, float*>& params, std:
 			
 			m_deviceContext->Unmap(pbuffer, 0);
 
-			if (desc->shaderType == 0)
-			{
-				m_deviceContext->VSSetConstantBuffers(bufferNumber, 1, &pbuffer);
-			}
-			else
-			{
-				m_deviceContext->PSSetConstantBuffers(bufferNumber, 1, &pbuffer);
-			}
+			OnSetValue(bufferNumber, 1, &pbuffer);
 		}
 	}
 
@@ -265,6 +258,11 @@ void DShaderVertexProgram11::OnDraw()
 {
 	DShaderProgram11::OnDraw();
 	m_deviceContext->VSSetShader(m_vertexShader, NULL, 0);
+}
+
+void DShaderVertexProgram11::OnSetValue(UINT startSlot, UINT numBuffers, ID3D11Buffer * const * buffers)
+{
+	m_deviceContext->VSSetConstantBuffers(startSlot, numBuffers, buffers);
 }
 
 HRESULT DShaderVertexProgram11::InitVertexShader(ID3DBlob* pShaderBlob, ID3D11Device* pD3DDevice, ID3D11InputLayout** pInputLayout, int* inputLayoutByteLength)
@@ -438,7 +436,6 @@ HRESULT DShaderVertexProgram11::InitVertexShader(ID3DBlob* pShaderBlob, ID3D11De
 		cbufferdesc->cbufferIndex = m_cbufferCount;
 		cbufferdesc->cbufferStartSlot = i;
 		cbufferdesc->cbufferSize = clength;
-		cbufferdesc->shaderType = 0;
 
 		for (unsigned int j = 0; j < desc.Variables; j++)
 		{
@@ -578,6 +575,11 @@ void DShaderPixelProgram11::OnDraw()
 	m_deviceContext->PSSetShader(m_pixelShader, NULL, 0);
 }
 
+void DShaderPixelProgram11::OnSetValue(UINT startSlot, UINT numBuffers, ID3D11Buffer * const * buffers)
+{
+	m_deviceContext->PSSetConstantBuffers(startSlot, numBuffers, buffers);
+}
+
 HRESULT DShaderPixelProgram11::InitPixelShader(ID3DBlob * pShaderBlob, ID3D11Device * pD3DDevice)
 {
 	// Reflect shader info
@@ -634,7 +636,6 @@ HRESULT DShaderPixelProgram11::InitPixelShader(ID3DBlob * pShaderBlob, ID3D11Dev
 		cbufferdesc->cbufferIndex = m_cbufferCount;
 		cbufferdesc->cbufferSize = clength;
 		cbufferdesc->cbufferStartSlot = i;
-		cbufferdesc->shaderType = 1;
 
 		for (unsigned int j = 0; j < desc.Variables; j++)
 		{

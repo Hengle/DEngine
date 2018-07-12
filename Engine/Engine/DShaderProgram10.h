@@ -4,6 +4,7 @@
 #include <vector>
 #include <map>
 
+/*Shader程序Direct3d10实现*/
 class DShaderProgram10 : public DShaderProgram
 {
 public:
@@ -16,6 +17,7 @@ public:
 protected:
 	virtual void OnDraw();
 	virtual void OnApplyParams(std::map<std::string, float*>&params, std::map<std::string, float*>&gparams);
+	virtual void OnSetValue(UINT, UINT, ID3D10Buffer* const *) = 0;
 
 protected:
 	ID3D10Device* m_device;
@@ -25,6 +27,7 @@ protected:
 	std::vector<ID3D10Buffer*> m_paramBuffers;
 };
 
+/*顶点着色器direct3d10实现*/
 class DShaderVertexProgram10 : public DShaderProgram10
 {
 public:
@@ -38,11 +41,13 @@ private:
 protected:
 	virtual bool OnInit(const char* content, char* funcName);
 	virtual void OnDraw();
+	virtual void OnSetValue(UINT, UINT, ID3D10Buffer* const *);
 
 private:
 	ID3D10VertexShader* m_vertexShader;
 };
 
+/*像素着色器direct3d10实现*/
 class DShaderPixelProgram10 : public DShaderProgram10
 {
 public:
@@ -56,6 +61,7 @@ private:
 protected:
 	virtual bool OnInit(const char* content, char* funcName);
 	virtual void OnDraw();
+	virtual void OnSetValue(UINT, UINT, ID3D10Buffer* const *);
 
 private:
 	ID3D10PixelShader *m_pixelShader;

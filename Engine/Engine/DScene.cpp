@@ -212,12 +212,20 @@ void DScene::Destroy()
 	Exit();
 }
 
-void DScene::AddTransform(DTransform * transform)
+//void DScene::AddTransform(DTransform * transform)
+//{
+//	if (m_transforms == NULL)
+//		return;
+//	transform->RemoveFromParent();
+//	m_transforms->push_back(transform);
+//}
+
+void DScene::AddSceneObject(DSceneObject * sceneObj)
 {
 	if (m_transforms == NULL)
 		return;
-	transform->RemoveFromParent();
-	m_transforms->push_back(transform);
+	sceneObj->GetTransform()->RemoveFromParent();
+	m_transforms->push_back(sceneObj->GetTransform());
 }
 
 DCameraNode * DScene::GetCameraNode()
@@ -321,6 +329,7 @@ void DScene::OnUnLoad()
 
 void DScene::DrawScene(bool callOnRender, DShader* replaceShader)
 {
+	DGraphics::SetGlobalRenderShader(replaceShader);
 	if (m_transforms != NULL) 
 	{
 		int i, size;
@@ -328,9 +337,10 @@ void DScene::DrawScene(bool callOnRender, DShader* replaceShader)
 		for (int i = 0; i < size; i++) 
 		{
 			DTransform* trans = m_transforms->at(i);
-			trans->GetSceneObject()->Cull(replaceShader);
+			trans->GetSceneObject()->Cull();
 		}
 	}
 	if (callOnRender)
 		OnRender();
+	DGraphics::ClearGlobalRenderShader();
 }

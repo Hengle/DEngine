@@ -2,6 +2,7 @@
 #include "DGLCore.h"
 #include "DGraphicsDefine.h"
 
+/*光栅化状态集*/
 struct RasterizerState
 {
 public:
@@ -12,6 +13,7 @@ public:
 	DFillMode fillMode;
 };
 
+/*深度模板状态集*/
 struct DepthStencilState
 {
 public:
@@ -30,6 +32,7 @@ public:
 	UINT8 stencilWriteMask;
 };
 
+/*混合状态集*/
 struct BlendState
 {
 public:

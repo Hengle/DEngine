@@ -2,19 +2,19 @@
 #include "D3D10Core.h"
 
 /*
-	Mesh资源Direct3D10底层
+	Geometry资源Direct3D10底层
 */
-class DMeshRes10 : public DMeshRes
+class DGeometryRes10 : public DGeometryRes
 {
 public:
-	DMeshRes10(ID3D10Device* device, int vertexUsage, bool dynamic);
-	~DMeshRes10();
+	DGeometryRes10(ID3D10Device* device, int vertexUsage, bool dynamic);
+	~DGeometryRes10();
 	virtual void Release();
 
 protected:
 	virtual void OnRefresh(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount);
 	virtual bool OnInit(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount);
-	virtual void OnDraw(DMeshTopology);
+	virtual void OnDraw(DGeometryTopology);
 
 private:
 	ID3D10Device* m_device;

@@ -17,23 +17,26 @@ public:
 	virtual bool Init(int width, int height, bool fullscreen, HWND);
 	/*模块销毁*/
 	virtual void Destroy();
-	//virtual void BeginRender();
-	//virtual void EndRender();
 	/*提交渲染结果*/
 	virtual void Present();
-	virtual void Clear(bool clearDepth, bool clearStencil, DColor& clearColor, DRenderTextureViewRes* = NULL);
-	virtual void SetRenderTarget(DRenderTextureViewRes* = NULL);
+	/*清除缓冲区*/
+	virtual void Clear(bool clearDepth /*清除深度缓冲*/, bool clearStencil /*清除模板缓冲*/, DColor& clearColor /*颜色缓冲区清除颜色*/, IRenderTextureViewRes* = NULL);
+	/*设置渲染目标*/
+	virtual void SetRenderTarget(IRenderTextureViewRes* = NULL);
+	/*设置视口区域*/
 	virtual void SetViewPort(float, float, float, float);
-	virtual void EndSetRenderTarget(DRenderTextureViewRes* = NULL);
-	/*创建网格资源*/
-	virtual DMeshRes* CreateMeshRes(int vertexUsage, bool dynamic);
+	/*结束渲染*/
+	virtual void EndSetRenderTarget(IRenderTextureViewRes* = NULL);
+	/*创建几何体资源*/
+	virtual DGeometryRes* CreateGeometryRes(int vertexUsage, bool dynamic);
 	/*创建贴图资源*/
-	virtual DTextureRes* CreateTextureRes(WCHAR* path);
+	virtual ITextureRes* CreateTextureRes(WCHAR* path);
 	/*创建RenderTexture资源*/
-	virtual DRenderTextureViewRes* CreateRenderTextureRes(float width, float height);
-	/*创建shader资源*/
+	virtual IRenderTextureViewRes* CreateRenderTextureRes(float width, float height);
+	/*创建shader程序*/
 	virtual DShaderProgram* CreateShaderProgram(DShaderProgramType);
 	virtual void ApplySamplerState(UINT, DWrapMode);
+	/*获取渲染状态管理器*/
 	virtual IRenderStateMgr* GetRenderStateMgr();
 
 	LPDIRECT3DDEVICE9 GetDevice()

@@ -4,10 +4,10 @@
 static class DModelLoader
 {
 public:
-	static bool LoadObj(const char *, DMeshBufferDesc*);
+	static bool LoadObj(const char *, DGeometryBufferDesc*);
 
-	static bool CreateCube(DMeshBufferDesc*);
+	static bool CreateCube(DGeometryBufferDesc*);
 
-	static bool CreatePlane(DMeshBufferDesc*);
+	static bool CreatePlane(DGeometryBufferDesc*);
 };
 

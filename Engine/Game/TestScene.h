@@ -28,6 +28,7 @@ private:
 	DDisplayObject* m_obj0;
 	DDisplayObject* m_cube;
 	DMesh* plane;
+	DCamera* m_camera;
 	//DMesh* cube;
 	//DMesh* obj;
 	DRenderTexture* m_rt;

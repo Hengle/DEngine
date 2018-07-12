@@ -30,14 +30,12 @@ TestScene::TestScene(SCENEID sceneId, char * sceneName) : DScene(sceneId, sceneN
 
 void TestScene::OnGUI()
 {
-	/*DGUI::Label(u8"森哥的引擎：中文utf-8测试");
+	DGUI::Label(u8"森哥的引擎：中文utf-8测试");
 	DGUI::Label("DeltaTime:%lf", DTime::GetDeltaTime());
 	DGUI::Label("FixedDeltaTime:%lf", DTime::GetFixedDeltaTime());
 	DGUI::Label("Timer:%lf", DTime::GetTimer());
 	DGUI::Label("FPS:%d", DTime::GetFPS());
-	int x, y;
-	DInput::GetMousePosition(x, y);
-	DGUI::Label("Mouse:%d,%d", x, y);*/
+	DGUI::Label("DrawCall:%d", DGraphics::GetDrawCall());
 	//DGUI::Label("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
 	/*D3DXVECTOR3 euler;
@@ -193,7 +191,8 @@ void TestScene::TestLoad()
 	delete aoshader;
 	aoshader = NULL;*/
 
-	DCamera* cam = new DCamera();
+	m_camera = new DCamera();
+	m_camera->Create();
 	DTransform* transform;
 
 	//DShader* replacetest = DRes::Load<DShader>(DEFAULT_GROUP, REPLACE_SHADER);
@@ -206,20 +205,20 @@ void TestScene::TestLoad()
 
 	m_filter = new TestFilter();
 	//cam->SetFilter(m_filter);
-	cam->SetSkyBox(skymat);
+	m_camera->SetSkyBox(skymat);
 
-	transform = cam->GetTransform();
+	transform = m_camera->GetTransform();
 	transform->SetEuler(34.996f, -154.423f, 0.0f);
 	transform->SetPosition(3.24f, 6.822f, 7.701f);
-	SetCamera(cam);
+	//SetCamera(cam);
 
 	m_light = new DLight();
+	m_light->Create();
 	m_light->SetColor(1, 1, 1, 1);
 	m_light->SetFar(60.0f);
 	transform = m_light->GetTransform();
 	transform->SetEuler(50, -30, 0);
 	transform->SetPosition(5.05f, 12.04f, -8.74f);
-	SetLight(m_light);
 
 	//DMesh* mesh = DMesh::Create("../Res/eboy.obj");
 	plane = DMesh::Create(DMESH_Plane);
@@ -238,9 +237,10 @@ void TestScene::TestLoad()
 	////DTexture2D* decal = new DTexture2D(L"../Res/decal.jpg");
 	m_plane = new DDisplayObject(plane, mat);
 	transform = m_plane->GetTransform();
+	m_plane->Create();
 
 
-	AddDisplayObject(m_plane);
+	//AddDisplayObject(m_plane);
 
 	//obj = DMesh::Create("../Res/eboy.obj");
 	DMesh* obj = DRes::Load<DMesh>(DEFAULT_GROUP, BODY_MESH);
@@ -253,10 +253,11 @@ void TestScene::TestLoad()
 	//mat2->SetTexture("shaderTexture", map);
 
 	m_obj0 = new DDisplayObject(obj, mat2);
+	m_obj0->Create();
 	transform = m_obj0->GetTransform();
 	transform->SetPosition(0.0f, 1.64f, 0.0f);
 
-	AddDisplayObject(m_obj0);
+	//AddDisplayObject(m_obj0);
 
 
 	//cube = DMesh::Create("../Res/eboy.obj");
@@ -268,12 +269,13 @@ void TestScene::TestLoad()
 	mat3->SetColor("outlinecolor", DColor(0,0,0,1.0f));
 	//mat3->SetZTest(DRSCompareFunc_Greater);
 	m_cube = new DDisplayObject(cube, mat3);
+	m_cube->Create();
 	transform = m_cube->GetTransform();
 	transform->SetPosition(2.64f, 2.61f, 0.0f);
 
 	DTransform* objtr = m_obj0->GetTransform();
 	transform->SetParent(objtr);
-	AddDisplayObject(m_cube);
+	//AddDisplayObject(m_cube);
 }
 
 void TestScene::OnUnLoad()

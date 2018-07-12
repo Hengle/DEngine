@@ -1,6 +1,6 @@
 ﻿#include "D3D11Core.h"
 #include "DSystem.h"
-#include "DMeshRes11.h"
+#include "DGeometryRes11.h"
 #include "DShaderProgram11.h"
 #include "DTextureRes11.h"
 #include "DRenderStateMgr11.h"
@@ -349,7 +349,7 @@ void D3D11Core::Present()
 	}
 }
 
-void D3D11Core::Clear(bool clearDepth, bool clearStencil, DColor & color, DRenderTextureViewRes * res)
+void D3D11Core::Clear(bool clearDepth, bool clearStencil, DColor & color, IRenderTextureViewRes * res)
 {
 	int flag = 0;
 	if (clearDepth && clearStencil)
@@ -380,7 +380,7 @@ void D3D11Core::Clear(bool clearDepth, bool clearStencil, DColor & color, DRende
 	}
 }
 
-void D3D11Core::SetRenderTarget(DRenderTextureViewRes * res)
+void D3D11Core::SetRenderTarget(IRenderTextureViewRes * res)
 {
 	if (res != NULL)
 	{
@@ -408,23 +408,23 @@ void D3D11Core::SetViewPort(float x, float y, float width, float height)
 	m_deviceContext->RSSetViewports(1, &m_viewPort);
 }
 
-void D3D11Core::EndSetRenderTarget(DRenderTextureViewRes *)
+void D3D11Core::EndSetRenderTarget(IRenderTextureViewRes *)
 {
 
 }
 
-DMeshRes * D3D11Core::CreateMeshRes(int vertexUsage, bool dynamic)
+DGeometryRes * D3D11Core::CreateGeometryRes(int vertexUsage, bool dynamic)
 {
-	DMeshRes11* res = new DMeshRes11(m_device, m_deviceContext, vertexUsage, dynamic);
+	DGeometryRes11* res = new DGeometryRes11(m_device, m_deviceContext, vertexUsage, dynamic);
 	return res;
 }
 
-DTextureRes * D3D11Core::CreateTextureRes(WCHAR* filename)
+ITextureRes * D3D11Core::CreateTextureRes(WCHAR* filename)
 {
 	return new DTextureRes11(m_device, m_deviceContext, filename);
 }
 
-DRenderTextureViewRes * D3D11Core::CreateRenderTextureRes(float width, float height)
+IRenderTextureViewRes * D3D11Core::CreateRenderTextureRes(float width, float height)
 {
 	return new DRenderTextureViewRes11(m_device, m_deviceContext, width, height);
 }

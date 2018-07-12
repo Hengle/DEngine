@@ -1,6 +1,6 @@
 ﻿#include "DGLCore.h"
 
-DMeshRes::DMeshRes(int vertexUsage, bool dynamic)
+DGeometryRes::DGeometryRes(int vertexUsage, bool dynamic)
 {
 	m_isSupported = false;
 	m_isInitialized = false;
@@ -68,7 +68,7 @@ DMeshRes::DMeshRes(int vertexUsage, bool dynamic)
 //	m_isInitialized = OnInit(desc);
 //}
 
-void DMeshRes::Refresh(DMeshBufferDesc * desc)
+void DGeometryRes::Refresh(DGeometryBufferDesc * desc)
 {
 	if (desc == NULL)
 		return;
@@ -128,7 +128,7 @@ void DMeshRes::Refresh(DMeshBufferDesc * desc)
 	vertices = 0;
 }
 
-void DMeshRes::Refresh(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
+void DGeometryRes::Refresh(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
 {
 	if (indexCount <= 0 || vertexCount <= 0)
 		return;
@@ -150,13 +150,13 @@ void DMeshRes::Refresh(float * vertexbuffer, unsigned long * indexbuffer, int ve
 	}
 }
 
-void DMeshRes::DrawPrimitive(DMeshTopology topology)
+void DGeometryRes::DrawPrimitive(DGeometryTopology topology)
 {
 	if (m_isSupported)
 		OnDraw(topology);
 }
 
-bool DMeshRes::IsInitialized()
+bool DGeometryRes::IsInitialized()
 {
 	return m_isInitialized;
 }

@@ -84,6 +84,7 @@ private:
 	vector<DShaderPass*> m_passes;
 };
 
+/*shader代码块*/
 class DShaderBlock
 {
 public:
@@ -91,19 +92,28 @@ public:
 	~DShaderBlock();
 	void Release();
 
+	/*编译*/
 	bool Compile(char* fileName);
 	bool IsSupported();
 	int GetPassCount();
 	DShaderPass* GetPass(int);
 
 private:
+	/*解释sub shader块*/
 	bool InterpretSubShader(ifstream&);
+	/*解释desc块*/
 	void InterpretDesc(ifstream&, DSubShader*);
+	/*解释编译目标块*/
 	void InterpretCompileTarget(ifstream&, DSubShader*);
+	/*解释pass块*/
 	void InterpretPass(ifstream&, DSubShader*);
+	/*解释标签块*/
 	void InterpretTags(ifstream&, DShaderPass*);
+	/*解释状态块*/
 	void InterpretState(ifstream&, DShaderPass*);
+	/*解释模板状态块*/
 	void InterpretStencil(ifstream&, DShaderPass*);
+	/*解释shader块*/
 	void InterpretShader(ifstream&, DShaderPass*);
 
 private:

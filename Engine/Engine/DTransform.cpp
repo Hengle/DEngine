@@ -43,6 +43,8 @@ void DTransform::SetPosition(float x, float y, float z)
 	m_position.x = x;
 	m_position.y = y;
 	m_position.z = z;
+
+	/*改变transform的坐标将引发矩阵的修改，该修改会延迟到下一帧或下一帧之后*/
 	m_isL2WMatrixChanged = true;
 	m_isW2LMatrixChanged = true;
 }
@@ -52,6 +54,8 @@ void DTransform::SetPosition(DVector3 position)
 	if (IS_FLOAT_EQUAL(m_position.x, position.x) && IS_FLOAT_EQUAL(m_position.y, position.y) && IS_FLOAT_EQUAL(m_position.z, position.z))
 		return;
 	m_position = position;
+
+	/*改变transform的坐标将引发矩阵的修改，该修改会延迟到下一帧或下一帧之后*/
 	m_isL2WMatrixChanged = true;
 	m_isW2LMatrixChanged = true;
 }
@@ -64,8 +68,11 @@ void DTransform::SetRotation(float x, float y, float z, float w)
 	m_rotation.y = y;
 	m_rotation.z = z;
 	m_rotation.w = w;
+
+	/*改变transform的角度将引发矩阵的修改，该修改会延迟到下一帧或下一帧之后*/
 	m_isL2WMatrixChanged = true;
 	m_isW2LMatrixChanged = true;
+	/*引起欧拉角的修改，该修改在下次访问欧拉角时生效*/
 	m_isEulerChanged = true;
 }
 
@@ -74,8 +81,11 @@ void DTransform::SetRotation(DQuaterion rotation)
 	if (IS_FLOAT_EQUAL(m_rotation.x, rotation.x) && IS_FLOAT_EQUAL(m_rotation.y, rotation.y) && IS_FLOAT_EQUAL(m_rotation.z, rotation.z) && IS_FLOAT_EQUAL(m_rotation.w, rotation.w))
 		return;
 	m_rotation = rotation;
+
+	/*改变transform的角度将引发矩阵的修改，该修改会延迟到下一帧或下一帧之后*/
 	m_isL2WMatrixChanged = true;
 	m_isW2LMatrixChanged = true;
+	/*引起欧拉角的修改，该修改在下次访问欧拉角时生效*/
 	m_isEulerChanged = true;
 }
 
@@ -86,6 +96,8 @@ void DTransform::SetEuler(float pitch, float yaw, float roll)
 	m_euler.x = pitch;
 	m_euler.y = yaw;
 	m_euler.z = roll;
+
+	/*改变transform的角度将引发矩阵的修改，该修改会延迟到下一帧或下一帧之后*/
 	DQuaterion::Euler(&m_rotation, m_euler);
 	m_isL2WMatrixChanged = true;
 	m_isW2LMatrixChanged = true;
@@ -96,6 +108,8 @@ void DTransform::SetEuler(DVector3 euler)
 	if (IS_FLOAT_EQUAL(m_euler.x, euler.x) && IS_FLOAT_EQUAL(m_euler.y, euler.y) && IS_FLOAT_EQUAL(m_euler.z, euler.z))
 		return;
 	m_euler = euler;
+
+	/*改变transform的角度将引发矩阵的修改，该修改会延迟到下一帧或下一帧之后*/
 	DQuaterion::Euler(&m_rotation, m_euler);
 	m_isL2WMatrixChanged = true;
 	m_isW2LMatrixChanged = true;
@@ -133,7 +147,8 @@ void DTransform::GetRotation(DQuaterion & rotation)
 
 void DTransform::GetEuler(DVector3 & euler)
 {
-	if (m_isEulerChanged) {
+	if (m_isEulerChanged) { 
+		//访问欧拉角时如果此前修改过四元数，则更新欧拉角
 		RefreshEuler();
 		m_isEulerChanged = false;
 	}
@@ -219,13 +234,18 @@ void DTransform::SetParent(DTransform * parent)
 {
 	if (m_parent != NULL)
 	{
+		//如果当前transform的父节点存在，则先从父节点移除
 		RemoveFromParent();
 	}
 	m_parent = parent;
+
+	//插入到父节点的子节点链表
 	m_nextNeighbor = parent->m_firstChild;
 	parent->m_firstChild = this;
+	//父节点孩子数量+1
 	parent->m_childCount += 1;
 
+	//由于设置了父节点，导致矩阵发生变化
 	m_isL2WMatrixChanged = true;
 	m_isW2LMatrixChanged = true;
 }
@@ -239,6 +259,8 @@ void DTransform::RemoveFromParent()
 {
 	if (m_parent == NULL)
 		return;
+	
+	//从父节点的孩子链表移除
 	if (m_parent->m_firstChild == this)
 	{
 		m_parent->m_firstChild = this->m_nextNeighbor;
@@ -247,11 +269,14 @@ void DTransform::RemoveFromParent()
 	{
 		m_preNeighbor->m_nextNeighbor = m_nextNeighbor;
 	}
+
+	//父节点孩子数量-1
 	m_parent->m_childCount -= 1;
 	m_preNeighbor = NULL;
 	m_nextNeighbor = NULL;
 	m_parent = NULL;
 
+	//标记矩阵变化
 	m_isL2WMatrixChanged = true;
 	m_isW2LMatrixChanged = true;
 }

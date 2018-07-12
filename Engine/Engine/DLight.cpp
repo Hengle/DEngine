@@ -2,7 +2,7 @@
 #include "DShader.h"
 #include "DSystem.h"
 
-DLight::DLight()
+DLight::DLight() : DSceneObject()
 {
 	m_shadowMap = 0;
 	m_shadowShader = 0;

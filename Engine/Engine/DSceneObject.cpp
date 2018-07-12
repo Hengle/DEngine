@@ -14,7 +14,7 @@ DSceneObject::~DSceneObject()
 
 void DSceneObject::Create()
 {
-	DSystem::GetSceneMgr()->GetCurrentScene()->AddTransform(m_transform);
+	DSystem::GetSceneMgr()->GetCurrentScene()->AddSceneObject(this);
 	m_isInitialized = OnInit();
 }
 

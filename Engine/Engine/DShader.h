@@ -5,6 +5,7 @@
 #include "DTexture.h"
 #include "DShaderBlock.h"
 
+/*shader常量表*/
 class DShaderConstantTable
 {
 public:
@@ -22,6 +23,7 @@ public:
 	std::map<std::string, DTexture*> textures;
 };
 
+/*shader类*/
 class DShader : public DResObject
 {
 private:
@@ -57,4 +59,5 @@ private:
 	DShaderBlock* m_shaderBlock;
 };
 
+/*全局shader常量*/
 static DShaderConstantTable* sGlobalShaderConstants;

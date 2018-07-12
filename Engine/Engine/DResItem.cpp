@@ -254,5 +254,5 @@ DMeshResItem * DMeshResItem::LoadManifest(std::ifstream & ifile)
 
 DResObject * DMeshResItem::OnLoad()
 {
-	return DMesh::Create(m_path);
+	return DGeometry::Create(m_path);
 }

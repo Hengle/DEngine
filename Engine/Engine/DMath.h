@@ -2,11 +2,11 @@
 #include <math.h>
 
 #define EPSILNON 0.000001f
-#define D_PI 3.1415926535897f
-#define RAD_TO_DEG 57.29577951308f
-#define DEG_TO_RAD 0.01745329252f
+#define D_PI 3.1415926535897f          //π
+#define RAD_TO_DEG 57.29577951308f    //角度转弧度
+#define DEG_TO_RAD 0.01745329252f     //弧度转角度
 
-#define IS_FLOAT_EQUAL(a, b) (a>=b-EPSILNON&&a<=b+EPSILNON)
+#define IS_FLOAT_EQUAL(a, b) (a>=b-EPSILNON&&a<=b+EPSILNON)   //浮点数比较
 
 typedef struct DRect
 {
@@ -242,6 +242,28 @@ public:
 	DVector3 center;
 	DVector3 size;
 } DBounds, *LPDBounds;
+
+#define DVEC2_ZERO DVector2(0.0f, 0.0f);
+#define DVEC2_ONE DVector2(1.0f, 1.0f);
+#define DVEC2_UP DVector2(0.0f, 1.0f);
+#define DVEC2_DOWN DVector2(0.0f, -1.0f);
+#define DVEC2_LEFT DVector2(1.0f, 0.0f);
+#define DVEC2_RIGHT DVector2(-1.0f, 0.0f);
+
+#define DVEC3_ZERO DVector3(0.0f, 0.0f, 0.0f);
+#define DVEC3_ONE DVector3(1.0f, 1.0f, 1.0f);
+#define DVEC3_FORWARD DVector3(0.0f, 0.0f, 1.0f);
+#define DVEC3_BACK DVector3(0.0f, 0.0f, -1.0f);
+#define DVEC3_UP DVector3(0.0f, 1.0f, 0.0f);
+#define DVEC3_DOWN DVector3(0.0f, -1.0f, 0.0f);
+#define DVEC3_LEFT DVector3(-1.0f, 0.0f, 0.0f);
+#define DVEC3_RIGHT DVector3(1.0f, 0.0f, 0.0f);
+
+#define DVEC4_ZERO DVector4(0.0f, 0.0f, 0.0f, 0.0f);
+#define DVEC4_ONE DVector4(1.0f, 1.0f, 1.0f, 1.0f);
+
+#define DMATRIX_IDENTITY = DMatrix4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); 
+
 
 const DVector2 dvec2_zero = DVector2(0.0f, 0.0f);
 const DVector2 dvec2_one = DVector2(1.0f, 1.0f);

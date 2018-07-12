@@ -11,13 +11,13 @@ DLogMsg::DLogMsg(char * msg, DLogType type)
 	this->msg = std::string();
 	switch (type)
 	{
-	case DLogType::Info:
+	case DLogType::DLogType_Info:
 		GenInfoMsg(msg);
 		break;
-	case DLogType::Warning:
+	case DLogType::DLogType_Warning:
 		GenWarningMsg(msg);
 		break;
-	case DLogType::Error:
+	case DLogType::DLogType_Error:
 		GenErrorMsg(msg);
 		break;
 	default:
@@ -116,19 +116,19 @@ void DLog::DrawMsg(DLogMsg * msg)
 {
 	DColor color;
 	
-	if (msg->type == DLogType::Info) {
+	if (msg->type == DLogType::DLogType_Info) {
 		color.r = 1;
 		color.g = 1;
 		color.b = 1;
 		color.a = 1;
 	}
-	else if (msg->type == DLogType::Warning) {
+	else if (msg->type == DLogType::DLogType_Warning) {
 		color.r = 1;
 		color.g = 1;
 		color.b = 0;
 		color.a = 1;
 	}
-	else if (msg->type == DLogType::Error) {
+	else if (msg->type == DLogType::DLogType_Error) {
 		color.r = 1;
 		color.g = 0;
 		color.b = 0;
@@ -157,7 +157,7 @@ void DLog::SaveLog()
 void DLog::Info(char * msg)
 {
 #if _DEBUG
-	DLogMsg* lg = new DLogMsg(msg, DLogType::Info);
+	DLogMsg* lg = new DLogMsg(msg, DLogType::DLogType_Info);
 	DSystem::GetLogMgr()->AddLog(lg);
 
 	OutputDebugString(CA2W(lg->msg.data()));
@@ -167,7 +167,7 @@ void DLog::Info(char * msg)
 void DLog::Warn(char * msg)
 {
 #if _DEBUG
-	DLogMsg* lg = new DLogMsg(msg, DLogType::Warning);
+	DLogMsg* lg = new DLogMsg(msg, DLogType::DLogType_Warning);
 	DSystem::GetLogMgr()->AddLog(lg);
 
 	OutputDebugString(CA2W(lg->msg.data()));
@@ -177,7 +177,7 @@ void DLog::Warn(char * msg)
 void DLog::Err(char * msg)
 {
 #if _DEBUG
-	DLogMsg* lg = new DLogMsg(msg, DLogType::Error);
+	DLogMsg* lg = new DLogMsg(msg, DLogType::DLogType_Error);
 	DSystem::GetLogMgr()->AddLog(lg);
 
 	OutputDebugString(CA2W(lg->msg.data()));

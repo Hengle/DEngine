@@ -17,14 +17,15 @@ void GlTestScene::OnLoad()
 	//m_testcolorshader = DRes::Load<DShader>(DEFAULT_GROUP, COLOR_SHADER);
 	//m_testcolormat = new DMaterial(m_testcolorshader);
 
-	DCamera * cam = new DCamera();
+	cam = new DCamera();
+	cam->Create();
 
 	DTransform* transform = cam->GetTransform();
 	transform->SetPosition(-11.47823f, 13.5114f, -19.58396f);
 	transform->SetEuler(35.444f, 29.564f, 0);
 	cam->SetBackgroundColor(DColor(49.0f / 255.0f, 77.0f / 255.0f, 121.0f / 255.0f));
 
-	SetCamera(cam);
+	//SetCamera(cam);
 }
 
 void GlTestScene::OnUnLoad()
@@ -59,7 +60,6 @@ void GlTestScene::OnRender()
 	DGraphics::GlPopMatrix();
 
 
-	DCamera* cam = GetCamera();
 	if (cam != NULL)
 	{
 		DTransform* tran = cam->GetTransform();

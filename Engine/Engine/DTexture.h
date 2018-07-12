@@ -3,6 +3,7 @@
 #include "DGLCore.h"
 #include "DResObject.h"
 
+/*纹理*/
 class DTexture : public DResObject
 {
 public:
@@ -11,6 +12,7 @@ public:
 	virtual void Apply(UINT);
 };
 
+/*2d纹理*/
 class DTexture2D : public DTexture 
 {
 private:
@@ -25,7 +27,7 @@ public:
 	static DTexture2D* Create(WCHAR*, DWrapMode);
 
 private:
-	DTextureRes* m_textureRes;
+	ITextureRes* m_textureRes;
 	DWrapMode m_wrapMode;
 };
 
@@ -43,7 +45,7 @@ public:
 	virtual void Destroy();
 	virtual void Apply(UINT);
 	DWrapMode GetWrapMode();
-	DRenderTextureViewRes* GetTextureRes();
+	IRenderTextureViewRes* GetTextureRes();
 	float GetWidth() const;
 	float GetHeight() const;
 
@@ -52,7 +54,7 @@ public:
 
 
 private:
-	DRenderTextureViewRes* m_renderTextureRes;
+	IRenderTextureViewRes* m_renderTextureRes;
 	DWrapMode m_wrapMode;
 	float m_width;
 	float m_height;

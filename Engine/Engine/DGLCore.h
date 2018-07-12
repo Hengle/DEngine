@@ -50,22 +50,20 @@ public:
 		cbufferIndex = -1;
 		cbufferStartSlot = -1;
 		cbufferSize = 0;
-		shaderType = 0;
 	}
 
 public:
 	int cbufferIndex;//用于索引该cbuffer指针
 	int cbufferStartSlot;
 	int cbufferSize;//cbuffer大小
-	int shaderType;//shader类型
 	std::map<std::string, DShaderPropertyDesc> properties;
 };
 
-/*meshbuffer描述*/
-typedef struct DMeshBufferDesc
+/*geometrybuffer描述*/
+typedef struct DGeometryBufferDesc
 {
 public:
-	DMeshBufferDesc(){}
+	DGeometryBufferDesc(){}
 public:
 	int vertexCount /*顶点数量*/, indexCount /*索引数量*/;
 	float*vertices; /*顶点缓存*/
@@ -75,23 +73,23 @@ public:
 	float*normals;
 	float*colors;
 	unsigned long*indices;
-} DMeshBufferDesc;
+} DGeometryBufferDesc;
 
-//抽象Mesh资源-用于实现不同API下的mesh
-class DMeshRes
+//抽象Geometry资源-用于实现不同API下的Geometry
+class DGeometryRes
 {
 public:
-	DMeshRes(int vertexUsage /*顶点用法描述*/, bool dynamic /*是否为动态mesh*/);
-	void Refresh(DMeshBufferDesc* desc); //更新顶点缓存
+	DGeometryRes(int vertexUsage /*顶点用法描述*/, bool dynamic /*是否为动态mesh*/);
+	void Refresh(DGeometryBufferDesc* desc); //更新顶点缓存
 	void Refresh(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount);//更新顶点缓存
-	void DrawPrimitive(DMeshTopology topology);//绘制
+	void DrawPrimitive(DGeometryTopology topology);//绘制
 	virtual void Release() = 0; //释放资源
 	bool IsInitialized();
 
 protected:
 	virtual void OnRefresh(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount) = 0;
 	virtual bool OnInit(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount) = 0;
-	virtual void OnDraw(DMeshTopology) = 0;
+	virtual void OnDraw(DGeometryTopology) = 0;
 
 protected:
 	int m_vertexUsage;
@@ -115,28 +113,30 @@ private:
 
 };
 
-//抽象贴图资源-用于实现不同API下的texture
-class DTextureRes
+/*抽象贴图资源接口-用于实现不同API下的texture*/
+interface ITextureRes
 {
 public:
 	virtual void Release() = 0;
 	virtual void Apply(UINT, DWrapMode) = 0;
 };
 
-class DRenderBuffer
+/*抽象RenderBuffer接口*/
+interface IRenderBuffer
 {
 public:
 	virtual void Release() = 0;
 };
 
-class DRenderTextureViewRes
+/*抽象RenderTextureView接口*/
+interface IRenderTextureViewRes
 {
 public:
 	virtual void Release() = 0;
 	virtual void Apply(UINT, DWrapMode) = 0;
 
-	virtual DRenderBuffer* GetColorBuffer() = 0;
-	virtual DRenderBuffer* GetDepthBuffer() = 0;
+	virtual IRenderBuffer* GetColorBuffer() = 0;
+	virtual IRenderBuffer* GetDepthBuffer() = 0;
 };
 
 //抽象shader program-用于实现不同API下的不同shader
@@ -203,20 +203,28 @@ public:
 	virtual bool Init(int width, int height, bool fullscreen, HWND);
 	/*销毁图形库*/
 	virtual void Destroy() = 0;
-	//virtual void BeginRender() = 0;
-	//virtual void EndRender() = 0;
 	/*提交渲染结果*/
 	virtual void Present() = 0;
-	virtual void Clear(bool, bool, DColor&, DRenderTextureViewRes* = NULL) = 0;
-	virtual void SetRenderTarget(DRenderTextureViewRes* = NULL) = 0;
+	/*清除缓冲区*/
+	virtual void Clear(bool, bool, DColor&, IRenderTextureViewRes* = NULL) = 0;
+	/*设置渲染目标*/
+	virtual void SetRenderTarget(IRenderTextureViewRes* = NULL) = 0;
+	/*设置视口区域*/
 	virtual void SetViewPort(float, float, float, float) = 0;
-	virtual void EndSetRenderTarget(DRenderTextureViewRes* = NULL) = 0;
-	virtual DMeshRes* CreateMeshRes(int, bool) = 0;
-	virtual DTextureRes* CreateTextureRes(WCHAR*) = 0;
-	virtual DRenderTextureViewRes* CreateRenderTextureRes(float, float) = 0;
+	/*结束渲染*/
+	virtual void EndSetRenderTarget(IRenderTextureViewRes* = NULL) = 0;
+	/*创建几何体资源*/
+	virtual DGeometryRes* CreateGeometryRes(int, bool) = 0;
+	/*创建贴图资源*/
+	virtual ITextureRes* CreateTextureRes(WCHAR*) = 0;
+	/*创建RenderTexture资源*/
+	virtual IRenderTextureViewRes* CreateRenderTextureRes(float, float) = 0;
+	/*创建shader程序*/
 	virtual DShaderProgram* CreateShaderProgram(DShaderProgramType) = 0;
 	virtual void ApplySamplerState(UINT, DWrapMode) = 0;
+	/*获取渲染状态管理器*/
 	virtual IRenderStateMgr* GetRenderStateMgr() = 0;
+	/*获取屏幕分辨率*/
 	void GetResolution(float&, float&);
 
 protected:

@@ -2,7 +2,7 @@
 #include "DSystem.h"
 #include "DScene.h"
 
-DCamera::DCamera()
+DCamera::DCamera() : DSceneObject()
 {
 	m_filter = 0;
 	m_fieldOfView = D_PI / 3.0f;

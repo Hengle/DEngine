@@ -2,6 +2,7 @@
 #include "DImGUICore.h"
 #include <d3d9.h>
 
+/*Direct3d9 ImGUI渲染与管理模块*/
 class DImGUICore9 : public DImGUICore
 {
 public:

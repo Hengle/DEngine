@@ -98,7 +98,7 @@ DWrapMode DRenderTexture::GetWrapMode()
 	return m_wrapMode;
 }
 
-DRenderTextureViewRes * DRenderTexture::GetTextureRes()
+IRenderTextureViewRes * DRenderTexture::GetTextureRes()
 {
 	return m_renderTextureRes;
 }

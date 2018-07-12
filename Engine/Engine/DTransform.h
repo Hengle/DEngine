@@ -3,6 +3,8 @@
 #include "DSceneObject.h"
 
 class DSceneObject;
+
+/*transform类*/
 class DTransform
 {
 public:
@@ -40,6 +42,8 @@ public:
 	DTransform* GetFirstChild();
 	DTransform* GetNextNegibhor();
 
+	/*当前矩阵是否即将改变
+	矩阵的改变只在下一帧访问该矩阵时才会更新，以避免每次修改transform都导致矩阵刷新*/
 	bool IsMatrixWillChange();
 
 	void Release();

@@ -5,13 +5,18 @@
 #define DLOG_MAX_CACHE_LOG_NUMS 9999
 #define DLOG_SHOW true
 
+/*log类型*/
 enum DLogType
 {
-	Info = 0,
-	Warning = 1,
-	Error = 2,
+	/*消息*/
+	DLogType_Info = 0,
+	/*警告*/
+	DLogType_Warning = 1,
+	/*错误*/
+	DLogType_Error = 2,
 };
 
+/*Log消息条目*/
 typedef struct DLogMsg
 {
 public:

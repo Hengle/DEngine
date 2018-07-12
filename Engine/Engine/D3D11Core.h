@@ -18,29 +18,34 @@ public:
 	virtual bool Init(int width, int height, bool fullscreen, HWND);
 	/*模块销毁*/
 	virtual void Destroy();
-	//virtual void BeginRender();
-	//virtual void EndRender();
 	/*提交渲染结果*/
 	virtual void Present();
-	virtual void Clear(bool, bool, DColor&, DRenderTextureViewRes* = NULL);
-	virtual void SetRenderTarget(DRenderTextureViewRes* = NULL);
+	/*清除缓冲区*/
+	virtual void Clear(bool /*清除深度缓冲*/, bool /*清除模板缓冲*/, DColor& /*颜色缓冲区清除颜色*/, IRenderTextureViewRes* = NULL);
+	/*设置渲染目标*/
+	virtual void SetRenderTarget(IRenderTextureViewRes* = NULL);
+	/*设置视口区域*/
 	virtual void SetViewPort(float, float, float, float);
-	virtual void EndSetRenderTarget(DRenderTextureViewRes* = NULL);
-	/*创建网格资源*/
-	virtual DMeshRes* CreateMeshRes(int vertexUsage, bool dynamic);
+	/*结束渲染*/
+	virtual void EndSetRenderTarget(IRenderTextureViewRes* = NULL);
+	/*创建几何体资源*/
+	virtual DGeometryRes* CreateGeometryRes(int vertexUsage, bool dynamic);
 	/*创建贴图资源*/
-	virtual DTextureRes* CreateTextureRes(WCHAR*);
+	virtual ITextureRes* CreateTextureRes(WCHAR*);
 	/*创建RenderTexture资源*/
-	virtual DRenderTextureViewRes* CreateRenderTextureRes(float width, float height);
+	virtual IRenderTextureViewRes* CreateRenderTextureRes(float width, float height);
 	/*创建shader程序*/
 	virtual DShaderProgram* CreateShaderProgram(DShaderProgramType);
 	virtual void ApplySamplerState(UINT, DWrapMode);
+	/*获取渲染状态管理器*/
 	virtual IRenderStateMgr* GetRenderStateMgr();
 	ID3D11Device* GetDevice() const;
 	ID3D11DeviceContext* GetDeviceContext() const;
 
 private:
+	/*初始化采样器状态*/
 	void InitSamplerStates();
+	/*初始化渲染状态管理器*/
 	void InitRenderStateMgr();
 	ID3D11SamplerState* CreateSamplerState(D3D11_TEXTURE_ADDRESS_MODE);
 
@@ -49,8 +54,8 @@ private:
 	ID3D11Device* m_device;
 	ID3D11DeviceContext* m_deviceContext;
 	ID3D11Texture2D* m_depthStencilBuffer;
-	DRenderBuffer* m_colorBuffer;
-	DRenderBuffer* m_depthBuffer;
+	IRenderBuffer* m_colorBuffer;
+	IRenderBuffer* m_depthBuffer;
 	IRenderStateMgr* m_renderStateMgr;
 	D3D11_VIEWPORT m_viewPort;
 	std::map<DWrapMode, ID3D11SamplerState*> m_samplerStates;

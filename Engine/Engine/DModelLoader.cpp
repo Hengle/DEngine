@@ -7,7 +7,7 @@
 
 using namespace std;
 
-bool DModelLoader::LoadObj(const char * file, DMeshBufferDesc* desc)
+bool DModelLoader::LoadObj(const char * file, DGeometryBufferDesc* desc)
 //bool DObjModelLoader::LoadObj(const char*file)
 {
 	ifstream ifile;
@@ -151,7 +151,7 @@ bool DModelLoader::LoadObj(const char * file, DMeshBufferDesc* desc)
 	return true;
 }
 
-bool DModelLoader::CreateCube(DMeshBufferDesc*)
+bool DModelLoader::CreateCube(DGeometryBufferDesc*)
 {
 	/*dataSize = sizeof(float) * 5;
 	vertexCount = 24;
@@ -207,7 +207,7 @@ bool DModelLoader::CreateCube(DMeshBufferDesc*)
 	return true;
 }
 
-bool DModelLoader::CreatePlane(DMeshBufferDesc* desc)
+bool DModelLoader::CreatePlane(DGeometryBufferDesc* desc)
 {
 	//dataSize = sizeof(float) * 5;
 

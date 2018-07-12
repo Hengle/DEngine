@@ -1,6 +1,6 @@
 ﻿#include "D3D9Core.h"
 #include <fstream>
-#include "DMeshRes9.h"
+#include "DGeometryRes9.h"
 #include "DShaderProgram9.h"
 #include "DTextureRes9.h"
 #include "DRenderStateMgr9.h"
@@ -119,7 +119,7 @@ void D3D9Core::Present()
 	m_device->Present(0, 0, 0, 0);
 }
 
-void D3D9Core::Clear(bool clearDepth, bool clearStencil, DColor & color, DRenderTextureViewRes * res)
+void D3D9Core::Clear(bool clearDepth, bool clearStencil, DColor & color, IRenderTextureViewRes * res)
 {
 	DWORD flag = D3DCLEAR_TARGET;
 	if (clearDepth)
@@ -142,7 +142,7 @@ void D3D9Core::Clear(bool clearDepth, bool clearStencil, DColor & color, DRender
 	}
 }
 
-void D3D9Core::SetRenderTarget(DRenderTextureViewRes * res)
+void D3D9Core::SetRenderTarget(IRenderTextureViewRes * res)
 {
 }
 
@@ -156,7 +156,7 @@ void D3D9Core::SetViewPort(float x, float y, float width, float height)
 	m_device->SetViewport(&m_viewPort);
 }
 
-void D3D9Core::EndSetRenderTarget(DRenderTextureViewRes * res)
+void D3D9Core::EndSetRenderTarget(IRenderTextureViewRes * res)
 {
 	if (res != NULL)
 	{
@@ -170,18 +170,18 @@ void D3D9Core::EndSetRenderTarget(DRenderTextureViewRes * res)
 	}
 }
 
-DMeshRes * D3D9Core::CreateMeshRes(int vertexUsage, bool dynamic)
+DGeometryRes * D3D9Core::CreateGeometryRes(int vertexUsage, bool dynamic)
 {
-	DMeshRes9* res = new DMeshRes9(m_device, vertexUsage, dynamic);
+	DGeometryRes9* res = new DGeometryRes9(m_device, vertexUsage, dynamic);
 	return res;
 }
 
-DTextureRes * D3D9Core::CreateTextureRes(WCHAR* filename)
+ITextureRes * D3D9Core::CreateTextureRes(WCHAR* filename)
 {
 	return new DTextureRes9(m_device, filename);
 }
 
-DRenderTextureViewRes * D3D9Core::CreateRenderTextureRes(float width, float height)
+IRenderTextureViewRes * D3D9Core::CreateRenderTextureRes(float width, float height)
 {
 	return new DRenderTextureViewRes9(m_device, width, height);
 }

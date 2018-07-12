@@ -1,6 +1,6 @@
-﻿#include "DMeshRes10.h"
+﻿#include "DGeometryRes10.h"
 
-DMeshRes10::DMeshRes10(ID3D10Device * device, int vertexUsage, bool dynamic) : DMeshRes(vertexUsage, dynamic)
+DGeometryRes10::DGeometryRes10(ID3D10Device * device, int vertexUsage, bool dynamic) : DGeometryRes(vertexUsage, dynamic)
 {
 	m_device = device;
 	m_vertexBuffer = 0;
@@ -60,11 +60,11 @@ DMeshRes10::DMeshRes10(ID3D10Device * device, int vertexUsage, bool dynamic) : D
 	}*/
 }
 
-DMeshRes10::~DMeshRes10()
+DGeometryRes10::~DGeometryRes10()
 {
 }
 
-void DMeshRes10::Release()
+void DGeometryRes10::Release()
 {
 	if (m_vertexBuffer != NULL)
 	{
@@ -79,11 +79,11 @@ void DMeshRes10::Release()
 	m_device = NULL;
 }
 
-void DMeshRes10::OnRefresh(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
+void DGeometryRes10::OnRefresh(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
 {
 }
 
-bool DMeshRes10::OnInit(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
+bool DGeometryRes10::OnInit(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
 {
 	D3D10_BUFFER_DESC  vertexBufferDesc, indexBufferDesc;
 	D3D10_SUBRESOURCE_DATA vertexData, indexData;
@@ -119,7 +119,7 @@ bool DMeshRes10::OnInit(float * vertexbuffer, unsigned long * indexbuffer, int v
 	return true;
 }
 
-void DMeshRes10::OnDraw(DMeshTopology topology)
+void DGeometryRes10::OnDraw(DGeometryTopology topology)
 {
 	unsigned int stride;
 	unsigned int offset;
@@ -135,15 +135,15 @@ void DMeshRes10::OnDraw(DMeshTopology topology)
 
 	m_device->IASetIndexBuffer(ibuffer, DXGI_FORMAT_R32_UINT, 0);
 
-	if (topology == DMeshTopology_LineList)
+	if (topology == DGeometryTopology_LineList)
 		m_device->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_LINELIST);
-	else if (topology == DMeshTopology_LineStrip)
+	else if (topology == DGeometryTopology_LineStrip)
 		m_device->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_LINESTRIP);
-	else if (topology == DMeshTopology_PointList)
+	else if (topology == DGeometryTopology_PointList)
 		m_device->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_POINTLIST);
-	else if (topology == DMeshTopology_TriangleList)
+	else if (topology == DGeometryTopology_TriangleList)
 		m_device->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	else if (topology == DMeshTopology_TriangleStrip)
+	else if (topology == DGeometryTopology_TriangleStrip)
 		m_device->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
 	m_device->DrawIndexed(m_indexCount, 0, 0);

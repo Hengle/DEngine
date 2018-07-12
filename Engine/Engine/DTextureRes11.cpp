@@ -148,12 +148,12 @@ void DRenderTextureViewRes11::Release()
 	m_deviceContext = NULL;
 }
 
-DRenderBuffer * DRenderTextureViewRes11::GetColorBuffer()
+IRenderBuffer * DRenderTextureViewRes11::GetColorBuffer()
 {
 	return m_colorBuffer;
 }
 
-DRenderBuffer * DRenderTextureViewRes11::GetDepthBuffer()
+IRenderBuffer * DRenderTextureViewRes11::GetDepthBuffer()
 {
 	return m_depthBuffer;
 }

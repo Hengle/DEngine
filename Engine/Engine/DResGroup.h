@@ -2,6 +2,7 @@
 #include "DResItem.h"
 #include <map>
 
+/*资源组*/
 class DResGroup
 {
 public:

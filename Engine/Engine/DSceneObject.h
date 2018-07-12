@@ -3,6 +3,8 @@
 #include "DTransform.h"
 
 class DTransform;
+
+/*场景对象*/
 class DSceneObject : public DObject
 {
 public:

@@ -5,6 +5,7 @@
 
 typedef unsigned int        SCENEID;
 
+/*场景*/
 class DScene : public DObject
 {
 public:
@@ -24,7 +25,7 @@ public:
 	bool IsEnter();
 	virtual void Destroy();
 
-	void AddTransform(DTransform*);
+	void AddSceneObject(DSceneObject*);
 	DCameraNode* GetCameraNode();
 	void SetCameraNode(DCameraNode*);
 	DLightNode* GetLightNode();

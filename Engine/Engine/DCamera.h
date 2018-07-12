@@ -14,6 +14,8 @@ public:
 	virtual void Release() = 0;
 };
 
+class DCamera;
+
 struct DCameraNode
 {
 public:
@@ -54,16 +56,21 @@ public:
 	DMaterial* GetSkuBox() const;
 	/*是否为正交投影*/
 	bool IsOrthographic() const;
+	/*设置fov*/
 	void SetFieldOfView(float);
+	/*设置近裁面*/
 	void SetNear(float);
+	/*设置远裁面*/
 	void SetFar(float);
 	void SetAspect(float);
 	void SetOrthographic(bool);
 	void SetOrthoSize(float);
 	/*设置相机滤镜*/
 	void SetFilter(ICameraFilter* filter);
+	/*设置相机背景色*/
 	void SetBackgroundColor(DColor&);
 	void SetSkyBox(DMaterial*);
+	/*设置相机视口*/
 	void SetViewPort(DRect&);
 	void ClearSkyBox();
 	void ClearFilter();
@@ -94,6 +101,7 @@ private:
 	bool m_ortho;
 	DMatrix4x4 m_viewMatrix;
 	DMatrix4x4 m_projection;
+	/*标记投影矩阵是否发生变化*/
 	bool m_isProjectionChanged;
 	ICameraFilter* m_filter;
 	DRenderTexture* m_renderTexture;
@@ -101,7 +109,7 @@ private:
 	DMaterial* m_skyBoxMaterial;
 	DRect m_viewPort;
 	DShader* m_replacementShader;
-
+	/*保存当前的相机节点*/
 	DCameraNode* m_node;
 };
 

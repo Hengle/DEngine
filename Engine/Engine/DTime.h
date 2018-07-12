@@ -9,7 +9,6 @@ public:
 	~DTime();
 	void Init();
 	void Update();
-	/*µÈ´ýfixedupdate*/
 	void Wait();
 	void Shutdown();
 	bool BeginFixedUpdateLoop();

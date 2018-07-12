@@ -323,6 +323,7 @@ void DTransform::RefreshLocalToWorldMatrix()
 		m_localToWorld = m_localToWorld*parentL2W;
 	}
 
+	//矩阵发生变化时将子节点也标记为矩阵变化
 	DTransform* node = m_firstChild;
 	while (node != NULL)
 	{

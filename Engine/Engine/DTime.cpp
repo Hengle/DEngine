@@ -36,6 +36,8 @@ void DTime::Update()
 	m_deltaTime = ((double)(m_currentTime - m_previousTime)) * 0.001f;
 	m_timer = ((double)(m_currentTime - m_beginTime)) * 0.001f;
 	m_previousTime = m_currentTime;
+
+	//根据实际deltaTime进行补偿
 	m_lag += m_deltaTime;
 
 	m_frameCount++;

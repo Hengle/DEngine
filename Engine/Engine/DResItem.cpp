@@ -213,23 +213,23 @@ DResObject * DMaterialResItem::OnLoad()
 	return obj;
 }
 
-DMeshResItem::DMeshResItem(char * path)
+DGeometryResItem::DGeometryResItem(char * path)
 {
 	m_path = path;
 }
 
-void DMeshResItem::Release()
+void DGeometryResItem::Release()
 {
 	DResItem::Release();
 	delete[] m_path;
 }
 
-DMeshResItem * DMeshResItem::LoadManifest(std::ifstream & ifile)
+DGeometryResItem * DGeometryResItem::LoadManifest(std::ifstream & ifile)
 {
 	char mdef[32], path[512];
 	char* argp = 0;
 	int argplen;
-	DMeshResItem* item = NULL;
+	DGeometryResItem* item = NULL;
 	while (!ifile.eof())
 	{
 		ifile >> mdef;
@@ -244,7 +244,7 @@ DMeshResItem * DMeshResItem::LoadManifest(std::ifstream & ifile)
 		{
 			if (argp != 0)
 			{
-				item = new DMeshResItem(argp);
+				item = new DGeometryResItem(argp);
 			}
 			return item;
 		}
@@ -252,7 +252,7 @@ DMeshResItem * DMeshResItem::LoadManifest(std::ifstream & ifile)
 	return NULL;
 }
 
-DResObject * DMeshResItem::OnLoad()
+DResObject * DGeometryResItem::OnLoad()
 {
 	return DGeometry::Create(m_path);
 }

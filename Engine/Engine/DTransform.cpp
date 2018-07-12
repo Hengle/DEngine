@@ -25,6 +25,13 @@ DTransform::DTransform()
 	m_nextNeighbor = NULL;
 
 	m_firstChild = NULL;
+
+	m_isRoot = false;
+}
+
+DTransform::DTransform(bool root) : DTransform()
+{
+	m_isRoot = root;
 }
 
 DTransform::DTransform(DSceneObject * data) : DTransform()
@@ -252,6 +259,8 @@ void DTransform::SetParent(DTransform * parent)
 
 DTransform * DTransform::GetParent()
 {
+	if (m_parent != NULL && m_parent->m_isRoot) //如果父节点为场景根节点，则不允许返回该父节点
+		return NULL;
 	return m_parent;
 }
 
@@ -316,7 +325,7 @@ void DTransform::RefreshLocalToWorldMatrix()
 	DMatrix4x4::TRS(&m_localToWorld, &m_forward, &m_up, m_position, m_rotation, m_scale);
 	//m_worldToLocal = m_localToWorld
 
-	if (m_parent != NULL)
+	if (m_parent != NULL && m_parent->m_isRoot == false) //不需要从根节点计算矩阵
 	{
 		DMatrix4x4 parentL2W;
 		m_parent->GetLocalToWorld(parentL2W);

@@ -36,6 +36,13 @@ void TestScene::OnGUI()
 	DGUI::Label("Timer:%lf", DTime::GetTimer());
 	DGUI::Label("FPS:%d", DTime::GetFPS());
 	DGUI::Label("DrawCall:%d", DGraphics::GetDrawCall());
+
+	if (DGUI::Button("Test Destroy"))
+	{
+		m_obj0->Destroy();
+		delete m_obj0;
+		m_obj0 = 0;
+	}
 	//DGUI::Label("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
 	/*D3DXVECTOR3 euler;
@@ -87,12 +94,15 @@ void TestScene::OnGUI()
 
 	transform->SetEuler(euler.x, euler.y, euler.z);
 
-	transform = m_obj0->GetTransform();
-	transform->GetEuler(euler);
+	if (m_obj0 != NULL)
+	{
+		transform = m_obj0->GetTransform();
+		transform->GetEuler(euler);
 
-	ImGui::SliderFloat("objY", &euler.y, 0.0f, 360.0f);
+		ImGui::SliderFloat("objY", &euler.y, 0.0f, 360.0f);
 
-	transform->SetEuler(euler.x, euler.y, euler.z);
+		transform->SetEuler(euler.x, euler.y, euler.z);
+	}
 	//transform->GetForward(forward);
 	//DShader::SetGlobalVector3("g_sundir", forward);
 }
@@ -221,7 +231,7 @@ void TestScene::TestLoad()
 	transform->SetPosition(5.05f, 12.04f, -8.74f);
 
 	//DMesh* mesh = DMesh::Create("../Res/eboy.obj");
-	plane = DMesh::Create(DMESH_Plane);
+	plane = DGeometry::Create(DGeometry_Plane);
 	//shader = DRes::Load<DShader>(DEFAULT_GROUP, TEXTURE_SHADER);
 	//floor = DRes::Load<DTexture2D>(DEFAULT_GROUP, DECAL_TEX);
 	//map = DRes::Load<DTexture2D>(DEFAULT_GROUP, BODY_TEX);
@@ -243,7 +253,7 @@ void TestScene::TestLoad()
 	//AddDisplayObject(m_plane);
 
 	//obj = DMesh::Create("../Res/eboy.obj");
-	DMesh* obj = DRes::Load<DMesh>(DEFAULT_GROUP, BODY_MESH);
+	DGeometry* obj = DRes::Load<DGeometry>(DEFAULT_GROUP, BODY_MESH);
 	// mat2 = new DMaterial(shader);
 	DMaterial* mat2 = DRes::Load<DMaterial>(DEFAULT_GROUP, BODY_MAT);
 	//mat2->SetCullMode(DCullMode_Front);
@@ -261,7 +271,7 @@ void TestScene::TestLoad()
 
 
 	//cube = DMesh::Create("../Res/eboy.obj");
-	DMesh* cube = DRes::Load<DMesh>(DEFAULT_GROUP, BODY_MESH);
+	DGeometry* cube = DRes::Load<DGeometry>(DEFAULT_GROUP, BODY_MESH);
 	//mat3 = new DMaterial(shader);
 	//mat3->SetTexture("shaderTexture", cb);
 	DMaterial* mat3 = DRes::Load<DMaterial>(DEFAULT_GROUP, OUTLINE_MAT);

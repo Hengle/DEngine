@@ -30,6 +30,7 @@ public:
 protected:
 	virtual void OnApplyParams(std::map<std::string, float*>&params, std::map<std::string, float*>&gparams);
 	virtual void OnSetValue(D3DXHANDLE&, float*, UINT) = 0;
+	void OutputErrorLog(ID3DXBuffer*);
 
 protected:
 	LPDIRECT3DDEVICE9 m_device;

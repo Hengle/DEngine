@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include "DCamera.h"
 #include "DDisplayObject.h"
-#include <vector>
 
 typedef unsigned int        SCENEID;
 
@@ -34,6 +33,12 @@ public:
 	static void Draw(bool callOnRender, DShader* replaceShader = NULL);
 	static void DrawShadow();
 
+private:
+	void UpdateSceneObject(DTransform* node);
+	void FixedUpdateSceneObject(DTransform* node);
+	void UnLoadSceneObject(DTransform* node);
+	void DrawSceneObject(DTransform* node);
+
 protected:
 	virtual void OnGUI();
 	virtual void OnRender();
@@ -53,7 +58,8 @@ private:
 	void DrawScene(bool callOnRender, DShader* replaceShader);
 
 protected:
-	std::vector<DTransform*>* m_transforms;
+	//std::vector<DTransform*>* m_transforms;
+	DTransform* m_rootTransform;
 	DCameraNode* m_cameraNode;
 	DLightNode* m_lightNode;
 	//DCamera* m_camera;

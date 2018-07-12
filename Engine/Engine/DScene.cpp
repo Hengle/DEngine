@@ -11,15 +11,16 @@ DScene::DScene(SCENEID sceneId, char * sceneName)
 	//m_displayObjects = 0;
 	//m_camera = 0;
 	//m_light = 0;
-	m_transforms = 0;
+	//m_transforms = 0;
+	m_rootTransform = 0;
 }
 
 DScene::~DScene()
 {
 	m_sceneName = 0;
-	m_transforms->clear();
+	/*m_transforms->clear();
 	delete m_transforms;
-	m_transforms = 0;
+	m_transforms = 0;*/
 }
 
 void DScene::DrawGUI()
@@ -77,7 +78,7 @@ void DScene::Update()
 	//	m_camera->Update();
 	//if (m_light != NULL)
 	//	m_light->Update();
-	if (m_transforms != NULL) {
+	/*if (m_transforms != NULL) {
 		int i, size;
 		size = m_transforms->size();
 		for (int i = 0; i < size; i++) {
@@ -85,7 +86,11 @@ void DScene::Update()
 			DSceneObject* sceneObj = trans->GetSceneObject();
 			sceneObj->Update();
 		}
-	}
+	}*/
+	if (m_rootTransform != NULL)
+		UpdateSceneObject(m_rootTransform);
+	
+
 	OnUpdate();
 }
 
@@ -99,7 +104,7 @@ void DScene::FixedUpdate()
 	//	m_camera->FixedUpdate();
 	//if (m_light != NULL)
 	//	m_light->FixedUpdate();
-	if (m_transforms != NULL) {
+	/*if (m_transforms != NULL) {
 		int i, size;
 		size = m_transforms->size();
 		for (int i = 0; i < size; i++) {
@@ -107,7 +112,10 @@ void DScene::FixedUpdate()
 			DSceneObject* sceneObj = trans->GetSceneObject();
 			sceneObj->FixedUpdate();
 		}
-	}
+	}*/
+	if(m_rootTransform != NULL)
+		FixedUpdateSceneObject(m_rootTransform);
+
 	OnFixedUpdate();
 }
 
@@ -147,8 +155,12 @@ void DScene::Load()
 {
 	if (m_isLoaded)
 		return;
-	if (m_transforms == NULL) {
+	/*if (m_transforms == NULL) {
 		m_transforms = new std::vector<DTransform*>();
+	}*/
+	if (m_rootTransform == NULL)
+	{
+		m_rootTransform = new DTransform(true);
 	}
 	OnLoad();
 	m_isLoaded = true;
@@ -158,7 +170,7 @@ void DScene::UnLoad()
 {
 	if (!m_isLoaded)
 		return;
-	if (m_transforms != NULL)
+	/*if (m_transforms != NULL)
 	{
 		int i, size;
 		size = m_transforms->size();
@@ -170,6 +182,13 @@ void DScene::UnLoad()
 			delete obj;
 		}
 		m_transforms->clear();
+	}*/
+	if (m_rootTransform != NULL)
+	{
+		UnLoadSceneObject(m_rootTransform);
+		m_rootTransform->Release();
+		delete m_rootTransform;
+		m_rootTransform = NULL;
 	}
 	//if (m_camera != NULL)
 	//{
@@ -222,10 +241,13 @@ void DScene::Destroy()
 
 void DScene::AddSceneObject(DSceneObject * sceneObj)
 {
-	if (m_transforms == NULL)
+	if (m_rootTransform == NULL)
 		return;
-	sceneObj->GetTransform()->RemoveFromParent();
-	m_transforms->push_back(sceneObj->GetTransform());
+	//if (m_transforms == NULL)
+	//	return;
+	// sceneObj->GetTransform()->RemoveFromParent();
+	sceneObj->GetTransform()->SetParent(m_rootTransform);
+	//m_transforms->push_back(sceneObj->GetTransform());
 }
 
 DCameraNode * DScene::GetCameraNode()
@@ -265,6 +287,67 @@ void DScene::DrawShadow()
 	{
 		node->light->Render();
 		node = node->next;
+	}
+}
+
+void DScene::UpdateSceneObject(DTransform * node)
+{
+	DTransform* child = node->GetFirstChild();
+	while (child != NULL)
+	{
+		DSceneObject* sobj = child->GetSceneObject();
+		if (sobj != NULL)
+			sobj->Update();
+		UpdateSceneObject(child);
+
+		child = child->GetNextNegibhor();
+	}
+}
+
+void DScene::FixedUpdateSceneObject(DTransform * node)
+{
+	DTransform* child = node->GetFirstChild();
+	while (child != NULL)
+	{
+		DSceneObject* sobj = child->GetSceneObject();
+		if (sobj != NULL)
+			sobj->FixedUpdate();
+		FixedUpdateSceneObject(child);
+
+		child = child->GetNextNegibhor();
+	}
+}
+
+void DScene::UnLoadSceneObject(DTransform * node)
+{
+	DTransform* child = node->GetFirstChild();
+	while (child != NULL)
+	{
+		UnLoadSceneObject(child);
+
+		DSceneObject* sobj = child->GetSceneObject();
+
+		child = child->GetNextNegibhor();
+
+		if (sobj != NULL) {
+			sobj->Destroy();
+			delete sobj;
+			sobj = NULL;
+		}
+	}
+}
+
+void DScene::DrawSceneObject(DTransform * node)
+{
+	DTransform* child = node->GetFirstChild();
+	while (child != NULL)
+	{
+		DSceneObject* sobj = child->GetSceneObject();
+		if (sobj != NULL)
+			sobj->Cull();
+		DrawSceneObject(child);
+
+		child = child->GetNextNegibhor();
 	}
 }
 
@@ -330,7 +413,11 @@ void DScene::OnUnLoad()
 void DScene::DrawScene(bool callOnRender, DShader* replaceShader)
 {
 	DGraphics::SetGlobalRenderShader(replaceShader);
-	if (m_transforms != NULL) 
+
+	if (m_rootTransform != NULL)
+		DrawSceneObject(m_rootTransform);
+
+	/*if (m_transforms != NULL) 
 	{
 		int i, size;
 		size = m_transforms->size();
@@ -339,7 +426,7 @@ void DScene::DrawScene(bool callOnRender, DShader* replaceShader)
 			DTransform* trans = m_transforms->at(i);
 			trans->GetSceneObject()->Cull();
 		}
-	}
+	}*/
 	if (callOnRender)
 		OnRender();
 	DGraphics::ClearGlobalRenderShader();

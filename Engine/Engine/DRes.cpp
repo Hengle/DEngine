@@ -203,9 +203,9 @@ void DRes::LoadResGroupManifest(ifstream & ifile, unsigned int groupid)
 				if (item != NULL)
 					group->AddItem(rid, item);
 			}
-			else if (strcmp(rtype, "MESH") == 0)
+			else if (strcmp(rtype, "GEOMETRY") == 0)
 			{
-				item = DMeshResItem::LoadManifest(ifile);
+				item = DGeometryResItem::LoadManifest(ifile);
 				if (item != NULL)
 					group->AddItem(rid, item);
 			}

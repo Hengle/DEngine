@@ -9,6 +9,7 @@ class DTransform
 {
 public:
 	DTransform();
+	DTransform(bool);
 	DTransform(DSceneObject* data);
 	~DTransform();
 	void SetPosition(float, float, float);
@@ -75,5 +76,7 @@ private:
 	DMatrix4x4 m_worldToLocal;
 
 	DSceneObject* m_sceneObj;
+
+	bool m_isRoot;
 };
 

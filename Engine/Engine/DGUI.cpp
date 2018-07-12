@@ -33,6 +33,14 @@ void DGUI::Label(const DColor & color, const char * text, ...)
 	va_end(args);
 }
 
+bool DGUI::Button(const char * text, const DVector2 & size)
+{
+	ImVec2 vec;
+	vec.x = size.x;
+	vec.y = size.y;
+	return ImGui::Button(text, vec);
+}
+
 bool DGUI::IsGUIActive()
 {
 	return ImGui::IsAnyItemActive();

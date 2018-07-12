@@ -22,6 +22,15 @@ void DSceneObject::Destroy()
 {
 	if (m_transform != NULL)
 	{
+		DTransform* child = m_transform->GetFirstChild();
+		while (child != NULL)
+		{
+			DSceneObject* childobj = child->GetSceneObject();
+			child = child->GetNextNegibhor();
+			if (childobj != NULL)
+				childobj->Destroy();
+		}
+
 		m_transform->RemoveFromParent();
 		m_transform->Release();
 		delete m_transform;

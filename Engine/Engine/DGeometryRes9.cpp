@@ -1,5 +1,6 @@
 ﻿#include "DGeometryRes9.h"
 #include <vector>
+#include <exception>
 
 DGeometryRes9::DGeometryRes9(LPDIRECT3DDEVICE9 device, int vertexUsage, bool dynamic) : DGeometryRes(vertexUsage, dynamic)
 {
@@ -95,6 +96,10 @@ bool DGeometryRes9::OnInit(float * vertexbuffer, unsigned long * indexbuffer, in
 
 void DGeometryRes9::OnDraw(DGeometryTopology topology)
 {
+	if (m_dataSize <= 0)
+		throw std::exception("不正确的缓冲长度");
+	if(m_vertexCount<=0 || m_indexCount<=0)
+		throw std::exception("不正确的缓存");
 	m_device->SetStreamSource(0, m_vertexBuffer, 0, m_dataSize);
 	m_device->SetIndices(m_indexBuffer);
 	m_device->SetVertexDeclaration(m_vertexDeclaration);

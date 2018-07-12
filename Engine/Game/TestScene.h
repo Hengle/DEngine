@@ -2,7 +2,7 @@
 #include "DScene.h"
 #include "DDisplayObject.h"
 #include "DShader.h"
-#include "DMesh.h"
+#include "DGeometry.h"
 #include "TestFilter.h"
 
 class TestScene : public DScene
@@ -27,7 +27,7 @@ private:
 	DDisplayObject* m_plane;
 	DDisplayObject* m_obj0;
 	DDisplayObject* m_cube;
-	DMesh* plane;
+	DGeometry* plane;
 	DCamera* m_camera;
 	//DMesh* cube;
 	//DMesh* obj;

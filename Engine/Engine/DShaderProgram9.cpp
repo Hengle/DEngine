@@ -1,4 +1,5 @@
 ﻿#include "DShaderProgram9.h"
+#include "DLog.h"
 
 DShaderProgram9::DShaderProgram9(LPDIRECT3DDEVICE9 device) : DShaderProgram()
 {
@@ -82,6 +83,13 @@ void DShaderProgram9::OnApplyParams(std::map<std::string, float*>& params, std::
 	}
 }
 
+void DShaderProgram9::OutputErrorLog(ID3DXBuffer * errorBuffer)
+{
+	char* log = (char*)errorBuffer->GetBufferPointer();
+	DLog::Err("Shader Compile Error:");
+	DLog::Err(log);
+}
+
 DShaderVertexProgram9::DShaderVertexProgram9(LPDIRECT3DDEVICE9 device) : DShaderProgram9(device)
 {
 	m_vertexShader = 0;
@@ -118,7 +126,7 @@ bool DShaderVertexProgram9::OnInit(const char * content, char * funcName)
 
 	if (errorBuffer)
 	{
-		char* log = (char*)errorBuffer->GetBufferPointer();
+		OutputErrorLog(errorBuffer);
 		errorBuffer->Release();
 		errorBuffer = 0;
 	}
@@ -135,8 +143,9 @@ bool DShaderVertexProgram9::OnInit(const char * content, char * funcName)
 	}
 
 	hr = InitVertexShader(vshader);
-	if (FAILED(hr))
+	if (FAILED(hr)) {
 		return false;
+	}
 
 	if (vshader != NULL)
 		vshader->Release();
@@ -301,7 +310,7 @@ bool DShaderPixelProgram9::OnInit(const char * content, char * funcName)
 
 	if (errorBuffer)
 	{
-		char* log = (char*)errorBuffer->GetBufferPointer();
+		OutputErrorLog(errorBuffer);
 		errorBuffer->Release();
 		errorBuffer = 0;
 	}

@@ -2,7 +2,7 @@
 #include "DScene.h"
 #include "DDisplayObject.h"
 #include "DShader.h"
-#include "DMesh.h"
+//#include "DMesh.h"
 
 class GlTestScene : public DScene
 {

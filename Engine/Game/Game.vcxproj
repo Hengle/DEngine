@@ -71,8 +71,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>e:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;..\Engine;$(IncludePath)</IncludePath>
-    <LibraryPath>e:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;..\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>c:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;..\Engine;$(IncludePath)</IncludePath>
+    <LibraryPath>c:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;..\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -153,7 +153,6 @@
   <ItemGroup>
     <ClInclude Include="GameFrame.h" />
     <ClInclude Include="GlTestScene.h" />
-    <ClInclude Include="MyTestShader.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TestFilter.h" />
@@ -164,7 +163,6 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameFrame.cpp" />
     <ClCompile Include="GlTestScene.cpp" />
-    <ClCompile Include="MyTestShader.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

@@ -1477,7 +1477,7 @@ void DMatrix4x4::TRS(DMatrix4x4 * matrix, const DVector3 & position, const DQuat
 	matrix->m33 = 1.0f;
 }
 
-void DMatrix4x4::TRS(DMatrix4x4 * matrix, DVector3 * forward, DVector3 * up, const DVector3 & position, const DQuaterion & rotation, const DVector3 & scale)
+void DMatrix4x4::TRS(DMatrix4x4 * matrix, DVector3 * right, DVector3 * up, DVector3 * forward, const DVector3 & position, const DQuaterion & rotation, const DVector3 & scale)
 {
 	float x2 = 2.0f*rotation.x*rotation.x;
 	float y2 = 2.0f*rotation.y*rotation.y;
@@ -1498,13 +1498,17 @@ void DMatrix4x4::TRS(DMatrix4x4 * matrix, DVector3 * forward, DVector3 * up, con
 	float rh = yz - xw;
 	float ri = 1.0f - x2 - y2;
 
-	forward->x = rg;
-	forward->y = rh;
-	forward->z = ri;
+	right->x = ra;
+	right->y = rb;
+	right->z = rc;
 
 	up->x = rd;
 	up->y = re;
 	up->z = rf;
+
+	forward->x = rg;
+	forward->y = rh;
+	forward->z = ri;
 
 	matrix->m00 = scale.x*ra;
 	matrix->m01 = scale.x*rb;
@@ -1523,6 +1527,53 @@ void DMatrix4x4::TRS(DMatrix4x4 * matrix, DVector3 * forward, DVector3 * up, con
 	matrix->m32 = position.z;
 	matrix->m33 = 1.0f;
 }
+
+//void DMatrix4x4::TRS(DMatrix4x4 * matrix, DVector3 * forward, DVector3 * up, const DVector3 & position, const DQuaterion & rotation, const DVector3 & scale)
+//{
+//	float x2 = 2.0f*rotation.x*rotation.x;
+//	float y2 = 2.0f*rotation.y*rotation.y;
+//	float z2 = 2.0f*rotation.z*rotation.z;
+//	float xy = 2.0f*rotation.x*rotation.y;
+//	float xz = 2.0f*rotation.x*rotation.z;
+//	float xw = 2.0f*rotation.x*rotation.w;
+//	float yz = 2.0f*rotation.y*rotation.z;
+//	float yw = 2.0f*rotation.y*rotation.w;
+//	float zw = 2.0f*rotation.z*rotation.w;
+//	float ra = 1.0f - y2 - z2;
+//	float rb = xy + zw;
+//	float rc = xz - yw;
+//	float rd = xy - zw;
+//	float re = 1.0f - x2 - z2;
+//	float rf = yz + xw;
+//	float rg = xz + yw;
+//	float rh = yz - xw;
+//	float ri = 1.0f - x2 - y2;
+//
+//	forward->x = rg;
+//	forward->y = rh;
+//	forward->z = ri;
+//
+//	up->x = rd;
+//	up->y = re;
+//	up->z = rf;
+//
+//	matrix->m00 = scale.x*ra;
+//	matrix->m01 = scale.x*rb;
+//	matrix->m02 = scale.x*rc;
+//	matrix->m03 = 0.0f;
+//	matrix->m10 = scale.y*rd;
+//	matrix->m11 = scale.y*re;
+//	matrix->m12 = scale.y*rf;
+//	matrix->m13 = 0.0f;
+//	matrix->m20 = scale.z*rg;
+//	matrix->m21 = scale.z*rh;
+//	matrix->m22 = scale.z*ri;
+//	matrix->m23 = 0.0f;
+//	matrix->m30 = position.x;
+//	matrix->m31 = position.y;
+//	matrix->m32 = position.z;
+//	matrix->m33 = 1.0f;
+//}
 
 void DMatrix4x4::LookAt(DMatrix4x4 * matrix, const DVector3 & eye, const DVector3 & lookat, const DVector3 & up)
 {

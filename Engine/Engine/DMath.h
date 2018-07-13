@@ -207,7 +207,7 @@ public:
 	static void RotateZ(DMatrix4x4*, float);
 	static void Rotate(DMatrix4x4*, const DQuaterion&);
 	static void TRS(DMatrix4x4*, const DVector3&, const DQuaterion&, const DVector3&);
-	static void TRS(DMatrix4x4*, DVector3* forward, DVector3* up, const DVector3&, const DQuaterion&, const DVector3&);
+	static void TRS(DMatrix4x4*, DVector3* right, DVector3* up, DVector3* forward, const DVector3&, const DQuaterion&, const DVector3&);
 	static void LookAt(DMatrix4x4*, const DVector3&, const DVector3&, const DVector3&);
 	static void Transpose(DMatrix4x4* out, const DMatrix4x4& target);
 	static void Inverse(DMatrix4x4* out, const DMatrix4x4& target);

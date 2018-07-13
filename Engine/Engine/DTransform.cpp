@@ -5,6 +5,7 @@ DTransform::DTransform()
 	m_position = DVector3(0, 0, 0);
 	//m_euler = D3DXVECTOR3();
 	m_scale = DVector3(1, 1, 1);
+	m_right = DVector3(1, 0, 0);
 	m_up = DVector3(0, 1, 0);
 	m_forward = DVector3(0, 0, 1);
 	m_rotation = DQuaterion(0, 0, 0, 1);
@@ -188,7 +189,8 @@ void DTransform::GetRight(DVector3 & right)
 	if (m_isL2WMatrixChanged) {
 		RefreshLocalToWorldMatrix();
 	}
-	DVector3::Cross(m_up, m_forward, right);
+	right = m_right;
+	//DVector3::Cross(m_up, m_forward, right);
 }
 
 void DTransform::GetLocalToWorld(DMatrix4x4 & localToWorld)
@@ -237,7 +239,7 @@ DSceneObject * DTransform::GetSceneObject()
 	return m_sceneObj;
 }
 
-void DTransform::SetParent(DTransform * parent)
+void DTransform::SetParent(DTransform * parent, bool useLocalInfo)
 {
 	if (m_parent != NULL)
 	{
@@ -322,7 +324,7 @@ void DTransform::RefreshLocalToWorldMatrix()
 {
 	m_isL2WMatrixChanged = false;
 
-	DMatrix4x4::TRS(&m_localToWorld, &m_forward, &m_up, m_position, m_rotation, m_scale);
+	DMatrix4x4::TRS(&m_localToWorld, &m_right, &m_up, &m_forward, m_position, m_rotation, m_scale);
 	//m_worldToLocal = m_localToWorld
 
 	if (m_parent != NULL && m_parent->m_isRoot == false) //不需要从根节点计算矩阵
@@ -330,6 +332,19 @@ void DTransform::RefreshLocalToWorldMatrix()
 		DMatrix4x4 parentL2W;
 		m_parent->GetLocalToWorld(parentL2W);
 		m_localToWorld = m_localToWorld*parentL2W;
+
+		DVector3 pright, pup, pforward;
+		m_parent->GetRight(pright);
+		m_parent->GetUp(pup);
+		m_parent->GetForward(pforward);
+
+		DVector3 nright = DVector3(m_right.x*pright.x + m_right.y*pup.x + m_right.z*pforward.x, m_right.x*pright.y + m_right.y*pup.y + m_right.z*pforward.y, m_right.x*pright.z + m_right.y*pup.z + m_right.z*pforward.z);
+		DVector3 nup = DVector3(m_up.x*pright.x + m_up.y*pup.x + m_up.z*pforward.x, m_up.x*pright.y + m_up.y*pup.y + m_up.z*pforward.y, m_up.x*pright.z + m_up.y*pup.z + m_up.z*pforward.z);
+		DVector3 nforward = DVector3(m_forward.x*pright.x + m_forward.y*pup.x + m_forward.z*pforward.x, m_forward.x*pright.y + m_forward.y*pup.y + m_forward.z*pforward.y, m_forward.x*pright.z + m_forward.y*pup.z + m_forward.z*pforward.z);
+
+		m_right = nright;
+		m_up = nup;
+		m_forward = nforward;
 	}
 
 	//矩阵发生变化时将子节点也标记为矩阵变化

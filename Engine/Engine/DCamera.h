@@ -4,6 +4,17 @@
 #include "DMaterial.h"
 #include "DEngineDefine.h"
 
+/*相机额外渲染贴图类型*/
+enum DCameraAdditionalTextureType
+{
+	/*不额外渲染*/
+	DCameraAdditional_None = 0U,
+	/*额外渲染屏幕纹理*/
+	DCameraAdditional_Screen = 1U,
+	/*额外渲染屏幕深度*/
+	DCameraAdditional_Depth = 2U,
+};
+
 /*相机滤镜接口*/
 interface ICameraFilter
 {
@@ -111,6 +122,8 @@ private:
 	DShader* m_replacementShader;
 	/*保存当前的相机节点*/
 	DCameraNode* m_node;
+	/*当前相机额外渲染纹理类型*/
+	unsigned int m_additionalTextureType;
 };
 
 static DCamera* sCurrent;

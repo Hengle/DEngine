@@ -35,7 +35,7 @@ public:
 
 	DSceneObject* GetSceneObject();
 
-	void SetParent(DTransform* parent);
+	void SetParent(DTransform* parent, bool useLocalInfo = false);
 	DTransform* GetParent();
 	void RemoveFromParent();
 
@@ -57,6 +57,7 @@ private:
 	DVector3 m_position;
 	DVector3 m_euler;
 	DVector3 m_scale;
+	DVector3 m_right;
 	DVector3 m_up;
 	DVector3 m_forward;
 	DQuaterion m_rotation;

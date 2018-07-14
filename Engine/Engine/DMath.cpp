@@ -1464,12 +1464,12 @@ void DMatrix4x4::TRS(DMatrix4x4 * matrix, const DVector3 & position, const DQuat
 	matrix->m02 = scale.x*rc;
 	matrix->m03 = 0.0f;
 	matrix->m10 = scale.y*rd;
-	matrix->m11 = scale.y*re ;
+	matrix->m11 = scale.y*re;
 	matrix->m12 = scale.y*rf;
 	matrix->m13 = 0.0f;
-	matrix->m20 = scale.z*rg ;
-	matrix->m21 = scale.z*rh ;
-	matrix->m22 = scale.z*ri ;
+	matrix->m20 = scale.z*rg;
+	matrix->m21 = scale.z*rh;
+	matrix->m22 = scale.z*ri;
 	matrix->m23 = 0.0f;
 	matrix->m30 = position.x;
 	matrix->m31 = position.y;

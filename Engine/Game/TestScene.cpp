@@ -97,11 +97,34 @@ void TestScene::OnGUI()
 	if (m_obj0 != NULL)
 	{
 		transform = m_obj0->GetTransform();
-		transform->GetEuler(euler);
+
+		DVector3 right, up, forward;
+		transform->GetRight(right);
+		transform->GetUp(up);
+		transform->GetForward(forward);
+
+		DGUI::Label("Right:(%f,%f,%f)", right.x, right.y, right.z);
+		DGUI::Label("Up:(%f,%f,%f)", up.x, up.y, up.z);
+		DGUI::Label("Forward:(%f,%f,%f)", forward.x, forward.y, forward.z);
+
+		/*transform->GetEuler(euler);
 
 		ImGui::SliderFloat("objY", &euler.y, 0.0f, 360.0f);
 
-		transform->SetEuler(euler.x, euler.y, euler.z);
+		transform->SetEuler(euler.x, euler.y, euler.z);*/
+	}
+	if (m_cube != NULL)
+	{
+		transform = m_cube->GetTransform();
+
+		DVector3 right, up, forward;
+		transform->GetRight(right);
+		transform->GetUp(up);
+		transform->GetForward(forward);
+
+		DGUI::Label("Right:(%f,%f,%f)", right.x, right.y, right.z);
+		DGUI::Label("Up:(%f,%f,%f)", up.x, up.y, up.z);
+		DGUI::Label("Forward:(%f,%f,%f)", forward.x, forward.y, forward.z);
 	}
 	//transform->GetForward(forward);
 	//DShader::SetGlobalVector3("g_sundir", forward);
@@ -266,6 +289,7 @@ void TestScene::TestLoad()
 	m_obj0->Create();
 	transform = m_obj0->GetTransform();
 	transform->SetPosition(0.0f, 1.64f, 0.0f);
+	transform->SetEuler(0.0f, 65.979f, 0.0f);
 
 	//AddDisplayObject(m_obj0);
 

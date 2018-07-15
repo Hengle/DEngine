@@ -98,33 +98,49 @@ void TestScene::OnGUI()
 	{
 		transform = m_obj0->GetTransform();
 
-		DVector3 right, up, forward;
+		/*DVector3 right, up, forward, position;
 		transform->GetRight(right);
 		transform->GetUp(up);
 		transform->GetForward(forward);
+		transform->GetPosition(position);
 
 		DGUI::Label("Right:(%f,%f,%f)", right.x, right.y, right.z);
 		DGUI::Label("Up:(%f,%f,%f)", up.x, up.y, up.z);
-		DGUI::Label("Forward:(%f,%f,%f)", forward.x, forward.y, forward.z);
+		DGUI::Label("Forward:(%f,%f,%f)", forward.x, forward.y, forward.z);*/
+
 
 		/*transform->GetEuler(euler);
 
 		ImGui::SliderFloat("objY", &euler.y, 0.0f, 360.0f);
 
 		transform->SetEuler(euler.x, euler.y, euler.z);*/
+
+		DVector3 lpos, leuler;
+		transform->GetLocalPosition(lpos);
+		transform->GetLocalEuler(leuler);
+
+		DGUI::Label("Obj0 Local Position:(%f,%f,%f)", lpos.x, lpos.y, lpos.z);
+		DGUI::Label("Obj0 Local Euler:(%f,%f,%f)", leuler.x, leuler.y, leuler.z);
 	}
 	if (m_cube != NULL)
 	{
 		transform = m_cube->GetTransform();
 
-		DVector3 right, up, forward;
+		/*DVector3 right, up, forward;
 		transform->GetRight(right);
 		transform->GetUp(up);
 		transform->GetForward(forward);
 
 		DGUI::Label("Right:(%f,%f,%f)", right.x, right.y, right.z);
 		DGUI::Label("Up:(%f,%f,%f)", up.x, up.y, up.z);
-		DGUI::Label("Forward:(%f,%f,%f)", forward.x, forward.y, forward.z);
+		DGUI::Label("Forward:(%f,%f,%f)", forward.x, forward.y, forward.z);*/
+
+		DVector3 lpos, leuler;
+		transform->GetLocalPosition(lpos);
+		transform->GetLocalEuler(leuler);
+
+		DGUI::Label("Cube Local Position:(%f,%f,%f)", lpos.x, lpos.y, lpos.z);
+		DGUI::Label("Cube Local Euler:(%f,%f,%f)", leuler.x, leuler.y, leuler.z);
 	}
 	//transform->GetForward(forward);
 	//DShader::SetGlobalVector3("g_sundir", forward);

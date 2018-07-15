@@ -717,7 +717,7 @@ void DVector4::Project(const DVector4 & a, const DVector4 & b, DVector4& out)
 	out = b * DVector4::Dot(a, b) / DVector4::Dot(b, b);
 }
 
-DQuaterion::DQuaterion()
+DQuaternion::DQuaternion()
 {
 	x = 0.0f;
 	y = 0.0f;
@@ -725,15 +725,15 @@ DQuaterion::DQuaterion()
 	w = 0.0f;
 }
 
-DQuaterion::DQuaterion(const DQuaterion & quaterion)
+DQuaternion::DQuaternion(const DQuaternion & quaternion)
 {
-	x = quaterion.x;
-	y = quaterion.y;
-	z = quaterion.z;
-	w = quaterion.w;
+	x = quaternion.x;
+	y = quaternion.y;
+	z = quaternion.z;
+	w = quaternion.w;
 }
 
-DQuaterion::DQuaterion(float x, float y, float z, float w)
+DQuaternion::DQuaternion(float x, float y, float z, float w)
 {
 	this->x = x;
 	this->y = y;
@@ -741,7 +741,7 @@ DQuaterion::DQuaterion(float x, float y, float z, float w)
 	this->w = w;
 }
 
-void DQuaterion::EulerAngle(float & eulerX, float & eulerY, float & eulerZ)
+void DQuaternion::EulerAngle(float & eulerX, float & eulerY, float & eulerZ)
 {
 	long sp = -2.0f*(y*z - w*x);
 
@@ -762,7 +762,7 @@ void DQuaterion::EulerAngle(float & eulerX, float & eulerY, float & eulerZ)
 	eulerZ *= RAD_TO_DEG;
 }
 
-void DQuaterion::EulerAngle(DVector3 & euler)
+void DQuaternion::EulerAngle(DVector3 & euler)
 {
 	float sp = -2.0f*(y*z - w*x);
 
@@ -783,7 +783,68 @@ void DQuaterion::EulerAngle(DVector3 & euler)
 	euler.z *= RAD_TO_DEG;
 }
 
-void DQuaterion::Euler(DQuaterion * rotation, float eulerX, float eulerY, float eulerZ)
+float DQuaternion::Magnitude() const
+{
+	return sqrtf(x*x + y*y + z*z + w*w);
+}
+
+float & DQuaternion::operator[](int index)
+{
+	if (index < 0 || index >= 4)
+	{
+		throw std::exception("无效的索引");
+	}
+	switch (index)
+	{
+	case 0:
+		return x;
+	case 1:
+		return y;
+	case 2:
+		return z;
+	case 3:
+		return w;
+	default:
+		break;
+	}
+}
+
+bool DQuaternion::operator==(const DVector4 & quaternion) const
+{
+	return IS_FLOAT_EQUAL(x, quaternion.x) && IS_FLOAT_EQUAL(y, quaternion.y) && IS_FLOAT_EQUAL(z, quaternion.z) && IS_FLOAT_EQUAL(w, quaternion.w);
+}
+
+bool DQuaternion::operator!=(const DVector4 & quaternion) const
+{
+	return !IS_FLOAT_EQUAL(x, quaternion.x) || !IS_FLOAT_EQUAL(y, quaternion.y) || !IS_FLOAT_EQUAL(z, quaternion.z) || !IS_FLOAT_EQUAL(w, quaternion.w);
+}
+
+DQuaternion DQuaternion::operator*(const DQuaternion & b) const
+{
+	DQuaternion result;
+	result.x = b.w * x + b.x * w + b.z * y - b.y * z;
+	result.y = b.w * y + b.y * w + b.x * z - b.z * x;
+	result.z = b.w * z + b.z * w + b.y * x - b.x * y;
+	result.w = b.w * w - b.x * x - b.y * y - b.z * z;
+	return result;
+}
+
+DQuaternion & DQuaternion::operator*=(const DQuaternion & b)
+{
+	DQuaternion result;
+	result.x = b.w * x + b.x * w + b.z * y - b.y * z;
+	result.y = b.w * y + b.y * w + b.x * z - b.z * x;
+	result.z = b.w * z + b.z * w + b.y * x - b.x * y;
+	result.w = b.w * w - b.x * x - b.y * y - b.z * z;
+	return result;
+}
+
+float DQuaternion::Dot(const DQuaternion a, const DQuaternion b)
+{
+	return a.w * b.w + a.x * b.x + a.y * b.y + a.z * b.z;
+}
+
+void DQuaternion::Euler(DQuaternion * rotation, float eulerX, float eulerY, float eulerZ)
 {
 	float cosx = cosf(eulerX*DEG_TO_RAD*0.5f);
 	float cosy = cosf(eulerY*DEG_TO_RAD*0.5f);
@@ -799,7 +860,7 @@ void DQuaterion::Euler(DQuaterion * rotation, float eulerX, float eulerY, float 
 	rotation->w = cosy*cosx*cosz + siny*sinx*sinz;
 }
 
-void DQuaterion::Euler(DQuaterion * rotation, const DVector3 & euler)
+void DQuaternion::Euler(DQuaternion * rotation, const DVector3 & euler)
 {
 	float cosx = cosf(euler.x*DEG_TO_RAD*0.5f);
 	float cosy = cosf(euler.y*DEG_TO_RAD*0.5f);
@@ -813,6 +874,20 @@ void DQuaterion::Euler(DQuaterion * rotation, const DVector3 & euler)
 	rotation->y = siny*cosx*cosz - cosy*sinx*sinz;
 	rotation->z = cosy*cosx*sinz - siny*sinx*cosz;
 	rotation->w = cosy*cosx*cosz + siny*sinx*sinz;
+}
+
+float DQuaternion::Magnitude(const DQuaternion & quaternion)
+{
+	return sqrtf(quaternion.x*quaternion.x + quaternion.y*quaternion.y + quaternion.z*quaternion.z + quaternion.w*quaternion.w);
+}
+
+void DQuaternion::Inverse(const DQuaternion & in, DQuaternion & out)
+{
+	float m = in.Magnitude();
+	out.x = -in.x / m;
+	out.y = -in.y / m;
+	out.z = -in.z / m;
+	out.w = in.w / m;
 }
 
 DMatrix4x4::DMatrix4x4()
@@ -1409,7 +1484,7 @@ void DMatrix4x4::RotateZ(DMatrix4x4 * matrix, float angle)
 	matrix->m33 = 1.0f;
 }
 
-void DMatrix4x4::Rotate(DMatrix4x4 * matrix, const DQuaterion & rotation)
+void DMatrix4x4::Rotate(DMatrix4x4 * matrix, const DQuaternion & rotation)
 {
 	float x2 = 2.0f*rotation.x*rotation.x;
 	float y2 = 2.0f*rotation.y*rotation.y;
@@ -1438,7 +1513,7 @@ void DMatrix4x4::Rotate(DMatrix4x4 * matrix, const DQuaterion & rotation)
 	matrix->m33 = 1.0f;
 }
 
-void DMatrix4x4::TRS(DMatrix4x4 * matrix, const DVector3 & position, const DQuaterion & rotation, const DVector3 & scale)
+void DMatrix4x4::TRS(DMatrix4x4 * matrix, const DVector3 & position, const DQuaternion & rotation, const DVector3 & scale)
 {
 	float x2 = 2.0f*rotation.x*rotation.x;
 	float y2 = 2.0f*rotation.y*rotation.y;
@@ -1477,56 +1552,56 @@ void DMatrix4x4::TRS(DMatrix4x4 * matrix, const DVector3 & position, const DQuat
 	matrix->m33 = 1.0f;
 }
 
-void DMatrix4x4::TRS(DMatrix4x4 * matrix, DVector3 * right, DVector3 * up, DVector3 * forward, const DVector3 & position, const DQuaterion & rotation, const DVector3 & scale)
-{
-	float x2 = 2.0f*rotation.x*rotation.x;
-	float y2 = 2.0f*rotation.y*rotation.y;
-	float z2 = 2.0f*rotation.z*rotation.z;
-	float xy = 2.0f*rotation.x*rotation.y;
-	float xz = 2.0f*rotation.x*rotation.z;
-	float xw = 2.0f*rotation.x*rotation.w;
-	float yz = 2.0f*rotation.y*rotation.z;
-	float yw = 2.0f*rotation.y*rotation.w;
-	float zw = 2.0f*rotation.z*rotation.w;
-	float ra = 1.0f - y2 - z2;
-	float rb = xy + zw;
-	float rc = xz - yw;
-	float rd = xy - zw;
-	float re = 1.0f - x2 - z2;
-	float rf = yz + xw;
-	float rg = xz + yw;
-	float rh = yz - xw;
-	float ri = 1.0f - x2 - y2;
-
-	right->x = ra;
-	right->y = rb;
-	right->z = rc;
-
-	up->x = rd;
-	up->y = re;
-	up->z = rf;
-
-	forward->x = rg;
-	forward->y = rh;
-	forward->z = ri;
-
-	matrix->m00 = scale.x*ra;
-	matrix->m01 = scale.x*rb;
-	matrix->m02 = scale.x*rc;
-	matrix->m03 = 0.0f;
-	matrix->m10 = scale.y*rd;
-	matrix->m11 = scale.y*re;
-	matrix->m12 = scale.y*rf;
-	matrix->m13 = 0.0f;
-	matrix->m20 = scale.z*rg;
-	matrix->m21 = scale.z*rh;
-	matrix->m22 = scale.z*ri;
-	matrix->m23 = 0.0f;
-	matrix->m30 = position.x;
-	matrix->m31 = position.y;
-	matrix->m32 = position.z;
-	matrix->m33 = 1.0f;
-}
+//void DMatrix4x4::TRS(DMatrix4x4 * matrix, DVector3 * right, DVector3 * up, DVector3 * forward, const DVector3 & position, const DQuaterion & rotation, const DVector3 & scale)
+//{
+//	float x2 = 2.0f*rotation.x*rotation.x;
+//	float y2 = 2.0f*rotation.y*rotation.y;
+//	float z2 = 2.0f*rotation.z*rotation.z;
+//	float xy = 2.0f*rotation.x*rotation.y;
+//	float xz = 2.0f*rotation.x*rotation.z;
+//	float xw = 2.0f*rotation.x*rotation.w;
+//	float yz = 2.0f*rotation.y*rotation.z;
+//	float yw = 2.0f*rotation.y*rotation.w;
+//	float zw = 2.0f*rotation.z*rotation.w;
+//	float ra = 1.0f - y2 - z2;
+//	float rb = xy + zw;
+//	float rc = xz - yw;
+//	float rd = xy - zw;
+//	float re = 1.0f - x2 - z2;
+//	float rf = yz + xw;
+//	float rg = xz + yw;
+//	float rh = yz - xw;
+//	float ri = 1.0f - x2 - y2;
+//
+//	right->x = ra;
+//	right->y = rb;
+//	right->z = rc;
+//
+//	up->x = rd;
+//	up->y = re;
+//	up->z = rf;
+//
+//	forward->x = rg;
+//	forward->y = rh;
+//	forward->z = ri;
+//
+//	matrix->m00 = scale.x*ra;
+//	matrix->m01 = scale.x*rb;
+//	matrix->m02 = scale.x*rc;
+//	matrix->m03 = 0.0f;
+//	matrix->m10 = scale.y*rd;
+//	matrix->m11 = scale.y*re;
+//	matrix->m12 = scale.y*rf;
+//	matrix->m13 = 0.0f;
+//	matrix->m20 = scale.z*rg;
+//	matrix->m21 = scale.z*rh;
+//	matrix->m22 = scale.z*ri;
+//	matrix->m23 = 0.0f;
+//	matrix->m30 = position.x;
+//	matrix->m31 = position.y;
+//	matrix->m32 = position.z;
+//	matrix->m33 = 1.0f;
+//}
 
 //void DMatrix4x4::TRS(DMatrix4x4 * matrix, DVector3 * forward, DVector3 * up, const DVector3 & position, const DQuaterion & rotation, const DVector3 & scale)
 //{

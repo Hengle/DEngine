@@ -25,9 +25,9 @@ public:
 	void SetLocalPosition(float, float, float);
 	void SetLocalPosition(DVector3);
 	void SetRotation(float, float, float, float);
-	void SetRotation(DQuaterion);
+	void SetRotation(DQuaternion);
 	void SetLocalRotation(float, float, float, float);
-	void SetLocalRotation(DQuaterion);
+	void SetLocalRotation(DQuaternion);
 	void SetEuler(float, float, float);
 	void SetEuler(DVector3);
 	void SetLocalEuler(float, float, float);
@@ -36,10 +36,10 @@ public:
 	void SetLocalScale(DVector3);
 
 	void GetPosition(DVector3&);
-	void GetRotation(DQuaterion&);
+	void GetRotation(DQuaternion&);
 	void GetEuler(DVector3&);
 	void GetLocalPosition(DVector3&);
-	void GetLocalRotation(DQuaterion&);
+	void GetLocalRotation(DQuaternion&);
 	void GetLocalEuler(DVector3&);
 	void GetLocalScale(DVector3&);
 	void GetLossyScale(DVector3&);
@@ -70,10 +70,11 @@ public:
 private:
 	void RefreshLocalToWorldMatrix();
 	void RefreshWorldToLocalMatrix();
+	void RefreshPosition();
+	void RefreshScale();
+	void RefreshRotation();
 	void RefreshEuler();
 	void RefreshQuaterion();
-
-	//void RefreshWorldTransform();
 
 private:
 	DVector3 m_position;
@@ -85,8 +86,8 @@ private:
 	DVector3 m_right;
 	DVector3 m_up;
 	DVector3 m_forward;
-	DQuaterion m_rotation;
-	DQuaterion m_localRotation;
+	DQuaternion m_rotation;
+	DQuaternion m_localRotation;
 
 	DTransform* m_parent;
 	DTransform* m_preNeighbor;
@@ -95,22 +96,13 @@ private:
 	DTransform* m_firstChild;
 	int m_childCount;
 
-	//bool m_isL2WMatrixChanged;
-	//bool m_isW2LMatrixChanged;
-	//bool m_isEulerChanged;
-	//bool m_isLocalTransformChanged; //标记本地transform信息是否变化，该变化会引起重新计算
-	//bool m_isWorldTransformChanged;
-	//bool m_isLocalEulerChanged;
-	//bool m_isWorldEulerChanged;
-	//SpaceDefine m_transformChangeMark; //标记当前引起transform变化的信息来自本地还是世界
-	//SpaceDefine m_eullerChangeMark;  //标记引起当前角度变化的信息来自本地还是世界
-	//bool m_isRotationChanged;
+	bool m_isL2WMatrixChanged;    //标记localToWorld矩阵是否发生变化
 	bool m_isW2LMatrixChanged;    //标记worldToLocal矩阵是否发生变化
 
 	SpaceDefine m_positionChangedMark; //标记当前坐标改变的来源-可能设置局部或世界坐标，根据来源不同，矩阵的更新也不同
 	SpaceDefine m_eulerChangedMark;  //标记当前欧拉角改变的来源-可能设置局部或世界欧拉角，根据来源不同，矩阵的更新也不同
 	SpaceDefine m_rotationChangedMark;  
-	bool m_isLocalScaleChanged;
+	SpaceDefine m_scaleChangedMark;
 
 	DMatrix4x4 m_localToWorld;
 	DMatrix4x4 m_worldToLocal;

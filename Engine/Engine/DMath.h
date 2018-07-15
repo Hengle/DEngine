@@ -159,20 +159,31 @@ public:
 	float x, y, z, w;
 } DVector4, *LPDVector4;
 
-typedef struct DQuaterion
+typedef struct DQuaternion
 {
 public:
-	DQuaterion();
-	DQuaterion(const DQuaterion&);
-	DQuaterion(float, float, float, float);
+	DQuaternion();
+	DQuaternion(const DQuaternion&);
+	DQuaternion(float, float, float, float);
 	void EulerAngle(float & eulerX, float & eulerY, float & eulerZ);
 	void EulerAngle(DVector3& euler);
-	static void Euler(DQuaterion* rotation, float, float, float);
-	static void Euler(DQuaterion* rotation, const DVector3&);
+	float Magnitude() const;
+
+	float& operator [](int);
+	bool operator ==(const DVector4&) const;
+	bool operator !=(const DVector4&) const;
+	DQuaternion operator * (const DQuaternion&) const;
+	DQuaternion& operator *= (const DQuaternion&);
+
+	static float Dot(const DQuaternion a, const DQuaternion b);
+	static void Euler(DQuaternion* rotation, float, float, float);
+	static void Euler(DQuaternion* rotation, const DVector3&);
+	static float Magnitude(const DQuaternion&);
+	static void Inverse(const DQuaternion&, DQuaternion&);
 
 public:
 	float x, y, z, w;
-} DQuaterion, *LPDQuaterion;
+} DQuaternion, *LPDQuaternion;
 
 typedef struct DMatrix4x4
 {
@@ -205,9 +216,9 @@ public:
 	static void RotateX(DMatrix4x4*, float);
 	static void RotateY(DMatrix4x4*, float);
 	static void RotateZ(DMatrix4x4*, float);
-	static void Rotate(DMatrix4x4*, const DQuaterion&);
-	static void TRS(DMatrix4x4*, const DVector3&, const DQuaterion&, const DVector3&);
-	static void TRS(DMatrix4x4*, DVector3* right, DVector3* up, DVector3* forward, const DVector3&, const DQuaterion&, const DVector3&);
+	static void Rotate(DMatrix4x4*, const DQuaternion&);
+	static void TRS(DMatrix4x4*, const DVector3&, const DQuaternion&, const DVector3&);
+	//static void TRS(DMatrix4x4*, DVector3* right, DVector3* up, DVector3* forward, const DVector3&, const DQuaterion&, const DVector3&);
 	static void LookAt(DMatrix4x4*, const DVector3&, const DVector3&, const DVector3&);
 	static void Transpose(DMatrix4x4* out, const DMatrix4x4& target);
 	static void Inverse(DMatrix4x4* out, const DMatrix4x4& target);
@@ -264,6 +275,8 @@ public:
 
 #define DMATRIX_IDENTITY = DMatrix4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); 
 
+#define DQUATERNION_IDENTITY = DQuaternion(0, 0, 0, 1);
+
 
 const DVector2 dvec2_zero = DVector2(0.0f, 0.0f);
 const DVector2 dvec2_one = DVector2(1.0f, 1.0f);
@@ -288,3 +301,5 @@ const DMatrix4x4 dmat_identity = DMatrix4x4(1, 0, 0, 0,
 	0, 1, 0, 0,
 	0, 0, 1, 0,
 	0, 0, 0, 1);
+
+const DQuaternion dquaternion_identity = DQuaternion(0, 0, 0, 1);

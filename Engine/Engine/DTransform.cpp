@@ -4,31 +4,26 @@ DTransform::DTransform()
 {
 	m_position = DVector3(0, 0, 0);
 	m_localPosition = DVector3(0, 0, 0);
-	//m_euler = D3DXVECTOR3();
 	m_localScale = DVector3(1, 1, 1);
 	m_right = DVector3(1, 0, 0);
 	m_up = DVector3(0, 1, 0);
 	m_forward = DVector3(0, 0, 1);
-	m_rotation = DQuaterion(0, 0, 0, 1);
-	m_localRotation = DQuaterion(0, 0, 0, 1);
+	m_rotation = DQuaternion(0, 0, 0, 1);
+	m_localRotation = DQuaternion(0, 0, 0, 1);
 	m_euler = DVector3(0, 0, 0);
 	m_localEuler = DVector3(0, 0, 0);
 
-	//m_isL2WMatrixChanged = false;
-	//m_isW2LMatrixChanged = false;
-	//m_isEulerChanged = false;
-	//m_transformChangeMark = SpaceDefine_None;
-	//m_eullerChangeMark = SpaceDefine_None;
-	//m_isRotationChanged = false;
+	m_isL2WMatrixChanged = false;
 	m_isW2LMatrixChanged = false;
 	m_positionChangedMark = SpaceDefine_None;
 	m_eulerChangedMark = SpaceDefine_None;
 	m_rotationChangedMark = SpaceDefine_None;
-	m_isLocalScaleChanged = false;
+	m_scaleChangedMark = SpaceDefine_None;
 
 	m_childCount = 0;
 
 	m_localToWorld = dmat_identity;
+	m_worldToLocal = dmat_identity;
 
 	m_sceneObj = NULL;
 
@@ -65,8 +60,9 @@ void DTransform::SetPosition(float x, float y, float z)
 
 	//标记当前坐标改变，并且来源是世界坐标
 	m_positionChangedMark = SpaceDefine_World;
-	//标记worldtolocal矩阵改变
+	//标记矩阵改变
 	m_isW2LMatrixChanged = true;
+	m_isL2WMatrixChanged = true;
 }
 
 void DTransform::SetPosition(DVector3 position)
@@ -77,8 +73,9 @@ void DTransform::SetPosition(DVector3 position)
 
 	//标记当前坐标改变，并且来源是世界坐标
 	m_positionChangedMark = SpaceDefine_World;
-	//标记worldtolocal矩阵改变
+	//标记矩阵改变
 	m_isW2LMatrixChanged = true;
+	m_isL2WMatrixChanged = true;
 }
 
 void DTransform::SetLocalPosition(float x, float y, float z)
@@ -91,8 +88,9 @@ void DTransform::SetLocalPosition(float x, float y, float z)
 
 	//标记当前坐标改变，并且来源是局部坐标
 	m_positionChangedMark = SpaceDefine_Local;
-	//标记worldtolocal矩阵改变
+	//标记矩阵改变
 	m_isW2LMatrixChanged = true;
+	m_isL2WMatrixChanged = true;
 }
 
 void DTransform::SetLocalPosition(DVector3 localPosition)
@@ -103,8 +101,9 @@ void DTransform::SetLocalPosition(DVector3 localPosition)
 
 	//标记当前坐标改变，并且来源是局部坐标
 	m_positionChangedMark = SpaceDefine_Local;
-	//标记worldtolocal矩阵改变
+	//标记矩阵改变
 	m_isW2LMatrixChanged = true;
+	m_isL2WMatrixChanged = true;
 }
 
 void DTransform::SetRotation(float x, float y, float z, float w)
@@ -120,11 +119,12 @@ void DTransform::SetRotation(float x, float y, float z, float w)
 	m_rotationChangedMark = SpaceDefine_World;
 	//由于设置了四元数，则取消欧拉角改变，避免引起重计算四元数
 	m_eulerChangedMark = SpaceDefine_None;
-	//标记worldtolocal矩阵改变
+	//标记矩阵改变
 	m_isW2LMatrixChanged = true;
+	m_isL2WMatrixChanged = true;
 }
 
-void DTransform::SetRotation(DQuaterion rotation)
+void DTransform::SetRotation(DQuaternion rotation)
 {
 	if (IS_FLOAT_EQUAL(m_rotation.x, rotation.x) && IS_FLOAT_EQUAL(m_rotation.y, rotation.y) && IS_FLOAT_EQUAL(m_rotation.z, rotation.z) && IS_FLOAT_EQUAL(m_rotation.w, rotation.w))
 		return;
@@ -134,8 +134,9 @@ void DTransform::SetRotation(DQuaterion rotation)
 	m_rotationChangedMark = SpaceDefine_World;
 	//由于设置了四元数，则取消欧拉角改变，避免引起重计算四元数
 	m_eulerChangedMark = SpaceDefine_None;
-	//标记worldtolocal矩阵改变
+	//标记矩阵改变
 	m_isW2LMatrixChanged = true;
+	m_isL2WMatrixChanged = true;
 }
 
 void DTransform::SetLocalRotation(float x, float y, float z, float w)
@@ -151,11 +152,12 @@ void DTransform::SetLocalRotation(float x, float y, float z, float w)
 	m_rotationChangedMark = SpaceDefine_Local;
 	//由于设置了四元数，则取消欧拉角改变，避免引起重计算四元数
 	m_eulerChangedMark = SpaceDefine_None;
-	//标记worldtolocal矩阵改变
+	//标记矩阵改变
 	m_isW2LMatrixChanged = true;
+	m_isL2WMatrixChanged = true;
 }
 
-void DTransform::SetLocalRotation(DQuaterion localRotation)
+void DTransform::SetLocalRotation(DQuaternion localRotation)
 {
 	if (IS_FLOAT_EQUAL(m_localRotation.x, localRotation.x) && IS_FLOAT_EQUAL(m_localRotation.y, localRotation.y) && IS_FLOAT_EQUAL(m_localRotation.z, localRotation.z) && IS_FLOAT_EQUAL(m_localRotation.w, localRotation.w))
 		return;
@@ -165,8 +167,9 @@ void DTransform::SetLocalRotation(DQuaterion localRotation)
 	m_rotationChangedMark = SpaceDefine_Local;
 	//由于设置了四元数，则取消欧拉角改变，避免引起重计算四元数
 	m_eulerChangedMark = SpaceDefine_None;
-	//标记worldtolocal矩阵改变
+	//标记矩阵改变
 	m_isW2LMatrixChanged = true;
+	m_isL2WMatrixChanged = true;
 }
 
 void DTransform::SetEuler(float pitch, float yaw, float roll)
@@ -181,8 +184,9 @@ void DTransform::SetEuler(float pitch, float yaw, float roll)
 	m_eulerChangedMark = SpaceDefine_World;
 	//由于设置了欧拉角，则取消四元数改变，避免引起重计算欧拉角
 	m_rotationChangedMark = SpaceDefine_None;
-	//标记worldtolocal矩阵改变
+	//标记矩阵改变
 	m_isW2LMatrixChanged = true;
+	m_isL2WMatrixChanged = true;
 }
 
 void DTransform::SetEuler(DVector3 euler)
@@ -195,8 +199,9 @@ void DTransform::SetEuler(DVector3 euler)
 	m_eulerChangedMark = SpaceDefine_World;
 	//由于设置了欧拉角，则取消四元数改变，避免引起重计算欧拉角
 	m_rotationChangedMark = SpaceDefine_None;
-	//标记worldtolocal矩阵改变
+	//标记矩阵改变
 	m_isW2LMatrixChanged = true;
+	m_isL2WMatrixChanged = true;
 }
 
 void DTransform::SetLocalEuler(float pitch, float yaw, float roll)
@@ -211,8 +216,9 @@ void DTransform::SetLocalEuler(float pitch, float yaw, float roll)
 	m_eulerChangedMark = SpaceDefine_Local;
 	//由于设置了欧拉角，则取消四元数改变，避免引起重计算欧拉角
 	m_rotationChangedMark = SpaceDefine_None;
-	//标记worldtolocal矩阵改变
+	//标记矩阵改变
 	m_isW2LMatrixChanged = true;
+	m_isL2WMatrixChanged = true;
 }
 
 void DTransform::SetLocalEuler(DVector3 localEuler)
@@ -225,8 +231,9 @@ void DTransform::SetLocalEuler(DVector3 localEuler)
 	m_eulerChangedMark = SpaceDefine_Local;
 	//由于设置了欧拉角，则取消四元数改变，避免引起重计算欧拉角
 	m_rotationChangedMark = SpaceDefine_None;
-	//标记worldtolocal矩阵改变
+	//标记矩阵改变
 	m_isW2LMatrixChanged = true;
+	m_isL2WMatrixChanged = true;
 }
 
 void DTransform::SetLocalScale(float x, float y, float z)
@@ -236,9 +243,10 @@ void DTransform::SetLocalScale(float x, float y, float z)
 	m_localScale.x = x;
 	m_localScale.y = y;
 	m_localScale.z = z;
-	m_isLocalScaleChanged = true;
-	//m_isL2WMatrixChanged = true;
+	
+	m_scaleChangedMark = SpaceDefine_Local;
 	m_isW2LMatrixChanged = true;
+	m_isL2WMatrixChanged = true;
 }
 
 void DTransform::SetLocalScale(DVector3 localScale)
@@ -246,28 +254,30 @@ void DTransform::SetLocalScale(DVector3 localScale)
 	if (IS_FLOAT_EQUAL(m_localScale.x, localScale.x) && IS_FLOAT_EQUAL(m_localScale.y, localScale.y) && IS_FLOAT_EQUAL(m_localScale.z, localScale.z))
 		return;
 	m_localScale = localScale;
-	m_isLocalScaleChanged = true;
-	//m_isL2WMatrixChanged = true;
+	
+	m_scaleChangedMark = SpaceDefine_World;
 	m_isW2LMatrixChanged = true;
+	m_isL2WMatrixChanged = true;
 }
 
 void DTransform::GetPosition(DVector3 &position)
 {
 	if (m_positionChangedMark == SpaceDefine_Local)
 	{
-		//由于上一次改变坐标设置的是局部坐标，则此次获取坐标时重计算矩阵，并更新世界坐标
-		RefreshLocalToWorldMatrix();
+		//更新坐标
+		RefreshPosition();
 	}
 
 	position = m_position;
 }
 
-void DTransform::GetRotation(DQuaterion & rotation)
+void DTransform::GetRotation(DQuaternion & rotation)
 {
 	if (m_rotationChangedMark == SpaceDefine_Local  /*上一次设置了局部四元数改变*/
 		|| m_eulerChangedMark != SpaceDefine_None  /*上一次设置了欧拉角改变*/ )
 	{
-		RefreshLocalToWorldMatrix();
+		//更新坐标
+		RefreshRotation();
 	}
 
 	rotation = m_rotation;
@@ -278,13 +288,8 @@ void DTransform::GetEuler(DVector3 & euler)
 	if (m_eulerChangedMark == SpaceDefine_Local  /*上一次设置了局部欧拉角改变*/
 		|| m_rotationChangedMark != SpaceDefine_None  /*上一次设置了四元数改变*/)
 	{
-		RefreshLocalToWorldMatrix();
+		RefreshRotation();
 	}
-	//if (m_isEulerChanged) { 
-	//	//访问欧拉角时如果此前修改过四元数，则更新欧拉角
-	//	RefreshEuler();
-	//	m_isEulerChanged = false;
-	//}
 	euler = m_euler;
 }
 
@@ -292,19 +297,18 @@ void DTransform::GetLocalPosition(DVector3 & localPosition)
 {
 	if (m_positionChangedMark == SpaceDefine_World)
 	{
-		//由于上一次改变坐标设置的是世界坐标，则此次获取坐标时重计算矩阵，并更新局部坐标
-		RefreshLocalToWorldMatrix();
+		RefreshPosition();
 	}
 
 	localPosition = m_localPosition;
 }
 
-void DTransform::GetLocalRotation(DQuaterion & localRotation)
+void DTransform::GetLocalRotation(DQuaternion & localRotation)
 {
 	if (m_rotationChangedMark == SpaceDefine_World  /*上一次设置了世界四元数改变*/
 		|| m_eulerChangedMark != SpaceDefine_None  /*上一次设置了欧拉角改变*/)
 	{
-		RefreshLocalToWorldMatrix();
+		RefreshRotation();
 	}
 
 	localRotation = m_localRotation;
@@ -315,7 +319,7 @@ void DTransform::GetLocalEuler(DVector3 & localEuler)
 	if (m_eulerChangedMark == SpaceDefine_World  /*上一次设置了世界欧拉角改变*/
 		|| m_rotationChangedMark != SpaceDefine_None  /*上一次设置了四元数改变*/)
 	{
-		RefreshLocalToWorldMatrix();
+		RefreshRotation();
 	}
 
 	localEuler = m_localEuler;
@@ -323,23 +327,25 @@ void DTransform::GetLocalEuler(DVector3 & localEuler)
 
 void DTransform::GetLocalScale(DVector3 & localScale)
 {
-	if (m_isLocalScaleChanged) {
-		RefreshLocalToWorldMatrix();
+	if (m_scaleChangedMark == SpaceDefine_World)
+	{
+		RefreshScale();
 	}
 	localScale = m_localScale;
 }
 
 void DTransform::GetLossyScale(DVector3 & lossyScale)
 {
-	if (m_isLocalScaleChanged) {
-		RefreshLocalToWorldMatrix();
+	if (m_scaleChangedMark == SpaceDefine_Local)
+	{
+		RefreshScale();
 	}
 	lossyScale = m_lossyScale;
 }
 
 void DTransform::GetUp(DVector3 & up)
 {
-	if (IsMatrixWillChange()) { //矩阵更新则意味着up向量会更新
+	if (m_isL2WMatrixChanged) { //方向向量仅取决于旋转，因此当发生旋转时更新矩阵的旋转部分
 		RefreshLocalToWorldMatrix();
 	}
 	up = m_up;
@@ -347,7 +353,7 @@ void DTransform::GetUp(DVector3 & up)
 
 void DTransform::GetForward(DVector3 & forward)
 {
-	if (IsMatrixWillChange()) {
+	if (m_isL2WMatrixChanged) { //方向向量仅取决于旋转，因此当发生旋转时更新矩阵的旋转部分
 		RefreshLocalToWorldMatrix();
 	}
 	forward = m_forward;
@@ -355,16 +361,15 @@ void DTransform::GetForward(DVector3 & forward)
 
 void DTransform::GetRight(DVector3 & right)
 {
-	if (IsMatrixWillChange()) {
+	if (m_isL2WMatrixChanged) { //方向向量仅取决于旋转，因此当发生旋转时更新矩阵的旋转部分
 		RefreshLocalToWorldMatrix();
 	}
 	right = m_right;
-	//DVector3::Cross(m_up, m_forward, right);
 }
 
 void DTransform::GetLocalToWorld(DMatrix4x4 & localToWorld)
 {
-	if (IsMatrixWillChange()) {
+	if (IsMatrixWillChange()) {  //存在任何引起矩阵变化的元素都重新计算矩阵
 		RefreshLocalToWorldMatrix();
 	}
 
@@ -418,7 +423,19 @@ void DTransform::SetParent(DTransform * parent, bool useLocalInfo)
 	parent->m_childCount += 1;
 
 	//由于设置了父节点，导致矩阵发生变化
-	m_isL2WMatrixChanged = true;
+	if (useLocalInfo) 
+	{
+		m_positionChangedMark = SpaceDefine_World;
+		m_rotationChangedMark = SpaceDefine_World;
+		m_scaleChangedMark = SpaceDefine_World;
+	}
+	else
+	{
+		m_positionChangedMark = SpaceDefine_Local;
+		m_rotationChangedMark = SpaceDefine_Local;
+		m_scaleChangedMark = SpaceDefine_Local;
+		//m_lossyScale = m_localScale;
+	}
 	m_isW2LMatrixChanged = true;
 }
 
@@ -450,9 +467,6 @@ void DTransform::RemoveFromParent()
 	m_nextNeighbor = NULL;
 	m_parent = NULL;
 
-	//标记矩阵变化
-	m_isL2WMatrixChanged = true;
-	m_isW2LMatrixChanged = true;
 }
 
 unsigned int DTransform::GetChildCount()
@@ -472,8 +486,7 @@ DTransform * DTransform::GetNextNegibhor()
 
 bool DTransform::IsMatrixWillChange()
 {
-	//角度、坐标、缩放发生改变都会引起矩阵变化
-	return m_positionChangedMark != SpaceDefine_None || m_rotationChangedMark != SpaceDefine_None || m_eulerChangedMark != SpaceDefine_None || m_isLocalScaleChanged;
+	return m_isL2WMatrixChanged;
 }
 
 void DTransform::Release()
@@ -486,17 +499,58 @@ void DTransform::Release()
 
 void DTransform::RefreshLocalToWorldMatrix()
 {
-	if (m_eulerChangedMark != SpaceDefine_None)
-		RefreshEuler();
-	else if (m_rotationChangedMark != SpaceDefine_None)
-		RefreshQuaterion();
+	RefreshPosition();
+	RefreshRotation();
+	RefreshScale();
 
+	float x2 = 2.0f*m_localRotation.x*m_localRotation.x;
+	float y2 = 2.0f*m_localRotation.y*m_localRotation.y;
+	float z2 = 2.0f*m_localRotation.z*m_localRotation.z;
+	float xy = 2.0f*m_localRotation.x*m_localRotation.y;
+	float xz = 2.0f*m_localRotation.x*m_localRotation.z;
+	float xw = 2.0f*m_localRotation.x*m_localRotation.w;
+	float yz = 2.0f*m_localRotation.y*m_localRotation.z;
+	float yw = 2.0f*m_localRotation.y*m_localRotation.w;
+	float zw = 2.0f*m_localRotation.z*m_localRotation.w;
+	float ra = 1.0f - y2 - z2;
+	float rb = xy + zw;
+	float rc = xz - yw;
+	float rd = xy - zw;
+	float re = 1.0f - x2 - z2;
+	float rf = yz + xw;
+	float rg = xz + yw;
+	float rh = yz - xw;
+	float ri = 1.0f - x2 - y2;
 
+	m_right.x = ra;
+	m_right.y = rb;
+	m_right.z = rc;
 
-	m_isL2WMatrixChanged = false;
+	m_up.x = rd;
+	m_up.y = re;
+	m_up.z = rf;
 
-	DMatrix4x4::TRS(&m_localToWorld, &m_right, &m_up, &m_forward, m_localPosition, m_localRotation, m_localScale);
-	//m_worldToLocal = m_localToWorld
+	m_forward.x = rg;
+	m_forward.y = rh;
+	m_forward.z = ri;
+
+	m_localToWorld.m00 = m_localScale.x*ra;
+	m_localToWorld.m01 = m_localScale.x*rb;
+	m_localToWorld.m02 = m_localScale.x*rc;
+	m_localToWorld.m03 = 0.0f;
+	m_localToWorld.m10 = m_localScale.y*rd;
+	m_localToWorld.m11 = m_localScale.y*re;
+	m_localToWorld.m12 = m_localScale.y*rf;
+	m_localToWorld.m13 = 0.0f;
+	m_localToWorld.m20 = m_localScale.z*rg;
+	m_localToWorld.m21 = m_localScale.z*rh;
+	m_localToWorld.m22 = m_localScale.z*ri;
+	m_localToWorld.m23 = 0.0f;
+
+	m_localToWorld.m30 = m_localPosition.x;
+	m_localToWorld.m31 = m_localPosition.y;
+	m_localToWorld.m32 = m_localPosition.z;
+	m_localToWorld.m33 = 1.0f;
 
 	if (m_parent != NULL && m_parent->m_isRoot == false) //不需要从根节点计算矩阵
 	{
@@ -517,11 +571,8 @@ void DTransform::RefreshLocalToWorldMatrix()
 		m_right = nright;
 		m_up = nup;
 		m_forward = nforward;
-
-		m_lossyScale = DVector3(m_localScale.x*pscale.x, m_localScale.y*pscale.y, m_localScale.z*pscale.z);
 	}
 
-	//矩阵发生变化时将子节点也标记为矩阵变化
 	DTransform* node = m_firstChild;
 	while (node != NULL)
 	{
@@ -529,6 +580,7 @@ void DTransform::RefreshLocalToWorldMatrix()
 		node = node->m_nextNeighbor;
 	}
 
+	m_isL2WMatrixChanged = false;
 }
 
 void DTransform::RefreshWorldToLocalMatrix()
@@ -541,35 +593,145 @@ void DTransform::RefreshWorldToLocalMatrix()
 	DMatrix4x4::Inverse(&m_worldToLocal, m_localToWorld);
 }
 
+void DTransform::RefreshPosition()
+{
+	if (m_parent != NULL)
+	{
+		if (m_positionChangedMark == SpaceDefine_Local)
+		{
+			//坐标更改来源为局部坐标，则根据父节点更新世界坐标
+			m_parent->TransformPointToWorld(m_localPosition, m_position);
+		}
+		else if(m_positionChangedMark == SpaceDefine_World)
+		{
+			//坐标更改来源为世界坐标，则根据父节点更新局部坐标
+			m_parent->TransformPointToLocal(m_position, m_localPosition);
+		}
+	}
+	else
+	{
+		if (m_positionChangedMark == SpaceDefine_Local)
+		{
+			m_position = m_localPosition;
+		}
+		else if (m_positionChangedMark == SpaceDefine_World)
+		{
+			m_localPosition = m_position;
+		}
+	}
+	m_positionChangedMark = SpaceDefine_None;
+}
+
+void DTransform::RefreshScale()
+{
+	if (m_parent != NULL)
+	{
+		DVector3 pscale;
+		m_parent->GetLossyScale(pscale);
+		if (m_scaleChangedMark == SpaceDefine_Local)
+		{
+			m_lossyScale = DVector3(pscale.x*m_localScale.x, pscale.y*m_localScale.y, pscale.z*m_localScale.z);
+		}
+		else if(m_scaleChangedMark == SpaceDefine_World)
+		{
+			m_localScale = DVector3(m_lossyScale.x / pscale.x, m_lossyScale.y / pscale.y, m_lossyScale.z / pscale.z);
+		}
+	}
+	else
+	{
+		if (m_scaleChangedMark == SpaceDefine_Local)
+		{
+			m_lossyScale = m_localScale;
+		}
+		else if (m_scaleChangedMark == SpaceDefine_World)
+		{
+			m_localScale = m_lossyScale;
+		}
+	}
+	m_scaleChangedMark = SpaceDefine_None;
+}
+
+void DTransform::RefreshRotation()
+{
+	if (m_rotationChangedMark != SpaceDefine_None)
+		RefreshEuler();
+	if (m_eulerChangedMark != SpaceDefine_None)
+		RefreshQuaterion();
+}
+
 void DTransform::RefreshEuler()
 {
 	if (m_rotationChangedMark == SpaceDefine_Local) //局部四元数导致局部欧拉角发生变化
+	{
 		m_localRotation.EulerAngle(m_localEuler);
+		if (m_parent != NULL)
+		{
+			DQuaternion protation;
+			m_parent->GetLocalRotation(protation);
+			m_rotation = protation*m_localRotation;
+			m_rotation.EulerAngle(m_euler);
+		}
+		else
+		{
+			m_rotation = m_localRotation;
+			m_rotation.EulerAngle(m_euler);
+		}
+	}
 	else if (m_rotationChangedMark == SpaceDefine_World) //世界四元数导致世界欧拉角发生变化
+	{
 		m_rotation.EulerAngle(m_euler);
-	//m_rotation.EulerAngle(m_euler);
+		if (m_parent != NULL)
+		{
+			DQuaternion protation,protationinv;
+			m_parent->GetRotation(protation);
+			DQuaternion::Inverse(protation, protationinv);
+			m_localRotation = protationinv*m_rotation;
+			m_localRotation.EulerAngle(m_localEuler);
+		}
+		else
+		{
+			m_localRotation = m_rotation;
+			m_localRotation.EulerAngle(m_localEuler);
+		}
+	}
+	m_rotationChangedMark = SpaceDefine_None;
 }
 
 void DTransform::RefreshQuaterion()
 {
 	if (m_eulerChangedMark == SpaceDefine_Local)
-		DQuaterion::Euler(&m_localRotation, m_localEuler);
+	{
+		DQuaternion::Euler(&m_localRotation, m_localEuler);
+		if (m_parent != NULL)
+		{
+			DQuaternion protation;
+			m_parent->GetLocalRotation(protation);
+			m_rotation = protation*m_localRotation;
+			m_rotation.EulerAngle(m_euler);
+		}
+		else
+		{
+			m_rotation = m_localRotation;
+			m_rotation.EulerAngle(m_euler);
+		}
+	}
 	else if (m_eulerChangedMark == SpaceDefine_World)
-		DQuaterion::Euler(&m_rotation, m_euler);
-}
-
-void DTransform::RefreshWorldTransform()
-{
-	DVector3 wpos = DVector3(m_localToWorld.m30, m_localToWorld.m31, m_localToWorld.m32);
-
-	float ra = m_localToWorld.m00 / m_lossyScale.x;
-	float rb = m_localToWorld.m01 / m_lossyScale.x;
-	float rc = m_localToWorld.m02 / m_lossyScale.x;
-	float rd = m_localToWorld.m10 / m_lossyScale.y;
-	float re = m_localToWorld.m11 / m_lossyScale.y;
-	float rf = m_localToWorld.m12 / m_lossyScale.y;
-	float rg = m_localToWorld.m20 / m_lossyScale.z;
-	float rh = m_localToWorld.m21 / m_lossyScale.z;
-	float ri = m_localToWorld.m22 / m_lossyScale.z;
+	{
+		DQuaternion::Euler(&m_rotation, m_euler);
+		if (m_parent != NULL)
+		{
+			DQuaternion protation, protationinv;
+			m_parent->GetRotation(protation);
+			DQuaternion::Inverse(protation, protationinv);
+			m_localRotation = protationinv*m_rotation;
+			m_localRotation.EulerAngle(m_localEuler);
+		}
+		else
+		{
+			m_localRotation = m_rotation;
+			m_localRotation.EulerAngle(m_localEuler);
+		}
+	}
+	m_eulerChangedMark = SpaceDefine_None;
 }
 

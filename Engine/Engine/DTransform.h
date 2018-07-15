@@ -68,6 +68,8 @@ public:
 	void Release();
 
 private:
+	void SetLossyScale(float, float, float);
+
 	void RefreshLocalToWorldMatrix();
 	void RefreshWorldToLocalMatrix();
 	void RefreshPosition();

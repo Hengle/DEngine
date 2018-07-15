@@ -5,6 +5,7 @@ DTransform::DTransform()
 	m_position = DVector3(0, 0, 0);
 	m_localPosition = DVector3(0, 0, 0);
 	m_localScale = DVector3(1, 1, 1);
+	m_lossyScale = DVector3(1, 1, 1);
 	m_right = DVector3(1, 0, 0);
 	m_up = DVector3(0, 1, 0);
 	m_forward = DVector3(0, 0, 1);
@@ -255,7 +256,7 @@ void DTransform::SetLocalScale(DVector3 localScale)
 		return;
 	m_localScale = localScale;
 	
-	m_scaleChangedMark = SpaceDefine_World;
+	m_scaleChangedMark = SpaceDefine_Local;
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
 }
@@ -422,21 +423,29 @@ void DTransform::SetParent(DTransform * parent, bool useLocalInfo)
 	//父节点孩子数量+1
 	parent->m_childCount += 1;
 
+	RefreshPosition();
+	RefreshRotation();
+	RefreshScale();
+
 	//由于设置了父节点，导致矩阵发生变化
 	if (useLocalInfo) 
-	{
-		m_positionChangedMark = SpaceDefine_World;
-		m_rotationChangedMark = SpaceDefine_World;
-		m_scaleChangedMark = SpaceDefine_World;
-	}
-	else
 	{
 		m_positionChangedMark = SpaceDefine_Local;
 		m_rotationChangedMark = SpaceDefine_Local;
 		m_scaleChangedMark = SpaceDefine_Local;
+	}
+	else
+	{
+		
+
+		m_positionChangedMark = SpaceDefine_World;
+		m_rotationChangedMark = SpaceDefine_World;
+		m_scaleChangedMark = SpaceDefine_World;
 		//m_lossyScale = m_localScale;
 	}
+	//m_isW2LMatrixChanged = true;
 	m_isW2LMatrixChanged = true;
+	m_isL2WMatrixChanged = true;
 }
 
 DTransform * DTransform::GetParent()
@@ -495,6 +504,19 @@ void DTransform::Release()
 	m_firstChild = NULL;
 	m_nextNeighbor = NULL;
 	m_parent = NULL;
+}
+
+void DTransform::SetLossyScale(float x, float y, float z)
+{
+	if (IS_FLOAT_EQUAL(m_lossyScale.x, x) && IS_FLOAT_EQUAL(m_lossyScale.y, y) && IS_FLOAT_EQUAL(m_lossyScale.z, z))
+		return;
+	m_lossyScale.x = x;
+	m_lossyScale.y = y;
+	m_lossyScale.z = z;
+
+	m_scaleChangedMark = SpaceDefine_World;
+	m_isW2LMatrixChanged = true;
+	m_isL2WMatrixChanged = true;
 }
 
 void DTransform::RefreshLocalToWorldMatrix()

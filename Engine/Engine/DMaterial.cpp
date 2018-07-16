@@ -4,6 +4,7 @@
 DMaterial::DMaterial(DShader * shader)
 {
 	m_shader = shader;
+	m_constantTable = new DShaderConstantTable();
 }
 
 DMaterial::~DMaterial()

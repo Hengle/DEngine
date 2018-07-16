@@ -219,6 +219,8 @@ void TestScene::OnLoad()
 void TestScene::TestLoad()
 {
 	DMaterial* skymat = DRes::Load<DMaterial>(DEFAULT_GROUP, SKY_MAT);
+
+	m_testColorMat = DRes::Load<DMaterial>(DEFAULT_GROUP, COLOR_MAT);
 	/*testcolormesh = new DMesh();
 	float* vs = new float[12];
 	unsigned long* is = new unsigned long[4];
@@ -400,9 +402,9 @@ void TestScene::OnUnLoad()
 
 void TestScene::OnRender()
 {
-	/*DGraphics::GlSetMaterial(testcolormat);
+	m_testColorMat->SetPass(0);
+	//DGraphics::GlSetMaterial(testcolormat);
 	DGraphics::GlPushMatrix();
-	DGraphics::GlLoadIndentity();
 
 	DGraphics::GlBegin();
 
@@ -417,7 +419,7 @@ void TestScene::OnRender()
 
 	DGraphics::GlEnd();
 
-	DGraphics::GlPopMatrix();*/
+	DGraphics::GlPopMatrix();
 
 
 	//testd->Render();

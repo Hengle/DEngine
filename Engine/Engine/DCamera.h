@@ -62,6 +62,7 @@ public:
 	float GetOrthoSize() const;
 	/*返回当前相机视口区域*/
 	void GetViewPort(DRect&) const;
+	int GetSortOrder() const;
 	/*获取相机滤镜*/
 	ICameraFilter* GetFilter() const;
 	DMaterial* GetSkuBox() const;
@@ -83,6 +84,7 @@ public:
 	void SetSkyBox(DMaterial*);
 	/*设置相机视口*/
 	void SetViewPort(DRect&);
+	void SetSortOrder(int);
 	void ClearSkyBox();
 	void ClearFilter();
 	DRenderTexture* GetRenderTexture();
@@ -100,6 +102,8 @@ protected:
 	virtual void OnRender();
 
 private:
+	void ForwardMoveCameraNode();
+	void BackwardMoveCameraNode();
 	void BeginRender();
 	void EndRender();
 
@@ -123,7 +127,8 @@ private:
 	/*保存当前的相机节点*/
 	DCameraNode* m_node;
 	/*当前相机额外渲染纹理类型*/
-	unsigned int m_additionalTextureType;
+
+	int m_sortOrder;
 };
 
 static DCamera* sCurrent;

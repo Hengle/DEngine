@@ -16,5 +16,5 @@ void GameFrame::OnInit()
 {
 	RegisterScene(new TestScene(5, "tst"));
 	RegisterScene(new GlTestScene(6, "glsce"));
-	ChangeScene(5);
+	ChangeScene(6);
 }

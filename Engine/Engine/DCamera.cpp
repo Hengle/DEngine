@@ -27,7 +27,7 @@ DCamera::DCamera() : DSceneObject()
 	m_isProjectionChanged = true;
 	//m_position = D3DXVECTOR3(2.178069f, 3.102766f, -0.4222083f);
 	m_backgroundColor = dcol_blue;
-
+	m_sortOrder = 0;
 	m_node = 0;
 }
 
@@ -93,6 +93,11 @@ float DCamera::GetOrthoSize()const
 void DCamera::GetViewPort(DRect & rect) const
 {
 	rect = m_viewPort;
+}
+
+int DCamera::GetSortOrder() const
+{
+	return m_sortOrder;
 }
 
 ICameraFilter * DCamera::GetFilter() const
@@ -186,6 +191,19 @@ void DCamera::SetViewPort(DRect & viewPort)
 	m_viewPort = viewPort;
 }
 
+void DCamera::SetSortOrder(int sortOrder)
+{
+	m_sortOrder = sortOrder;
+	if (m_node->pre != NULL && m_node->pre->camera->GetSortOrder() > m_sortOrder)
+	{
+
+	}
+	else if(m_node->next != NULL && m_node->next->camera->GetSortOrder() < m_sortOrder)
+	{
+
+	}
+}
+
 void DCamera::ClearSkyBox()
 {
 	m_skyBoxMaterial = NULL;
@@ -229,8 +247,34 @@ bool DCamera::OnInit()
 	if (camNode == NULL)
 		camNode = m_node;
 	else {
-		camNode->next = m_node;
-		m_node->pre = camNode;
+		if (camNode->camera->GetSortOrder() >= m_sortOrder)
+		{
+			m_node->next = camNode;
+			camNode->pre = m_node;
+			camNode = m_node;
+		}
+		else
+		{
+			DCameraNode* node = camNode;
+			while (node != NULL && node->camera->GetSortOrder() < m_sortOrder)
+			{
+				if (node->next == NULL)
+				{
+					node->next = m_node;
+					m_node->pre = node;
+					break;
+				}
+				if (node->next->camera->GetSortOrder() >= m_sortOrder)
+				{
+					m_node->next = node->next;
+					node->next->pre = m_node;
+					node->next = m_node;
+					m_node->pre = node;
+					break;
+				}
+				node = node->next;
+			}
+		}
 	}
 	DSystem::GetSceneMgr()->GetCurrentScene()->SetCameraNode(camNode);
 	return true;
@@ -276,6 +320,34 @@ void DCamera::OnRender()
 	else
 		DScene::Draw(true);
 	EndRender();
+}
+
+void DCamera::ForwardMoveCameraNode()
+{
+	if (m_node->pre != NULL && m_node->pre->camera->GetSortOrder() > m_sortOrder)
+	{
+		DCameraNode* pre = m_node->pre;
+		pre->next = m_node->next;
+		m_node->pre = pre->pre;
+		pre->pre = m_node;
+		ForwardMoveCameraNode();
+	}
+	else if (m_node->pre == NULL)
+	{
+		DSystem::GetSceneMgr()->GetCurrentScene()->SetCameraNode(m_node);
+	}
+}
+
+void DCamera::BackwardMoveCameraNode()
+{
+	if (m_node->next != NULL && m_node->next->camera->GetSortOrder() < m_sortOrder)
+	{
+		DCameraNode* next = m_node->next;
+		next->pre = m_node->pre;
+		m_node->next = next->next;
+		next->next = m_node;
+		BackwardMoveCameraNode();
+	}
 }
 
 void DCamera::BeginRender()

@@ -37,5 +37,6 @@ private:
 	float m_lookDistance;
 	/*DMesh* testcolormesh;
 	DDisplayObject* testcolorobj;*/
+	DMaterial* m_testColorMat;
 	
 };

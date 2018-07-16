@@ -16,6 +16,7 @@ void GlTestScene::OnLoad()
 {
 	//m_testcolorshader = DRes::Load<DShader>(DEFAULT_GROUP, COLOR_SHADER);
 	//m_testcolormat = new DMaterial(m_testcolorshader);
+	m_testcolormat = DRes::Load<DMaterial>(DEFAULT_GROUP, COLOR_MAT);
 
 	cam = new DCamera();
 	cam->Create();
@@ -42,6 +43,7 @@ void GlTestScene::OnUnLoad()
 		delete m_testcolorshader;
 		m_testcolorshader = NULL;
 	}*/
+	DRes::UnLoadGroup(DEFAULT_GROUP);
 }
 
 void GlTestScene::OnRender()

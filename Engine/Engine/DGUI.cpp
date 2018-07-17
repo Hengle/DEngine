@@ -4,16 +4,20 @@
 
 void DGUI::BeginWindow(const char * windowName)
 {
-	ImGui::Begin(windowName);
+	if (DSystem::GetGraphicsMgr()->GetGUICore() != NULL)
+		ImGui::Begin(windowName);
 }
 
 void DGUI::EndWindow()
 {
-	ImGui::End();
+	if (DSystem::GetGraphicsMgr()->GetGUICore() != NULL)
+		ImGui::End();
 }
 
 void DGUI::Label(const char * text, ...)
 {
+	if (DSystem::GetGraphicsMgr()->GetGUICore() == NULL)
+		return;
 	va_list args;
 	va_start(args, text);
 	ImGui::TextV(text, args);
@@ -22,6 +26,8 @@ void DGUI::Label(const char * text, ...)
 
 void DGUI::Label(const DColor & color, const char * text, ...)
 {
+	if (DSystem::GetGraphicsMgr()->GetGUICore() == NULL)
+		return;
 	ImVec4 col;
 	col.x = color.r;
 	col.y = color.g;
@@ -35,6 +41,8 @@ void DGUI::Label(const DColor & color, const char * text, ...)
 
 bool DGUI::Button(const char * text, const DVector2 & size)
 {
+	if (DSystem::GetGraphicsMgr()->GetGUICore() == NULL)
+		return false;
 	ImVec2 vec;
 	vec.x = size.x;
 	vec.y = size.y;
@@ -43,5 +51,7 @@ bool DGUI::Button(const char * text, const DVector2 & size)
 
 bool DGUI::IsGUIActive()
 {
+	if (DSystem::GetGraphicsMgr()->GetGUICore() == NULL)
+		return false;
 	return ImGui::IsAnyItemActive();
 }

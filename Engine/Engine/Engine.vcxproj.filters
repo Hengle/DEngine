@@ -55,6 +55,12 @@
     <Filter Include="头文件\Core\D3D11Core">
       <UniqueIdentifier>{cfab7024-3b35-4a2e-8b48-0eb006876e8d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\Core\OpenGLCore">
+      <UniqueIdentifier>{707acc3e-33dd-402e-b4f5-9a159664eb99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Core\OpenGLCore">
+      <UniqueIdentifier>{cd5c06c9-1e99-4013-a544-05a2c112e617}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -67,9 +73,6 @@
       <Filter>头文件\Engine</Filter>
     </ClInclude>
     <ClInclude Include="DSystem.h">
-      <Filter>头文件\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="DGLCore.h">
       <Filter>头文件\Core</Filter>
     </ClInclude>
     <ClInclude Include="imconfig.h">
@@ -243,6 +246,12 @@
     <ClInclude Include="DGeometryRes11.h">
       <Filter>头文件\Core\D3D11Core</Filter>
     </ClInclude>
+    <ClInclude Include="DGLCore.h">
+      <Filter>头文件\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="DOpenGLCore.h">
+      <Filter>头文件\Core\OpenGLCore</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DMath.cpp">
@@ -403,6 +412,9 @@
     </ClCompile>
     <ClCompile Include="DGeometry.cpp">
       <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="DOpenGLCore.cpp">
+      <Filter>源文件\Core\OpenGLCore</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -199,6 +199,7 @@ class DGLCore
 public:
 	DGLCore();
 	~DGLCore();
+	virtual bool PreInitWindow(int width, int height, bool fullscreen, HWND&) = 0;
 	/*初始化图形库*/
 	virtual bool Init(int width, int height, bool fullscreen, HWND);
 	/*销毁图形库*/

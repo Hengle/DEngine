@@ -151,6 +151,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="EmptyScene.h" />
     <ClInclude Include="GameFrame.h" />
     <ClInclude Include="GlTestScene.h" />
     <ClInclude Include="stdafx.h" />
@@ -160,6 +161,7 @@
     <ClInclude Include="TestScene.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="EmptyScene.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameFrame.cpp" />
     <ClCompile Include="GlTestScene.cpp" />

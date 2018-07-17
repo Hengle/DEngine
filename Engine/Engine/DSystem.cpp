@@ -33,7 +33,7 @@ bool DSystem::Init()
 	m_timeMgr->Init();
 
 	m_graphicsMgr = new DGraphics();
-	if (!m_graphicsMgr->Init(width, height, false, m_hwnd, DGRAPHICS_API_D3D11))
+	if (!m_graphicsMgr->Init(width, height, false, m_hwnd, DGRAPHICS_API_OPENGL))
 	{
 		return false;
 	}
@@ -146,7 +146,7 @@ void DSystem::InitWindow(int& width, int& height, bool fullScreen)
 	wnd.cbSize = sizeof(wnd);
 	wnd.cbClsExtra = 0;
 	wnd.cbWndExtra = 0;
-	wnd.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
+	wnd.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
 	wnd.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wnd.hIcon = LoadIcon(NULL, IDI_WINLOGO);
 	wnd.hIconSm = wnd.hIcon;

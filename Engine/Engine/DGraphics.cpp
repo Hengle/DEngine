@@ -3,6 +3,7 @@
 #include "D3D11Core.h"
 #include "D3D10Core.h"
 #include "D3D9Core.h"
+#include "DOpenGLCore.h"
 #include "DImGUICore11.h"
 #include "DImGUICore10.h"
 #include "DImGUICore9.h"
@@ -19,6 +20,11 @@ DGraphics::DGraphics()
 
 DGraphics::~DGraphics()
 {
+}
+
+bool DGraphics::PreInitWindow(int width, int height, bool fullscreen, HWND &)
+{
+	return false;
 }
 
 bool DGraphics::Init(int width, int height, bool fullScreen, HWND hwnd, DGraphicsAPI api)
@@ -57,6 +63,15 @@ bool DGraphics::Init(int width, int height, bool fullScreen, HWND hwnd, DGraphic
 		((DImGUICore9*)m_GUI)->Init(hwnd, gl->GetDevice());
 		m_GL = gl;
 	}
+	else if (api == DGRAPHICS_API_OPENGL)
+	{
+		DOpenGLCore* gl = new DOpenGLCore();
+		if (!gl->Init(width, height, fullScreen, hwnd))
+		{
+			return false;
+		}
+		m_GL = gl;
+	}
 
 	m_glDrawer = new DGLDrawer();
 
@@ -71,13 +86,15 @@ bool DGraphics::Frame()
 
 	time->Update();
 
-	m_GUI->NewFrame();
+	if(m_GUI != NULL)
+		m_GUI->NewFrame();
 
 	sceneManager->DrawGUI();
 
 	logManager->DrawMsgs();
 
-	m_GUI->EndFrame();
+	if (m_GUI != NULL)
+		m_GUI->EndFrame();
 
 	while (time->BeginFixedUpdateLoop())
 	{
@@ -90,7 +107,8 @@ bool DGraphics::Frame()
 	m_drawCall = 0;
 	sceneManager->RenderScene();
 
-	m_GUI->Render();
+	if (m_GUI != NULL)
+		m_GUI->Render();
 	//m_GL->EndRender();
 
 	DScene::DrawShadow();

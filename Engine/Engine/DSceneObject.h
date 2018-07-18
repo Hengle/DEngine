@@ -14,24 +14,26 @@ public:
 	void Destroy();
 	void Update();
 	void FixedUpdate();
-	void Render();
-	void Cull();
+	void RenderObject();
+	bool CullObject();
 	DTransform* GetTransform() const;
 	bool IsInitialized();
+	bool IsDestroyed();
 
 protected:
 	virtual bool OnInit() = 0;
 	virtual void OnDestroy() = 0;
 	virtual void OnUpdate() = 0;
 	virtual void OnFixedUpdate() = 0;
-	virtual void OnRender() {}
-	virtual void OnCull() {}
+	virtual void OnRenderObject() {}
+	virtual bool OnCullObject() {}
 
 protected:
 	DTransform* m_transform;
 
 private:
 	bool m_isInitialized;
+	bool m_isDestroyed;
 
 };
 

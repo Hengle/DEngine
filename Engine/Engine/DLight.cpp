@@ -18,6 +18,17 @@ DLight::~DLight()
 {
 }
 
+void DLight::RenderShadow()
+{
+	float w = m_shadowMap->GetWidth();
+	float h = m_shadowMap->GetHeight();
+	//DGraphics::ResetViewPort();
+	DGraphics::SetViewPort(0, 0, w, h);
+	BeginRenderShadow();
+	DScene::Draw(false, m_shadowShader);
+	EndRenderShadow();
+}
+
 void DLight::GetColor(DColor& color)
 {
 	color = m_color;
@@ -129,17 +140,6 @@ void DLight::OnUpdate()
 
 void DLight::OnFixedUpdate()
 {
-}
-
-void DLight::OnRender()
-{
-	float w = m_shadowMap->GetWidth();
-	float h = m_shadowMap->GetHeight();
-	//DGraphics::ResetViewPort();
-	DGraphics::SetViewPort(0, 0, w, h);
-	BeginRenderShadow();
-	DScene::Draw(false, m_shadowShader);
-	EndRenderShadow();
 }
 
 void DLight::BeginRenderShadow()

@@ -36,6 +36,16 @@ DCamera::~DCamera()
 {
 }
 
+void DCamera::Render()
+{
+	BeginRender();
+	if (m_replacementShader != NULL)
+		DScene::Draw(true, m_replacementShader);
+	else
+		DScene::Draw(true);
+	EndRender();
+}
+
 void DCamera::RenderFilter()
 {
 	if (m_filter != NULL && m_renderTexture != NULL)
@@ -310,16 +320,6 @@ void DCamera::OnUpdate()
 
 void DCamera::OnFixedUpdate()
 {
-}
-
-void DCamera::OnRender()
-{
-	BeginRender();
-	if (m_replacementShader != NULL)
-		DScene::Draw(true, m_replacementShader);
-	else
-		DScene::Draw(true);
-	EndRender();
 }
 
 void DCamera::ForwardMoveCameraNode()

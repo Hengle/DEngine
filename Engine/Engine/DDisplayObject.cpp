@@ -13,28 +13,6 @@ DDisplayObject::~DDisplayObject()
 {
 }
 
-void DDisplayObject::Render(DShader* replaceShader)
-{
-	if (m_geometry != NULL && m_material != NULL && m_isVisible)
-	{
-		DMatrix4x4 world;
-		//DCamera* cur;
-		//DCamera::GetCurrentCamera(&cur);
-		m_transform->GetLocalToWorld(world);
-		if (replaceShader != NULL)
-		{
-			DShader* current = m_material->GetShader();
-			m_material->SetShader(replaceShader);
-			DGraphics::DrawGeometry(m_geometry, world, m_material);
-			m_material->SetShader(current);
-		}
-		else
-		{
-			DGraphics::DrawGeometry(m_geometry, world, m_material);
-		}
-	}
-}
-
 void DDisplayObject::SetVisible(bool visible)
 {
 	m_isVisible = visible;
@@ -64,11 +42,7 @@ void DDisplayObject::OnFixedUpdate()
 {
 }
 
-void DDisplayObject::OnRender()
-{
-}
-
-void DDisplayObject::OnCull()
+void DDisplayObject::OnRenderObject()
 {
 	if (m_geometry != NULL && m_material != NULL && m_isVisible)
 	{
@@ -92,4 +66,9 @@ void DDisplayObject::OnCull()
 			DGraphics::DrawGeometry(m_geometry, world, m_material);
 		}
 	}
+}
+
+bool DDisplayObject::OnCullObject()
+{
+	return true;
 }

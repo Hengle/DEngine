@@ -25,6 +25,7 @@ class DLight : public DSceneObject
 public:
 	DLight();
 	~DLight();
+	void RenderShadow();
 	void GetColor(DColor&);
 	void SetColor(float, float, float, float);
 	void SetColor(DColor);
@@ -40,7 +41,6 @@ protected:
 	virtual void OnDestroy();
 	virtual void OnUpdate();
 	virtual void OnFixedUpdate();
-	virtual void OnRender();
 
 private:
 	void BeginRenderShadow();

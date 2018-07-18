@@ -112,3 +112,10 @@ enum DShaderProgramType
 	DShaderProgram_Vertex = 0,
 	DShaderProgram_Pixel = 1,
 };
+
+/*渲染队列*/
+enum DRenderQueue
+{
+	DRenderQueue_Opaque,
+	DRenderQueue_Transparent,
+};

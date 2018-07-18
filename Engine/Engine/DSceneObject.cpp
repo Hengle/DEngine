@@ -4,6 +4,7 @@
 DSceneObject::DSceneObject()
 {
 	m_isInitialized = false;
+	m_isDestroyed = false;
 	m_transform = new DTransform(this);
 }
 
@@ -20,6 +21,8 @@ void DSceneObject::Create()
 
 void DSceneObject::Destroy()
 {
+	if (m_isDestroyed)
+		return;
 	if (m_transform != NULL)
 	{
 		DTransform* child = m_transform->GetFirstChild();
@@ -37,30 +40,32 @@ void DSceneObject::Destroy()
 		m_transform = NULL;
 	}
 	OnDestroy();
+	m_isDestroyed = true;
 }
 
 void DSceneObject::Update()
 {
-	if (m_isInitialized)
+	if (m_isInitialized && !m_isDestroyed)
 		OnUpdate();
 }
 
 void DSceneObject::FixedUpdate()
 {
-	if (m_isInitialized)
+	if (m_isInitialized && !m_isDestroyed)
 		OnFixedUpdate();
 }
 
-void DSceneObject::Render()
+void DSceneObject::RenderObject()
 {
-	if (m_isInitialized)
-		OnRender();
+	if (m_isInitialized && !m_isDestroyed)
+		OnRenderObject();
 }
 
-void DSceneObject::Cull()
+bool DSceneObject::CullObject()
 {
-	if (m_isInitialized)
-		OnCull();
+	if (m_isInitialized && !m_isDestroyed)
+		return OnCullObject();
+	return false;
 }
 
 DTransform * DSceneObject::GetTransform() const
@@ -71,4 +76,9 @@ DTransform * DSceneObject::GetTransform() const
 bool DSceneObject::IsInitialized()
 {
 	return m_isInitialized;
+}
+
+bool DSceneObject::IsDestroyed()
+{
+	return m_isDestroyed;
 }

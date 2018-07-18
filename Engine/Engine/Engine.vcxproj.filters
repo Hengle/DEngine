@@ -252,6 +252,9 @@
     <ClInclude Include="DOpenGLCore.h">
       <Filter>头文件\Core\OpenGLCore</Filter>
     </ClInclude>
+    <ClInclude Include="DRenderer.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DMath.cpp">
@@ -415,6 +418,9 @@
     </ClCompile>
     <ClCompile Include="DOpenGLCore.cpp">
       <Filter>源文件\Core\OpenGLCore</Filter>
+    </ClCompile>
+    <ClCompile Include="DRenderer.cpp">
+      <Filter>源文件\Engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

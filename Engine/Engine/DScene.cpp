@@ -285,7 +285,7 @@ void DScene::DrawShadow()
 	DLightNode* node = current->m_lightNode;
 	while (node != NULL)
 	{
-		node->light->Render();
+		node->light->RenderShadow();
 		node = node->next;
 	}
 }
@@ -296,8 +296,9 @@ void DScene::UpdateSceneObject(DTransform * node)
 	while (child != NULL)
 	{
 		DSceneObject* sobj = child->GetSceneObject();
-		if (sobj != NULL)
+		if (sobj != NULL) {
 			sobj->Update();
+		}
 		UpdateSceneObject(child);
 
 		child = child->GetNextNegibhor();

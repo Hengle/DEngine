@@ -43,6 +43,7 @@ public:
 	~DCamera();
 	//void BeginRender();
 	//void EndRender();
+	void Render();
 	/*渲染滤镜*/
 	void RenderFilter();
 	/*返回当前相机的视空间矩阵*/
@@ -99,7 +100,6 @@ protected:
 	virtual void OnDestroy();
 	virtual void OnUpdate();
 	virtual void OnFixedUpdate();
-	virtual void OnRender();
 
 private:
 	void ForwardMoveCameraNode();

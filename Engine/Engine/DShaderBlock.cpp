@@ -121,6 +121,10 @@ void DShaderBlock::InterpretDesc(ifstream & ifile, DSubShader * subshader)
 			{
 				InterpretCompileTarget(ifile, subshader);
 			}
+			else if (strcmp(read, "Queue") == 0)
+			{
+				InterpretRenderQueue(ifile, subshader);
+			}
 		}
 	}
 }
@@ -161,6 +165,16 @@ void DShaderBlock::InterpretCompileTarget(ifstream & ifile, DSubShader* subshade
 			}
 		}
 	}
+}
+
+void DShaderBlock::InterpretRenderQueue(ifstream &ifile, DSubShader * subShader)
+{
+	char read[64];
+	ifile >> read;
+	if (strcmp(read, "Opaque") == 0)
+		subShader->SetRenderQueue(DRenderQueue_Opaque);
+	else if (strcmp(read, "Transparent") == 0)
+		subShader->SetRenderQueue(DRenderQueue_Transparent);
 }
 
 void DShaderBlock::InterpretPass(ifstream & ifile, DSubShader* subshader)
@@ -239,12 +253,6 @@ void DShaderBlock::InterpretTags(ifstream & ifile, DShaderPass* pass)
 				ifile >> funcname;
 				if (pass != NULL)
 					pass->SetPixelFuncName(funcname);
-			}
-			else if (strcmp(read, "Queue") == 0)
-			{
-				ifile >> read;
-				if (pass != NULL)
-					pass->SetRenderQueue(read);
 			}
 		}
 	}
@@ -448,9 +456,15 @@ DShaderPass * DShaderBlock::GetPass(int index)
 	return m_supportShader->GetPass(index);
 }
 
+DRenderQueue DShaderBlock::GetRenderQueue()
+{
+	return m_supportShader->GetRenderQueue();;
+}
+
 DSubShader::DSubShader()
 {
 	m_compileTarget = 0;
+	m_renderQueue = DRenderQueue_Opaque;
 }
 
 void DSubShader::Release()
@@ -481,9 +495,19 @@ bool DSubShader::IsSupport(DGraphicsAPI api)
 	return (m_compileTarget & api) != 0;
 }
 
+void DSubShader::SetRenderQueue(DRenderQueue renderQueue)
+{
+	m_renderQueue = renderQueue;
+}
+
 int DSubShader::GetPassCount()
 {
 	return m_passes.size();
+}
+
+DRenderQueue DSubShader::GetRenderQueue()
+{
+	return m_renderQueue;
 }
 
 DShaderPass * DSubShader::GetPass(int index)
@@ -513,7 +537,6 @@ DShaderPass::DShaderPass()
 	m_stencilPass = DRSStencilOp_Keep;
 	m_stencilFail = DRSStencilOp_Keep;
 	m_stencilZFail = DRSStencilOp_Keep;
-	m_renderQueue = DRenderQueue_Opaque;
 	m_passEnable = true;
 }
 
@@ -654,14 +677,6 @@ void DShaderPass::SetPixelFuncName(char *pixelFuncName)
 	int len = strlen(pixelFuncName) + 1;
 	m_pixelFuncName = new char[len];
 	strcpy_s(m_pixelFuncName, len, pixelFuncName);
-}
-
-void DShaderPass::SetRenderQueue(char* queue)
-{
-	if (strcmp(queue, "Opaque") == 0)
-		m_renderQueue = DRenderQueue_Opaque;
-	else if (strcmp(queue, "Transparent") == 0)
-		m_renderQueue == DRenderQueue_Transparent;
 }
 
 void DShaderPass::CompileShader(const char * content)

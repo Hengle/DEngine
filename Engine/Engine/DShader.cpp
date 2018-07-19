@@ -384,6 +384,13 @@ int DShader::GetPassCount()
 	return 0;
 }
 
+DRenderQueue DShader::GetRenderQueue()
+{
+	if (m_shaderBlock != NULL)
+		return m_shaderBlock->GetRenderQueue();
+	return DRenderQueue_Opaque;
+}
+
 bool DShader::IsPassEnable(int index)
 {
 	if (m_shaderBlock != NULL)

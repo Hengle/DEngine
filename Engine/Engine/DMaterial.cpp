@@ -143,6 +143,13 @@ int DMaterial::GetPassCount()
 	return 0;
 }
 
+DRenderQueue DMaterial::GetRenderQueue()
+{
+	if (m_shader != NULL)
+		return m_shader->GetRenderQueue();
+	return DRenderQueue_Opaque;
+}
+
 void DMaterial::Destroy()
 {
 	m_shader = NULL;

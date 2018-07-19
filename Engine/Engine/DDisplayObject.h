@@ -31,8 +31,7 @@ protected:
 	virtual void OnDestroy();
 	virtual void OnUpdate();
 	virtual void OnFixedUpdate();
-	virtual void OnRenderObject();
-	virtual bool OnCullObject();
+	virtual bool OnCullObject(DCuller*, DRender*);
 
 protected:
 	DGeometry* m_geometry;

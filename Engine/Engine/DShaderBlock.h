@@ -28,7 +28,6 @@ public:
 	void SetStencilZFail(char*);
 	void SetVertexFuncName(char*);
 	void SetPixelFuncName(char*);
-	void SetRenderQueue(char*);
 	void CompileShader(const char*);
 	//DShaderRes* GetShaderRes();
 	DShaderProgram* GetVertexShader();
@@ -67,7 +66,6 @@ private:
 	char* m_pixelFuncName;
 	
 	bool m_passEnable;
-	DRenderQueue m_renderQueue;
 };
 
 class DSubShader
@@ -78,12 +76,15 @@ public:
 	void AddCompileTarget(DGraphicsAPI api);
 	void AddPass(DShaderPass*);
 	bool IsSupport(DGraphicsAPI api);
+	void SetRenderQueue(DRenderQueue);
 	int GetPassCount();
+	DRenderQueue GetRenderQueue();
 	DShaderPass* GetPass(int);
 
 private:
 	int m_compileTarget;
 	vector<DShaderPass*> m_passes;
+	DRenderQueue m_renderQueue;
 };
 
 /*shader代码块*/
@@ -99,6 +100,7 @@ public:
 	bool IsSupported();
 	int GetPassCount();
 	DShaderPass* GetPass(int);
+	DRenderQueue GetRenderQueue();
 
 private:
 	/*解释sub shader块*/
@@ -107,6 +109,8 @@ private:
 	void InterpretDesc(ifstream&, DSubShader*);
 	/*解释编译目标块*/
 	void InterpretCompileTarget(ifstream&, DSubShader*);
+	/*解释渲染队列*/
+	void InterpretRenderQueue(ifstream&, DSubShader*);
 	/*解释pass块*/
 	void InterpretPass(ifstream&, DSubShader*);
 	/*解释标签块*/

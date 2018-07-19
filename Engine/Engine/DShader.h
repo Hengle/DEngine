@@ -39,6 +39,7 @@ public:
 	void Draw(int);
 	int GetVertexUsage(int);
 	int GetPassCount();
+	DRenderQueue GetRenderQueue();
 	bool IsPassEnable(int);
 	void SetPassEnable(int, bool);
 	static DShader* Create(char*);

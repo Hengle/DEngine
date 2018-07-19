@@ -30,14 +30,14 @@ public:
 	DLightNode* GetLightNode();
 	void SetLightNode(DLightNode*);
 
-	static void Draw(bool callOnRender, DShader* replaceShader = NULL);
+	static void Draw(bool callOnRender, DCuller* culler, DRender* render);
 	static void DrawShadow();
 
 private:
 	void UpdateSceneObject(DTransform* node);
 	void FixedUpdateSceneObject(DTransform* node);
 	void UnLoadSceneObject(DTransform* node);
-	void DrawSceneObject(DTransform* node);
+	void DrawSceneObject(DTransform* node, DCuller* culler, DRender* render);
 
 protected:
 	virtual void OnGUI();
@@ -53,9 +53,6 @@ protected:
 	//DCamera* GetCamera();
 	//void SetLight(DLight*);
 	//DLight* GetLight();
-
-private:
-	void DrawScene(bool callOnRender, DShader* replaceShader);
 
 protected:
 	//std::vector<DTransform*>* m_transforms;

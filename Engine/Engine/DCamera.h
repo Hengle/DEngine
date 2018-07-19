@@ -3,6 +3,8 @@
 #include "DTexture.h"
 #include "DMaterial.h"
 #include "DEngineDefine.h"
+#include "DRender.h"
+#include "DCuller.h"
 
 /*相机额外渲染贴图类型*/
 enum DCameraAdditionalTextureType
@@ -130,6 +132,9 @@ private:
 	/*当前相机额外渲染纹理类型*/
 
 	int m_sortOrder;
+
+	DRender* m_render;
+	DCuller* m_culler;
 };
 
 static DCamera* sCurrent;

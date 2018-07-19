@@ -30,6 +30,7 @@ public:
 	int GetVertexUsage(int);
 	/*返回shader pass数量*/
 	int GetPassCount();
+	DRenderQueue GetRenderQueue();
 	virtual void Destroy();
 
 

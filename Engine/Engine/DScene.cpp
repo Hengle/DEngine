@@ -47,7 +47,6 @@ void DScene::Render()
 	while (node != NULL)
 	{
 		node->camera->Render();
-		node->camera->RenderFilter();
 		node = node->next;
 	}
 	/*if (m_camera != NULL)
@@ -270,11 +269,17 @@ void DScene::SetLightNode(DLightNode * lightNode)
 	m_lightNode = lightNode;
 }
 
-void DScene::Draw(bool callOnRender, DShader* replaceShader)
+void DScene::Draw(bool callOnRender, DCuller * culler, DRender * render)
 {
 	DScene* current = DSystem::GetSceneMgr()->GetCurrentScene();
 	if (current != NULL)
-		current->DrawScene(callOnRender, replaceShader);
+	{
+		if (current->m_rootTransform != NULL)
+			current->DrawSceneObject(current->m_rootTransform, culler, render);
+
+		if (callOnRender)
+			current->OnRender();
+	}
 }
 
 void DScene::DrawShadow()
@@ -338,15 +343,16 @@ void DScene::UnLoadSceneObject(DTransform * node)
 	}
 }
 
-void DScene::DrawSceneObject(DTransform * node)
+void DScene::DrawSceneObject(DTransform * node, DCuller * culler, DRender * render)
 {
 	DTransform* child = node->GetFirstChild();
 	while (child != NULL)
 	{
 		DSceneObject* sobj = child->GetSceneObject();
-		if (sobj != NULL)
-			sobj->Cull();
-		DrawSceneObject(child);
+		if (sobj != NULL) {
+			sobj->CullObject(culler, render);
+		}
+		DrawSceneObject(child, culler, render);
 
 		child = child->GetNextNegibhor();
 	}
@@ -410,25 +416,3 @@ void DScene::OnUnLoad()
 //{
 //	return m_light;
 //}
-
-void DScene::DrawScene(bool callOnRender, DShader* replaceShader)
-{
-	DGraphics::SetGlobalRenderShader(replaceShader);
-
-	if (m_rootTransform != NULL)
-		DrawSceneObject(m_rootTransform);
-
-	/*if (m_transforms != NULL) 
-	{
-		int i, size;
-		size = m_transforms->size();
-		for (int i = 0; i < size; i++) 
-		{
-			DTransform* trans = m_transforms->at(i);
-			trans->GetSceneObject()->Cull();
-		}
-	}*/
-	if (callOnRender)
-		OnRender();
-	DGraphics::ClearGlobalRenderShader();
-}

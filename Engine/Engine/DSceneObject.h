@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "DObject.h"
 #include "DTransform.h"
+#include "DCuller.h"
+#include "DRender.h"
 
 class DTransform;
 
@@ -14,8 +16,7 @@ public:
 	void Destroy();
 	void Update();
 	void FixedUpdate();
-	void RenderObject();
-	bool CullObject();
+	bool CullObject(DCuller*, DRender*);
 	DTransform* GetTransform() const;
 	bool IsInitialized();
 	bool IsDestroyed();
@@ -25,8 +26,7 @@ protected:
 	virtual void OnDestroy() = 0;
 	virtual void OnUpdate() = 0;
 	virtual void OnFixedUpdate() = 0;
-	virtual void OnRenderObject() {}
-	virtual bool OnCullObject() {}
+	virtual bool OnCullObject(DCuller*, DRender*) { return false; }
 
 protected:
 	DTransform* m_transform;

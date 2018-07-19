@@ -2,14 +2,14 @@
 #include "DDisplayObject.h"
 #include <queue>
 
-class DRenderer
+class DRender
 {
 public:
-	DRenderer();
-	~DRenderer();
+	DRender();
+	~DRender();
 	void PushDisplayObject(DDisplayObject*, DRenderQueue);
 	void Render();
-	void ShutDown();
+	void Release();
 
 private:
 	std::queue<DDisplayObject*> m_opaqueQueue;

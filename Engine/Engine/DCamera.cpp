@@ -44,6 +44,8 @@ void DCamera::Render()
 	else
 		DScene::Draw(true);
 	EndRender();
+
+	RenderFilter();
 }
 
 void DCamera::RenderFilter()

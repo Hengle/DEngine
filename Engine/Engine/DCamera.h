@@ -44,8 +44,7 @@ public:
 	//void BeginRender();
 	//void EndRender();
 	void Render();
-	/*渲染滤镜*/
-	void RenderFilter();
+	
 	/*返回当前相机的视空间矩阵*/
 	void GetViewMatrix(DMatrix4x4& out) const;
 	/*返回当前相机的投影空间矩阵*/
@@ -102,6 +101,8 @@ protected:
 	virtual void OnFixedUpdate();
 
 private:
+	/*渲染滤镜*/
+	void RenderFilter();
 	void ForwardMoveCameraNode();
 	void BackwardMoveCameraNode();
 	void BeginRender();

@@ -282,6 +282,10 @@ void DGraphics::DrawGeometry(DGeometry * geometry, const DMatrix4x4 & matrix, DM
 
 }
 
+void DGraphics::PrepareDraw(DDisplayObject *, DRenderQueue)
+{
+}
+
 void DGraphics::DrawTexture(DTexture * texture, DMaterial * material)
 {
 	if (DSystem::GetGraphicsMgr()->m_screenPlane == NULL)

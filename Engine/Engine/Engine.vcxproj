@@ -145,6 +145,7 @@
     <ClInclude Include="D3DCore.h" />
     <ClInclude Include="DCamera.h" />
     <ClInclude Include="DColor.h" />
+    <ClInclude Include="DCuller.h" />
     <ClInclude Include="DDisplayObject.h" />
     <ClInclude Include="DEngineDefine.h" />
     <ClInclude Include="DFrameBase.h" />
@@ -211,6 +212,7 @@
     <ClCompile Include="D3DCore.cpp" />
     <ClCompile Include="DCamera.cpp" />
     <ClCompile Include="DColor.cpp" />
+    <ClCompile Include="DCuller.cpp" />
     <ClCompile Include="DDisplayObject.cpp" />
     <ClCompile Include="DFrameBase.cpp" />
     <ClCompile Include="DGLCore.cpp" />

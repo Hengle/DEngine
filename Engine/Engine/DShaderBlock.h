@@ -28,6 +28,7 @@ public:
 	void SetStencilZFail(char*);
 	void SetVertexFuncName(char*);
 	void SetPixelFuncName(char*);
+	void SetRenderQueue(char*);
 	void CompileShader(const char*);
 	//DShaderRes* GetShaderRes();
 	DShaderProgram* GetVertexShader();
@@ -66,6 +67,7 @@ private:
 	char* m_pixelFuncName;
 	
 	bool m_passEnable;
+	DRenderQueue m_renderQueue;
 };
 
 class DSubShader

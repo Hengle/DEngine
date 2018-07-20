@@ -25,13 +25,15 @@ public:
 	void SetVisible(bool visible /*是否可见*/);
 	/*获取可见性*/
 	bool GetVisible();
+	DMaterial* GetMaterial();
+	DGeometry* GetGeometry();
 
 protected:
 	virtual bool OnInit();
 	virtual void OnDestroy();
 	virtual void OnUpdate();
 	virtual void OnFixedUpdate();
-	virtual bool OnCullObject(DCuller*, DRender*);
+	virtual bool OnCullObject(DCuller*);
 
 protected:
 	DGeometry* m_geometry;

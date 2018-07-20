@@ -23,6 +23,16 @@ bool DDisplayObject::GetVisible()
 	return m_isVisible;
 }
 
+DMaterial * DDisplayObject::GetMaterial()
+{
+	return m_material;
+}
+
+DGeometry * DDisplayObject::GetGeometry()
+{
+	return m_geometry;
+}
+
 bool DDisplayObject::OnInit()
 {
 	return true;
@@ -68,11 +78,10 @@ void DDisplayObject::OnFixedUpdate()
 //	}
 //}
 
-bool DDisplayObject::OnCullObject(DCuller * culler, DRender * render)
+bool DDisplayObject::OnCullObject(DCuller * culler)
 {
 	if (m_geometry != NULL && m_material != NULL && m_isVisible)
 	{
-		render->PushDisplayObject(this, m_material->GetRenderQueue());
 		return true;
 	}
 	return false;

@@ -2,7 +2,6 @@
 #include "DObject.h"
 #include "DTransform.h"
 #include "DCuller.h"
-#include "DRender.h"
 
 class DTransform;
 
@@ -16,7 +15,7 @@ public:
 	void Destroy();
 	void Update();
 	void FixedUpdate();
-	bool CullObject(DCuller*, DRender*);
+	bool CullObject(DCuller*);
 	DTransform* GetTransform() const;
 	bool IsInitialized();
 	bool IsDestroyed();
@@ -26,7 +25,7 @@ protected:
 	virtual void OnDestroy() = 0;
 	virtual void OnUpdate() = 0;
 	virtual void OnFixedUpdate() = 0;
-	virtual bool OnCullObject(DCuller*, DRender*) { return false; }
+	virtual bool OnCullObject(DCuller*) { return false; }
 
 protected:
 	DTransform* m_transform;

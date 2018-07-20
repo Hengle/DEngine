@@ -55,10 +55,10 @@ void DSceneObject::FixedUpdate()
 		OnFixedUpdate();
 }
 
-bool DSceneObject::CullObject(DCuller *culler, DRender *render)
+bool DSceneObject::CullObject(DCuller *culler)
 {
 	if (m_isInitialized && !m_isDestroyed)
-		return OnCullObject(culler, render);
+		return OnCullObject(culler);
 	return false;
 }
 

@@ -350,7 +350,10 @@ void DScene::DrawSceneObject(DTransform * node, DCuller * culler, DRender * rend
 	{
 		DSceneObject* sobj = child->GetSceneObject();
 		if (sobj != NULL) {
-			sobj->CullObject(culler, render);
+			if (sobj->CullObject(culler))
+			{
+				//render->PushDisplayObject(sobj, sobj->)
+			}
 		}
 		DrawSceneObject(child, culler, render);
 

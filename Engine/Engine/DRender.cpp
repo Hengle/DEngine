@@ -34,6 +34,10 @@ void DRender::Render()
 	}
 }
 
+void DRender::Release()
+{
+}
+
 void DRender::ShutDown()
 {
 	while (!m_opaqueQueue.empty())

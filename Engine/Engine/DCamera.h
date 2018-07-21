@@ -5,6 +5,10 @@
 #include "DEngineDefine.h"
 #include "DCuller.h"
 
+#define D_LAYERMASK_NOTHING 0U
+#define D_LAYERMASK_ALL     0xFFFFFFFFU
+#define D_LAYERMASK_DEFAULT 1U
+
 /*相机额外渲染贴图类型*/
 enum DCameraAdditionalTextureType
 {

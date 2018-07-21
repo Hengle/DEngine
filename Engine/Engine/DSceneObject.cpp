@@ -6,6 +6,7 @@ DSceneObject::DSceneObject()
 	m_isInitialized = false;
 	m_isDestroyed = false;
 	m_transform = new DTransform(this);
+	m_layer = DLAYER_DEFAULT;
 }
 
 
@@ -83,4 +84,14 @@ bool DSceneObject::IsInitialized()
 bool DSceneObject::IsDestroyed()
 {
 	return m_isDestroyed;
+}
+
+void DSceneObject::SetLayer(DLAYER layer)
+{
+	m_layer = layer;
+}
+
+DLAYER DSceneObject::GetLayer()
+{
+	return m_layer;
 }

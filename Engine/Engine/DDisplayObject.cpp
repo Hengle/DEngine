@@ -175,5 +175,7 @@ void DDisplayObject::UpdateBounds()
 	DVector3 rmin, rmax;
 	m_geometry->GetBoundsRange(&rmin, &rmax);
 
+
+
 	m_transform->ClearAreaChange();
 }

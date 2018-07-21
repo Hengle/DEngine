@@ -3,6 +3,10 @@
 #include "DTransform.h"
 #include "DCuller.h"
 
+#define DLAYER unsigned int
+
+#define DLAYER_DEFAULT 1U
+
 class DTransform;
 
 /*场景对象*/
@@ -20,6 +24,9 @@ public:
 	DTransform* GetTransform() const;
 	bool IsInitialized();
 	bool IsDestroyed();
+	void SetLayer(DLAYER);
+	DLAYER GetLayer();
+	
 
 protected:
 	virtual bool OnInit() = 0;
@@ -31,6 +38,7 @@ protected:
 
 protected:
 	DTransform* m_transform;
+	DLAYER m_layer;
 
 private:
 	bool m_isInitialized;

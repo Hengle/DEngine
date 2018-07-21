@@ -245,6 +245,7 @@ typedef struct DBounds
 {
 public:
 	DBounds();
+	DBounds(float maxX, float maxY, float maxZ, float minX, float minY, float minZ);
 	DBounds(DVector3 center, DVector3 size);
 	void GetMin(DVector3* min) const;
 	void GetMax(DVector3* max) const;

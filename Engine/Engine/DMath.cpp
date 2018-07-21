@@ -1862,6 +1862,12 @@ DBounds::DBounds()
 	size = DVector3(0.0f, 0.0f, 0.0f);
 }
 
+DBounds::DBounds(float maxX, float maxY, float maxZ, float minX, float minY, float minZ)
+{
+	size = DVector3(maxX - minX, maxY - minY, maxZ - minZ);
+	center = DVector3(minX + size.x*0.5f, minY + size.y*0.5f, minZ + size.z*0.5f);
+}
+
 DBounds::DBounds(DVector3 center, DVector3 size)
 {
 	this->center = center;

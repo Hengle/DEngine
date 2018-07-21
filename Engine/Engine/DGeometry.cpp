@@ -154,47 +154,52 @@ void DGeometry::GetUV(int index, int channel, DVector2 * uv) const
 	}
 }
 
+void DGeometry::GetBounds(DBounds * bounds)
+{
+	*bounds = m_Bounds;
+}
+
 DGeometryTopology DGeometry::GetTopology()
 {
 	return m_topology;
 }
 
-void DGeometry::SetVertex(int index, const DVector3 & vertex)
-{
-	if (index < 0 || index >= m_geometryDesc.vertexCount)
-		return;
-	if (m_geometryDesc.vertices == 0)
-		return;
-	m_geometryDesc.vertices[index*3] = vertex.x;
-	m_geometryDesc.vertices[index*3 + 1] = vertex.y;
-	m_geometryDesc.vertices[index*3 + 2] = vertex.z;
-	m_vertexChanged = true;
-}
-
-void DGeometry::SetNormal(int index, const DVector3 & normal)
-{
-	if (index < 0 || index >= m_geometryDesc.vertexCount)
-		return;
-	if (m_geometryDesc.normals == 0)
-		return;
-	m_geometryDesc.normals[index*3] = normal.x;
-	m_geometryDesc.normals[index*3 + 1] = normal.y;
-	m_geometryDesc.normals[index*3 + 2] = normal.z;
-	m_vertexChanged = true;
-}
-
-void DGeometry::SetColor(int index, const DColor & color)
-{
-	if (index < 0 || index >= m_geometryDesc.vertexCount)
-		return;
-	if (m_geometryDesc.colors == 0)
-		return;
-	m_geometryDesc.colors[index*4] = color.r;
-	m_geometryDesc.colors[index*4 + 1] = color.g;
-	m_geometryDesc.colors[index*4 + 2] = color.b;
-	m_geometryDesc.colors[index*4 + 3] = color.a;
-	m_vertexChanged = true;
-}
+//void DGeometry::SetVertex(int index, const DVector3 & vertex)
+//{
+//	if (index < 0 || index >= m_geometryDesc.vertexCount)
+//		return;
+//	if (m_geometryDesc.vertices == 0)
+//		return;
+//	m_geometryDesc.vertices[index*3] = vertex.x;
+//	m_geometryDesc.vertices[index*3 + 1] = vertex.y;
+//	m_geometryDesc.vertices[index*3 + 2] = vertex.z;
+//	m_vertexChanged = true;
+//}
+//
+//void DGeometry::SetNormal(int index, const DVector3 & normal)
+//{
+//	if (index < 0 || index >= m_geometryDesc.vertexCount)
+//		return;
+//	if (m_geometryDesc.normals == 0)
+//		return;
+//	m_geometryDesc.normals[index*3] = normal.x;
+//	m_geometryDesc.normals[index*3 + 1] = normal.y;
+//	m_geometryDesc.normals[index*3 + 2] = normal.z;
+//	m_vertexChanged = true;
+//}
+//
+//void DGeometry::SetColor(int index, const DColor & color)
+//{
+//	if (index < 0 || index >= m_geometryDesc.vertexCount)
+//		return;
+//	if (m_geometryDesc.colors == 0)
+//		return;
+//	m_geometryDesc.colors[index*4] = color.r;
+//	m_geometryDesc.colors[index*4 + 1] = color.g;
+//	m_geometryDesc.colors[index*4 + 2] = color.b;
+//	m_geometryDesc.colors[index*4 + 3] = color.a;
+//	m_vertexChanged = true;
+//}
 
 void DGeometry::SetVertices(DVector3 * vertices, int length)
 {
@@ -205,11 +210,26 @@ void DGeometry::SetVertices(DVector3 * vertices, int length)
 		m_geometryDesc.vertices = 0;
 	}
 	m_geometryDesc.vertices = new float[length * 3];
+	float maxX = -INFINITY, maxY = -INFINITY, maxZ = -INFINITY, minX = INFINITY, minY = INFINITY, minZ = INFINITY;
 	for (i = 0; i < length; i++)
 	{
 		m_geometryDesc.vertices[i * 3] = vertices[i].x;
 		m_geometryDesc.vertices[i * 3 + 1] = vertices[i].y;
 		m_geometryDesc.vertices[i * 3 + 2] = vertices[i].z;
+
+		if (maxX < vertices[i].x)
+			maxX = vertices[i].x;
+		if (maxY < vertices[i].y)
+			maxY = vertices[i].y;
+		if (maxZ < vertices[i].z)
+			maxZ = vertices[i].z;
+
+		if (minX > vertices[i].x)
+			minX = vertices[i].x;
+		if (minY > vertices[i].y)
+			minY = vertices[i].y;
+		if (minZ > vertices[i].z)
+			minZ = vertices[i].z;
 	}
 	m_geometryDesc.vertexCount = length;
 	m_vertexChanged = true;
@@ -335,35 +355,35 @@ void DGeometry::SetIndices(unsigned long * indices, int length)
 	m_vertexChanged = true;
 }
 
-void DGeometry::SetUV(int index, int channel, const DVector2 & uv)
-{
-	if (index < 0 || index >= m_geometryDesc.vertexCount)
-		return;
-	if (channel == 0)
-	{
-		if (m_geometryDesc.uvs == 0)
-			return;
-		m_geometryDesc.uvs[index*2] = uv.x;
-		m_geometryDesc.uvs[index*2 + 1] = uv.y;
-		m_vertexChanged = true;
-	}
-	else if (channel == 1)
-	{
-		if (m_geometryDesc.uv2s == 0)
-			return;
-		m_geometryDesc.uv2s[index * 2] = uv.x;
-		m_geometryDesc.uv2s[index * 2 + 1] = uv.y;
-		m_vertexChanged = true;
-	}
-	else if (channel == 2)
-	{
-		if (m_geometryDesc.uv3s == 0)
-			return;
-		m_geometryDesc.uv3s[index * 2] = uv.x;
-		m_geometryDesc.uv3s[index * 2 + 1] = uv.y;
-		m_vertexChanged = true;
-	}
-}
+//void DGeometry::SetUV(int index, int channel, const DVector2 & uv)
+//{
+//	if (index < 0 || index >= m_geometryDesc.vertexCount)
+//		return;
+//	if (channel == 0)
+//	{
+//		if (m_geometryDesc.uvs == 0)
+//			return;
+//		m_geometryDesc.uvs[index*2] = uv.x;
+//		m_geometryDesc.uvs[index*2 + 1] = uv.y;
+//		m_vertexChanged = true;
+//	}
+//	else if (channel == 1)
+//	{
+//		if (m_geometryDesc.uv2s == 0)
+//			return;
+//		m_geometryDesc.uv2s[index * 2] = uv.x;
+//		m_geometryDesc.uv2s[index * 2 + 1] = uv.y;
+//		m_vertexChanged = true;
+//	}
+//	else if (channel == 2)
+//	{
+//		if (m_geometryDesc.uv3s == 0)
+//			return;
+//		m_geometryDesc.uv3s[index * 2] = uv.x;
+//		m_geometryDesc.uv3s[index * 2 + 1] = uv.y;
+//		m_vertexChanged = true;
+//	}
+//}
 
 void DGeometry::SetTopology(DGeometryTopology topology)
 {

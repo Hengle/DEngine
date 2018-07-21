@@ -26,11 +26,12 @@ public:
 	void GetNormal(int index, DVector3* normal) const;
 	void GetColor(int index, DColor* color) const;
 	void GetUV(int index, int channel, DVector2* uv) const;
+	void GetBounds(DBounds*);
 	DGeometryTopology GetTopology();
-	void SetVertex(int index, const DVector3&);
+	/*void SetVertex(int index, const DVector3&);
 	void SetNormal(int index, const DVector3&);
 	void SetColor(int index, const DColor&);
-	void SetUV(int index, int channel, const DVector2&);
+	void SetUV(int index, int channel, const DVector2&);*/
 	void SetVertices(DVector3*, int);
 	void SetVertices(float*, int);
 	void SetUVs(int channel, DVector2*, int);
@@ -57,4 +58,5 @@ private:
 	DGeometryTopology m_topology;
 	std::map<int, DGeometryRes*> m_geometryReses;
 	bool m_dynamic;
+	DBounds m_Bounds;
 };

@@ -15,6 +15,8 @@ DGraphics::DGraphics()
 	m_glDrawer = 0;
 	m_globalRenderShader = 0;
 	m_drawCall = 0;
+	m_renderer = 0;
+	m_activeMaterial = 0;
 }
 
 
@@ -72,6 +74,8 @@ bool DGraphics::Init(int width, int height, bool fullScreen, HWND hwnd, DGraphic
 		}
 		m_GL = gl;
 	}
+
+	m_renderer = new DRenderer();
 
 	m_glDrawer = new DGLDrawer();
 
@@ -153,6 +157,13 @@ void DGraphics::Shutdown()
 		delete m_glDrawer;
 		m_glDrawer = NULL;
 	}
+	if (m_renderer != NULL)
+	{
+		m_renderer->Release();
+		delete m_renderer;
+		m_renderer = NULL;
+	}
+	m_activeMaterial = NULL;
 	m_globalRenderShader = NULL;
 }
 DGLCore * DGraphics::GetGLCore()
@@ -195,14 +206,14 @@ void DGraphics::BeginScene(bool clearDepth, bool clearStencil, DColor & color, D
 		SetRenderTarget();
 		Clear(clearDepth, clearStencil, color);
 	}
+	
+	DSystem::GetGraphicsMgr()->ClearRenderQueue();
 }
 
 void DGraphics::EndScene(DRenderTexture * renderTexture)
 {
-	if (DSystem::GetGraphicsMgr()->m_glDrawer != NULL)
-	{
-		DSystem::GetGraphicsMgr()->m_glDrawer->PostGL();
-	}
+	DSystem::GetGraphicsMgr()->ExecuteRenderQueue();
+
 	if (renderTexture != NULL)
 	{
 		EndSetRenderTarget(renderTexture);
@@ -264,9 +275,9 @@ void DGraphics::DrawGeometry(DGeometry * geometry, const DMatrix4x4 & matrix, DM
 
 	DMatrix4x4 world = matrix;
 
-	material->SetMatrix("g_worldMatrix", world);
-	material->SetMatrix("g_viewMatrix", view);
-	material->SetMatrix("g_projectionMatrix", proj);
+	material->SetMatrix(D_MATRIX_M, world);
+	material->SetMatrix(D_MATRIX_V, view);
+	material->SetMatrix(D_MATRIX_P, proj);
 
 	int passcount = material->GetPassCount();
 	int i;
@@ -282,8 +293,12 @@ void DGraphics::DrawGeometry(DGeometry * geometry, const DMatrix4x4 & matrix, DM
 
 }
 
-void DGraphics::PrepareDraw(DDisplayObject *, DRenderQueue)
+void DGraphics::PushRenderQueue(DDisplayObject * displayObject, DRenderQueue renderQueue)
 {
+	if (DSystem::GetGraphicsMgr()->m_renderer != NULL)
+	{
+		DSystem::GetGraphicsMgr()->m_renderer->PushDisplayObject(displayObject, renderQueue);
+	}
 }
 
 void DGraphics::DrawTexture(DTexture * texture, DMaterial * material)
@@ -302,10 +317,10 @@ void DGraphics::DrawTexture(DTexture * texture, DMaterial * material)
 	DSystem::GetGraphicsMgr()->GetGLCore()->GetResolution(screenWidth, screenHeight);
 	DMatrix4x4::Ortho(&proj, screenWidth, screenHeight, -100.0f, 100.0f);
 
-	material->SetMatrix("g_worldMatrix", world);
-	material->SetMatrix("g_viewMatrix", view);
-	material->SetMatrix("g_projectionMatrix", proj);
-	material->SetTexture("screenTexture", texture);
+	material->SetMatrix(D_MATRIX_M, world);
+	material->SetMatrix(D_MATRIX_V, view);
+	material->SetMatrix(D_MATRIX_P, proj);
+	material->SetTexture(D_TEXTURE_SCREEN, texture);
 
 	int passcount = material->GetPassCount();
 	int i;
@@ -478,21 +493,21 @@ void DGraphics::GlEnd()
 	}
 }
 
-void DGraphics::GlVector3(DVector3 & vector)
+void DGraphics::GlVertex(DVector3 & vector)
 {
 	DGLDrawer* drawer = DSystem::GetGraphicsMgr()->m_glDrawer;
 	if (drawer != NULL)
 	{
-		drawer->GlVector3(&vector);
+		drawer->GlVertex(&vector);
 	}
 }
 
-void DGraphics::GlVector(float x, float y, float z)
+void DGraphics::GlVertex3(float x, float y, float z)
 {
 	DGLDrawer* drawer = DSystem::GetGraphicsMgr()->m_glDrawer;
 	if (drawer != NULL)
 	{
-		drawer->GlVector(x, y, z);
+		drawer->GlVertex3(x, y, z);
 	}
 }
 
@@ -577,9 +592,40 @@ void DGraphics::GetProjection(DMatrix4x4 & projection)
 	}
 }
 
+void DGraphics::PostGL()
+{
+	if (DSystem::GetGraphicsMgr()->m_glDrawer != NULL)
+	{
+		DSystem::GetGraphicsMgr()->m_glDrawer->PostGL();
+	}
+}
+
 unsigned int DGraphics::GetDrawCall()
 {
 	return DSystem::GetGraphicsMgr()->m_drawCall;
+}
+
+void DGraphics::SetActiveMaterial(DMaterial * material)
+{
+	DSystem::GetGraphicsMgr()->m_activeMaterial = material;
+}
+
+void DGraphics::ClearActiveMaterial(DMaterial * material)
+{
+	DMaterial* currentActive = DSystem::GetGraphicsMgr()->m_activeMaterial;
+	if (currentActive == material)
+	{
+		DSystem::GetGraphicsMgr()->m_activeMaterial = NULL;
+	}
+}
+
+void DGraphics::ApplyActiveMaterial()
+{
+	DMaterial* currentActive = DSystem::GetGraphicsMgr()->m_activeMaterial;
+	if (currentActive != NULL)
+	{
+		currentActive->ApplyPass();
+	}
 }
 
 void DGraphics::InitScreenPlane()
@@ -697,5 +743,17 @@ void DGraphics::InitSkyBox()
 
 	m_skyGeometry->SetVertices(vertices, 36);
 	m_skyGeometry->SetIndices(indices, 36);
+}
+
+void DGraphics::ClearRenderQueue()
+{
+	if (m_renderer != NULL)
+		m_renderer->Clear();
+}
+
+void DGraphics::ExecuteRenderQueue()
+{
+	if (m_renderer != NULL)
+		m_renderer->Render();
 }
 

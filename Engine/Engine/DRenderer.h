@@ -2,13 +2,14 @@
 #include "DDisplayObject.h"
 #include <queue>
 
-class DRender
+class DRenderer
 {
 public:
-	DRender();
-	~DRender();
+	DRenderer();
+	~DRenderer();
 	void PushDisplayObject(DDisplayObject*, DRenderQueue);
 	void Render();
+	void Clear();
 	void Release();
 
 private:

@@ -34,6 +34,7 @@ protected:
 	virtual void OnUpdate();
 	virtual void OnFixedUpdate();
 	virtual bool OnCullObject(DCuller*);
+	virtual void OnRenderObject();
 
 protected:
 	DGeometry* m_geometry;

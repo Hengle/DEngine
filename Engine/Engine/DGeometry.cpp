@@ -402,6 +402,9 @@ void DGeometry::Draw(int vertexUsage)
 {
 	if (vertexUsage <= 0)
 		return;
+	
+	DGraphics::ApplyActiveMaterial();
+
 	if (m_geometryReses.find(vertexUsage) == m_geometryReses.end())
 	{
 		DGeometryRes* res = DSystem::GetGraphicsMgr()->GetGLCore()->CreateGeometryRes(vertexUsage, m_dynamic);

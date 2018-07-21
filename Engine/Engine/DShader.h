@@ -4,6 +4,7 @@
 #include "DColor.h"
 #include "DTexture.h"
 #include "DShaderBlock.h"
+#include "DShaderConstant.h"
 
 /*shader常量表*/
 class DShaderConstantTable

@@ -19,5 +19,6 @@
 #define PEFFECT_MAT      3005
 #define COLOR_MAT        3004
 #define OUTLINE_MAT      3006
+#define TRANSPARENT_MAT  3007
 
 #define BODY_MESH        4000

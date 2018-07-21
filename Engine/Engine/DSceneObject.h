@@ -16,6 +16,7 @@ public:
 	void Update();
 	void FixedUpdate();
 	bool CullObject(DCuller*);
+	void RenderObject();
 	DTransform* GetTransform() const;
 	bool IsInitialized();
 	bool IsDestroyed();
@@ -26,6 +27,7 @@ protected:
 	virtual void OnUpdate() = 0;
 	virtual void OnFixedUpdate() = 0;
 	virtual bool OnCullObject(DCuller*) { return false; }
+	virtual void OnRenderObject() {}
 
 protected:
 	DTransform* m_transform;

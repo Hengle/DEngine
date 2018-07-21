@@ -22,6 +22,7 @@ public:
 	DShader* GetShader();
 	/*设置进行渲染的shader pass，返回false则当前设置的pass不可渲染*/
 	bool SetPass(int pass);
+	void ApplyPass();
 	/*判断pass是否激活*/
 	bool IsPassEnable(int);
 	/*设置shader pass的激活状态*/
@@ -38,4 +39,5 @@ private:
 	DShader* m_shader;
 	/*shader常量表*/
 	DShaderConstantTable* m_constantTable;
+	int m_currentPass;
 };

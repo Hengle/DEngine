@@ -11,6 +11,7 @@ DLight::DLight() : DSceneObject()
 	m_isProjChanged = false;
 
 	m_node = 0;
+	m_culler = 0;
 }
 
 
@@ -25,8 +26,11 @@ void DLight::RenderShadow()
 	//DGraphics::ResetViewPort();
 	DGraphics::SetViewPort(0, 0, w, h);
 	BeginRenderShadow();
-	DScene::Draw(false, m_shadowShader);
+	DGraphics::SetGlobalRenderShader(m_shadowShader);
+	DScene::Draw(false, m_culler);
+	
 	EndRenderShadow();
+	DGraphics::ClearGlobalRenderShader();
 }
 
 void DLight::GetColor(DColor& color)
@@ -84,6 +88,9 @@ bool DLight::OnInit()
 	DLightNode* lightNode = DSystem::GetSceneMgr()->GetCurrentScene()->GetLightNode();
 	m_node = new DLightNode();
 	m_node->light = this;
+
+	m_culler = new DCuller();
+
 	if (lightNode == NULL)
 		lightNode = m_node;
 	else {
@@ -132,6 +139,9 @@ void DLight::OnDestroy()
 		delete m_node;
 		m_node = NULL;
 	}
+
+	delete m_culler;
+	m_culler = NULL;
 }
 
 void DLight::OnUpdate()
@@ -169,7 +179,7 @@ void DLight::BeginRenderShadow()
 		m_transform->GetPosition(position);
 		m_transform->GetForward(lookAt);
 
-		DShader::SetGlobalVector3("g_sundir", lookAt);
+		DShader::SetGlobalVector3(D_LIGHT_DIR, lookAt);
 
 		lookAt = position + lookAt;
 
@@ -189,7 +199,7 @@ void DLight::BeginRenderShadow()
 	DGraphics::GlMultiMatrix(m_view);
 	DGraphics::GlLoadProjectionMatrix(m_proj);
 
-	DShader::SetGlobalVector4("g_shadowParams", DVector4(1.0f, 0.0f, m_far, 1.0f / m_far));
+	DShader::SetGlobalVector4(D_PARAMS_SHADOW, DVector4(1.0f, 0.0f, m_far, 1.0f / m_far));
 
 	DGraphics::BeginScene(true, false, DColor(1,1,1,1.0f), m_shadowMap);
 }
@@ -199,9 +209,9 @@ void DLight::EndRenderShadow()
 	DGraphics::EndScene(m_shadowMap);
 	DGraphics::GlPopMatrix();
 
-	DShader::SetGlobalTexture("g_shadowMap", m_shadowMap);
-	DShader::SetGlobalMatrix("g_shadowView", m_view);
-	DShader::SetGlobalMatrix("g_shadowProj", m_proj);
+	DShader::SetGlobalTexture(D_TEXTURE_SHADOW, m_shadowMap);
+	DShader::SetGlobalMatrix(D_MATRIX_SHADOW_V, m_view);
+	DShader::SetGlobalMatrix(D_MATRIX_SHADOW_P, m_proj);
 }
 
 //void DLight::GetCameraBounds(DCamera * cam, DVector3 * outCenter, DVector3 * outSize)

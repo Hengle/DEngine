@@ -1,5 +1,4 @@
-﻿#include "stdafx.h"
-#include "DCuller.h"
+﻿#include "DCuller.h"
 
 
 DCuller::DCuller()

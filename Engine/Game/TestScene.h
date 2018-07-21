@@ -27,6 +27,7 @@ private:
 	DDisplayObject* m_plane;
 	DDisplayObject* m_obj0;
 	DDisplayObject* m_cube;
+	DDisplayObject* m_tobj0;
 	DGeometry* plane;
 	DCamera* m_camera;
 	//DMesh* cube;

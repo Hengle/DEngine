@@ -255,7 +255,7 @@
     <ClInclude Include="DCuller.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="DRender.h">
+    <ClInclude Include="DRenderer.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
   </ItemGroup>
@@ -425,7 +425,7 @@
     <ClCompile Include="DCuller.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="DRender.cpp">
+    <ClCompile Include="DRenderer.cpp">
       <Filter>源文件\Engine</Filter>
     </ClCompile>
   </ItemGroup>

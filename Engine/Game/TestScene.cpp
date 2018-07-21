@@ -301,6 +301,8 @@ void TestScene::TestLoad()
 	DGeometry* obj = DRes::Load<DGeometry>(DEFAULT_GROUP, BODY_MESH);
 	// mat2 = new DMaterial(shader);
 	DMaterial* mat2 = DRes::Load<DMaterial>(DEFAULT_GROUP, BODY_MAT);
+
+	DMaterial* mat4 = DRes::Load<DMaterial>(DEFAULT_GROUP, TRANSPARENT_MAT);
 	//mat2->SetCullMode(DCullMode_Front);
 
 	//mat2->SetFloat("power", 1.6f);
@@ -312,6 +314,11 @@ void TestScene::TestLoad()
 	transform = m_obj0->GetTransform();
 	transform->SetPosition(0.0f, 1.64f, 0.0f);
 	transform->SetEuler(0.0f, 65.979f, 0.0f);
+
+	m_tobj0 = new DDisplayObject(obj, mat4);
+	m_tobj0->Create();
+	transform = m_tobj0->GetTransform();
+	transform->SetPosition(2.0f, 1.64f, 3.6f);
 
 	//AddDisplayObject(m_obj0);
 
@@ -408,14 +415,14 @@ void TestScene::OnRender()
 
 	DGraphics::GlBegin();
 
-	DGraphics::GlVector(0.0f, 0.0f, 0.0f);
-	DGraphics::GlVector(3.2f, 3.78f, 2.3f);
+	DGraphics::GlVertex3(0.0f, 0.0f, 0.0f);
+	DGraphics::GlVertex3(3.2f, 3.78f, 2.3f);
 
-	DGraphics::GlVector(3.2f, 3.78f, 2.3f);
-	DGraphics::GlVector(3.2f, 7.0f, 2.3f);
+	/*DGraphics::GlVertex3(3.2f, 3.78f, 2.3f);
+	DGraphics::GlVertex3(3.2f, 7.0f, 2.3f);
 
-	DGraphics::GlVector(3.2f, 7.0f, 2.3f);
-	DGraphics::GlVector(-3.2f, 2.0f, -2.3f);
+	DGraphics::GlVertex3(3.2f, 7.0f, 2.3f);
+	DGraphics::GlVertex3(-3.2f, 2.0f, -2.3f);*/
 
 	DGraphics::GlEnd();
 

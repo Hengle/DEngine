@@ -1,10 +1,11 @@
 ﻿#include "DMaterial.h"
-
+#include "DGraphics.h"
 
 DMaterial::DMaterial(DShader * shader)
 {
 	m_shader = shader;
 	m_constantTable = new DShaderConstantTable();
+	m_currentPass = -1;
 }
 
 DMaterial::~DMaterial()
@@ -106,14 +107,30 @@ bool DMaterial::SetPass(int pass)
 		return false;
 	if (!IsPassEnable(pass))
 		return false;
-
-	m_shader->ApplyStates(pass);
+	
+	m_currentPass = pass;
+	DGraphics::SetActiveMaterial(this);
+	/*m_shader->ApplyStates(pass);
 
 	m_shader->ApplyParams(m_constantTable, pass);
 
-	m_shader->Draw(pass);
+	m_shader->Draw(pass);*/
 
 	return true;
+}
+
+void DMaterial::ApplyPass()
+{
+	if (m_shader == NULL)
+		return;
+	if (!IsPassEnable(m_currentPass))
+		return;
+
+	m_shader->ApplyStates(m_currentPass);
+
+	m_shader->ApplyParams(m_constantTable, m_currentPass);
+
+	m_shader->Draw(m_currentPass);
 }
 
 bool DMaterial::IsPassEnable(int pass)
@@ -152,6 +169,8 @@ DRenderQueue DMaterial::GetRenderQueue()
 
 void DMaterial::Destroy()
 {
+	DGraphics::ClearActiveMaterial(this);
+
 	m_shader = NULL;
 
 	if (m_constantTable != nullptr)

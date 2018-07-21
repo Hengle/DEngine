@@ -1,16 +1,16 @@
-﻿#include "DRender.h"
+﻿#include "DRenderer.h"
 
 
-DRender::DRender()
+DRenderer::DRenderer()
 {
 }
 
 
-DRender::~DRender()
+DRenderer::~DRenderer()
 {
 }
 
-void DRender::PushDisplayObject(DDisplayObject * displayObject, DRenderQueue queue)
+void DRenderer::PushDisplayObject(DDisplayObject * displayObject, DRenderQueue queue)
 {
 	if (queue == DRenderQueue_Opaque)
 		m_opaqueQueue.push(displayObject);
@@ -18,7 +18,7 @@ void DRender::PushDisplayObject(DDisplayObject * displayObject, DRenderQueue que
 		m_transparentQueue.push(displayObject);
 }
 
-void DRender::Render()
+void DRenderer::Render()
 {
 	while (!m_opaqueQueue.empty())
 	{
@@ -34,11 +34,19 @@ void DRender::Render()
 	}
 }
 
-void DRender::Release()
+void DRenderer::Clear()
 {
+	while (!m_opaqueQueue.empty())
+	{
+		m_opaqueQueue.pop();
+	}
+	while (!m_transparentQueue.empty())
+	{
+		m_transparentQueue.pop();
+	}
 }
 
-void DRender::ShutDown()
+void DRenderer::Release()
 {
 	while (!m_opaqueQueue.empty())
 	{

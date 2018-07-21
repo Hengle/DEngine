@@ -62,6 +62,12 @@ bool DSceneObject::CullObject(DCuller *culler)
 	return false;
 }
 
+void DSceneObject::RenderObject()
+{
+	if (m_isInitialized && !m_isDestroyed)
+		OnRenderObject();
+}
+
 DTransform * DSceneObject::GetTransform() const
 {
 	return m_transform;

@@ -54,15 +54,15 @@ void GlTestScene::OnRender()
 
 	DGraphics::GlBegin();
 
-	DGraphics::GlVector(0.0f, 0.0f, 0.0f);
-	DGraphics::GlVector(-1.0f, 1.0f, -1.0f);
+	DGraphics::GlVertex3(0.0f, 0.0f, 0.0f);
+	DGraphics::GlVertex3(-1.0f, 1.0f, -1.0f);
 
 	DGraphics::GlEnd();
 
 	DGraphics::GlPopMatrix();
 
 
-	if (cam != NULL)
+	/*if (cam != NULL)
 	{
 		DTransform* tran = cam->GetTransform();
 		DMatrix4x4 ltw;
@@ -71,8 +71,8 @@ void GlTestScene::OnRender()
 		DGraphics::GlMultiMatrix(ltw);
 		DGraphics::GlBegin();
 
-		DGraphics::GlVector(0.0f, 0.0f, 10.0f);
-		DGraphics::GlVector(-2.0f, 3.0f, 20.0f);
+		DGraphics::GlVertex3(0.0f, 0.0f, 10.0f);
+		DGraphics::GlVertex3(-2.0f, 3.0f, 20.0f);
 
 		DGraphics::GlEnd();
 
@@ -83,12 +83,12 @@ void GlTestScene::OnRender()
 	DGraphics::GlLoadOrtho();
 	DGraphics::GlBegin();
 
-	DGraphics::GlVector(-1.0f, -1.0f, 0.0f);
-	DGraphics::GlVector(1.0f, 1.0f, 0.0f);
+	DGraphics::GlVertex3(-1.0f, -1.0f, 0.0f);
+	DGraphics::GlVertex3(1.0f, 1.0f, 0.0f);
 
 	DGraphics::GlEnd();
 
-	DGraphics::GlPopMatrix();
+	DGraphics::GlPopMatrix();*/
 }
 
 void GlTestScene::OnUpdate()

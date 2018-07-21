@@ -5,6 +5,7 @@
 #include "DImGUICore.h"
 #include "DGLDrawer.h"
 #include "DGraphicsDefine.h"
+#include "DRenderer.h"
 
 /*图形模块*/
 class DGraphics
@@ -30,6 +31,7 @@ public:
 	static void BeginScene(bool clearDepth, bool clearStencil, DColor& clearColor,  DRenderTexture* target = NULL);
 	/*结束场景绘制*/
 	static void EndScene(DRenderTexture* = NULL);
+
 	/*清除缓冲区*/
 	static void Clear(bool clearDepth, bool clearStencil, DColor& clearColor, DRenderTexture* target = NULL);
 	/*设置渲染目标*/
@@ -38,7 +40,7 @@ public:
 	static void EndSetRenderTarget(DRenderTexture* = NULL);
 	/*立即绘制Geometry*/
 	static void DrawGeometry(DGeometry*, const DMatrix4x4&, DMaterial*);
-	//static void PushRenderCommand();
+	static void PushRenderQueue(DDisplayObject*, DRenderQueue);
 	/*绘制屏幕纹理*/
 	static void DrawTexture(DTexture*, DMaterial*);
 	/*绘制天空盒*/
@@ -66,8 +68,8 @@ public:
 
 	static void GlBegin();
 	static void GlEnd();
-	static void GlVector3(DVector3&);
-	static void GlVector(float, float, float);
+	static void GlVertex(DVector3&);
+	static void GlVertex3(float, float, float);
 	/*设置当前绘制颜色*/
 	static void GlColor(DColor&);
 	/*对modelvewi矩阵和投影矩阵压栈*/
@@ -87,11 +89,19 @@ public:
 	/*获取当前投影矩阵*/
 	static void GetProjection(DMatrix4x4&);
 
+	static void PostGL();
+
 	static unsigned int GetDrawCall();
+
+	static void SetActiveMaterial(DMaterial*);
+	static void ClearActiveMaterial(DMaterial*);
+	static void ApplyActiveMaterial();
 
 private:
 	void InitScreenPlane();
 	void InitSkyBox();
+	void ClearRenderQueue();
+	void ExecuteRenderQueue();
 
 private:
 	float* m_glVertices;
@@ -105,6 +115,8 @@ private:
 	DMatrix4x4 m_modelView;
 	DMatrix4x4 m_projection;
 	DShader* m_globalRenderShader;
+	DRenderer* m_renderer;
+	DMaterial* m_activeMaterial;
 
 	unsigned int m_drawCall;
 };

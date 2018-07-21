@@ -28,6 +28,10 @@
 		#PATH ../Res/texture_shadow.shader
 	#RES_END
 
+	#RES_BEGIN SHADER 1007 
+		#PATH ../Res/transparent.shader
+	#RES_END
+
 	#RES_BEGIN TEXTURE2D 2000
 		#PATH ../Res/decal.jpg
 		#WRAPMODE REPEAT
@@ -70,6 +74,11 @@
 
 	#RES_BEGIN MATERIAL 3006
 		#SHADER 0 1004
+	#RES_END
+
+	#RES_BEGIN MATERIAL 3007
+		#SHADER 0 1007
+		#PARAM_TEX shaderTexture 0 2001
 	#RES_END
 
 	#RES_BEGIN GEOMETRY 4000

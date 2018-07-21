@@ -30,7 +30,7 @@ DCamera::DCamera() : DSceneObject()
 	m_sortOrder = 0;
 	m_node = 0;
 
-	m_render = 0;
+	//m_render = 0;
 	m_culler = 0;
 }
 
@@ -42,11 +42,20 @@ DCamera::~DCamera()
 void DCamera::Render()
 {
 	BeginRender();
-	if (m_replacementShader != NULL)
-		DScene::Draw(true, m_replacementShader);
-	else
-		DScene::Draw(true);
+	//if (m_replacementShader != NULL) {
+		DGraphics::SetGlobalRenderShader(m_replacementShader);
+	//}
+	//	DScene::Draw(true, m_replacementShader);
+	//else
+	//	DScene::Draw(true);
+		OnPreRender();
+		DScene::Draw(true, m_culler);
+
+		OnPostRender();
+
+		
 	EndRender();
+	DGraphics::ClearGlobalRenderShader();
 
 	RenderFilter();
 }
@@ -293,7 +302,7 @@ bool DCamera::OnInit()
 	}
 	DSystem::GetSceneMgr()->GetCurrentScene()->SetCameraNode(camNode);
 
-	m_render = new DRender();
+	//m_render = new DRender();
 	m_culler = new DCuller();
 	return true;
 }
@@ -307,9 +316,9 @@ void DCamera::OnDestroy()
 
 	delete m_culler;
 	m_culler = NULL;
-	m_render->Release();
-	delete m_render;
-	m_render = NULL;
+	//m_render->Release();
+	//delete m_render;
+	//m_render = NULL;
 
 	if (m_node != NULL)
 	{
@@ -433,6 +442,7 @@ void DCamera::BeginRender()
 
 void DCamera::EndRender()
 {
+	DGraphics::PostGL();
 	if (m_renderTexture != NULL)
 	{
 		DGraphics::EndScene(m_renderTexture);

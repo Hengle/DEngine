@@ -43,14 +43,14 @@ void DGLDrawer::GlEnd()
 	m_currentProcess = NULL;
 }
 
-void DGLDrawer::GlVector3(DVector3 * vector)
+void DGLDrawer::GlVertex(DVector3 * vector)
 {
 	if (m_currentProcess == NULL)
 		return;
 	m_currentProcess->ProcessVector(vector->x, vector->y, vector->z);
 }
 
-void DGLDrawer::GlVector(float x, float y, float z)
+void DGLDrawer::GlVertex3(float x, float y, float z)
 {
 	if (m_currentProcess == NULL)
 		return;
@@ -262,9 +262,10 @@ void DGLDrawerProcess::ProcessDraw(DMatrix4x4& modelview, DMatrix4x4& projection
 	DMatrix4x4 world;
 	DMatrix4x4::Identity(&world);
 
-	DShader::SetGlobalMatrix("g_worldMatrix", world);
-	DShader::SetGlobalMatrix("g_viewMatrix", modelview);
-	DShader::SetGlobalMatrix("g_projectionMatrix", projection);
+	DShader::SetGlobalMatrix(D_MATRIX_M, world);
+	DShader::SetGlobalMatrix(D_MATRIX_V, modelview);
+	DShader::SetGlobalMatrix(D_MATRIX_P, projection);
 
+	DGraphics::ApplyActiveMaterial();
 	m_geometryRes->DrawPrimitive(DGeometryTopology_LineList);
 }

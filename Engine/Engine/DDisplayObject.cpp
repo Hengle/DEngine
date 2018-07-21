@@ -82,7 +82,29 @@ bool DDisplayObject::OnCullObject(DCuller * culler)
 {
 	if (m_geometry != NULL && m_material != NULL && m_isVisible)
 	{
+		DGraphics::PushRenderQueue(this, m_material->GetRenderQueue());
 		return true;
 	}
 	return false;
+}
+
+void DDisplayObject::OnRenderObject()
+{
+	if (m_geometry != NULL && m_material != NULL && m_isVisible)
+	{
+		DShader* rpshader = DGraphics::GetGlobalRenderShader();
+		DMatrix4x4 world;
+		m_transform->GetLocalToWorld(world);
+		if (rpshader != NULL)
+		{
+			DShader* current = m_material->GetShader();
+			m_material->SetShader(rpshader);
+			DGraphics::DrawGeometry(m_geometry, world, m_material);
+			m_material->SetShader(current);
+		}
+		else
+		{
+			DGraphics::DrawGeometry(m_geometry, world, m_material);
+		}
+	}
 }

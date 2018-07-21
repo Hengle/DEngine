@@ -3,7 +3,6 @@
 #include "DTexture.h"
 #include "DMaterial.h"
 #include "DEngineDefine.h"
-#include "DRender.h"
 #include "DCuller.h"
 
 /*相机额外渲染贴图类型*/
@@ -97,6 +96,8 @@ public:
 	static void GetCurrentCamera(DCamera** cam);
 
 protected:
+	virtual void OnPreRender() {};
+	virtual void OnPostRender() {};
 	virtual bool OnInit();
 	virtual void OnDestroy();
 	virtual void OnUpdate();
@@ -133,7 +134,6 @@ private:
 
 	int m_sortOrder;
 
-	DRender* m_render;
 	DCuller* m_culler;
 };
 

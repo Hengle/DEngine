@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>c:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>c:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>e:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>e:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>E:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
@@ -172,7 +172,7 @@
     <ClInclude Include="DOpenGLCore.h" />
     <ClInclude Include="DRenderBuffer10.h" />
     <ClInclude Include="DRenderBuffer11.h" />
-    <ClInclude Include="DRender.h" />
+    <ClInclude Include="DRenderer.h" />
     <ClInclude Include="DRenderStateMgr10.h" />
     <ClInclude Include="DRenderStateMgr11.h" />
     <ClInclude Include="DRenderStateMgr9.h" />
@@ -237,7 +237,7 @@
     <ClCompile Include="DOpenGLCore.cpp" />
     <ClCompile Include="DRenderBuffer10.cpp" />
     <ClCompile Include="DRenderBuffer11.cpp" />
-    <ClCompile Include="DRender.cpp" />
+    <ClCompile Include="DRenderer.cpp" />
     <ClCompile Include="DRenderStateMgr10.cpp" />
     <ClCompile Include="DRenderStateMgr11.cpp" />
     <ClCompile Include="DRenderStateMgr9.cpp" />

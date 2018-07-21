@@ -35,8 +35,8 @@ public:
 	void PostGL();
 	void GlBegin();
 	void GlEnd();
-	void GlVector3(DVector3*);
-	void GlVector(float, float, float);
+	void GlVertex(DVector3*);
+	void GlVertex3(float, float, float);
 	void GlColor(DColor*);
 	void GlPushMatrix();
 	void GlPopMatrix();

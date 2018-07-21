@@ -32,6 +32,8 @@ DCamera::DCamera() : DSceneObject()
 
 	//m_render = 0;
 	m_culler = 0;
+
+	m_testDrawScene = true;
 }
 
 
@@ -49,7 +51,8 @@ void DCamera::Render()
 	//else
 	//	DScene::Draw(true);
 		OnPreRender();
-		DScene::Draw(true, m_culler);
+		if(m_testDrawScene)
+			DScene::Draw(true, m_culler);
 
 		OnPostRender();
 
@@ -65,8 +68,10 @@ void DCamera::RenderFilter()
 	if (m_filter != NULL && m_renderTexture != NULL)
 	{
 		//FLOAT width, height;
-
-		DGraphics::BeginScene(true, false, m_backgroundColor);
+		if (m_testDrawScene)
+			DGraphics::BeginScene(true, true, true, m_backgroundColor);
+		else
+			DGraphics::BeginScene(true, true, false, m_backgroundColor);
 		//DGraphics::Clear(true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f));
 		//DSystem::GetGraphicsMgr()->GetResolution(width, height);
 		m_filter->Render(m_renderTexture);
@@ -416,7 +421,10 @@ void DCamera::BeginRender()
 		float vw = rtw*m_viewPort.width;
 		float vh = rth*m_viewPort.height;
 		DGraphics::SetViewPort(vx, vy, vw, vh);
-		DGraphics::BeginScene(true, false, m_backgroundColor, m_renderTexture);
+		if (m_testDrawScene)
+			DGraphics::BeginScene(true, true, true, m_backgroundColor, m_renderTexture);
+		else
+			DGraphics::BeginScene(true, true, false, m_backgroundColor, m_renderTexture);
 		//DGraphics::SetRenderTarget(m_renderTexture);
 		//DGraphics::ClearRenderTarget(m_renderTexture, true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f));
 	}
@@ -429,7 +437,10 @@ void DCamera::BeginRender()
 		float vw = screenw*m_viewPort.width;
 		float vh = screenh*m_viewPort.height;
 		DGraphics::SetViewPort(vx, vy, vw, vh);
-		DGraphics::BeginScene(true, false, m_backgroundColor);
+		if (m_testDrawScene)
+			DGraphics::BeginScene(true, true, true, m_backgroundColor);
+		else
+			DGraphics::BeginScene(true, true, false, m_backgroundColor);
 		//DGraphics::SetDefaultRenderTarget();
 		//DGraphics::Clear(true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f));
 	}

@@ -28,12 +28,12 @@ public:
 	DGraphicsAPI GetAPI();
 
 	/*开始场景绘制*/
-	static void BeginScene(bool clearDepth, bool clearStencil, DColor& clearColor,  DRenderTexture* target = NULL);
+	static void BeginScene(bool clearDepth, bool clearStencil, bool clearColor, DColor& color,  DRenderTexture* target = NULL);
 	/*结束场景绘制*/
 	static void EndScene(DRenderTexture* = NULL);
 
-	/*清除缓冲区*/
-	static void Clear(bool clearDepth, bool clearStencil, DColor& clearColor, DRenderTexture* target = NULL);
+	/*清除深度/模板缓冲区*/
+	static void Clear(bool /*清除深度缓冲*/, bool /*清除模板缓冲*/, bool /*清除颜色缓冲*/, DColor& /*颜色缓冲区清除颜色*/, DRenderTexture * = NULL);
 	/*设置渲染目标*/
 	static void SetRenderTarget(DRenderTexture* = NULL);
 	/*结束渲染*/

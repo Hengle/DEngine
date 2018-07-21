@@ -14,7 +14,7 @@ public:
 	/*提交渲染结果*/
 	virtual void Present();
 	/*清除缓冲区*/
-	virtual void Clear(bool /*清除深度缓冲*/, bool /*清除模板缓冲*/, DColor& /*颜色缓冲区清除颜色*/, IRenderTextureViewRes* = NULL);
+	virtual void Clear(bool /*清除深度缓冲*/, bool /*清除模板缓冲*/, bool /*清除颜色缓冲*/, DColor& /*颜色缓冲区清除颜色*/, IRenderTextureViewRes* = NULL);
 	/*设置渲染目标*/
 	virtual void SetRenderTarget(IRenderTextureViewRes* = NULL);
 	/*设置视口区域*/

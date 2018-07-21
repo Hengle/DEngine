@@ -352,7 +352,7 @@ void DScene::DrawSceneObject(DTransform * node, DCuller * culler)
 		if (sobj != NULL) {
 			if (sobj->CullObject(culler))
 			{
-				sobj->RenderObject();
+				//sobj->RenderObject();
 				//render->PushDisplayObject(sobj, sobj->)
 			}
 		}

@@ -23,7 +23,7 @@ void DOpenGLCore::Present()
 {
 }
 
-void DOpenGLCore::Clear(bool, bool, DColor &, IRenderTextureViewRes *)
+void DOpenGLCore::Clear(bool, bool, bool, DColor &, IRenderTextureViewRes *)
 {
 }
 

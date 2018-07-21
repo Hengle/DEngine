@@ -101,8 +101,8 @@ void DGLDrawer::GlLoadOrtho()
 		0.0f, 1.0f, 0.0f, 0.0f,
 		0.0f, 0.0f, -1.0f, 0.0f,
 		0.0f, 0.0f, -1.0f, 1.0f);
-	float screenWidth, screenHeight;
-	DSystem::GetGraphicsMgr()->GetGLCore()->GetResolution(screenWidth, screenHeight);
+	//float screenWidth, screenHeight;
+	//DSystem::GetGraphicsMgr()->GetGLCore()->GetResolution(screenWidth, screenHeight);
 	DMatrix4x4::Ortho(&m_currentP, 2.0f, 2.0f, -1.0f, 1.0f);
 }
 

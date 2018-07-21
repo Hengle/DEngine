@@ -349,7 +349,7 @@ void D3D11Core::Present()
 	}
 }
 
-void D3D11Core::Clear(bool clearDepth, bool clearStencil, DColor & color, IRenderTextureViewRes * res)
+void D3D11Core::Clear(bool clearDepth, bool clearStencil, bool clearColor, DColor & color, IRenderTextureViewRes * res)
 {
 	int flag = 0;
 	if (clearDepth && clearStencil)
@@ -370,13 +370,15 @@ void D3D11Core::Clear(bool clearDepth, bool clearStencil, DColor & color, IRende
 		DDepthBuffer11*db = (DDepthBuffer11*)(res->GetDepthBuffer());
 		if (flag != 0)
 			m_deviceContext->ClearDepthStencilView(db->GetView(), flag, 1.0f, 0);
-		m_deviceContext->ClearRenderTargetView(cb->GetView(), c);
+		if (clearColor)
+			m_deviceContext->ClearRenderTargetView(cb->GetView(), c);
 	}
 	else
 	{
 		if (flag != 0)
 			m_deviceContext->ClearDepthStencilView(((DDepthBuffer11*)m_depthBuffer)->GetView(), flag, 1.0f, 0);
-		m_deviceContext->ClearRenderTargetView(((DColorBuffer11*)m_colorBuffer)->GetView(), c);
+		if (clearColor)
+			m_deviceContext->ClearRenderTargetView(((DColorBuffer11*)m_colorBuffer)->GetView(), c);
 	}
 }
 

@@ -104,9 +104,11 @@ void D3D9Core::Present()
 	m_device->Present(0, 0, 0, 0);
 }
 
-void D3D9Core::Clear(bool clearDepth, bool clearStencil, DColor & color, IRenderTextureViewRes * res)
+void D3D9Core::Clear(bool clearDepth, bool clearStencil, bool clearColor, DColor & color, IRenderTextureViewRes * res)
 {
-	DWORD flag = D3DCLEAR_TARGET;
+	DWORD flag = 0;
+	if (clearColor)
+		flag |= D3DCLEAR_TARGET;
 	if (clearDepth)
 		flag |= D3DCLEAR_ZBUFFER;
 	if (clearStencil)

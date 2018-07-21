@@ -193,18 +193,18 @@ DGraphicsAPI DGraphics::GetAPI()
 	return m_API;
 }
 
-void DGraphics::BeginScene(bool clearDepth, bool clearStencil, DColor & color, DRenderTexture * renderTexture)
+void DGraphics::BeginScene(bool clearDepth, bool clearStencil, bool clearColor, DColor & color, DRenderTexture * renderTexture)
 {
 	if (renderTexture != NULL)
 	{
 		
 		SetRenderTarget(renderTexture);
-		Clear(clearDepth, clearStencil, color, renderTexture);
+		Clear(clearDepth, clearStencil, clearColor, color, renderTexture);
 	}
 	else
 	{
 		SetRenderTarget();
-		Clear(clearDepth, clearStencil, color);
+		Clear(clearDepth, clearStencil, clearColor, color);
 	}
 	
 	DSystem::GetGraphicsMgr()->ClearRenderQueue();
@@ -224,17 +224,17 @@ void DGraphics::EndScene(DRenderTexture * renderTexture)
 	}
 }
 
-void DGraphics::Clear(bool clearDepth, bool clearStencil, DColor & color, DRenderTexture * renderTexture)
+void DGraphics::Clear(bool clearDepth, bool clearStencil, bool clearColor, DColor & color, DRenderTexture * renderTexture)
 {
 	if (renderTexture != NULL)
 	{
 		IRenderTextureViewRes* res = renderTexture->GetTextureRes();
-		if(res != NULL)
-			DSystem::GetGraphicsMgr()->GetGLCore()->Clear(clearDepth, clearStencil, color, res);
+		if (res != NULL)
+			DSystem::GetGraphicsMgr()->GetGLCore()->Clear(clearDepth, clearStencil, clearColor, color, res);
 	}
 	else
 	{
-		DSystem::GetGraphicsMgr()->GetGLCore()->Clear(clearDepth, clearStencil, color);
+		DSystem::GetGraphicsMgr()->GetGLCore()->Clear(clearDepth, clearStencil, clearColor, color);
 	}
 }
 

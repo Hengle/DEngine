@@ -185,6 +185,7 @@
     <ClInclude Include="DSceneObject.h" />
     <ClInclude Include="DShader.h" />
     <ClInclude Include="DShaderBlock.h" />
+    <ClInclude Include="DShaderConstant.h" />
     <ClInclude Include="DShaderProgram10.h" />
     <ClInclude Include="DShaderProgram11.h" />
     <ClInclude Include="DShaderProgram9.h" />

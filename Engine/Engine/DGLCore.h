@@ -206,7 +206,7 @@ public:
 	/*提交渲染结果*/
 	virtual void Present() = 0;
 	/*清除缓冲区*/
-	virtual void Clear(bool, bool, DColor&, IRenderTextureViewRes* = NULL) = 0;
+	virtual void Clear(bool, bool, bool, DColor&, IRenderTextureViewRes* = NULL) = 0;
 	/*设置渲染目标*/
 	virtual void SetRenderTarget(IRenderTextureViewRes* = NULL) = 0;
 	/*设置视口区域*/

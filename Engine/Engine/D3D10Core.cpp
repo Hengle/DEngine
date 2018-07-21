@@ -353,7 +353,7 @@ void D3D10Core::Present()
 		m_swapChain->Present(0, 0);
 }
 
-void D3D10Core::Clear(bool clearDepth, bool clearStencil, DColor & color, IRenderTextureViewRes * res)
+void D3D10Core::Clear(bool clearDepth, bool clearStencil, bool clearColor, DColor & color, IRenderTextureViewRes * res)
 {
 	int flag = 0;
 	if (clearDepth && clearStencil)
@@ -374,13 +374,15 @@ void D3D10Core::Clear(bool clearDepth, bool clearStencil, DColor & color, IRende
 		DDepthBuffer10*db = (DDepthBuffer10*)(res->GetDepthBuffer());
 		if (flag != 0)
 			m_device->ClearDepthStencilView(db->GetView(), flag, 1.0f, 0);
-		m_device->ClearRenderTargetView(cb->GetView(), c);
+		if (clearColor)
+			m_device->ClearRenderTargetView(cb->GetView(), c);
 	}
 	else
 	{
 		if (flag != 0)
 			m_device->ClearDepthStencilView(((DDepthBuffer10*)m_depthBuffer)->GetView(), flag, 1.0f, 0);
-		m_device->ClearRenderTargetView(((DColorBuffer10*)m_colorBuffer)->GetView(), c);
+		if (clearColor)
+			m_device->ClearRenderTargetView(((DColorBuffer10*)m_colorBuffer)->GetView(), c);
 	}
 }
 

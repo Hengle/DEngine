@@ -111,6 +111,9 @@ private:
 	void BeginRender();
 	void EndRender();
 
+protected:
+	bool m_testDrawScene;
+
 private:
 	float m_fieldOfView;
 	float m_near;

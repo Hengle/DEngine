@@ -201,7 +201,7 @@ void DLight::BeginRenderShadow()
 
 	DShader::SetGlobalVector4(D_PARAMS_SHADOW, DVector4(1.0f, 0.0f, m_far, 1.0f / m_far));
 
-	DGraphics::BeginScene(true, false, DColor(1,1,1,1.0f), m_shadowMap);
+	DGraphics::BeginScene(true, false, true, DColor(1,1,1,1.0f), m_shadowMap);
 }
 
 void DLight::EndRenderShadow()

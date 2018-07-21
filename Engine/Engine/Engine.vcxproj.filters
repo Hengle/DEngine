@@ -258,6 +258,9 @@
     <ClInclude Include="DRenderer.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
+    <ClInclude Include="DShaderConstant.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DMath.cpp">

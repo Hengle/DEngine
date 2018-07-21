@@ -7,6 +7,7 @@
 #include "DGUI.h"
 #include "D3D9Core.h"
 #include "TestResDefine.h"
+#include "SVCamera.h"
 
 TestScene::TestScene(SCENEID sceneId, char * sceneName) : DScene(sceneId, sceneName)
 {
@@ -218,6 +219,9 @@ void TestScene::OnLoad()
 
 void TestScene::TestLoad()
 {
+	SVCamera* svc = new SVCamera();
+	svc->Create();
+
 	DMaterial* skymat = DRes::Load<DMaterial>(DEFAULT_GROUP, SKY_MAT);
 
 	m_testColorMat = DRes::Load<DMaterial>(DEFAULT_GROUP, COLOR_MAT);
@@ -245,6 +249,8 @@ void TestScene::TestLoad()
 	aoshader->Destroy();
 	delete aoshader;
 	aoshader = NULL;*/
+
+	
 
 	m_camera = new DCamera();
 	m_camera->Create();

@@ -46,7 +46,9 @@ void DSceneObject::Destroy()
 void DSceneObject::Update()
 {
 	if (m_isInitialized && !m_isDestroyed)
+	{
 		OnUpdate();
+	}
 }
 
 void DSceneObject::FixedUpdate()

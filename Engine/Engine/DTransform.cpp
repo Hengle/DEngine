@@ -35,6 +35,9 @@ DTransform::DTransform()
 	m_firstChild = NULL;
 
 	m_isRoot = false;
+	m_isAreaChanged = false;
+
+	
 }
 
 DTransform::DTransform(bool root) : DTransform()
@@ -64,6 +67,7 @@ void DTransform::SetPosition(float x, float y, float z)
 	//标记矩阵改变
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
+	m_isAreaChanged = true;
 }
 
 void DTransform::SetPosition(DVector3 position)
@@ -77,6 +81,7 @@ void DTransform::SetPosition(DVector3 position)
 	//标记矩阵改变
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
+	m_isAreaChanged = true;
 }
 
 void DTransform::SetLocalPosition(float x, float y, float z)
@@ -92,6 +97,7 @@ void DTransform::SetLocalPosition(float x, float y, float z)
 	//标记矩阵改变
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
+	m_isAreaChanged = true;
 }
 
 void DTransform::SetLocalPosition(DVector3 localPosition)
@@ -105,6 +111,7 @@ void DTransform::SetLocalPosition(DVector3 localPosition)
 	//标记矩阵改变
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
+	m_isAreaChanged = true;
 }
 
 void DTransform::SetRotation(float x, float y, float z, float w)
@@ -123,6 +130,7 @@ void DTransform::SetRotation(float x, float y, float z, float w)
 	//标记矩阵改变
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
+	m_isAreaChanged = true;
 }
 
 void DTransform::SetRotation(DQuaternion rotation)
@@ -138,6 +146,7 @@ void DTransform::SetRotation(DQuaternion rotation)
 	//标记矩阵改变
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
+	m_isAreaChanged = true;
 }
 
 void DTransform::SetLocalRotation(float x, float y, float z, float w)
@@ -156,6 +165,7 @@ void DTransform::SetLocalRotation(float x, float y, float z, float w)
 	//标记矩阵改变
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
+	m_isAreaChanged = true;
 }
 
 void DTransform::SetLocalRotation(DQuaternion localRotation)
@@ -171,6 +181,7 @@ void DTransform::SetLocalRotation(DQuaternion localRotation)
 	//标记矩阵改变
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
+	m_isAreaChanged = true;
 }
 
 void DTransform::SetEuler(float pitch, float yaw, float roll)
@@ -188,6 +199,7 @@ void DTransform::SetEuler(float pitch, float yaw, float roll)
 	//标记矩阵改变
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
+	m_isAreaChanged = true;
 }
 
 void DTransform::SetEuler(DVector3 euler)
@@ -203,6 +215,7 @@ void DTransform::SetEuler(DVector3 euler)
 	//标记矩阵改变
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
+	m_isAreaChanged = true;
 }
 
 void DTransform::SetLocalEuler(float pitch, float yaw, float roll)
@@ -220,6 +233,7 @@ void DTransform::SetLocalEuler(float pitch, float yaw, float roll)
 	//标记矩阵改变
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
+	m_isAreaChanged = true;
 }
 
 void DTransform::SetLocalEuler(DVector3 localEuler)
@@ -235,6 +249,7 @@ void DTransform::SetLocalEuler(DVector3 localEuler)
 	//标记矩阵改变
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
+	m_isAreaChanged = true;
 }
 
 void DTransform::SetLocalScale(float x, float y, float z)
@@ -248,6 +263,7 @@ void DTransform::SetLocalScale(float x, float y, float z)
 	m_scaleChangedMark = SpaceDefine_Local;
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
+	m_isAreaChanged = true;
 }
 
 void DTransform::SetLocalScale(DVector3 localScale)
@@ -259,6 +275,7 @@ void DTransform::SetLocalScale(DVector3 localScale)
 	m_scaleChangedMark = SpaceDefine_Local;
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
+	m_isAreaChanged = true;
 }
 
 void DTransform::GetPosition(DVector3 &position)
@@ -370,7 +387,7 @@ void DTransform::GetRight(DVector3 & right)
 
 void DTransform::GetLocalToWorld(DMatrix4x4 & localToWorld)
 {
-	if (IsMatrixWillChange()) {  //存在任何引起矩阵变化的元素都重新计算矩阵
+	if (m_isL2WMatrixChanged) {  //存在任何引起矩阵变化的元素都重新计算矩阵
 		RefreshLocalToWorldMatrix();
 	}
 
@@ -446,6 +463,7 @@ void DTransform::SetParent(DTransform * parent, bool useLocalInfo)
 	//m_isW2LMatrixChanged = true;
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
+	m_isAreaChanged = true;
 }
 
 DTransform * DTransform::GetParent()
@@ -493,9 +511,14 @@ DTransform * DTransform::GetNextNegibhor()
 	return m_nextNeighbor;
 }
 
-bool DTransform::IsMatrixWillChange()
+bool DTransform::IsAreaChanged()
 {
-	return m_isL2WMatrixChanged;
+	return m_isAreaChanged;
+}
+
+void DTransform::ClearAreaChange()
+{
+	m_isAreaChanged = false;
 }
 
 void DTransform::Release()
@@ -608,7 +631,7 @@ void DTransform::RefreshLocalToWorldMatrix()
 void DTransform::RefreshWorldToLocalMatrix()
 {
 	m_isW2LMatrixChanged = false;
-	if (IsMatrixWillChange())
+	if (m_isL2WMatrixChanged)
 	{
 		RefreshLocalToWorldMatrix();
 	}

@@ -27,6 +27,7 @@ public:
 	bool GetVisible();
 	DMaterial* GetMaterial();
 	DGeometry* GetGeometry();
+	void GetBounds(DBounds*);
 
 protected:
 	virtual bool OnInit();
@@ -36,9 +37,14 @@ protected:
 	virtual bool OnCullObject(DCuller*);
 	virtual void OnRenderObject();
 
+private:
+	void UpdateBounds();
+
 protected:
 	DGeometry* m_geometry;
 	DMaterial* m_material;
+	DMaterial* m_gizmoMat;
+	DBounds m_bounds;
 
 private:
 	bool m_isVisible;

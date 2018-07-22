@@ -1,5 +1,8 @@
 ﻿#pragma once
+#ifdef _DGAPI_D3D10
+
 #include "DGLCore.h"
+#include <d3d10_1.h>
 #include <d3d10.h>
 #include <map>
 
@@ -54,3 +57,4 @@ private:
 	std::map<DWrapMode, ID3D10SamplerState*> m_samplerStates;
 };
 
+#endif

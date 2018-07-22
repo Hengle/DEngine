@@ -153,15 +153,21 @@ void DShaderBlock::InterpretCompileTarget(ifstream & ifile, DSubShader* subshade
 			}
 			else if (strcmp(read, "d3d9") == 0)
 			{
+#ifdef _DGAPI_D3D9
 				subshader->AddCompileTarget(DGRAPHICS_API_D3D9);
+#endif
 			}
 			else if (strcmp(read, "d3d10") == 0)
 			{
+#ifdef _DGAPI_D3D10
 				subshader->AddCompileTarget(DGRAPHICS_API_D3D10);
+#endif
 			}
 			else if (strcmp(read, "d3d11") == 0)
 			{
+#ifdef _DGAPI_D3D11
 				subshader->AddCompileTarget(DGRAPHICS_API_D3D11);
+#endif
 			}
 		}
 	}

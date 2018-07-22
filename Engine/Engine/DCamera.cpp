@@ -32,7 +32,8 @@ DCamera::DCamera() : DSceneObject()
 
 	//m_render = 0;
 
-	m_testDrawScene = true;
+	m_layerMask = D_LAYERMASK_DEFAULT;
+	m_clearFlags = DClearFlags_SkyBox;
 }
 
 
@@ -50,8 +51,8 @@ void DCamera::Render()
 	//else
 	//	DScene::Draw(true);
 		OnPreRender();
-		if(m_testDrawScene)
-			DScene::Draw(true);
+
+		DScene::Draw(true, m_layerMask);
 
 		OnPostRender();
 
@@ -67,10 +68,13 @@ void DCamera::RenderFilter()
 	if (m_filter != NULL && m_renderTexture != NULL)
 	{
 		//FLOAT width, height;
-		if (m_testDrawScene)
-			DGraphics::BeginScene(true, true, true, m_backgroundColor);
-		else
-			DGraphics::BeginScene(true, true, false, m_backgroundColor);
+		//if (m_testDrawScene)
+		//	DGraphics::BeginScene(true, true, true, m_backgroundColor);
+		//else
+		//	DGraphics::BeginScene(true, true, false, m_backgroundColor);
+		bool clearDepth = m_clearFlags != DClearFlags_DontClear;
+		bool clearColor = m_clearFlags != DClearFlags_Depth && m_clearFlags != DClearFlags_DontClear;
+		DGraphics::BeginScene(clearDepth, clearDepth, clearColor, m_backgroundColor);
 		//DGraphics::Clear(true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f));
 		//DSystem::GetGraphicsMgr()->GetResolution(width, height);
 		m_filter->Render(m_renderTexture);
@@ -222,6 +226,7 @@ void DCamera::SetViewPort(DRect & viewPort)
 void DCamera::SetSortOrder(int sortOrder)
 {
 	m_sortOrder = sortOrder;
+	throw "TODO 暂未实现重新排序";
 	if (m_node->pre != NULL && m_node->pre->camera->GetSortOrder() > m_sortOrder)
 	{
 
@@ -260,6 +265,42 @@ void DCamera::SetReplaceShader(DShader * replacement)
 void DCamera::ResetReplaceShader()
 {
 	m_replacementShader = NULL;
+}
+
+void DCamera::SetClearFlags(DClearFlags clearFlags)
+{
+	m_clearFlags = clearFlags;
+}
+
+DClearFlags DCamera::GetClearFlags()
+{
+	return m_clearFlags;
+}
+
+void DCamera::SetLayerMask(DLAYER layerMask)
+{
+	m_layerMask = layerMask;
+}
+
+DLAYER DCamera::GetLayerMask()
+{
+	return m_layerMask;
+}
+
+void DCamera::AddLayer(DLAYER layer)
+{
+	m_layerMask |= layer;
+}
+
+void DCamera::RemoveLayer(DLAYER layer)
+{
+	if ((m_layerMask&layer) != 0)
+		m_layerMask ^= layer;
+}
+
+bool DCamera::IsLayerVisible(DLAYER layer)
+{
+	return (m_layerMask&layer) != 0;
 }
 
 void DCamera::GetCurrentCamera(DCamera ** cam)
@@ -417,10 +458,14 @@ void DCamera::BeginRender()
 		float vw = rtw*m_viewPort.width;
 		float vh = rth*m_viewPort.height;
 		DGraphics::SetViewPort(vx, vy, vw, vh);
-		if (m_testDrawScene)
+
+		bool clearDepth = m_clearFlags != DClearFlags_DontClear;
+		bool clearColor = m_clearFlags != DClearFlags_Depth && m_clearFlags != DClearFlags_DontClear;
+		DGraphics::BeginScene(clearDepth, clearDepth, clearColor, m_backgroundColor);
+		/*if (m_testDrawScene)
 			DGraphics::BeginScene(true, true, true, m_backgroundColor, m_renderTexture);
 		else
-			DGraphics::BeginScene(true, true, false, m_backgroundColor, m_renderTexture);
+			DGraphics::BeginScene(true, true, false, m_backgroundColor, m_renderTexture);*/
 		//DGraphics::SetRenderTarget(m_renderTexture);
 		//DGraphics::ClearRenderTarget(m_renderTexture, true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f));
 	}
@@ -433,15 +478,20 @@ void DCamera::BeginRender()
 		float vw = screenw*m_viewPort.width;
 		float vh = screenh*m_viewPort.height;
 		DGraphics::SetViewPort(vx, vy, vw, vh);
-		if (m_testDrawScene)
+
+		bool clearDepth = m_clearFlags != DClearFlags_DontClear;
+		bool clearColor = m_clearFlags != DClearFlags_Depth && m_clearFlags != DClearFlags_DontClear;
+		DGraphics::BeginScene(clearDepth, clearDepth, clearColor, m_backgroundColor);
+
+		/*if (m_testDrawScene)
 			DGraphics::BeginScene(true, true, true, m_backgroundColor);
 		else
-			DGraphics::BeginScene(true, true, false, m_backgroundColor);
+			DGraphics::BeginScene(true, true, false, m_backgroundColor);*/
 		//DGraphics::SetDefaultRenderTarget();
 		//DGraphics::Clear(true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f));
 	}
 
-	if (m_skyBoxMaterial != NULL)
+	if (m_skyBoxMaterial != NULL && m_clearFlags == DClearFlags_SkyBox)
 	{
 		DGraphics::DrawSkyBox(m_skyBoxMaterial, this);
 	}

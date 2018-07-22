@@ -1,4 +1,6 @@
 ﻿#pragma once
+#ifdef _DGAPI_D3D11
+
 #include "D3D11Core.h"
 
 /*
@@ -22,3 +24,4 @@ private:
 	ID3D11Buffer* m_vertexBuffer, *m_indexBuffer;
 };
 
+#endif

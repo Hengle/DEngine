@@ -45,7 +45,6 @@ void DDisplayObject::GetBounds(DBounds * bounds)
 
 bool DDisplayObject::OnInit()
 {
-	m_gizmoMat = DRes::Load<DMaterial>(0, 3004);
 	return true;
 }
 
@@ -105,58 +104,6 @@ bool DDisplayObject::OnCullObject()
 
 void DDisplayObject::OnRenderObject()
 {
-	m_gizmoMat->SetPass(0);
-	DBounds bounds;
-	GetBounds(&bounds);
-	DGraphics::GlPushMatrix();
-
-	DGraphics::GlBegin();
-
-	DGraphics::GlColor(DCOLOR_GREEN);
-
-
-	DGraphics::GlVertex3(bounds.center.x - bounds.size.x * 0.5f, bounds.center.y - bounds.size.y * 0.5f, bounds.center.z - bounds.size.z * 0.5f);
-	DGraphics::GlVertex3(bounds.center.x + bounds.size.x * 0.5f, bounds.center.y - bounds.size.y * 0.5f, bounds.center.z - bounds.size.z * 0.5f);
-
-	DGraphics::GlVertex3(bounds.center.x - bounds.size.x * 0.5f, bounds.center.y - bounds.size.y * 0.5f, bounds.center.z + bounds.size.z * 0.5f);
-	DGraphics::GlVertex3(bounds.center.x + bounds.size.x * 0.5f, bounds.center.y - bounds.size.y * 0.5f, bounds.center.z + bounds.size.z * 0.5f);
-
-	DGraphics::GlVertex3(bounds.center.x - bounds.size.x * 0.5f, bounds.center.y - bounds.size.y * 0.5f, bounds.center.z - bounds.size.z * 0.5f);
-	DGraphics::GlVertex3(bounds.center.x - bounds.size.x * 0.5f, bounds.center.y - bounds.size.y * 0.5f, bounds.center.z + bounds.size.z * 0.5f);
-
-	DGraphics::GlVertex3(bounds.center.x + bounds.size.x * 0.5f, bounds.center.y - bounds.size.y * 0.5f, bounds.center.z - bounds.size.z * 0.5f);
-	DGraphics::GlVertex3(bounds.center.x + bounds.size.x * 0.5f, bounds.center.y - bounds.size.y * 0.5f, bounds.center.z + bounds.size.z * 0.5f);
-
-
-	DGraphics::GlVertex3(bounds.center.x - bounds.size.x * 0.5f, bounds.center.y + bounds.size.y * 0.5f, bounds.center.z - bounds.size.z * 0.5f);
-	DGraphics::GlVertex3(bounds.center.x + bounds.size.x * 0.5f, bounds.center.y + bounds.size.y * 0.5f, bounds.center.z - bounds.size.z * 0.5f);
-
-	DGraphics::GlVertex3(bounds.center.x - bounds.size.x * 0.5f, bounds.center.y + bounds.size.y * 0.5f, bounds.center.z + bounds.size.z * 0.5f);
-	DGraphics::GlVertex3(bounds.center.x + bounds.size.x * 0.5f, bounds.center.y + bounds.size.y * 0.5f, bounds.center.z + bounds.size.z * 0.5f);
-
-	DGraphics::GlVertex3(bounds.center.x - bounds.size.x * 0.5f, bounds.center.y + bounds.size.y * 0.5f, bounds.center.z - bounds.size.z * 0.5f);
-	DGraphics::GlVertex3(bounds.center.x - bounds.size.x * 0.5f, bounds.center.y + bounds.size.y * 0.5f, bounds.center.z + bounds.size.z * 0.5f);
-
-	DGraphics::GlVertex3(bounds.center.x + bounds.size.x * 0.5f, bounds.center.y + bounds.size.y * 0.5f, bounds.center.z - bounds.size.z * 0.5f);
-	DGraphics::GlVertex3(bounds.center.x + bounds.size.x * 0.5f, bounds.center.y + bounds.size.y * 0.5f, bounds.center.z + bounds.size.z * 0.5f);
-
-
-	DGraphics::GlVertex3(bounds.center.x + bounds.size.x * 0.5f, bounds.center.y + bounds.size.y * 0.5f, bounds.center.z + bounds.size.z * 0.5f);
-	DGraphics::GlVertex3(bounds.center.x + bounds.size.x * 0.5f, bounds.center.y - bounds.size.y * 0.5f, bounds.center.z + bounds.size.z * 0.5f);
-
-	DGraphics::GlVertex3(bounds.center.x - bounds.size.x * 0.5f, bounds.center.y + bounds.size.y * 0.5f, bounds.center.z + bounds.size.z * 0.5f);
-	DGraphics::GlVertex3(bounds.center.x - bounds.size.x * 0.5f, bounds.center.y - bounds.size.y * 0.5f, bounds.center.z + bounds.size.z * 0.5f);
-
-	DGraphics::GlVertex3(bounds.center.x - bounds.size.x * 0.5f, bounds.center.y + bounds.size.y * 0.5f, bounds.center.z - bounds.size.z * 0.5f);
-	DGraphics::GlVertex3(bounds.center.x - bounds.size.x * 0.5f, bounds.center.y - bounds.size.y * 0.5f, bounds.center.z - bounds.size.z * 0.5f);
-
-	DGraphics::GlVertex3(bounds.center.x + bounds.size.x * 0.5f, bounds.center.y + bounds.size.y * 0.5f, bounds.center.z - bounds.size.z * 0.5f);
-	DGraphics::GlVertex3(bounds.center.x + bounds.size.x * 0.5f, bounds.center.y - bounds.size.y * 0.5f, bounds.center.z - bounds.size.z * 0.5f);
-
-	DGraphics::GlEnd();
-
-	DGraphics::GlPopMatrix();
-
 	if (m_geometry != NULL && m_material != NULL && m_isVisible)
 	{
 		DShader* rpshader = DGraphics::GetGlobalRenderShader();

@@ -1,4 +1,5 @@
-﻿#include "DImGUICore10.h"
+﻿#ifdef _DGAPI_D3D10
+#include "DImGUICore10.h"
 #include "imgui.h"
 #include <d3dcompiler.h>
 
@@ -550,3 +551,4 @@ void DImGUICore10::ImGui_ImplDX10_CreateFontsTexture()
 		g_pd3dDevice->CreateSamplerState(&desc, &g_pFontSampler);
 	}
 }
+#endif

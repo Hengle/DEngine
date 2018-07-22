@@ -1,4 +1,6 @@
 ﻿#pragma once
+#ifdef _DGAPI_D3D9
+
 #include "D3D9Core.h"
 
 /*
@@ -46,3 +48,5 @@ private:
 	bool m_isSuccess;
 	LPDIRECT3DDEVICE9 m_device;
 };
+
+#endif

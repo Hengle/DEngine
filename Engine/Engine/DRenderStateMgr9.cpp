@@ -1,4 +1,5 @@
-﻿#include "DRenderStateMgr9.h"
+﻿#ifdef _DGAPI_D3D9
+#include "DRenderStateMgr9.h"
 
 DRenderStateMgr9::DRenderStateMgr9(IDirect3DDevice9* device)
 {
@@ -384,3 +385,4 @@ D3DSTENCILOP DRenderStateMgr9::GetStencilOp(DRSStencilOp op)
 		return D3DSTENCILOP_KEEP;
 	}
 }
+#endif

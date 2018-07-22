@@ -1,4 +1,6 @@
 ﻿#pragma once
+#ifdef _DGAPI_D3D10
+
 #include "D3D10Core.h"
 #include <string>
 #include <vector>
@@ -67,3 +69,4 @@ private:
 	ID3D10PixelShader *m_pixelShader;
 };
 
+#endif

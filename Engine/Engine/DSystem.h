@@ -6,10 +6,6 @@
 #include "DInput.h"
 #include "DRes.h"
 
-#define D_DEFAULT_FULL_SCREEN    FALSE
-#define D_DEFAULT_WIDTH          1024
-#define D_DEFAULT_HEIGHT         768
-
 /*
 	系统模块管理类
 */
@@ -19,13 +15,13 @@ public:
 	DSystem();
 	~DSystem();
 	/*初始化*/
-	bool Init();
+	bool Init(int screenWidth, int screenHeight, bool fullScreen, DGraphicsAPI api);
 	/*运行*/
 	bool Run();
 	/*关闭*/
 	void Shutdown();
-	LRESULT CALLBACK MessageHandler(HWND, UINT, WPARAM, LPARAM);
-	static HWND GetHWND();
+	
+	static DSystem* Create(DGraphicsAPI api);
 
 	/*获取场景管理模块*/
 	static DSceneManager* GetSceneMgr();
@@ -42,25 +38,26 @@ public:
 
 	static void Quit();
 
+	//template<class T>
+	static DSystem* GetInstance();
+
+protected:
+	virtual bool OnInit(int screenWidth, int screenHeight, bool fullScreen, DGraphicsAPI api) = 0;
+	virtual void OnShutdown() = 0;
+
 private:
-	void InitWindow(int&, int&, bool);
 	bool Loop();
 
-private:
-	HWND m_hwnd;
-	DTime* m_timeMgr;
+protected:
 	DGraphics* m_graphicsMgr;
+	DInput* m_inputMgr;
+
+private:
+	DTime* m_timeMgr;
 	DSceneManager* m_sceneMgr;
 	DLog* m_logMgr;
-	DInput* m_inputMgr;
 	DRes* m_res;
-	HINSTANCE m_hInstance;
-	LPCWSTR m_applicationName;
-	LPCWSTR m_title;
-
 	bool m_quit;
 };
-
-static LRESULT CALLBACK SysWndProc(HWND, UINT, WPARAM, LPARAM);
 
 static DSystem *System = 0;

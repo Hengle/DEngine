@@ -1,4 +1,5 @@
-﻿#include "DRenderStateMgr10.h"
+﻿#ifdef _DGAPI_D3D10
+#include "DRenderStateMgr10.h"
 
 DRenderStateMgr10::DRenderStateMgr10(ID3D10Device * device)
 {
@@ -554,3 +555,4 @@ HRESULT DRenderStateMgr10::CreateDisableBlendState(ID3D10BlendState ** state)
 	HRESULT result = m_device->CreateBlendState(&blenddesc, state);
 	return result;
 }
+#endif

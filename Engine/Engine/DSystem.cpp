@@ -1,42 +1,35 @@
 ﻿#include "DSystem.h"
+#include "DOpenGLSystem.h"
+#include "D3DSystem.h"
 
 DSystem::DSystem()
 {
-	m_applicationName = 0;
-	m_title = 0;
+	//m_applicationName = 0;
+	//m_title = 0;
 	m_timeMgr = 0;
 	m_graphicsMgr = 0;
 	m_logMgr = 0;
 	m_inputMgr = 0;
 	m_sceneMgr = 0;
 	m_res = 0;
-	m_hInstance = 0;
-	m_hwnd = 0;
+	//m_hInstance = 0;
+	//m_hwnd = 0;
+	//m_window = 0;
 }
 
 DSystem::~DSystem()
 {
 }
 
-bool DSystem::Init()
+bool DSystem::Init(int screenWidth, int screenHeight, bool fullScreen, DGraphicsAPI api)
 {
-	int width = D_DEFAULT_WIDTH, height = D_DEFAULT_HEIGHT;
-	InitWindow(width, height, false);
-
-	m_inputMgr = new DInput();
-	if (!m_inputMgr->Init(m_hInstance, m_hwnd, width, height))
-	{
+	System = this;
+	//int width = D_DEFAULT_WIDTH, height = D_DEFAULT_HEIGHT;
+	if (!OnInit(screenWidth, screenHeight, fullScreen, api))
 		return false;
-	}
 
 	m_timeMgr = new DTime();
 	m_timeMgr->Init();
-
-	m_graphicsMgr = new DGraphics();
-	if (!m_graphicsMgr->Init(width, height, false, m_hwnd, DGRAPHICS_API_D3D11))
-	{
-		return false;
-	}
 
 	m_sceneMgr = new DSceneManager();
 	m_logMgr = new DLog();
@@ -82,7 +75,6 @@ bool DSystem::Run()
 
 void DSystem::Shutdown()
 {
-	DestroyWindow(m_hwnd);
 
 	if (m_inputMgr != NULL)
 	{
@@ -123,57 +115,18 @@ void DSystem::Shutdown()
 		m_res->Shutdown();
 		delete m_res;
 	}
+
+	OnShutdown();
+
 	DShader::ReleaseGlobalConstants();
 	m_res = NULL;
-
-	m_hwnd = NULL;
-	m_applicationName = NULL;
-
-	m_hInstance = NULL;
 
 	System = NULL;
 }
 
-void DSystem::InitWindow(int& width, int& height, bool fullScreen)
-{
-	m_hInstance = GetModuleHandle(NULL);
-	m_applicationName = L"DEngine";
-	m_title = L"DEngine";
-
-	System = this;
-
-	WNDCLASSEX wnd;
-	wnd.cbSize = sizeof(wnd);
-	wnd.cbClsExtra = 0;
-	wnd.cbWndExtra = 0;
-	wnd.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
-	wnd.hCursor = LoadCursor(NULL, IDC_ARROW);
-	wnd.hIcon = LoadIcon(NULL, IDI_WINLOGO);
-	wnd.hIconSm = wnd.hIcon;
-	wnd.hInstance = m_hInstance;
-	wnd.lpfnWndProc = SysWndProc;
-	wnd.lpszClassName = m_applicationName;
-	wnd.lpszMenuName = NULL;
-	wnd.style = CS_OWNDC | CS_HREDRAW | CS_VREDRAW;
-
-	RegisterClassEx(&wnd);
-
-	int posX, posY;
-	posX = (GetSystemMetrics(SM_CXSCREEN) - width) / 2;
-	posY = (GetSystemMetrics(SM_CYSCREEN) - height) / 2;
-
-	RECT rc = { 0, 0, width, height };
-	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
-	m_hwnd = CreateWindowEx(WS_EX_APPWINDOW, m_applicationName, m_title, WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_OVERLAPPEDWINDOW, posX, posY, rc.right - rc.left, rc.bottom - rc.top, NULL, NULL, m_hInstance, NULL);
-	
-	ShowWindow(m_hwnd, SW_SHOW);
-	SetFocus(m_hwnd);
-
-}
-
 bool DSystem::Loop()
 {
-	if (!m_inputMgr->InputLoop(m_hwnd))
+	if (!m_inputMgr->InputLoop())
 	{
 		return false;
 	}
@@ -184,23 +137,31 @@ bool DSystem::Loop()
 	return true;
 }
 
-LRESULT CALLBACK DSystem::MessageHandler(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+DSystem * DSystem::Create(DGraphicsAPI api)
 {
-	if (m_graphicsMgr != NULL && m_graphicsMgr->MessageHandler(hwnd, uMsg, wParam, lParam))
-		return true;
-	switch (uMsg)
-	{
-		default:
-		{
-			return DefWindowProc(hwnd, uMsg, wParam, lParam);
-		}
-	}
+#ifdef _DGAPI_D3D9
+	if (api == DGRAPHICS_API_D3D9)
+		return new D3DSystem;
+#endif
+#ifdef _DGAPI_D3D10
+	if (api == DGRAPHICS_API_D3D10)
+		return new D3DSystem;
+#endif
+#ifdef _DGAPI_D3D11
+	if (api == DGRAPHICS_API_D3D11)
+		return new D3DSystem;
+#endif
+#ifdef _DGAPI_OPENGL
+	if (api == DGRAPHICS_API_OPENGL)
+		return new DOpenGLSystem;
+#endif
+	return nullptr;
 }
 
-HWND DSystem::GetHWND()
-{
-	return System->m_hwnd;
-}
+//HWND DSystem::GetHWND()
+//{
+//	return System->m_hwnd;
+//}
 
 DSceneManager * DSystem::GetSceneMgr()
 {
@@ -236,25 +197,7 @@ void DSystem::Quit()
 {
 }
 
-LRESULT CALLBACK SysWndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
+DSystem * DSystem::GetInstance()
 {
-	switch (umessage)
-	{
-		case WM_DESTROY:
-		{
-			PostQuitMessage(0);
-			return 0;
-		}
-
-		case WM_CLOSE:
-		{
-			PostQuitMessage(0);
-			return 0;
-		}
-
-		default:
-		{
-			return System->MessageHandler(hwnd, umessage, wparam, lparam);
-		}
-	}
+	return System;
 }

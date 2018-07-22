@@ -36,6 +36,12 @@ public:
 	void SetSize(float);
 	void SetIntensity(float);
 
+	void SetLayerMask(DLAYER);
+	DLAYER GetLayerMask();
+	void AddLayer(DLAYER);
+	void RemoveLayer(DLAYER);
+	bool IsLayerVisible(DLAYER);
+
 protected:
 	virtual bool OnInit();
 	virtual void OnDestroy();
@@ -59,5 +65,7 @@ private:
 	bool m_isProjChanged;
 
 	DLightNode* m_node;
+
+	DLAYER m_layerMask;
 };
 

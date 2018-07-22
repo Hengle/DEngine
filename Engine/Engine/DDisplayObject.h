@@ -43,7 +43,6 @@ private:
 protected:
 	DGeometry* m_geometry;
 	DMaterial* m_material;
-	DMaterial* m_gizmoMat;
 	DBounds m_bounds;
 
 private:

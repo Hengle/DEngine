@@ -1,4 +1,6 @@
 ﻿#pragma once
+#ifdef _DGAPI_D3D11
+
 #include "D3D11Core.h"
 
 class DColorBuffer11 : public IRenderBuffer
@@ -27,3 +29,4 @@ private:
 	ID3D11DepthStencilView* m_depthStencilView;
 };
 
+#endif

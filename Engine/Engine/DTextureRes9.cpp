@@ -1,4 +1,5 @@
-﻿#include "DTextureRes9.h"
+﻿#ifdef _DGAPI_D3D9
+#include "DTextureRes9.h"
 #include "DSystem.h"
 
 DTextureRes9::DTextureRes9(LPDIRECT3DDEVICE9 device, WCHAR * filename)
@@ -98,3 +99,5 @@ IRenderBuffer * DRenderTextureViewRes9::GetDepthBuffer()
 {
 	return nullptr;
 }
+
+#endif

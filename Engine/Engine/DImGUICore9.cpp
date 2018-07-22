@@ -1,4 +1,5 @@
-﻿#include "DImGUICore9.h"
+﻿#ifdef _DGAPI_D3D9
+#include "DImGUICore9.h"
 #include "imgui.h"
 
 DImGUICore9::DImGUICore9()
@@ -345,3 +346,4 @@ bool DImGUICore9::ImGui_ImplDX9_CreateFontsTexture()
 
 	return true;
 }
+#endif

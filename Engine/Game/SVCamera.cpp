@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "SVCamera.h"
 #include "DRes.h"
 #include "TestResDefine.h"
@@ -6,7 +6,9 @@
 
 SVCamera::SVCamera() : DCamera()
 {
-	m_testDrawScene = false;
+	m_sortOrder = 1;
+	m_layerMask = D_LAYERMASK_NOTHING;
+	m_clearFlags = DClearFlags_Depth;
 }
 
 
@@ -21,7 +23,6 @@ bool SVCamera::OnInit()
 		m_lineMat = DRes::Load<DMaterial>(DEFAULT_GROUP, COLOR_MAT);
 		//SetOrthographic(true);
 		SetBackgroundColor(DColor(0, 0, 0, 0));
-		SetSortOrder(1);
 		return true;
 	}
 	return false;
@@ -44,7 +45,7 @@ void SVCamera::OnPostRender()
 	DGraphics::GlBegin();
 
 	DGraphics::GlVertex3(0, 0, 0.0f);
-	DGraphics::GlVertex3(1.0f, 1.0f, 0.0f);
+	DGraphics::GlVertex3(3.0f, 3.0f, 3.0f);
 
 	DGraphics::GlEnd();
 

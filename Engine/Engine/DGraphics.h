@@ -15,8 +15,6 @@ public:
 	~DGraphics();
 	/*初始化图形模块*/
 	bool Init(int width /*屏幕宽度*/, int height /*屏幕高度*/, bool fullscreen /*全屏*/, HWND hwnd /*窗口句柄*/, DGraphicsAPI api);
-	/*初始化窗口*/
-	bool PreInitWindow(int width, int height, bool fullscreen, HWND&);
 	/*帧函数*/
 	bool Frame();
 	/*关闭图形模块*/

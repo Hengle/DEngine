@@ -1,4 +1,5 @@
-﻿#include "DTextureRes10.h"
+﻿#ifdef _DGAPI_D3D10
+#include "DTextureRes10.h"
 #include "DSystem.h"
 #include "DRenderBuffer10.h"
 #include <D3DX10.h>
@@ -158,3 +159,4 @@ IRenderBuffer * DRenderTextureViewRes10::GetDepthBuffer()
 {
 	return m_depthBuffer;
 }
+#endif

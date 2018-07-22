@@ -8,6 +8,14 @@
 #define D_LAYERMASK_ALL     0xFFFFFFFFU
 #define D_LAYERMASK_DEFAULT 1U
 
+enum DClearFlags
+{
+	DClearFlags_SkyBox,
+	DClearFlags_Color,
+	DClearFlags_Depth,
+	DClearFlags_DontClear,
+};
+
 /*相机额外渲染贴图类型*/
 enum DCameraAdditionalTextureType
 {
@@ -95,6 +103,14 @@ public:
 	void SetRenderTexture(DRenderTexture*);
 	void SetReplaceShader(DShader* replacement);
 	void ResetReplaceShader();
+	void SetClearFlags(DClearFlags);
+	DClearFlags GetClearFlags();
+
+	void SetLayerMask(DLAYER);
+	DLAYER GetLayerMask();
+	void AddLayer(DLAYER);
+	void RemoveLayer(DLAYER);
+	bool IsLayerVisible(DLAYER);
 
 	static void GetCurrentCamera(DCamera** cam);
 
@@ -115,7 +131,10 @@ private:
 	void EndRender();
 
 protected:
-	bool m_testDrawScene;
+	int m_sortOrder;
+
+	DLAYER m_layerMask;
+	DClearFlags m_clearFlags;
 
 private:
 	float m_fieldOfView;
@@ -137,8 +156,6 @@ private:
 	/*保存当前的相机节点*/
 	DCameraNode* m_node;
 	/*当前相机额外渲染纹理类型*/
-
-	int m_sortOrder;
 };
 
 static DCamera* sCurrent;

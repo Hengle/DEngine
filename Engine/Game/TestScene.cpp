@@ -415,24 +415,24 @@ void TestScene::OnUnLoad()
 
 void TestScene::OnRender()
 {
-	m_testColorMat->SetPass(0);
-	//DGraphics::GlSetMaterial(testcolormat);
-	DGraphics::GlPushMatrix();
+	//m_testColorMat->SetPass(0);
+	////DGraphics::GlSetMaterial(testcolormat);
+	//DGraphics::GlPushMatrix();
 
-	DGraphics::GlBegin();
+	//DGraphics::GlBegin();
 
-	DGraphics::GlVertex3(0.0f, 0.0f, 0.0f);
-	DGraphics::GlVertex3(3.2f, 3.78f, 2.3f);
+	//DGraphics::GlVertex3(0.0f, 0.0f, 0.0f);
+	//DGraphics::GlVertex3(3.2f, 3.78f, 2.3f);
 
-	/*DGraphics::GlVertex3(3.2f, 3.78f, 2.3f);
-	DGraphics::GlVertex3(3.2f, 7.0f, 2.3f);
+	///*DGraphics::GlVertex3(3.2f, 3.78f, 2.3f);
+	//DGraphics::GlVertex3(3.2f, 7.0f, 2.3f);
 
-	DGraphics::GlVertex3(3.2f, 7.0f, 2.3f);
-	DGraphics::GlVertex3(-3.2f, 2.0f, -2.3f);*/
+	//DGraphics::GlVertex3(3.2f, 7.0f, 2.3f);
+	//DGraphics::GlVertex3(-3.2f, 2.0f, -2.3f);*/
 
-	DGraphics::GlEnd();
+	//DGraphics::GlEnd();
 
-	DGraphics::GlPopMatrix();
+	//DGraphics::GlPopMatrix();
 
 
 	//testd->Render();

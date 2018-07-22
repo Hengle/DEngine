@@ -1,4 +1,6 @@
 ﻿#pragma once
+#ifdef _DGAPI_D3D9
+
 #include "DGLCore.h"
 #include "DMath.h"
 #include <d3d9.h>
@@ -54,3 +56,4 @@ private:
 	IRenderStateMgr* m_renderStateMgr;
 };
 
+#endif

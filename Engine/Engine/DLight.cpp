@@ -11,6 +11,7 @@ DLight::DLight() : DSceneObject()
 	m_isProjChanged = false;
 
 	m_node = 0;
+	m_layerMask = D_LAYERMASK_DEFAULT;
 }
 
 
@@ -26,7 +27,7 @@ void DLight::RenderShadow()
 	DGraphics::SetViewPort(0, 0, w, h);
 	BeginRenderShadow();
 	DGraphics::SetGlobalRenderShader(m_shadowShader);
-	DScene::Draw(false);
+	DScene::Draw(false, m_layerMask);
 	
 	EndRenderShadow();
 	DGraphics::ClearGlobalRenderShader();
@@ -80,6 +81,32 @@ void DLight::SetSize(float size)
 void DLight::SetIntensity(float intensity)
 {
 	m_intensity = intensity;
+}
+
+void DLight::SetLayerMask(DLAYER layerMask)
+{
+	m_layerMask = layerMask;
+}
+
+DLAYER DLight::GetLayerMask()
+{
+	return m_layerMask;
+}
+
+void DLight::AddLayer(DLAYER layer)
+{
+	m_layerMask |= layer;
+}
+
+void DLight::RemoveLayer(DLAYER layer)
+{
+	if ((m_layerMask&layer) != 0)
+		m_layerMask ^= layer;
+}
+
+bool DLight::IsLayerVisible(DLAYER layer)
+{
+	return (m_layerMask&layer) != 0;
 }
 
 bool DLight::OnInit()

@@ -1,4 +1,5 @@
-﻿#include "D3D11Core.h"
+﻿#ifdef _DGAPI_D3D11
+#include "D3D11Core.h"
 #include "DSystem.h"
 #include "DGeometryRes11.h"
 #include "DShaderProgram11.h"
@@ -504,3 +505,4 @@ ID3D11SamplerState* D3D11Core::CreateSamplerState(D3D11_TEXTURE_ADDRESS_MODE mod
 		return NULL;
 	return state;
 }
+#endif

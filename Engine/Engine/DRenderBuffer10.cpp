@@ -1,3 +1,4 @@
+﻿#ifdef _DGAPI_D3D10
 #include "DRenderBuffer10.h"
 
 DColorBuffer10::DColorBuffer10()
@@ -69,3 +70,4 @@ ID3D10DepthStencilView * DDepthBuffer10::GetView()
 {
 	return m_depthStencilView;
 }
+#endif

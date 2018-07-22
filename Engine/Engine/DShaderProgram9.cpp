@@ -1,4 +1,5 @@
-﻿#include "DShaderProgram9.h"
+﻿#ifdef _DGAPI_D3D9
+#include "DShaderProgram9.h"
 #include "DLog.h"
 
 DShaderProgram9::DShaderProgram9(LPDIRECT3DDEVICE9 device) : DShaderProgram()
@@ -421,3 +422,4 @@ HRESULT DShaderPixelProgram9::InitPixelShader()
 
 	return S_OK;
 }
+#endif

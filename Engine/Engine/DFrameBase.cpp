@@ -1,4 +1,4 @@
-#include "DFrameBase.h"
+﻿#include "DFrameBase.h"
 #include "DSystem.h"
 
 
@@ -11,14 +11,14 @@ DFrameBase::~DFrameBase()
 {
 }
 
-void DFrameBase::Create()
+void DFrameBase::Create(int screenWidth, int screenHeight, bool fullScreen, DGraphicsAPI api)
 {
 	DSystem *system;
 	bool result;
-	system = new DSystem;
+	system = DSystem::Create(api);
 	if (!system)
 		return;
-	result = system->Init();
+	result = system->Init(screenWidth, screenHeight, fullScreen, api);
 
 	if (result)
 	{

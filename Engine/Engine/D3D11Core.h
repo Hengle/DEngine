@@ -1,4 +1,6 @@
 ﻿#pragma once
+#ifdef _DGAPI_D3D11
+
 #include "DGLCore.h"
 #include <dxgi.h>
 #include <D3D11.h>
@@ -61,3 +63,5 @@ private:
 	std::map<DWrapMode, ID3D11SamplerState*> m_samplerStates;
 	
 };
+
+#endif

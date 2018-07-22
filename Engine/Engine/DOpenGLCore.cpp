@@ -1,4 +1,5 @@
-﻿#include "DOpenGLCore.h"
+﻿#ifdef _DGAPI_OPENGL
+#include "DOpenGLCore.h"
 
 
 DOpenGLCore::DOpenGLCore()
@@ -67,3 +68,4 @@ IRenderStateMgr * DOpenGLCore::GetRenderStateMgr()
 {
 	return nullptr;
 }
+#endif

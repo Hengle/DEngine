@@ -1,4 +1,5 @@
-﻿#include "DRenderStateMgr11.h"
+﻿#ifdef _DGAPI_D3D11
+#include "DRenderStateMgr11.h"
 
 DRenderStateMgr11::DRenderStateMgr11(ID3D11Device *device, ID3D11DeviceContext *deviceContext)
 {
@@ -559,3 +560,4 @@ HRESULT DRenderStateMgr11::CreateDisableBlendState(ID3D11BlendState ** state)
 	HRESULT result = m_device->CreateBlendState(&blenddesc, state);
 	return result;
 }
+#endif

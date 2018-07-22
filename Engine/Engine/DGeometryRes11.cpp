@@ -1,4 +1,5 @@
-﻿#include "DGeometryRes11.h"
+﻿#ifdef _DGAPI_D3D11
+#include "DGeometryRes11.h"
 
 DGeometryRes11::DGeometryRes11(ID3D11Device* device,ID3D11DeviceContext * deviceContext, int vertexUsage, bool dynamic) : DGeometryRes(vertexUsage, dynamic)
 {
@@ -181,3 +182,4 @@ void DGeometryRes11::OnDraw(DGeometryTopology topology)
 
 	m_deviceContext->DrawIndexed(m_indexCount, 0, 0);
 }
+#endif

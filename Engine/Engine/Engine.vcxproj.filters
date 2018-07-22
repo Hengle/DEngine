@@ -252,14 +252,23 @@
     <ClInclude Include="DOpenGLCore.h">
       <Filter>头文件\Core\OpenGLCore</Filter>
     </ClInclude>
-    <ClInclude Include="DCuller.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="DRenderer.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
     <ClInclude Include="DShaderConstant.h">
       <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="DCuller.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="D3DSystem.h">
+      <Filter>头文件\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="DOpenGLSystem.h">
+      <Filter>头文件\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="DInputCore.h">
+      <Filter>头文件\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -425,11 +434,20 @@
     <ClCompile Include="DOpenGLCore.cpp">
       <Filter>源文件\Core\OpenGLCore</Filter>
     </ClCompile>
-    <ClCompile Include="DCuller.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="DRenderer.cpp">
       <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="DCuller.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="D3DSystem.cpp">
+      <Filter>源文件\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DOpenGLSystem.cpp">
+      <Filter>源文件\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DInputCore.cpp">
+      <Filter>源文件\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

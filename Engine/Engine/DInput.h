@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <dinput.h>
 
 class DInput
@@ -8,7 +8,7 @@ public:
 	~DInput();
 	bool Init(HINSTANCE, HWND, int, int);
 	void Shutdown();
-	bool InputLoop(HWND);
+	bool InputLoop();
 
 	static void GetMousePosition(int&, int&);
 	static void GetDeltaMouseMove(int&, int&);
@@ -35,5 +35,6 @@ private:
 	int m_screenWidth, m_screenHeight;
 	int m_mouseX, m_mouseY;
 	int m_deltaMouseX, m_deltaMouseY;
+	HWND m_hwnd;
 };
 

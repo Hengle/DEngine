@@ -1,4 +1,6 @@
 ﻿#pragma once
+#ifdef _DGAPI_D3D10
+
 #include "DImGUICore.h"
 #include <d3d10_1.h>
 #include <d3d10.h>
@@ -52,3 +54,4 @@ private:
 	int                      g_VertexBufferSize = 5000, g_IndexBufferSize = 10000;
 };
 
+#endif

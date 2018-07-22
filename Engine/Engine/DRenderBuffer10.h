@@ -1,4 +1,6 @@
-#pragma once
+﻿#pragma once
+#ifdef _DGAPI_D3D10
+
 #include "D3D10Core.h"
 
 class DColorBuffer10 : public IRenderBuffer
@@ -27,3 +29,4 @@ private:
 	ID3D10DepthStencilView* m_depthStencilView;
 };
 
+#endif

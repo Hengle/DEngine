@@ -1,4 +1,6 @@
 ﻿#pragma once
+#ifdef _DGAPI_D3D11
+
 #include "D3D11Core.h"
 #include <vector>
 
@@ -66,3 +68,5 @@ private:
 private:
 	ID3D11PixelShader *m_pixelShader;
 };
+
+#endif

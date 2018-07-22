@@ -1,4 +1,5 @@
 ﻿#pragma once
+#ifdef _DGAPI_D3D9
 #include "D3D9Core.h"
 
 /*
@@ -23,3 +24,4 @@ private:
 	IDirect3DVertexDeclaration9* m_vertexDeclaration;
 };
 
+#endif

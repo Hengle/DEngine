@@ -1,4 +1,5 @@
-﻿#include "D3D10Core.h"
+﻿#ifdef _DGAPI_D3D10
+#include "D3D10Core.h"
 #include "DGeometryRes10.h"
 #include "DShaderProgram10.h"
 #include "DTextureRes10.h"
@@ -501,3 +502,4 @@ ID3D10SamplerState * D3D10Core::CreateSamplerState(D3D10_TEXTURE_ADDRESS_MODE mo
 		return NULL;
 	return state;
 }
+#endif

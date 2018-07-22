@@ -1,4 +1,5 @@
-﻿#include "DShaderProgram10.h"
+﻿#ifdef _DGAPI_D3D10
+#include "DShaderProgram10.h"
 #include <D3DX10.h>
 #include <d3dcompiler.h>
 
@@ -637,3 +638,4 @@ void DShaderPixelProgram10::OnSetValue(UINT startSlot, UINT numBuffers, ID3D10Bu
 {
 	m_device->PSSetConstantBuffers(startSlot, numBuffers, buffers);
 }
+#endif

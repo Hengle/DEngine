@@ -1,4 +1,5 @@
-﻿#include "DImGUICore11.h"
+﻿#ifdef _DGAPI_D3D11
+#include "DImGUICore11.h"
 #include <d3dcompiler.h>
 
 struct VERTEX_CONSTANT_BUFFER
@@ -556,3 +557,4 @@ void DImGUICore11::ImGui_ImplDX11_CreateFontsTexture()
 		g_pd3dDevice->CreateSamplerState(&desc, &g_pFontSampler);
 	}
 }
+#endif

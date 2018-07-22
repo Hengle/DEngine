@@ -76,6 +76,7 @@ SubShader {
 SubShader {
 	Desc {
 		CompileTarget: { d3d9 }
+		Queue Transparent
 	}
 	Pass {
 		Tags {

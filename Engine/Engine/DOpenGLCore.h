@@ -1,4 +1,6 @@
 ﻿#pragma once
+#ifdef _DGAPI_OPENGL
+
 #include "DGLCore.h"
 
 class DOpenGLCore : public DGLCore
@@ -44,3 +46,4 @@ private:
 	
 };
 
+#endif

@@ -1,4 +1,6 @@
 ﻿#pragma once
+#ifdef _DGAPI_D3D11
+
 #include "D3D11Core.h"
 
 /*
@@ -41,3 +43,4 @@ private:
 	IRenderBuffer* m_depthBuffer;
 };
 
+#endif

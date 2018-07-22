@@ -1,4 +1,5 @@
-﻿#include "DGeometryRes9.h"
+﻿#ifdef _DGAPI_D3D9
+#include "DGeometryRes9.h"
 #include <vector>
 #include <exception>
 
@@ -138,3 +139,4 @@ void DGeometryRes9::Release()
 	m_indexBuffer = NULL;
 	m_vertexDeclaration = NULL;
 }
+#endif

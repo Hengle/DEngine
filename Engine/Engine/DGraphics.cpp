@@ -24,14 +24,10 @@ DGraphics::~DGraphics()
 {
 }
 
-bool DGraphics::PreInitWindow(int width, int height, bool fullscreen, HWND &)
-{
-	return false;
-}
-
 bool DGraphics::Init(int width, int height, bool fullScreen, HWND hwnd, DGraphicsAPI api)
 {
 	m_API = api;
+#ifdef _DGAPI_D3D11
 	if (api == DGRAPHICS_API_D3D11)
 	{
 		D3D11Core* gl = new D3D11Core();
@@ -43,7 +39,9 @@ bool DGraphics::Init(int width, int height, bool fullScreen, HWND hwnd, DGraphic
 		((DImGUICore11*)m_GUI)->Init(hwnd, gl->GetDevice(), gl->GetDeviceContext());
 		m_GL = gl;
 	}
-	else if (api == DGRAPHICS_API_D3D10)
+#endif
+#ifdef _DGAPI_D3D10
+	if (api == DGRAPHICS_API_D3D10)
 	{
 		D3D10Core* gl = new D3D10Core();
 		if (!gl->Init(width, height, fullScreen, hwnd))
@@ -54,7 +52,9 @@ bool DGraphics::Init(int width, int height, bool fullScreen, HWND hwnd, DGraphic
 		((DImGUICore10*)m_GUI)->Init(hwnd, gl->GetDevice());
 		m_GL = gl;
 	}
-	else if (api == DGRAPHICS_API_D3D9)
+#endif
+#ifdef _DGAPI_D3D9
+	if (api == DGRAPHICS_API_D3D9)
 	{
 		D3D9Core* gl = new D3D9Core();
 		if (!gl->Init(width, height, fullScreen, hwnd))
@@ -65,7 +65,9 @@ bool DGraphics::Init(int width, int height, bool fullScreen, HWND hwnd, DGraphic
 		((DImGUICore9*)m_GUI)->Init(hwnd, gl->GetDevice());
 		m_GL = gl;
 	}
-	else if (api == DGRAPHICS_API_OPENGL)
+#endif
+#ifdef _DGAPI_OPENGL
+	if (api == DGRAPHICS_API_OPENGL)
 	{
 		DOpenGLCore* gl = new DOpenGLCore();
 		if (!gl->Init(width, height, fullScreen, hwnd))
@@ -74,6 +76,10 @@ bool DGraphics::Init(int width, int height, bool fullScreen, HWND hwnd, DGraphic
 		}
 		m_GL = gl;
 	}
+#endif
+
+	if (m_GL == NULL)
+		return false;
 
 	m_renderer = new DRenderer();
 

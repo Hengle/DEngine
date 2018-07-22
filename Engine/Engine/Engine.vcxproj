@@ -88,7 +88,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalOptions>/D "_DGAPI_D3D9" /D "_DGAPI_D3D10" /D "_DGAPI_D3D11"  %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/D "_DGAPI_D3D9"  %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -143,6 +143,7 @@
     <ClInclude Include="D3D11Core.h" />
     <ClInclude Include="D3D9Core.h" />
     <ClInclude Include="D3DCore.h" />
+    <ClInclude Include="D3DSystem.h" />
     <ClInclude Include="DCamera.h" />
     <ClInclude Include="DColor.h" />
     <ClInclude Include="DCuller.h" />
@@ -159,6 +160,7 @@
     <ClInclude Include="DImGUICore11.h" />
     <ClInclude Include="DImGUICore9.h" />
     <ClInclude Include="DInput.h" />
+    <ClInclude Include="DInputCore.h" />
     <ClInclude Include="DLight.h" />
     <ClInclude Include="DLog.h" />
     <ClInclude Include="DMaterial.h" />
@@ -170,6 +172,7 @@
     <ClInclude Include="DModelLoader.h" />
     <ClInclude Include="DObject.h" />
     <ClInclude Include="DOpenGLCore.h" />
+    <ClInclude Include="DOpenGLSystem.h" />
     <ClInclude Include="DRenderBuffer10.h" />
     <ClInclude Include="DRenderBuffer11.h" />
     <ClInclude Include="DRenderer.h" />
@@ -211,6 +214,7 @@
     <ClCompile Include="D3D11Core.cpp" />
     <ClCompile Include="D3D9Core.cpp" />
     <ClCompile Include="D3DCore.cpp" />
+    <ClCompile Include="D3DSystem.cpp" />
     <ClCompile Include="DCamera.cpp" />
     <ClCompile Include="DColor.cpp" />
     <ClCompile Include="DCuller.cpp" />
@@ -225,6 +229,7 @@
     <ClCompile Include="DImGUICore11.cpp" />
     <ClCompile Include="DImGUICore9.cpp" />
     <ClCompile Include="DInput.cpp" />
+    <ClCompile Include="DInputCore.cpp" />
     <ClCompile Include="DLight.cpp" />
     <ClCompile Include="DLog.cpp" />
     <ClCompile Include="DMaterial.cpp" />
@@ -236,6 +241,7 @@
     <ClCompile Include="DModelLoader.cpp" />
     <ClCompile Include="DObject.cpp" />
     <ClCompile Include="DOpenGLCore.cpp" />
+    <ClCompile Include="DOpenGLSystem.cpp" />
     <ClCompile Include="DRenderBuffer10.cpp" />
     <ClCompile Include="DRenderBuffer11.cpp" />
     <ClCompile Include="DRenderer.cpp" />

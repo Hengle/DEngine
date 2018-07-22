@@ -1,4 +1,4 @@
-#include "DInput.h"
+﻿#include "DInput.h"
 #include "DSystem.h"
 
 DInput::DInput()
@@ -84,6 +84,7 @@ bool DInput::Init(HINSTANCE hInstance, HWND hwnd, int screenWidth, int screenHei
 	{
 		return false;
 	}*/
+	m_hwnd = hwnd;
 
 	return true;
 }
@@ -113,10 +114,12 @@ void DInput::Shutdown()
 		m_directInput = 0;
 	}
 
+	m_hwnd = 0;
+
 	return;
 }
 
-bool DInput::InputLoop(HWND hwnd)
+bool DInput::InputLoop()
 {
 	bool result;
 
@@ -129,7 +132,7 @@ bool DInput::InputLoop(HWND hwnd)
 	}
 
 	// Read the current state of the mouse.
-	result = ReadMouse(hwnd);
+	result = ReadMouse(m_hwnd);
 	if (!result)
 	{
 		return false;

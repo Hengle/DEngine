@@ -3,10 +3,18 @@
 /*图形API定义*/
 enum DGraphicsAPI
 {
-	DGRAPHICS_API_D3D9   = 1,
-	DGRAPHICS_API_D3D10  = 2,
-	DGRAPHICS_API_D3D11  = 4,
+#ifdef _DGAPI_D3D9
+	DGRAPHICS_API_D3D9 = 1,
+#endif // _DGAPI_D3D9
+#ifdef _DGAPI_D3D10
+	DGRAPHICS_API_D3D10 = 2,
+#endif // _DGAPI_D3D10
+#ifdef _DGAPI_D3D11
+	DGRAPHICS_API_D3D11 = 4,
+#endif // _DGAPI_D3D11
+#ifdef _DGAPI_OPENGL
 	DGRAPHICS_API_OPENGL = 8,
+#endif // _DGAPI_OPENGL
 };
 
 /*顶点用法定义*/

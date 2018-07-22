@@ -1,4 +1,5 @@
-﻿#include "D3D9Core.h"
+﻿#ifdef _DGAPI_D3D9
+#include "D3D9Core.h"
 #include <fstream>
 #include "DGeometryRes9.h"
 #include "DShaderProgram9.h"
@@ -216,3 +217,4 @@ void D3D9Core::InitRenderStateMgr()
 	m_renderStateMgr = new DRenderStateMgr9(m_device);
 	m_renderStateMgr->Init();
 }
+#endif

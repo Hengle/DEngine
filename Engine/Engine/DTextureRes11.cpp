@@ -1,4 +1,5 @@
-﻿#include "DTextureRes11.h"
+﻿#ifdef _DGAPI_D3D11
+#include "DTextureRes11.h"
 #include "DSystem.h"
 #include "DRenderBuffer11.h"
 
@@ -157,3 +158,4 @@ IRenderBuffer * DRenderTextureViewRes11::GetDepthBuffer()
 {
 	return m_depthBuffer;
 }
+#endif

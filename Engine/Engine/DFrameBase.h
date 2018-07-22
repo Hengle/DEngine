@@ -1,22 +1,22 @@
-#pragma once
+ï»¿#pragma once
 #include "DScene.h"
 
-/*¿ò¼ÜÈë¿Ú»ùÀà*/
-/*´Ó¸ÃÀàÀ©Õ¹£¬²¢×¢²á×Ô¼ºµÄ³¡¾°*/
+/*æ¡†æ¶å…¥å£åŸºç±»*/
+/*ä»è¯¥ç±»æ‰©å±•ï¼Œå¹¶æ³¨å†Œè‡ªå·±çš„åœºæ™¯*/
 class DFrameBase
 {
 public:
 	DFrameBase();
 	~DFrameBase();
-	void Create();
+	void Create(int screenWidth, int screenHeight, bool fullScreen, DGraphicsAPI api);
 	void Destroy();
 
 protected:
 	virtual void OnInit() = 0;
 
-	/*×¢²á³¡¾°*/
+	/*æ³¨å†Œåœºæ™¯*/
 	void RegisterScene(DScene* scene);
-	/*ÇĞ»»³¡¾°*/
+	/*åˆ‡æ¢åœºæ™¯*/
 	void ChangeScene(SCENEID sceneId);
 };
 

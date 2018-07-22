@@ -1,4 +1,6 @@
 ﻿#pragma once
+#ifdef _DGAPI_D3D9
+
 #include "D3D9Core.h"
 #include <string>
 #include <vector>
@@ -84,3 +86,4 @@ private:
 	ID3DXConstantTable* m_pixelConstable;
 };
 
+#endif

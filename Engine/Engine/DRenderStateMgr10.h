@@ -1,4 +1,6 @@
 ﻿#pragma once
+#ifdef _DGAPI_D3D10
+
 #include "D3D10Core.h"
 #include "D3DCore.h"
 #include <map>
@@ -66,3 +68,4 @@ private:
 	BlendState m_currentBlendState;
 };
 
+#endif

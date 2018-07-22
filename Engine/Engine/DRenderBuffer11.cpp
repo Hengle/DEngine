@@ -1,4 +1,5 @@
-﻿#include "DRenderBuffer11.h"
+﻿#ifdef _DGAPI_D3D11
+#include "DRenderBuffer11.h"
 
 
 DColorBuffer11::DColorBuffer11()
@@ -70,3 +71,4 @@ ID3D11DepthStencilView * DDepthBuffer11::GetView()
 {
 	return m_depthStencilView;
 }
+#endif

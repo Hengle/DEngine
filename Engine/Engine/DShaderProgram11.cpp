@@ -1,4 +1,5 @@
-﻿#include "DShaderProgram11.h"
+﻿#ifdef _DGAPI_D3D11
+#include "DShaderProgram11.h"
 #include "DTextureRes11.h"
 #include <d3dcompiler.h>
 #include <fstream>
@@ -702,3 +703,4 @@ HRESULT DShaderPixelProgram11::InitPixelShader(ID3DBlob * pShaderBlob, ID3D11Dev
 
 	return hr;
 }
+#endif

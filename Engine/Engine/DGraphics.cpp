@@ -7,6 +7,8 @@
 #include "DImGUICore11.h"
 #include "DImGUICore10.h"
 #include "DImGUICore9.h"
+#include "D3DSystem.h"
+#include "DOpenGLSystem.h"
 
 DGraphics::DGraphics()
 {
@@ -24,13 +26,14 @@ DGraphics::~DGraphics()
 {
 }
 
-bool DGraphics::Init(int width, int height, bool fullScreen, HWND hwnd, DGraphicsAPI api)
+bool DGraphics::Init(int width, int height, bool fullScreen, DGraphicsAPI api)
 {
 	m_API = api;
 #ifdef _DGAPI_D3D11
 	if (api == DGRAPHICS_API_D3D11)
 	{
 		D3D11Core* gl = new D3D11Core();
+		HWND hwnd = ((D3DSystem*)DSystem::GetInstance())->GetHWND();
 		if (!gl->Init(width, height, fullScreen, hwnd))
 		{
 			return false;
@@ -44,6 +47,7 @@ bool DGraphics::Init(int width, int height, bool fullScreen, HWND hwnd, DGraphic
 	if (api == DGRAPHICS_API_D3D10)
 	{
 		D3D10Core* gl = new D3D10Core();
+		HWND hwnd = ((D3DSystem*)DSystem::GetInstance())->GetHWND();
 		if (!gl->Init(width, height, fullScreen, hwnd))
 		{
 			return false;
@@ -57,6 +61,7 @@ bool DGraphics::Init(int width, int height, bool fullScreen, HWND hwnd, DGraphic
 	if (api == DGRAPHICS_API_D3D9)
 	{
 		D3D9Core* gl = new D3D9Core();
+		HWND hwnd = ((D3DSystem*)DSystem::GetInstance())->GetHWND();
 		if (!gl->Init(width, height, fullScreen, hwnd))
 		{
 			return false;
@@ -70,7 +75,8 @@ bool DGraphics::Init(int width, int height, bool fullScreen, HWND hwnd, DGraphic
 	if (api == DGRAPHICS_API_OPENGL)
 	{
 		DOpenGLCore* gl = new DOpenGLCore();
-		if (!gl->Init(width, height, fullScreen, hwnd))
+		GLFWwindow* window = ((DOpenGLSystem*)DSystem::GetInstance())->GetWindow();
+		if (!gl->Init(width, height, fullScreen, window))
 		{
 			return false;
 		}
@@ -90,6 +96,7 @@ bool DGraphics::Init(int width, int height, bool fullScreen, HWND hwnd, DGraphic
 
 bool DGraphics::Frame()
 {
+
 	DTime* time = DSystem::GetTimeMgr();
 	DSceneManager* sceneManager = DSystem::GetSceneMgr();
 	DLog* logManager = DSystem::GetLogMgr();

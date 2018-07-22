@@ -44,6 +44,8 @@ public:
 protected:
 	virtual bool OnInit(int screenWidth, int screenHeight, bool fullScreen, DGraphicsAPI api) = 0;
 	virtual void OnShutdown() = 0;
+	virtual void OnFrameEnd() {};
+	virtual bool IsWindowShouldClose() { return false; }
 
 private:
 	bool Loop();

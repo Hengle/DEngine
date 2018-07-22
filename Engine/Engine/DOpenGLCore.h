@@ -2,6 +2,8 @@
 #ifdef _DGAPI_OPENGL
 
 #include "DGLCore.h"
+#include "glad\glad.h"
+#include "GLFW\glfw3.h"
 
 class DOpenGLCore : public DGLCore
 {
@@ -10,7 +12,7 @@ public:
 	~DOpenGLCore();
 
 	/*模块初始化*/
-	virtual bool Init(int width, int height, bool fullscreen, HWND);
+	bool Init(int width, int height, bool fullscreen, GLFWwindow*);
 	/*模块销毁*/
 	virtual void Destroy();
 	/*提交渲染结果*/
@@ -43,7 +45,7 @@ private:
 	//ID3D11SamplerState* CreateSamplerState(D3D11_TEXTURE_ADDRESS_MODE);
 
 private:
-	
+	GLFWwindow* m_window;
 };
 
 #endif

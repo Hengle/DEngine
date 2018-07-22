@@ -10,6 +10,7 @@ public:
 	~D3DSystem();
 
 	LRESULT CALLBACK MessageHandler(HWND, UINT, WPARAM, LPARAM);
+	HWND GetHWND();
 
 protected:
 	virtual bool OnInit(int screenWidth, int screenHeight, bool fullScreen, DGraphicsAPI api);

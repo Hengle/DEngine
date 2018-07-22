@@ -29,6 +29,11 @@ LRESULT D3DSystem::MessageHandler(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 	}
 }
 
+HWND D3DSystem::GetHWND()
+{
+	return m_hwnd;
+}
+
 bool D3DSystem::OnInit(int screenWidth, int screenHeight, bool fullScreen, DGraphicsAPI api)
 {
 	InitWindow(screenWidth, screenHeight, fullScreen);
@@ -40,7 +45,7 @@ bool D3DSystem::OnInit(int screenWidth, int screenHeight, bool fullScreen, DGrap
 	}
 
 	m_graphicsMgr = new DGraphics();
-	if (!m_graphicsMgr->Init(screenWidth, screenHeight, fullScreen, m_hwnd, api))
+	if (!m_graphicsMgr->Init(screenWidth, screenHeight, fullScreen, api))
 	{
 		return false;
 	}

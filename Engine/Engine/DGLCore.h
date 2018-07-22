@@ -200,7 +200,7 @@ public:
 	DGLCore();
 	~DGLCore();
 	/*初始化图形库*/
-	virtual bool Init(int width, int height, bool fullscreen, HWND);
+	bool Init(int width, int height, bool fullscreen);
 	/*销毁图形库*/
 	virtual void Destroy() = 0;
 	/*提交渲染结果*/

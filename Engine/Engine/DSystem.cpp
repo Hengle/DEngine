@@ -134,6 +134,7 @@ bool DSystem::Loop()
 	{
 		return false;
 	}
+	OnFrameEnd();
 	return true;
 }
 

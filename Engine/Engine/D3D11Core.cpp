@@ -29,7 +29,7 @@ D3D11Core::~D3D11Core()
 
 bool D3D11Core::Init(int width, int height, bool fullScreen, HWND hwnd)
 {
-	DGLCore::Init(width, height, fullScreen, hwnd);
+	DGLCore::Init(width, height, fullScreen);
 	IDXGIFactory *factory;
 	HRESULT result;
 	IDXGIAdapter* adapter;

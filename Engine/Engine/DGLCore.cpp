@@ -233,7 +233,7 @@ DGLCore::~DGLCore()
 {
 }
 
-bool DGLCore::Init(int width, int height, bool, HWND)
+bool DGLCore::Init(int width, int height, bool)
 {
 	m_width = width;
 	m_height = height;

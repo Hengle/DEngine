@@ -21,7 +21,7 @@ D3D9Core::~D3D9Core()
 
 bool D3D9Core::Init(int width, int height, bool fullScreen, HWND hwnd)
 {
-	DGLCore::Init(width, height, fullScreen, hwnd);
+	DGLCore::Init(width, height, fullScreen);
 
 	HRESULT result;
 

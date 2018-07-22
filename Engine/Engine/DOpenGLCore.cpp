@@ -1,7 +1,5 @@
 ﻿#ifdef _DGAPI_OPENGL
 #include "DOpenGLCore.h"
-#include "glad\glad.h"
-#include "GLFW\glfw3.h"
 
 DOpenGLCore::DOpenGLCore()
 {
@@ -12,22 +10,33 @@ DOpenGLCore::~DOpenGLCore()
 {
 }
 
-bool DOpenGLCore::Init(int width, int height, bool fullscreen, HWND)
+bool DOpenGLCore::Init(int width, int height, bool fullscreen, GLFWwindow* window)
 {
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	{
+		MessageBox(NULL, L"创建GLAD失败", L"初始化失败", MB_ERR_INVALID_CHARS);
+		return false;
+
+	}
+
+	m_window = window;
 
 	return true;
 }
 
 void DOpenGLCore::Destroy()
 {
+	glfwTerminate();
 }
 
 void DOpenGLCore::Present()
 {
+	glfwSwapBuffers(m_window);
 }
 
 void DOpenGLCore::Clear(bool, bool, bool, DColor &, IRenderTextureViewRes *)
 {
+	
 }
 
 void DOpenGLCore::SetRenderTarget(IRenderTextureViewRes *)

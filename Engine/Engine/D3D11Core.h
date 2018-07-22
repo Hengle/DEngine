@@ -17,7 +17,7 @@ public:
 	~D3D11Core();
 
 	/*模块初始化*/
-	virtual bool Init(int width, int height, bool fullscreen, HWND);
+	bool Init(int width, int height, bool fullscreen, HWND);
 	/*模块销毁*/
 	virtual void Destroy();
 	/*提交渲染结果*/

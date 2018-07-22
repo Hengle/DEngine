@@ -88,7 +88,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalOptions>/D "_DGAPI_OPENGL"  %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/D "_DGAPI_D3D9" /D "_DGAPI_D3D10" /D "_DGAPI_D3D11" /D "_DGAPI_OPENGL"  %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

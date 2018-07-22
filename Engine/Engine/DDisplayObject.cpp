@@ -1,5 +1,6 @@
 ﻿#include "DDisplayObject.h"
 #include "DSystem.h"
+#include "DCuller.h"
 
 DDisplayObject::DDisplayObject(DGeometry* geometry, DMaterial* material) : DSceneObject()
 {
@@ -88,12 +89,16 @@ void DDisplayObject::OnFixedUpdate()
 //	}
 //}
 
-bool DDisplayObject::OnCullObject(DCuller * culler)
+bool DDisplayObject::OnCullObject()
 {
 	if (m_geometry != NULL && m_material != NULL && m_isVisible)
 	{
-		DGraphics::PushRenderQueue(this, m_material->GetRenderQueue());
-		return true;
+		DBounds bounds;
+		GetBounds(&bounds);
+		if (DCuller::Culling(bounds)) {
+			DGraphics::PushRenderQueue(this, m_material->GetRenderQueue());
+			return true;
+		}
 	}
 	return false;
 }
@@ -101,7 +106,8 @@ bool DDisplayObject::OnCullObject(DCuller * culler)
 void DDisplayObject::OnRenderObject()
 {
 	m_gizmoMat->SetPass(0);
-	DBounds bounds = m_bounds;
+	DBounds bounds;
+	GetBounds(&bounds);
 	DGraphics::GlPushMatrix();
 
 	DGraphics::GlBegin();
@@ -172,10 +178,23 @@ void DDisplayObject::OnRenderObject()
 
 void DDisplayObject::UpdateBounds()
 {
-	DVector3 rmin, rmax;
-	m_geometry->GetBoundsRange(&rmin, &rmax);
+	DVector3 center, size;
+	m_geometry->GetBoundsRange(&center, &size);
 
+	DMatrix4x4 ltw;
+	m_transform->GetLocalToWorld(ltw);
 
+	int i, j;
+	for (i = 0; i < 3; i++)
+	{
+		m_bounds.center[i] = ltw[12+i];
+		m_bounds.size[i] = 0.0f;
+		for (j = 0; j < 3; j++)
+		{
+			m_bounds.center[i] += ltw[j * 4 + i] * center[j];
+			m_bounds.size[i] += fabsf(ltw[j * 4 + i])*size[j];
+		}
+	}
 
 	m_transform->ClearAreaChange();
 }

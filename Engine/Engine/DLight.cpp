@@ -11,7 +11,6 @@ DLight::DLight() : DSceneObject()
 	m_isProjChanged = false;
 
 	m_node = 0;
-	m_culler = 0;
 }
 
 
@@ -27,7 +26,7 @@ void DLight::RenderShadow()
 	DGraphics::SetViewPort(0, 0, w, h);
 	BeginRenderShadow();
 	DGraphics::SetGlobalRenderShader(m_shadowShader);
-	DScene::Draw(false, m_culler);
+	DScene::Draw(false);
 	
 	EndRenderShadow();
 	DGraphics::ClearGlobalRenderShader();
@@ -89,8 +88,6 @@ bool DLight::OnInit()
 	m_node = new DLightNode();
 	m_node->light = this;
 
-	m_culler = new DCuller();
-
 	if (lightNode == NULL)
 		lightNode = m_node;
 	else {
@@ -140,8 +137,6 @@ void DLight::OnDestroy()
 		m_node = NULL;
 	}
 
-	delete m_culler;
-	m_culler = NULL;
 }
 
 void DLight::OnUpdate()

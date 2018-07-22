@@ -26,7 +26,7 @@ public:
 	void GetNormal(int index, DVector3* normal) const;
 	void GetColor(int index, DColor* color) const;
 	void GetUV(int index, int channel, DVector2* uv) const;
-	void GetBoundsRange(DVector3* min, DVector3* max);
+	void GetBoundsRange(DVector3* center, DVector3* size);
 	bool IsBoundsRangeChanged();
 	DGeometryTopology GetTopology();
 	void SetVertex(int index, const DVector3&);
@@ -60,8 +60,8 @@ private:
 	DGeometryTopology m_topology;
 	std::map<int, DGeometryRes*> m_geometryReses;
 	bool m_dynamic;
-	DVector3 m_minVertex;
-	DVector3 m_maxVertex;
+	DVector3 m_centerVertex;
+	DVector3 m_rangeSize;
 
 	bool m_isBoundsChanged;
 };

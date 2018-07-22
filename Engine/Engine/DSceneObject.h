@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include "DObject.h"
 #include "DTransform.h"
-#include "DCuller.h"
 
 #define DLAYER unsigned int
 
@@ -19,7 +18,7 @@ public:
 	void Destroy();
 	void Update();
 	void FixedUpdate();
-	bool CullObject(DCuller*);
+	bool CullObject();
 	void RenderObject();
 	DTransform* GetTransform() const;
 	bool IsInitialized();
@@ -33,7 +32,7 @@ protected:
 	virtual void OnDestroy() = 0;
 	virtual void OnUpdate() = 0;
 	virtual void OnFixedUpdate() = 0;
-	virtual bool OnCullObject(DCuller*) { return false; }
+	virtual bool OnCullObject() { return false; }
 	virtual void OnRenderObject() {}
 
 protected:

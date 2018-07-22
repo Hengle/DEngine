@@ -269,13 +269,13 @@ void DScene::SetLightNode(DLightNode * lightNode)
 	m_lightNode = lightNode;
 }
 
-void DScene::Draw(bool callOnRender, DCuller * culler)
+void DScene::Draw(bool callOnRender)
 {
 	DScene* current = DSystem::GetSceneMgr()->GetCurrentScene();
 	if (current != NULL)
 	{
 		if (current->m_rootTransform != NULL)
-			current->DrawSceneObject(current->m_rootTransform, culler);
+			current->DrawSceneObject(current->m_rootTransform);
 
 		if (callOnRender)
 			current->OnRender();
@@ -343,20 +343,20 @@ void DScene::UnLoadSceneObject(DTransform * node)
 	}
 }
 
-void DScene::DrawSceneObject(DTransform * node, DCuller * culler)
+void DScene::DrawSceneObject(DTransform * node)
 {
 	DTransform* child = node->GetFirstChild();
 	while (child != NULL)
 	{
 		DSceneObject* sobj = child->GetSceneObject();
 		if (sobj != NULL) {
-			if (sobj->CullObject(culler))
+			if (sobj->CullObject())
 			{
 				//sobj->RenderObject();
 				//render->PushDisplayObject(sobj, sobj->)
 			}
 		}
-		DrawSceneObject(child, culler);
+		DrawSceneObject(child);
 
 		child = child->GetNextNegibhor();
 	}

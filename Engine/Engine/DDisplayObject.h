@@ -34,7 +34,7 @@ protected:
 	virtual void OnDestroy();
 	virtual void OnUpdate();
 	virtual void OnFixedUpdate();
-	virtual bool OnCullObject(DCuller*);
+	virtual bool OnCullObject();
 	virtual void OnRenderObject();
 
 private:

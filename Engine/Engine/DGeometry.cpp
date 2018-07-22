@@ -156,15 +156,15 @@ void DGeometry::GetUV(int index, int channel, DVector2 * uv) const
 	}
 }
 
-void DGeometry::GetBoundsRange(DVector3 * min, DVector3 * max)
+void DGeometry::GetBoundsRange(DVector3 * center, DVector3 * size)
 {
 	if (m_isBoundsChanged)
 	{
 		UpdateBounds();
 		m_isBoundsChanged = false;
 	}
-	*min = m_minVertex;
-	*max = m_maxVertex;
+	*center = m_centerVertex;
+	*size = m_rangeSize;
 }
 
 bool DGeometry::IsBoundsRangeChanged()
@@ -516,7 +516,7 @@ void DGeometry::UpdateBounds()
 			minZ = m_geometryDesc.vertices[i * 3 + 2];
 	}
 	
-	m_minVertex = DVector3(minX, minY, minZ);
-	m_maxVertex = DVector3(maxX, maxY, maxZ);
+	m_rangeSize = DVector3(maxX - minX, maxY - minY, maxZ - minZ);
+	m_centerVertex = DVector3(minX + m_rangeSize.x * 0.5f, minY + m_rangeSize.y * 0.5f, minZ + m_rangeSize.z * 0.5f);
 }
 

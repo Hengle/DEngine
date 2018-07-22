@@ -3,7 +3,6 @@
 #include "DTexture.h"
 #include "DMaterial.h"
 #include "DEngineDefine.h"
-#include "DCuller.h"
 
 #define D_LAYERMASK_NOTHING 0U
 #define D_LAYERMASK_ALL     0xFFFFFFFFU
@@ -140,8 +139,6 @@ private:
 	/*当前相机额外渲染纹理类型*/
 
 	int m_sortOrder;
-
-	DCuller* m_culler;
 };
 
 static DCamera* sCurrent;

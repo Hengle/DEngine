@@ -7,6 +7,9 @@ public:
 	DCuller();
 	~DCuller();
 
-	bool Culling(DBounds bounds);
+	static bool Culling(DBounds bounds);
+
+private:
+	static int ComputeOutCode(DVector4&, DMatrix4x4& projection);
 };
 

@@ -521,6 +521,11 @@ void DTransform::ClearAreaChange()
 	m_isAreaChanged = false;
 }
 
+bool DTransform::IsMatrixWillChange()
+{
+	return m_isL2WMatrixChanged;
+}
+
 void DTransform::Release()
 {
 	m_sceneObj = NULL;
@@ -622,6 +627,7 @@ void DTransform::RefreshLocalToWorldMatrix()
 	while (node != NULL)
 	{
 		node->m_isL2WMatrixChanged = true;
+		node->m_isAreaChanged = true;
 		node = node->m_nextNeighbor;
 	}
 

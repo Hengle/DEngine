@@ -59,6 +59,5 @@ private:
 	bool m_isProjChanged;
 
 	DLightNode* m_node;
-	DCuller* m_culler;
 };
 

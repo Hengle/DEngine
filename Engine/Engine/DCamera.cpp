@@ -31,7 +31,6 @@ DCamera::DCamera() : DSceneObject()
 	m_node = 0;
 
 	//m_render = 0;
-	m_culler = 0;
 
 	m_testDrawScene = true;
 }
@@ -52,7 +51,7 @@ void DCamera::Render()
 	//	DScene::Draw(true);
 		OnPreRender();
 		if(m_testDrawScene)
-			DScene::Draw(true, m_culler);
+			DScene::Draw(true);
 
 		OnPostRender();
 
@@ -308,7 +307,6 @@ bool DCamera::OnInit()
 	DSystem::GetSceneMgr()->GetCurrentScene()->SetCameraNode(camNode);
 
 	//m_render = new DRender();
-	m_culler = new DCuller();
 	return true;
 }
 
@@ -319,8 +317,6 @@ void DCamera::OnDestroy()
 	m_skyBoxMaterial = NULL;
 	m_filter = NULL;
 
-	delete m_culler;
-	m_culler = NULL;
 	//m_render->Release();
 	//delete m_render;
 	//m_render = NULL;

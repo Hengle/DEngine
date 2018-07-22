@@ -30,14 +30,14 @@ public:
 	DLightNode* GetLightNode();
 	void SetLightNode(DLightNode*);
 
-	static void Draw(bool callOnRender, DCuller* culler);
+	static void Draw(bool callOnRender);
 	static void DrawShadow();
 
 private:
 	void UpdateSceneObject(DTransform* node);
 	void FixedUpdateSceneObject(DTransform* node);
 	void UnLoadSceneObject(DTransform* node);
-	void DrawSceneObject(DTransform* node, DCuller* culler);
+	void DrawSceneObject(DTransform* node);
 
 protected:
 	virtual void OnGUI();

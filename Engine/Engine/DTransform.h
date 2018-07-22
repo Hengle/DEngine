@@ -66,6 +66,8 @@ public:
 	//清除区域（包围盒）变换
 	void ClearAreaChange();
 
+	bool IsMatrixWillChange();
+
 	void Release();
 
 private:

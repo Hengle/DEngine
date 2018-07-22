@@ -31,7 +31,7 @@ TestScene::TestScene(SCENEID sceneId, char * sceneName) : DScene(sceneId, sceneN
 
 void TestScene::OnGUI()
 {
-	DGUI::Label(u8"森哥的引擎：中文utf-8测试");
+	DGUI::Label(u8"SG DEEP_LIGHT Engine：中文utf-8测试");
 	DGUI::Label("DeltaTime:%lf", DTime::GetDeltaTime());
 	DGUI::Label("FixedDeltaTime:%lf", DTime::GetFixedDeltaTime());
 	DGUI::Label("Timer:%lf", DTime::GetTimer());

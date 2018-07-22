@@ -5,3 +5,9 @@
 EmptyScene::EmptyScene(SCENEID sceneId, char * sceneName) : DScene(sceneId, sceneName)
 {
 }
+
+void EmptyScene::OnLoad()
+{
+	DCamera* cam = new DCamera();
+	cam->Create();
+}

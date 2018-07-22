@@ -449,6 +449,9 @@
     <ClCompile Include="DInputCore.cpp">
       <Filter>源文件\Core</Filter>
     </ClCompile>
+    <ClCompile Include="glad.c">
+      <Filter>源文件\Core\OpenGLCore</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Engine.rc">

@@ -126,7 +126,7 @@ void DSystem::Shutdown()
 
 bool DSystem::Loop()
 {
-	if (!m_inputMgr->InputLoop())
+	if (m_inputMgr != NULL && !m_inputMgr->InputLoop())
 	{
 		return false;
 	}

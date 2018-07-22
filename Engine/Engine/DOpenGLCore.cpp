@@ -1,6 +1,7 @@
 ﻿#ifdef _DGAPI_OPENGL
 #include "DOpenGLCore.h"
-
+#include "glad\glad.h"
+#include "GLFW\glfw3.h"
 
 DOpenGLCore::DOpenGLCore()
 {
@@ -13,6 +14,7 @@ DOpenGLCore::~DOpenGLCore()
 
 bool DOpenGLCore::Init(int width, int height, bool fullscreen, HWND)
 {
+
 	return true;
 }
 

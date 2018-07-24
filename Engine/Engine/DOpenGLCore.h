@@ -37,6 +37,8 @@ public:
 	/*获取渲染状态管理器*/
 	virtual IRenderStateMgr* GetRenderStateMgr();
 
+	virtual bool IsFrustrumZeroToOne() { return false; }
+
 private:
 	///*初始化采样器状态*/
 	//void InitSamplerStates();

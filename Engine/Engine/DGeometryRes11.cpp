@@ -7,60 +7,7 @@ DGeometryRes11::DGeometryRes11(ID3D11Device* device,ID3D11DeviceContext * device
 	m_indexBuffer = 0;
 	m_device = device;
 	m_deviceContext = deviceContext;
-	//m_dataSize = 0;
-	//m_dataCount = 0;
-	//m_indexCount = 0;
 
-	//m_dataSize = sizeof(float) * m_dataCount;
-	//m_dataCount = 3;
-	/*if (vertexUsage & (1UL << DVertexUsage_TEXCOORD0))
-	{
-		m_dataSize += fsize * 2;
-		m_dataCount += 2;
-		m_hasUV = true;
-	}
-	if (vertexUsage & (1UL << DVertexUsage_TEXCOORD1))
-	{
-		m_dataSize += fsize * 2;
-		m_dataCount += 2;
-		m_hasUV1 = true;
-	}
-	if (vertexUsage & (1UL << DVertexUsage_TEXCOORD2))
-	{
-		m_dataSize += fsize * 2;
-		m_dataCount += 2;
-		m_hasUV2 = true;
-	}
-	if (vertexUsage & (1UL << DVertexUsage_TEXCOORD3))
-	{
-		m_dataSize += fsize * 2;
-		m_dataCount += 2;
-		m_hasUV3 = true;
-	}
-	if (vertexUsage & (1UL << DVertexUsage_NORMAL))
-	{
-		m_dataSize += fsize * 3;
-		m_dataCount += 3;
-		m_hasNormal = true;
-	}
-	if (vertexUsage & (1UL << DVertexUsage_COLOR))
-	{
-		m_dataSize += fsize * 4;
-		m_dataCount += 4;
-		m_hasColor = true;
-	}
-	if (vertexUsage & (1UL << DVertexUsage_TANGENT))
-	{
-		m_dataSize += fsize * 4;
-		m_dataCount += 4;
-		m_hasTangent = true;
-	}
-	if (vertexUsage & (1UL << DVertexUsage_BINORMAL))
-	{
-		m_dataSize += fsize * 3;
-		m_dataCount += 3;
-		m_hasBinormal = true;
-	}*/
 }
 
 DGeometryRes11::~DGeometryRes11()

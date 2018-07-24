@@ -95,6 +95,8 @@ public:
 	static void ClearActiveMaterial(DMaterial*);
 	static void ApplyActiveMaterial();
 
+	static bool IsFrustrumZeroToOne();
+
 private:
 	void InitScreenPlane();
 	void InitSkyBox();

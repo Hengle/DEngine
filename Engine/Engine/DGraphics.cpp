@@ -641,6 +641,11 @@ void DGraphics::ApplyActiveMaterial()
 	}
 }
 
+bool DGraphics::IsFrustrumZeroToOne()
+{
+	return DSystem::GetGraphicsMgr()->IsFrustrumZeroToOne();
+}
+
 void DGraphics::InitScreenPlane()
 {
 	//DMeshBufferDesc desc;

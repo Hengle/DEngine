@@ -3,6 +3,9 @@
 
 #include "stdafx.h"
 #include "GameFrame.h"
+
+#include "glad\glad.h"
+#include "GLFW\glfw3.h"
 //#include "DMath.h"
 //#include <Windows.h>
 //#include <D3DX10math.h>
@@ -10,27 +13,10 @@ using namespace std;
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline, int nCmdShow)
 {
-	GameFrame* frame = new GameFrame();
+	/*GameFrame* frame = new GameFrame();
 	frame->Create(1024, 768, false, DGRAPHICS_API_OPENGL);
-	frame->Destroy();
-
+	frame->Destroy();*/
+	
+	
 	return 0;
 }
-
-//int main() {
-//
-//	DObjModelLoader::LoadObj("as.obj");
-//
-//	/*char* k = "1/2/3";
-//	int id0, id1, id2;
-//	sscanf_s(k, "%d/%d/%d", &id0, &id1, &id2);
-//
-//	cout << id0 << endl;
-//	cout << id1 << endl;
-//	cout << id2 << endl;*/
-//
-//	int c = 0;
-//	cin >> c;
-//
-//	return 0;
-//}

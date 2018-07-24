@@ -39,6 +39,8 @@ public:
 	virtual DShaderProgram* CreateShaderProgram(DShaderProgramType);
 	virtual void ApplySamplerState(UINT, DWrapMode);
 	virtual IRenderStateMgr* GetRenderStateMgr();
+
+	virtual bool IsFrustrumZeroToOne() { return true; }
 	ID3D10Device* GetDevice() const;
 
 private:

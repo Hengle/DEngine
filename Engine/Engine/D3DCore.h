@@ -44,3 +44,8 @@ public:
 	DRSBlendFactor srcfactor;
 	DRSBlendFactor dstfactor;
 };
+
+class DGeometryResD3D : public DGeometryRes
+{
+
+};

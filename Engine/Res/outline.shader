@@ -75,7 +75,7 @@ SubShader {
 			PixelFunc:  FragMain
 		}
 		State {
-			zwrite off
+			zwrite on
 			ztest lequal
 			cull front
 		}

@@ -150,6 +150,7 @@
     <ClInclude Include="DDisplayObject.h" />
     <ClInclude Include="DEngineDefine.h" />
     <ClInclude Include="DFrameBase.h" />
+    <ClInclude Include="DGeometryResOpGL.h" />
     <ClInclude Include="DGLCore.h" />
     <ClInclude Include="DGLDrawer.h" />
     <ClInclude Include="DGraphics.h" />
@@ -179,6 +180,7 @@
     <ClInclude Include="DRenderStateMgr10.h" />
     <ClInclude Include="DRenderStateMgr11.h" />
     <ClInclude Include="DRenderStateMgr9.h" />
+    <ClInclude Include="DRenderStateMgrOpGL.h" />
     <ClInclude Include="DRes.h" />
     <ClInclude Include="DResGroup.h" />
     <ClInclude Include="DResItem.h" />
@@ -192,6 +194,7 @@
     <ClInclude Include="DShaderProgram10.h" />
     <ClInclude Include="DShaderProgram11.h" />
     <ClInclude Include="DShaderProgram9.h" />
+    <ClInclude Include="DShaderProgramOpGL.h" />
     <ClInclude Include="DSystem.h" />
     <ClInclude Include="DTexture.h" />
     <ClInclude Include="DTextureRes10.h" />
@@ -220,6 +223,7 @@
     <ClCompile Include="DCuller.cpp" />
     <ClCompile Include="DDisplayObject.cpp" />
     <ClCompile Include="DFrameBase.cpp" />
+    <ClCompile Include="DGeometryResOpGL.cpp" />
     <ClCompile Include="DGLCore.cpp" />
     <ClCompile Include="DGLDrawer.cpp" />
     <ClCompile Include="DGraphics.cpp" />
@@ -248,6 +252,7 @@
     <ClCompile Include="DRenderStateMgr10.cpp" />
     <ClCompile Include="DRenderStateMgr11.cpp" />
     <ClCompile Include="DRenderStateMgr9.cpp" />
+    <ClCompile Include="DRenderStateMgrOpGL.cpp" />
     <ClCompile Include="DRes.cpp" />
     <ClCompile Include="DResGroup.cpp" />
     <ClCompile Include="DResItem.cpp" />
@@ -260,6 +265,7 @@
     <ClCompile Include="DShaderProgram10.cpp" />
     <ClCompile Include="DShaderProgram11.cpp" />
     <ClCompile Include="DShaderProgram9.cpp" />
+    <ClCompile Include="DShaderProgramOpGL.cpp" />
     <ClCompile Include="DSystem.cpp" />
     <ClCompile Include="DTexture.cpp" />
     <ClCompile Include="DTextureRes10.cpp" />

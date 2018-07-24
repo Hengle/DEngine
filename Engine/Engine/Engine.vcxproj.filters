@@ -37,29 +37,41 @@
     <Filter Include="库\ImGUI">
       <UniqueIdentifier>{7dc9357b-44fc-4f9d-9480-e5c91f19c3de}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\Core\D3D9Core">
-      <UniqueIdentifier>{65347ef2-8707-48f1-93da-ae0f714b32e9}</UniqueIdentifier>
+    <Filter Include="头文件\Core\D3D">
+      <UniqueIdentifier>{5fdae09b-2852-4580-9127-f2c069d01d7b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\Core\D3D10Core">
-      <UniqueIdentifier>{4d960700-2704-442a-bf9a-06ba95350899}</UniqueIdentifier>
+    <Filter Include="头文件\Core\OpenGL">
+      <UniqueIdentifier>{f9039f48-4773-4360-b1f2-6d1a5fe24a8f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\Core\D3D11Core">
-      <UniqueIdentifier>{51e36890-efe9-4e48-86b7-ea05d2878269}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="头文件\Core\D3D9Core">
-      <UniqueIdentifier>{e106ce3c-6371-400d-a4eb-80cf07a3a56b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="头文件\Core\D3D10Core">
-      <UniqueIdentifier>{25368936-df6c-4f16-97c1-ad82db4d3b5f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="头文件\Core\D3D11Core">
+    <Filter Include="头文件\Core\D3D\D3D11Core">
       <UniqueIdentifier>{cfab7024-3b35-4a2e-8b48-0eb006876e8d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\Core\OpenGLCore">
-      <UniqueIdentifier>{707acc3e-33dd-402e-b4f5-9a159664eb99}</UniqueIdentifier>
+    <Filter Include="头文件\Core\D3D\D3D9Core">
+      <UniqueIdentifier>{e106ce3c-6371-400d-a4eb-80cf07a3a56b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\Core\OpenGLCore">
+    <Filter Include="头文件\Core\D3D\D3D10Core">
+      <UniqueIdentifier>{25368936-df6c-4f16-97c1-ad82db4d3b5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Core\OpenGL\OpenGLCore">
       <UniqueIdentifier>{cd5c06c9-1e99-4013-a544-05a2c112e617}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Core\D3D">
+      <UniqueIdentifier>{a9959236-8294-4ad5-8576-ec43cb43a687}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Core\OpenGL">
+      <UniqueIdentifier>{00355a63-b7e9-4342-a649-7711e3689786}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Core\D3D\D3D11Core">
+      <UniqueIdentifier>{51e36890-efe9-4e48-86b7-ea05d2878269}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Core\D3D\D3D9Core">
+      <UniqueIdentifier>{65347ef2-8707-48f1-93da-ae0f714b32e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Core\D3D\D3D10Core">
+      <UniqueIdentifier>{4d960700-2704-442a-bf9a-06ba95350899}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Core\OpenGL\OpenGLCore">
+      <UniqueIdentifier>{707acc3e-33dd-402e-b4f5-9a159664eb99}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -100,13 +112,13 @@
       <Filter>头文件\Core</Filter>
     </ClInclude>
     <ClInclude Include="D3D9Core.h">
-      <Filter>头文件\Core\D3D9Core</Filter>
+      <Filter>头文件\Core\D3D\D3D9Core</Filter>
     </ClInclude>
     <ClInclude Include="D3D10Core.h">
-      <Filter>头文件\Core\D3D10Core</Filter>
+      <Filter>头文件\Core\D3D\D3D10Core</Filter>
     </ClInclude>
     <ClInclude Include="D3D11Core.h">
-      <Filter>头文件\Core\D3D11Core</Filter>
+      <Filter>头文件\Core\D3D\D3D11Core</Filter>
     </ClInclude>
     <ClInclude Include="DCamera.h">
       <Filter>头文件\Engine</Filter>
@@ -169,37 +181,37 @@
       <Filter>头文件\Core</Filter>
     </ClInclude>
     <ClInclude Include="DImGUICore9.h">
-      <Filter>头文件\Core\D3D9Core</Filter>
+      <Filter>头文件\Core\D3D\D3D9Core</Filter>
     </ClInclude>
     <ClInclude Include="DImGUICore10.h">
-      <Filter>头文件\Core\D3D10Core</Filter>
+      <Filter>头文件\Core\D3D\D3D10Core</Filter>
     </ClInclude>
     <ClInclude Include="DImGUICore11.h">
-      <Filter>头文件\Core\D3D11Core</Filter>
+      <Filter>头文件\Core\D3D\D3D11Core</Filter>
     </ClInclude>
     <ClInclude Include="DTextureRes11.h">
-      <Filter>头文件\Core\D3D11Core</Filter>
+      <Filter>头文件\Core\D3D\D3D11Core</Filter>
     </ClInclude>
     <ClInclude Include="DTextureRes10.h">
-      <Filter>头文件\Core\D3D10Core</Filter>
+      <Filter>头文件\Core\D3D\D3D10Core</Filter>
     </ClInclude>
     <ClInclude Include="DTextureRes9.h">
-      <Filter>头文件\Core\D3D9Core</Filter>
+      <Filter>头文件\Core\D3D\D3D9Core</Filter>
     </ClInclude>
     <ClInclude Include="DRenderStateMgr9.h">
-      <Filter>头文件\Core\D3D9Core</Filter>
+      <Filter>头文件\Core\D3D\D3D9Core</Filter>
     </ClInclude>
     <ClInclude Include="DRenderStateMgr10.h">
-      <Filter>头文件\Core\D3D10Core</Filter>
+      <Filter>头文件\Core\D3D\D3D10Core</Filter>
     </ClInclude>
     <ClInclude Include="DRenderStateMgr11.h">
-      <Filter>头文件\Core\D3D11Core</Filter>
+      <Filter>头文件\Core\D3D\D3D11Core</Filter>
     </ClInclude>
     <ClInclude Include="DRenderBuffer11.h">
-      <Filter>头文件\Core\D3D11Core</Filter>
+      <Filter>头文件\Core\D3D\D3D11Core</Filter>
     </ClInclude>
     <ClInclude Include="DRenderBuffer10.h">
-      <Filter>头文件\Core\D3D10Core</Filter>
+      <Filter>头文件\Core\D3D\D3D10Core</Filter>
     </ClInclude>
     <ClInclude Include="DGLDrawer.h">
       <Filter>头文件\Core</Filter>
@@ -222,35 +234,32 @@
     <ClInclude Include="DEngineDefine.h">
       <Filter>头文件\Core</Filter>
     </ClInclude>
-    <ClInclude Include="D3DCore.h">
-      <Filter>头文件\Core</Filter>
-    </ClInclude>
     <ClInclude Include="DShaderProgram11.h">
-      <Filter>头文件\Core\D3D11Core</Filter>
+      <Filter>头文件\Core\D3D\D3D11Core</Filter>
     </ClInclude>
     <ClInclude Include="DShaderProgram10.h">
-      <Filter>头文件\Core\D3D10Core</Filter>
+      <Filter>头文件\Core\D3D\D3D10Core</Filter>
     </ClInclude>
     <ClInclude Include="DShaderProgram9.h">
-      <Filter>头文件\Core\D3D9Core</Filter>
+      <Filter>头文件\Core\D3D\D3D9Core</Filter>
     </ClInclude>
     <ClInclude Include="DGeometry.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
     <ClInclude Include="DGeometryRes9.h">
-      <Filter>头文件\Core\D3D9Core</Filter>
+      <Filter>头文件\Core\D3D\D3D9Core</Filter>
     </ClInclude>
     <ClInclude Include="DGeometryRes10.h">
-      <Filter>头文件\Core\D3D10Core</Filter>
+      <Filter>头文件\Core\D3D\D3D10Core</Filter>
     </ClInclude>
     <ClInclude Include="DGeometryRes11.h">
-      <Filter>头文件\Core\D3D11Core</Filter>
+      <Filter>头文件\Core\D3D\D3D11Core</Filter>
     </ClInclude>
     <ClInclude Include="DGLCore.h">
       <Filter>头文件\Core</Filter>
     </ClInclude>
     <ClInclude Include="DOpenGLCore.h">
-      <Filter>头文件\Core\OpenGLCore</Filter>
+      <Filter>头文件\Core\OpenGL\OpenGLCore</Filter>
     </ClInclude>
     <ClInclude Include="DRenderer.h">
       <Filter>头文件\Engine</Filter>
@@ -261,14 +270,26 @@
     <ClInclude Include="DCuller.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="D3DSystem.h">
-      <Filter>头文件\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="DOpenGLSystem.h">
-      <Filter>头文件\Core</Filter>
-    </ClInclude>
     <ClInclude Include="DInputCore.h">
       <Filter>头文件\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="D3DCore.h">
+      <Filter>头文件\Core\D3D</Filter>
+    </ClInclude>
+    <ClInclude Include="D3DSystem.h">
+      <Filter>头文件\Core\D3D</Filter>
+    </ClInclude>
+    <ClInclude Include="DOpenGLSystem.h">
+      <Filter>头文件\Core\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="DGeometryResOpGL.h">
+      <Filter>头文件\Core\OpenGL\OpenGLCore</Filter>
+    </ClInclude>
+    <ClInclude Include="DShaderProgramOpGL.h">
+      <Filter>头文件\Core\OpenGL\OpenGLCore</Filter>
+    </ClInclude>
+    <ClInclude Include="DRenderStateMgrOpGL.h">
+      <Filter>头文件\Core\OpenGL\OpenGLCore</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -294,13 +315,13 @@
       <Filter>源文件\Core</Filter>
     </ClCompile>
     <ClCompile Include="D3D9Core.cpp">
-      <Filter>源文件\Core\D3D9Core</Filter>
+      <Filter>源文件\Core\D3D\D3D9Core</Filter>
     </ClCompile>
     <ClCompile Include="D3D10Core.cpp">
-      <Filter>源文件\Core\D3D10Core</Filter>
+      <Filter>源文件\Core\D3D\D3D10Core</Filter>
     </ClCompile>
     <ClCompile Include="D3D11Core.cpp">
-      <Filter>源文件\Core\D3D11Core</Filter>
+      <Filter>源文件\Core\D3D\D3D11Core</Filter>
     </ClCompile>
     <ClCompile Include="DCamera.cpp">
       <Filter>源文件\Engine</Filter>
@@ -363,37 +384,37 @@
       <Filter>源文件\Core</Filter>
     </ClCompile>
     <ClCompile Include="DImGUICore9.cpp">
-      <Filter>源文件\Core\D3D9Core</Filter>
+      <Filter>源文件\Core\D3D\D3D9Core</Filter>
     </ClCompile>
     <ClCompile Include="DImGUICore10.cpp">
-      <Filter>源文件\Core\D3D10Core</Filter>
+      <Filter>源文件\Core\D3D\D3D10Core</Filter>
     </ClCompile>
     <ClCompile Include="DImGUICore11.cpp">
-      <Filter>源文件\Core\D3D11Core</Filter>
+      <Filter>源文件\Core\D3D\D3D11Core</Filter>
     </ClCompile>
     <ClCompile Include="DTextureRes11.cpp">
-      <Filter>源文件\Core\D3D11Core</Filter>
+      <Filter>源文件\Core\D3D\D3D11Core</Filter>
     </ClCompile>
     <ClCompile Include="DTextureRes10.cpp">
-      <Filter>源文件\Core\D3D10Core</Filter>
+      <Filter>源文件\Core\D3D\D3D10Core</Filter>
     </ClCompile>
     <ClCompile Include="DTextureRes9.cpp">
-      <Filter>源文件\Core\D3D9Core</Filter>
+      <Filter>源文件\Core\D3D\D3D9Core</Filter>
     </ClCompile>
     <ClCompile Include="DRenderStateMgr9.cpp">
-      <Filter>源文件\Core\D3D9Core</Filter>
+      <Filter>源文件\Core\D3D\D3D9Core</Filter>
     </ClCompile>
     <ClCompile Include="DRenderStateMgr10.cpp">
-      <Filter>源文件\Core\D3D10Core</Filter>
+      <Filter>源文件\Core\D3D\D3D10Core</Filter>
     </ClCompile>
     <ClCompile Include="DRenderStateMgr11.cpp">
-      <Filter>源文件\Core\D3D11Core</Filter>
+      <Filter>源文件\Core\D3D\D3D11Core</Filter>
     </ClCompile>
     <ClCompile Include="DRenderBuffer11.cpp">
-      <Filter>源文件\Core\D3D11Core</Filter>
+      <Filter>源文件\Core\D3D\D3D11Core</Filter>
     </ClCompile>
     <ClCompile Include="DRenderBuffer10.cpp">
-      <Filter>源文件\Core\D3D10Core</Filter>
+      <Filter>源文件\Core\D3D\D3D10Core</Filter>
     </ClCompile>
     <ClCompile Include="DGLDrawer.cpp">
       <Filter>源文件\Core</Filter>
@@ -407,32 +428,29 @@
     <ClCompile Include="DShaderBlock.cpp">
       <Filter>源文件\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="D3DCore.cpp">
-      <Filter>源文件\Core</Filter>
-    </ClCompile>
     <ClCompile Include="DShaderProgram11.cpp">
-      <Filter>源文件\Core\D3D11Core</Filter>
+      <Filter>源文件\Core\D3D\D3D11Core</Filter>
     </ClCompile>
     <ClCompile Include="DShaderProgram10.cpp">
-      <Filter>源文件\Core\D3D10Core</Filter>
+      <Filter>源文件\Core\D3D\D3D10Core</Filter>
     </ClCompile>
     <ClCompile Include="DShaderProgram9.cpp">
-      <Filter>源文件\Core\D3D9Core</Filter>
+      <Filter>源文件\Core\D3D\D3D9Core</Filter>
     </ClCompile>
     <ClCompile Include="DGeometryRes9.cpp">
-      <Filter>源文件\Core\D3D9Core</Filter>
+      <Filter>源文件\Core\D3D\D3D9Core</Filter>
     </ClCompile>
     <ClCompile Include="DGeometryRes10.cpp">
-      <Filter>源文件\Core\D3D10Core</Filter>
+      <Filter>源文件\Core\D3D\D3D10Core</Filter>
     </ClCompile>
     <ClCompile Include="DGeometryRes11.cpp">
-      <Filter>源文件\Core\D3D11Core</Filter>
+      <Filter>源文件\Core\D3D\D3D11Core</Filter>
     </ClCompile>
     <ClCompile Include="DGeometry.cpp">
       <Filter>源文件\Engine</Filter>
     </ClCompile>
     <ClCompile Include="DOpenGLCore.cpp">
-      <Filter>源文件\Core\OpenGLCore</Filter>
+      <Filter>源文件\Core\OpenGL\OpenGLCore</Filter>
     </ClCompile>
     <ClCompile Include="DRenderer.cpp">
       <Filter>源文件\Engine</Filter>
@@ -440,17 +458,29 @@
     <ClCompile Include="DCuller.cpp">
       <Filter>源文件\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="D3DSystem.cpp">
-      <Filter>源文件\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="DOpenGLSystem.cpp">
-      <Filter>源文件\Core</Filter>
-    </ClCompile>
     <ClCompile Include="DInputCore.cpp">
       <Filter>源文件\Core</Filter>
     </ClCompile>
     <ClCompile Include="glad.c">
-      <Filter>源文件\Core\OpenGLCore</Filter>
+      <Filter>源文件\Core\OpenGL\OpenGLCore</Filter>
+    </ClCompile>
+    <ClCompile Include="D3DCore.cpp">
+      <Filter>源文件\Core\D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3DSystem.cpp">
+      <Filter>源文件\Core\D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="DOpenGLSystem.cpp">
+      <Filter>源文件\Core\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="DGeometryResOpGL.cpp">
+      <Filter>源文件\Core\OpenGL\OpenGLCore</Filter>
+    </ClCompile>
+    <ClCompile Include="DShaderProgramOpGL.cpp">
+      <Filter>源文件\Core\OpenGL\OpenGLCore</Filter>
+    </ClCompile>
+    <ClCompile Include="DRenderStateMgrOpGL.cpp">
+      <Filter>源文件\Core\OpenGL\OpenGLCore</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

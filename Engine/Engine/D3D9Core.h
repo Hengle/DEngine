@@ -41,6 +41,8 @@ public:
 	/*获取渲染状态管理器*/
 	virtual IRenderStateMgr* GetRenderStateMgr();
 
+	virtual bool IsFrustrumZeroToOne() { return true; }
+
 	LPDIRECT3DDEVICE9 GetDevice()
 	{
 		return m_device;

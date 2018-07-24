@@ -11,53 +11,63 @@ DGeometryRes::DGeometryRes(int vertexUsage, bool dynamic)
 	m_isDynamic = dynamic;
 
 	m_dataCount = 3;
+
+	m_uv0Offset = -1;
+	m_uv1Offset = -1;
+	m_uv2Offset = -1;
+	m_uv3Offset = -1;
+	m_normalOffset = -1;
+	m_colorOffset = -1;
+	m_tangentOffset = -1;
+	m_binormalOffset = -1;
+
 	if (vertexUsage & (1UL << DVertexUsage_TEXCOORD0))
 	{
 		//m_dataSize += fsize * 2;
+		m_uv0Offset = m_dataCount;
 		m_dataCount += 2;
-		m_hasUV = true;
 	}
 	if (vertexUsage & (1UL << DVertexUsage_TEXCOORD1))
 	{
 		//m_dataSize += fsize * 2;
+		m_uv1Offset = m_dataCount;
 		m_dataCount += 2;
-		m_hasUV1 = true;
 	}
 	if (vertexUsage & (1UL << DVertexUsage_TEXCOORD2))
 	{
 		//m_dataSize += fsize * 2;
+		m_uv2Offset = m_dataCount;
 		m_dataCount += 2;
-		m_hasUV2 = true;
 	}
 	if (vertexUsage & (1UL << DVertexUsage_TEXCOORD3))
 	{
 		//m_dataSize += fsize * 2;
+		m_uv3Offset = m_dataCount;
 		m_dataCount += 2;
-		m_hasUV3 = true;
 	}
 	if (vertexUsage & (1UL << DVertexUsage_NORMAL))
 	{
 		//m_dataSize += fsize * 3;
+		m_normalOffset = m_dataCount;
 		m_dataCount += 3;
-		m_hasNormal = true;
 	}
 	if (vertexUsage & (1UL << DVertexUsage_COLOR))
 	{
 		//m_dataSize += fsize * 4;
+		m_colorOffset = m_dataCount;
 		m_dataCount += 4;
-		m_hasColor = true;
 	}
 	if (vertexUsage & (1UL << DVertexUsage_TANGENT))
 	{
 		//m_dataSize += fsize * 4;
+		m_tangentOffset = m_dataCount;
 		m_dataCount += 4;
-		m_hasTangent = true;
 	}
 	if (vertexUsage & (1UL << DVertexUsage_BINORMAL))
 	{
 		//m_dataSize += fsize * 3;
+		m_binormalOffset = m_dataCount;
 		m_dataCount += 3;
-		m_hasBinormal = true;
 	}
 
 	m_dataSize = sizeof(float) * m_dataCount;
@@ -82,7 +92,7 @@ void DGeometryRes::Refresh(DGeometryBufferDesc * desc)
 	m_vertexCount = desc->vertexCount;
 
 
-	float* vertices = new float[m_dataCount * desc->vertexCount];
+	/*float* vertices = new float[m_dataCount * desc->vertexCount];
 	int i, j;
 	for (i = 0; i < desc->vertexCount; i++)
 	{
@@ -112,43 +122,50 @@ void DGeometryRes::Refresh(DGeometryBufferDesc * desc)
 			vertices[i*m_dataCount + j + 1] = desc->uvs != 0 ? desc->uvs[i * 2 + 1] : 0.0f;
 			j += 2;
 		}
-	}
+	}*/
 
 	if (!m_isInitialized)
 	{
-		m_isSupported = OnInit(vertices, desc->indices, desc->vertexCount, desc->indexCount);
+		m_isSupported = OnInit(desc); //OnInit(vertices, desc->indices, desc->vertexCount, desc->indexCount);
 		m_isInitialized = true;
 	}
 	else {
 		if (m_isSupported)
-			OnRefresh(vertices, desc->indices, desc->vertexCount, desc->indexCount);
+			OnRefresh(desc);
+			//OnRefresh(vertices, desc->indices, desc->vertexCount, desc->indexCount);
 	}
 
-	delete[] vertices;
-	vertices = 0;
+	//delete[] vertices;
+	//vertices = 0;
 }
 
-void DGeometryRes::Refresh(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
+void DGeometryRes::Reset(int vertexCount, int indexCount)
 {
-	if (indexCount <= 0 || vertexCount <= 0)
-		return;
-	if (vertexbuffer == 0)
-		return;
-	if (indexbuffer == 0)
-		return;
-	m_indexCount = indexCount;
-	m_vertexCount = vertexCount;
-
-	if (!m_isInitialized)
-	{
-		m_isSupported = OnInit(vertexbuffer, indexbuffer, vertexCount, indexCount);
-		m_isInitialized = true;
-	}
-	else {
-		if (m_isSupported)
-			OnRefresh(vertexbuffer, indexbuffer, vertexCount, indexCount);
-	}
+	if (m_isSupported)
+		OnReset(vertexCount, indexCount);
 }
+
+//void DGeometryRes::Refresh(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
+//{
+//	if (indexCount <= 0 || vertexCount <= 0)
+//		return;
+//	if (vertexbuffer == 0)
+//		return;
+//	if (indexbuffer == 0)
+//		return;
+//	m_indexCount = indexCount;
+//	m_vertexCount = vertexCount;
+//
+//	if (!m_isInitialized)
+//	{
+//		m_isSupported = OnInit(vertexbuffer, indexbuffer, vertexCount, indexCount);
+//		m_isInitialized = true;
+//	}
+//	else {
+//		if (m_isSupported)
+//			OnRefresh(vertexbuffer, indexbuffer, vertexCount, indexCount);
+//	}
+//}
 
 void DGeometryRes::DrawPrimitive(DGeometryTopology topology)
 {
@@ -159,6 +176,42 @@ void DGeometryRes::DrawPrimitive(DGeometryTopology topology)
 bool DGeometryRes::IsInitialized()
 {
 	return m_isInitialized;
+}
+
+void DGeometryRes::SetPosition(int index, float x, float y, float z)
+{
+	if (m_isSupported)
+		OnSetPosition(index, x, y, z);
+}
+
+void DGeometryRes::SetUV(int index, int channel, float x, float y)
+{
+	if (m_isSupported)
+		OnSetUV(index, channel, x, y);
+}
+
+void DGeometryRes::SetNormal(int index, float x, float y, float z)
+{
+	if (m_isSupported)
+		OnSetNormal(index, x, y, z);
+}
+
+void DGeometryRes::SetColor(int index, float r, float g, float b, float a)
+{
+	if (m_isSupported)
+		OnSetColor(index, r, g, b, a);
+}
+
+void DGeometryRes::SetTangent(int index, float x, float y, float z)
+{
+	if (m_isSupported)
+		OnSetTangent(index, x, y, z);
+}
+
+void DGeometryRes::SetBinormal(int index, float x, float y, float z)
+{
+	if (m_isSupported)
+		OnSetBinormal(index, x, y, z);
 }
 
 DShaderProgram::DShaderProgram()

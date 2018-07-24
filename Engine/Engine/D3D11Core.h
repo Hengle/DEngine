@@ -41,6 +41,8 @@ public:
 	virtual void ApplySamplerState(UINT, DWrapMode);
 	/*获取渲染状态管理器*/
 	virtual IRenderStateMgr* GetRenderStateMgr();
+
+	virtual bool IsFrustrumZeroToOne() { return true; }
 	ID3D11Device* GetDevice() const;
 	ID3D11DeviceContext* GetDeviceContext() const;
 

@@ -3,7 +3,7 @@
 #include <vector>
 #include <exception>
 
-DGeometryRes9::DGeometryRes9(LPDIRECT3DDEVICE9 device, int vertexUsage, bool dynamic) : DGeometryRes(vertexUsage, dynamic)
+DGeometryRes9::DGeometryRes9(LPDIRECT3DDEVICE9 device, int vertexUsage, bool dynamic) : DGeometryResD3D(vertexUsage, dynamic)
 {
 	m_device = device;
 	m_vertexBuffer = 0;
@@ -44,17 +44,17 @@ bool DGeometryRes9::OnInit(float * vertexbuffer, unsigned long * indexbuffer, in
 	WORD offset = 0;
 	elements.push_back({ 0, offset, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_POSITION, 0 });
 	offset += 12;
-	if (m_hasNormal)
+	if (m_normalOffset >= 0)
 	{
 		elements.push_back({ 0, offset, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_NORMAL, 0 });
 		offset += 12;
 	}
-	if (m_hasColor)
+	if (m_colorOffset >= 0)
 	{
 		elements.push_back({ 0, offset, D3DDECLTYPE_FLOAT4, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_COLOR, 0 });
 		offset += 16;
 	}
-	if (m_hasUV)
+	if (m_uv0Offset >= 0)
 	{
 		elements.push_back({ 0, offset, D3DDECLTYPE_FLOAT2, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TEXCOORD, 0 });
 		offset += 8;

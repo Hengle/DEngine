@@ -2,11 +2,12 @@
 #ifdef _DGAPI_D3D11
 
 #include "D3D11Core.h"
+#include "D3DCore.h"
 
 /*
 	Geometry资源Direct3D11底层
 */
-class DGeometryRes11 : public DGeometryRes
+class DGeometryRes11 : public DGeometryResD3D
 {
 public:
 	DGeometryRes11(ID3D11Device* device, ID3D11DeviceContext* deviceContext, int vertexUsage /*顶点用法*/, bool dynamic);

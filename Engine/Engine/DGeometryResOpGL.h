@@ -1,22 +1,29 @@
-#pragma once
+ï»¿#pragma once
 #ifdef _DGAPI_OPENGL
 
 #include "DOpenGLCore.h"
 
 /*
-Geometry×ÊÔ´OpenGLµ×²ã
+Geometryèµ„æºOpenGLåº•å±‚
 */
 class DGeometryResOpGL : public DGeometryRes
 {
 public:
-	DGeometryResOpGL(int vertexUsage /*¶¥µãÓÃ·¨ÃèÊö*/, bool dynamic /*ÊÇ·ñÎª¶¯Ì¬mesh*/);
+	DGeometryResOpGL(int vertexUsage /*é¡¶ç‚¹ç”¨æ³•æè¿°*/, bool dynamic /*æ˜¯å¦ä¸ºåŠ¨æ€mesh*/);
 	~DGeometryResOpGL();
 	virtual void Release();
 
 protected:
-	virtual void OnRefresh(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount);
-	virtual bool OnInit(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount);
+	virtual void OnRefresh(DGeometryBufferDesc* desc);
+	virtual bool OnInit(DGeometryBufferDesc* desc);
 	virtual void OnDraw(DGeometryTopology);
+
+private:
+	GLuint m_vertexArrayId;
+	GLuint m_vertexBuffer;
+	GLuint m_colorBuffer;
+	GLuint m_normalsBuffer;
+	GLuint m_uv0Buffer;
 };
 
 #endif

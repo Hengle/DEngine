@@ -1,11 +1,12 @@
 ﻿#pragma once
 #ifdef _DGAPI_D3D9
+#include "D3DCore.h"
 #include "D3D9Core.h"
 
 /*
 	Geometry资源Direct3D9底层
 */
-class DGeometryRes9 : public DGeometryRes
+class DGeometryRes9 : public DGeometryResD3D
 {
 public:
 	DGeometryRes9(LPDIRECT3DDEVICE9, int vertexUsage /*顶点用法*/, bool dynamic);

@@ -2,11 +2,12 @@
 #ifdef _DGAPI_D3D10
 
 #include "D3D10Core.h"
+#include "D3DCore.h"
 
 /*
 	Geometry资源Direct3D10底层
 */
-class DGeometryRes10 : public DGeometryRes
+class DGeometryRes10 : public DGeometryResD3D
 {
 public:
 	DGeometryRes10(ID3D10Device* device, int vertexUsage, bool dynamic);

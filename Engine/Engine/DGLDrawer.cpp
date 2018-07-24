@@ -16,45 +16,45 @@ DGLDrawer::~DGLDrawer()
 
 void DGLDrawer::PostGL()
 {
-	if (m_currentPLen != m_prePLen)
+	/*if (m_currentPLen != m_prePLen)
 	{
 		GenerateNewProcesses();
 		m_prePLen = m_currentPLen;
 	}
-	m_currentPLen = 0;
+	m_currentPLen = 0;*/
 
 }
 
 void DGLDrawer::GlBegin()
 {
-	if (m_currentPLen < m_prePLen)
+	/*if (m_currentPLen < m_prePLen)
 	{
 		m_currentProcess = m_processVector.at(m_currentPLen);
 	}
-	m_currentPLen += 1;
+	m_currentPLen += 1;*/
 }
 
 void DGLDrawer::GlEnd()
 {
-	if (m_currentProcess != NULL)
+	/*if (m_currentProcess != NULL)
 	{
 		m_currentProcess->PostProcess(m_currentMV, m_currentP);
 	}
-	m_currentProcess = NULL;
+	m_currentProcess = NULL;*/
 }
 
 void DGLDrawer::GlVertex(DVector3 * vector)
 {
-	if (m_currentProcess == NULL)
+	/*if (m_currentProcess == NULL)
 		return;
-	m_currentProcess->ProcessVector(vector->x, vector->y, vector->z);
+	m_currentProcess->ProcessVector(vector->x, vector->y, vector->z);*/
 }
 
 void DGLDrawer::GlVertex3(float x, float y, float z)
 {
-	if (m_currentProcess == NULL)
+	/*if (m_currentProcess == NULL)
 		return;
-	m_currentProcess->ProcessVector(x, y, z);
+	m_currentProcess->ProcessVector(x, y, z);*/
 }
 
 void DGLDrawer::GlColor(DColor * color)
@@ -118,7 +118,7 @@ void DGLDrawer::GlMultiMatrix(DMatrix4x4& matrix)
 
 void DGLDrawer::Release()
 {
-	int i = 0;
+	/*int i = 0;
 	int len = m_processVector.size();
 	if (len > 0)
 	{
@@ -129,8 +129,8 @@ void DGLDrawer::Release()
 			delete process;
 		}
 	}
-	m_processVector.clear();
-	//m_material = NULL;
+	m_processVector.clear();*/
+	
 }
 
 void DGLDrawer::GetModelView(DMatrix4x4 & out)
@@ -174,10 +174,13 @@ DGLDrawerProcess::DGLDrawerProcess()
 	m_currentColor = dcol_white;
 	m_currentIndex = 0;
 	m_preIndex = 0;
-	m_vertices = 0;
-	m_indices = 0;
+	//m_vertices = 0;
+	//m_indices = 0;
 	m_geometryRes = 0;
 	m_hasDrawCommand = false;
+	m_geoDesc.indices = 0;
+	m_geoDesc.vertices = 0;
+	m_geoDesc.colors = 0;
 }
 
 void DGLDrawerProcess::Release()
@@ -188,31 +191,44 @@ void DGLDrawerProcess::Release()
 		delete m_geometryRes;
 		m_geometryRes = 0;
 	}
-	if (m_vertices != 0)
+	if (m_geoDesc.vertices != 0)
 	{
-		delete[] m_vertices;
-		m_vertices = 0;
+		delete[] m_geoDesc.vertices;
+		m_geoDesc.vertices = 0;
 	}
-	if (m_indices != 0)
+	if (m_geoDesc.indices != 0)
 	{
-		delete[] m_indices;
-		m_indices = 0;
+		delete[] m_geoDesc.indices;
+		m_geoDesc.indices = 0;
 	}
-	
+	if (m_geoDesc.colors != 0)
+	{
+		delete[] m_geoDesc.colors;
+		m_geoDesc.colors = 0;
+	}
 }
 
 void DGLDrawerProcess::ProcessVector(float x, float y, float z)
 {
 	if (m_currentIndex < m_preIndex)
 	{
-		m_vertices[m_currentIndex * 7] = x;
+		/*m_vertices[m_currentIndex * 7] = x;
 		m_vertices[m_currentIndex * 7 + 1] = y;
 		m_vertices[m_currentIndex * 7 + 2] = z;
 		m_vertices[m_currentIndex * 7 + 3] = m_currentColor.r;
 		m_vertices[m_currentIndex * 7 + 4] = m_currentColor.g;
 		m_vertices[m_currentIndex * 7 + 5] = m_currentColor.b;
 		m_vertices[m_currentIndex * 7 + 6] = m_currentColor.a;
-		m_indices[m_currentIndex] = m_currentIndex;
+		m_indices[m_currentIndex] = m_currentIndex;*/
+		m_geoDesc.vertices[m_currentIndex * 3] = x;
+		m_geoDesc.vertices[m_currentIndex * 3 + 1] = y;
+		m_geoDesc.vertices[m_currentIndex * 3 + 2] = z;
+
+		m_geoDesc.colors[m_currentIndex * 4] = m_currentColor.r;
+		m_geoDesc.colors[m_currentIndex * 4 + 1] = m_currentColor.g;
+		m_geoDesc.colors[m_currentIndex * 4 + 2] = m_currentColor.b;
+		m_geoDesc.colors[m_currentIndex * 4 + 3] = m_currentColor.a;
+		m_geoDesc.indices[m_currentIndex] = m_currentIndex;
 	}
 	m_currentIndex += 1;
 	m_hasDrawCommand = true;
@@ -226,31 +242,40 @@ void DGLDrawerProcess::ProcessColor(DColor * color)
 
 void DGLDrawerProcess::PostProcess(DMatrix4x4& modelview, DMatrix4x4& projection)
 {
-	if (m_vertices != 0 && m_indices != 0 && m_hasDrawCommand)
+	if (m_geoDesc.vertices != 0 && m_geoDesc.colors != 0 && m_geoDesc.indices != 0 && m_hasDrawCommand)
 	{
 		if (m_geometryRes == NULL)
 		{
 			int vusage = (1UL << DVertexUsage_POSITION) | (1UL << DVertexUsage_COLOR);
 			m_geometryRes = DSystem::GetGraphicsMgr()->GetGLCore()->CreateGeometryRes(vusage, true);
 		}
-		m_geometryRes->Refresh(m_vertices, m_indices, m_currentIndex * 3, m_currentIndex);
+		m_geoDesc.vertexCount = m_currentIndex;
+		m_geoDesc.indexCount = m_currentIndex;
+		//m_geometryRes->Refresh(m_vertices, m_indices, m_currentIndex * 3, m_currentIndex);
+		m_geometryRes->Refresh(&m_geoDesc);
 		ProcessDraw(modelview, projection);
 		m_hasDrawCommand = false;
 	}
 	if (m_currentIndex != m_preIndex)
 	{
-		if (m_vertices != 0)
+		if (m_geoDesc.vertices != 0)
 		{
-			delete[] m_vertices;
-			m_vertices = 0;
+			delete[] m_geoDesc.vertices;
+			m_geoDesc.vertices = 0;
 		}
-		m_vertices = new float[m_currentIndex * 7];
-		if (m_indices != 0)
+		m_geoDesc.vertices = new float[m_currentIndex * 3];
+		if (m_geoDesc.colors != 0)
 		{
-			delete[] m_indices;
-			m_indices = 0;
+			delete[] m_geoDesc.colors;
+			m_geoDesc.colors = 0;
 		}
-		m_indices = new unsigned long[m_currentIndex];
+		m_geoDesc.colors = new float[m_currentIndex * 4];
+		if (m_geoDesc.indices != 0)
+		{
+			delete[] m_geoDesc.indices;
+			m_geoDesc.indices = 0;
+		}
+		m_geoDesc.indices = new unsigned long[m_currentIndex];
 		m_preIndex = m_currentIndex;
 	}
 	m_currentIndex = 0;

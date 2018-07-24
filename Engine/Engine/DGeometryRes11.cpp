@@ -1,7 +1,7 @@
 ﻿#ifdef _DGAPI_D3D11
 #include "DGeometryRes11.h"
 
-DGeometryRes11::DGeometryRes11(ID3D11Device* device,ID3D11DeviceContext * deviceContext, int vertexUsage, bool dynamic) : DGeometryRes(vertexUsage, dynamic)
+DGeometryRes11::DGeometryRes11(ID3D11Device* device,ID3D11DeviceContext * deviceContext, int vertexUsage, bool dynamic) : DGeometryResD3D(vertexUsage, dynamic)
 {
 	m_vertexBuffer = 0;
 	m_indexBuffer = 0;

@@ -1,8 +1,10 @@
-#pragma once
+ï»¿#pragma once
+#if _DGAPI_D3D9 || _DGAPI_D3D10 || _DGAPI_D3D11
+
 #include "DGLCore.h"
 #include "DGraphicsDefine.h"
 
-/*¹âÕ¤»¯×´Ì¬¼¯*/
+/*å…‰æ …åŒ–çŠ¶æ€é›†*/
 struct RasterizerState
 {
 public:
@@ -13,7 +15,7 @@ public:
 	DFillMode fillMode;
 };
 
-/*Éî¶ÈÄ£°å×´Ì¬¼¯*/
+/*æ·±åº¦æ¨¡æ¿çŠ¶æ€é›†*/
 struct DepthStencilState
 {
 public:
@@ -32,7 +34,7 @@ public:
 	UINT8 stencilWriteMask;
 };
 
-/*»ìºÏ×´Ì¬¼¯*/
+/*æ··åˆçŠ¶æ€é›†*/
 struct BlendState
 {
 public:
@@ -47,5 +49,14 @@ public:
 
 class DGeometryResD3D : public DGeometryRes
 {
+public:
+	DGeometryResD3D(int vertexUsage, bool dynamic);
 
+protected:
+	virtual void OnRefresh(DGeometryBufferDesc* desc);
+	virtual bool OnInit(DGeometryBufferDesc* desc);
+	virtual void OnRefresh(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount) = 0;
+	virtual bool OnInit(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount) = 0;
 };
+
+#endif

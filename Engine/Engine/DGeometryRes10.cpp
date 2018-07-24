@@ -1,7 +1,7 @@
 ﻿#ifdef _DGAPI_D3D10
 #include "DGeometryRes10.h"
 
-DGeometryRes10::DGeometryRes10(ID3D10Device * device, int vertexUsage, bool dynamic) : DGeometryRes(vertexUsage, dynamic)
+DGeometryRes10::DGeometryRes10(ID3D10Device * device, int vertexUsage, bool dynamic) : DGeometryResD3D(vertexUsage, dynamic)
 {
 	m_device = device;
 	m_vertexBuffer = 0;

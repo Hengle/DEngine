@@ -81,32 +81,17 @@ class DGeometryRes
 public:
 	DGeometryRes(int vertexUsage /*顶点用法描述*/, bool dynamic /*是否为动态mesh*/);
 	void Refresh(DGeometryBufferDesc* desc); //更新顶点缓存
-	void Reset(int vertexCount, int indexCount);
 	//void Refresh(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount);//更新顶点缓存
 	void DrawPrimitive(DGeometryTopology topology);//绘制
 	virtual void Release() = 0; //释放资源
 	bool IsInitialized();
-	void SetPosition(int index, float x, float y, float z);
-	void SetUV(int index, int channel, float x, float y);
-	void SetNormal(int index, float x, float y, float z);
-	void SetColor(int index, float r, float g, float b, float a);
-	void SetTangent(int index, float x, float y, float z);
-	void SetBinormal(int index, float x, float y, float z);
 
 protected:
 	virtual void OnRefresh(DGeometryBufferDesc* desc) = 0;
-	virtual void OnReset(int vertexCount, int indexCount) = 0;
 	virtual bool OnInit(DGeometryBufferDesc* desc) = 0;
 	//virtual void OnRefresh(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount) = 0;
 	//virtual bool OnInit(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount) = 0;
 	virtual void OnDraw(DGeometryTopology) = 0;
-
-	virtual void OnSetPosition(int index, float x, float y, float z) = 0;
-	virtual void OnSetUV(int index, int channel, float x, float y) = 0;
-	virtual void OnSetNormal(int index, float x, float y, float z) = 0;
-	virtual void OnSetColor(int index, float r, float g, float b, float a) = 0;
-	virtual void OnSetTangent(int index, float x, float y, float z) = 0;
-	virtual void OnSetBinormal(int index, float x, float y, float z) = 0;
 
 protected:
 	int m_vertexUsage;

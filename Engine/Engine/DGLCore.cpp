@@ -139,12 +139,6 @@ void DGeometryRes::Refresh(DGeometryBufferDesc * desc)
 	//vertices = 0;
 }
 
-void DGeometryRes::Reset(int vertexCount, int indexCount)
-{
-	if (m_isSupported)
-		OnReset(vertexCount, indexCount);
-}
-
 //void DGeometryRes::Refresh(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
 //{
 //	if (indexCount <= 0 || vertexCount <= 0)
@@ -176,42 +170,6 @@ void DGeometryRes::DrawPrimitive(DGeometryTopology topology)
 bool DGeometryRes::IsInitialized()
 {
 	return m_isInitialized;
-}
-
-void DGeometryRes::SetPosition(int index, float x, float y, float z)
-{
-	if (m_isSupported)
-		OnSetPosition(index, x, y, z);
-}
-
-void DGeometryRes::SetUV(int index, int channel, float x, float y)
-{
-	if (m_isSupported)
-		OnSetUV(index, channel, x, y);
-}
-
-void DGeometryRes::SetNormal(int index, float x, float y, float z)
-{
-	if (m_isSupported)
-		OnSetNormal(index, x, y, z);
-}
-
-void DGeometryRes::SetColor(int index, float r, float g, float b, float a)
-{
-	if (m_isSupported)
-		OnSetColor(index, r, g, b, a);
-}
-
-void DGeometryRes::SetTangent(int index, float x, float y, float z)
-{
-	if (m_isSupported)
-		OnSetTangent(index, x, y, z);
-}
-
-void DGeometryRes::SetBinormal(int index, float x, float y, float z)
-{
-	if (m_isSupported)
-		OnSetBinormal(index, x, y, z);
 }
 
 DShaderProgram::DShaderProgram()

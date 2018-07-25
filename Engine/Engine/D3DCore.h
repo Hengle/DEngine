@@ -60,6 +60,16 @@ protected:
 	virtual bool OnInit(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount) = 0;
 };
 
+class D3DShaderProgram : public DShaderProgram
+{
+public:
+	/*初始化*/
+	void Init(const char* content /*shader内容*/, char* funcName /*函数名*/);
+
+protected:
+	virtual bool OnInit(const char* content, char* funcName) = 0;
+};
+
 class D3DShaderPass : public DShaderPass
 {
 public:

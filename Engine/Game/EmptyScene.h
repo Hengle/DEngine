@@ -8,5 +8,6 @@ public:
 
 protected:
 	virtual void OnLoad();
+	virtual void OnUnLoad();
 };
 

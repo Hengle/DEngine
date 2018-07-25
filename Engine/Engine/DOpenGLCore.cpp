@@ -1,5 +1,7 @@
 ﻿#ifdef _DGAPI_OPENGL
 #include "DOpenGLCore.h"
+#include "DShaderPassOpGL.h"
+#include "DGeometryResOpGL.h"
 
 DOpenGLCore::DOpenGLCore()
 {
@@ -63,7 +65,7 @@ void DOpenGLCore::EndSetRenderTarget(IRenderTextureViewRes *)
 
 DGeometryRes * DOpenGLCore::CreateGeometryRes(int vertexUsage, bool dynamic)
 {
-	return nullptr;
+	return new DGeometryResOpGL(vertexUsage, dynamic);
 }
 
 ITextureRes * DOpenGLCore::CreateTextureRes(WCHAR *)
@@ -78,7 +80,7 @@ IRenderTextureViewRes * DOpenGLCore::CreateRenderTextureRes(float width, float h
 
 DShaderPass * DOpenGLCore::CreateShaderPass()
 {
-	return nullptr;
+	return new DShaderPassOpGL();
 }
 
 void DOpenGLCore::ApplySamplerState(UINT, DWrapMode)

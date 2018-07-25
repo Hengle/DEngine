@@ -9,7 +9,7 @@
 #include <d3dx9.h>
 
 /*Shader程序Direct3d9实现*/
-class DShaderProgram9 : public DShaderProgram
+class DShaderProgram9 : public D3DShaderProgram
 {
 protected:
 	/*描述shader属性*/

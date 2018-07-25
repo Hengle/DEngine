@@ -1,10 +1,10 @@
-#pragma once
+ï»¿#pragma once
 #include "DGraphicsDefine.h"
 #include <fstream>
 #include <map>
 #include <Windows.h>
 
-/*shader×ÊÔ´ÃèÊö*/
+/*shaderèµ„æºæè¿°*/
 typedef struct DShaderResDesc
 {
 public:
@@ -15,22 +15,20 @@ public:
 	}
 
 public:
-	UINT offset;//×ÊÔ´Æ«ÒÆ
-	std::string resName;//×ÊÔ´Ãû³Æ
-	bool isGlobal;//ÊÇ·ñÎªÈ«¾ÖÊôĞÔ
+	UINT offset;//èµ„æºåç§»
+	std::string resName;//èµ„æºåç§°
+	bool isGlobal;//æ˜¯å¦ä¸ºå…¨å±€å±æ€§
 };
 
 class DShaderProgram
 {
 public:
 	DShaderProgram();
-	/*»ñµÃÊôĞÔÊıÁ¿*/
+	/*è·å¾—å±æ€§æ•°é‡*/
 	unsigned int GetPropertyCount() const;
-	/*³õÊ¼»¯*/
-	void Init(const char* content /*shaderÄÚÈİ*/, char* funcName /*º¯ÊıÃû*/);
-	/*»ñµÃshader×ÊÔ´ÊôĞÔÊıÁ¿*/
+	/*è·å¾—shaderèµ„æºå±æ€§æ•°é‡*/
 	unsigned int GetResCount() const;
-	/*Ó¦ÓÃshader²ÎÊı*/
+	/*åº”ç”¨shaderå‚æ•°*/
 	void ApplyParams(std::map<std::string, float*>&params, std::map<std::string, float*>&gparams);
 	void Draw();
 	bool IsInitialized();
@@ -40,7 +38,6 @@ public:
 	virtual void Release() = 0;
 
 protected:
-	virtual bool OnInit(const char* content, char* funcName) = 0;
 	virtual void OnApplyParams(std::map<std::string, float*>&params, std::map<std::string, float*>&gparams) = 0;
 	virtual void OnDraw() = 0;
 

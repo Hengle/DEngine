@@ -195,6 +195,7 @@
     <ClInclude Include="D3DShaderPass10.h" />
     <ClInclude Include="D3DShaderPass11.h" />
     <ClInclude Include="D3DShaderPass9.h" />
+    <ClInclude Include="DShaderPassOpGL.h" />
     <ClInclude Include="DSystem.h" />
     <ClInclude Include="DTexture.h" />
     <ClInclude Include="DTextureRes10.h" />
@@ -266,6 +267,7 @@
     <ClCompile Include="D3DShaderPass10.cpp" />
     <ClCompile Include="D3DShaderPass11.cpp" />
     <ClCompile Include="D3DShaderPass9.cpp" />
+    <ClCompile Include="DShaderPassOpGL.cpp" />
     <ClCompile Include="DSystem.cpp" />
     <ClCompile Include="DTexture.cpp" />
     <ClCompile Include="DTextureRes10.cpp" />

@@ -5,7 +5,7 @@
 #include <D3DX10.h>
 #include <d3dcompiler.h>
 
-DShaderProgram10::DShaderProgram10(ID3D10Device * device) : DShaderProgram()
+DShaderProgram10::DShaderProgram10(ID3D10Device * device) : D3DShaderProgram()
 {
 	m_device = device;
 	m_layout = 0;
@@ -648,11 +648,14 @@ D3DShaderPass10::D3DShaderPass10() : D3DShaderPass()
 void D3DShaderPass10::OnCompile(const char * content)
 {
 	D3D10Core* core = (D3D10Core*)DSystem::GetGraphicsMgr()->GetGLCore();
-	m_vertexShader = new DShaderVertexProgram10(core->GetDevice());
-	m_pixelShader = new DShaderPixelProgram10(core->GetDevice());
+	DShaderVertexProgram10* vshader = new DShaderVertexProgram10(core->GetDevice());
+	DShaderPixelProgram10* pshader = new DShaderPixelProgram10(core->GetDevice());
 
-	m_vertexShader->Init(content, m_vertexFuncName);
-	m_pixelShader->Init(content, m_pixelFuncName);
+	vshader->Init(content, m_vertexFuncName);
+	pshader->Init(content, m_pixelFuncName);
+
+	m_vertexShader = vshader;
+	m_pixelShader = pshader;
 }
 
 #endif

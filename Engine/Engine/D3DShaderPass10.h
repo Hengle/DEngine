@@ -9,7 +9,7 @@
 #include <map>
 
 /*Shader程序Direct3d10实现*/
-class DShaderProgram10 : public DShaderProgram
+class DShaderProgram10 : public D3DShaderProgram
 {
 public:
 	DShaderProgram10(ID3D10Device* device);

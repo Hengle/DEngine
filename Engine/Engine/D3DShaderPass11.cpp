@@ -6,7 +6,7 @@
 #include <d3dcompiler.h>
 #include <fstream>
 
-DShaderProgram11::DShaderProgram11(ID3D11Device * device, ID3D11DeviceContext * deviceContext) : DShaderProgram()
+DShaderProgram11::DShaderProgram11(ID3D11Device * device, ID3D11DeviceContext * deviceContext) : D3DShaderProgram()
 {
 	m_device = device;
 	m_deviceContext = deviceContext;
@@ -714,11 +714,14 @@ D3DShaderPass11::D3DShaderPass11() : D3DShaderPass()
 void D3DShaderPass11::OnCompile(const char * content)
 {
 	D3D11Core* core = (D3D11Core*)DSystem::GetGraphicsMgr()->GetGLCore();
-	m_vertexShader = new DShaderVertexProgram11(core->GetDevice(), core->GetDeviceContext());
-	m_pixelShader = new DShaderPixelProgram11(core->GetDevice(), core->GetDeviceContext());
+	DShaderVertexProgram11*vshader = new DShaderVertexProgram11(core->GetDevice(), core->GetDeviceContext());
+	DShaderPixelProgram11*pshader = new DShaderPixelProgram11(core->GetDevice(), core->GetDeviceContext());
 
-	m_vertexShader->Init(content, m_vertexFuncName);
-	m_pixelShader->Init(content, m_pixelFuncName);
+	vshader->Init(content, m_vertexFuncName);
+	pshader->Init(content, m_pixelFuncName);
+
+	m_vertexShader = vshader;
+	m_pixelShader = pshader;
 }
 
 #endif

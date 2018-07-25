@@ -132,6 +132,11 @@ bool DGeometryResD3D::OnInit(DGeometryBufferDesc * desc)
 	return true;
 }
 
+void D3DShaderProgram::Init(const char * content, char * funcName)
+{
+	m_isInitialized = OnInit(content, funcName);
+}
+
 D3DShaderPass::D3DShaderPass() : DShaderPass()
 {
 	m_vertexFuncName = 0;
@@ -205,11 +210,10 @@ void D3DShaderPass::CompileShader(std::ifstream & ifile)
 		//}
 		//else
 		{
-		//	if (strcmp(read, "}") == 0)
-		//	{
-		//		isBegin = false;
-		//		return;
-		//	}
+			//if (strcmp(read, "}") == 0)
+			//{
+			//	return;
+			//}
 			if (strcmp(read, "#vert") == 0)
 			{
 				ifile >> param;

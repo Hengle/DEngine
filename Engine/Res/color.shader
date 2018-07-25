@@ -109,3 +109,44 @@ SubShader {
 		}
 	}
 }
+SubShader {
+	Desc {
+		CompileTarget: { opengl }
+	}
+	Pass {
+		State {
+			zwrite on
+			ztest lequal
+		}
+
+		Shader {
+			#code [
+				#vert [
+					#version 330 core
+
+					out vec4 gl_Position;
+
+					layout(location = 0) in vec3 vertexPosition_modelspace;
+
+					uniform mat4 g_worldMatrix;
+					uniform mat4 g_viewMatrix;
+					uniform mat4 g_projectionMatrix;
+
+					void main(){
+ 						gl_Position = g_worldMatrix * vec4(vertexPosition_modelspace,1);
+						gl_Position = g_viewMatrix * gl_Position;
+						gl_Position = g_projectionMatrix * gl_Position;
+					}
+
+				]
+				#frag [
+					#version 330 core
+					out vec3 color;
+					void main(){
+						color = vec3(1,0,0);
+					}
+				]
+			]
+		}
+	}
+}

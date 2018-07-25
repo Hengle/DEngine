@@ -6,7 +6,7 @@
 #include <vector>
 
 /*Shader程序Direct3d11实现*/
-class DShaderProgram11 : public DShaderProgram
+class DShaderProgram11 : public D3DShaderProgram
 {
 public:
 	DShaderProgram11(ID3D11Device* device, ID3D11DeviceContext* deviceContext);

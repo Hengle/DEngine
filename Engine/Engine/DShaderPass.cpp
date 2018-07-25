@@ -1,4 +1,4 @@
-#include "DShaderPass.h"
+﻿#include "DShaderPass.h"
 #include "DGraphics.h"
 #include <string>
 
@@ -16,10 +16,10 @@ unsigned int DShaderProgram::GetPropertyCount() const
 	return m_propertyCount;
 }
 
-void DShaderProgram::Init(const char * content, char * funcName)
-{
-	m_isInitialized = OnInit(content, funcName);
-}
+//void DShaderProgram::Init(const char * content, char * funcName)
+//{
+//	m_isInitialized = OnInit(content, funcName);
+//}
 
 unsigned int DShaderProgram::GetResCount() const
 {

@@ -287,13 +287,14 @@ bool DShader::HasProperty(const LPCSTR key) const
 		int scount,i;
 		scount = m_shaderBlock->GetPassCount();
 		DShaderPass* pass;
-		DShaderProgram* prog;
+		//DShaderProgram* prog;
 		for (i = 0; i < scount; i++)
 		{
 			pass = m_shaderBlock->GetPass(i);
 			if (pass == NULL)
 				continue;
-			prog = pass->GetVertexShader();
+			return pass->HasProperty(key);
+			/*prog = pass->GetVertexShader();
 			if (prog != NULL) {
 				if (prog->HasProperty(key))
 					return true;
@@ -302,7 +303,7 @@ bool DShader::HasProperty(const LPCSTR key) const
 			if (prog != NULL) {
 				if (prog->HasProperty(key))
 					return true;
-			}
+			}*/
 		}
 	}
 	return false;
@@ -318,12 +319,20 @@ void DShader::ApplyParams(DShaderConstantTable * constantTable, int index)
 		DShaderPass* pass = m_shaderBlock->GetPass(index);
 		if (pass == NULL)
 			return;
-		DShaderProgram* program = pass->GetVertexShader();
-		if (program != NULL)
-			ApplyShaderProgramParams(program, constantTable);
-		program = pass->GetPixelShader();
-		if (program != NULL)
-			ApplyShaderProgramParams(program, constantTable);
+		if (sGlobalShaderConstants == nullptr)
+			sGlobalShaderConstants = new DShaderConstantTable();
+		//pass->ApplyParams(constantTable, sGlobalShaderConstants);
+		int programCount = pass->GetShaderProgramCount();
+		int i;
+		DShaderProgram* program = 0;
+		
+		for (i = 0; i < programCount; i++)
+		{
+			program = pass->GetShaderProgram(i);
+			if (program != NULL)
+				ApplyShaderProgramParams(program, constantTable);
+		}
+		
 	}
 }
 
@@ -351,12 +360,13 @@ void DShader::Draw(int index)
 		DShaderPass* pass = m_shaderBlock->GetPass(index);
 		if (pass == NULL)
 			return;
-		DShaderProgram* prog = pass->GetVertexShader();
+		pass->Draw();
+		/*DShaderProgram* prog = pass->GetVertexShader();
 		if (prog != NULL)
 			prog->Draw();
 		prog = pass->GetPixelShader();
 		if (prog != NULL)
-			prog->Draw();
+			prog->Draw();*/
 	}
 }
 
@@ -370,9 +380,10 @@ int DShader::GetVertexUsage(int index)
 		DShaderPass* pass = m_shaderBlock->GetPass(index);
 		if (pass == NULL)
 			return 0;
-		DShaderProgram* vprog = pass->GetVertexShader();
+		return pass->GetVertexUsage();
+		/*DShaderProgram* vprog = pass->GetVertexShader();
 		if (vprog != NULL)
-			return vprog->GetVertexUsage();
+			return vprog->GetVertexUsage();*/
 	}
 	return 0;
 }

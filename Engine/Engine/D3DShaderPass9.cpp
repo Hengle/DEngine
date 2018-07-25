@@ -1,6 +1,8 @@
 ﻿#ifdef _DGAPI_D3D9
-#include "DShaderProgram9.h"
+#include "D3DShaderPass9.h"
 #include "DLog.h"
+#include "D3D9Core.h"
+#include "DSystem.h"
 
 DShaderProgram9::DShaderProgram9(LPDIRECT3DDEVICE9 device) : DShaderProgram()
 {
@@ -422,4 +424,21 @@ HRESULT DShaderPixelProgram9::InitPixelShader()
 
 	return S_OK;
 }
+
+D3DShaderPass9::D3DShaderPass9() : D3DShaderPass()
+{
+}
+
+void D3DShaderPass9::OnCompile(const char * content)
+{
+	D3D9Core* core = (D3D9Core*)DSystem::GetGraphicsMgr()->GetGLCore();
+	m_vertexShader = new DShaderVertexProgram9(core->GetDevice());
+	m_pixelShader = new DShaderPixelProgram9(core->GetDevice());
+
+	m_vertexShader->Init(content, m_vertexFuncName);
+	m_pixelShader->Init(content, m_pixelFuncName);
+}
+
 #endif
+
+

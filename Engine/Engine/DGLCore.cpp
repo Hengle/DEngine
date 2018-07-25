@@ -172,69 +172,6 @@ bool DGeometryRes::IsInitialized()
 	return m_isInitialized;
 }
 
-DShaderProgram::DShaderProgram()
-{
-	m_isInitialized = false;
-	m_cbufferCount = 0;
-	m_propertyCount = 0;
-	m_vertexUsage = 0;
-	m_resCount = 0;
-}
-
-//unsigned int DShaderRes::GetCBufferCount() const
-//{
-//	return m_cbufferCount;
-//}
-
-unsigned int DShaderProgram::GetPropertyCount() const
-{
-	return m_propertyCount;
-}
-
-//void DShaderRes::Init(WCHAR * vsfile, WCHAR * psfile)
-//{
-//	m_isInitialized = OnInit(vsfile, psfile);
-//}
-
-void DShaderProgram::Init(const char * content, char * funcName)
-{
-	m_isInitialized = OnInit(content, funcName);
-}
-
-unsigned int DShaderProgram::GetResCount() const
-{
-	return m_resCount;
-}
-
-void DShaderProgram::ApplyParams(std::map<std::string, float*>& params, std::map<std::string, float*>&gparams)
-{
-	if (m_isInitialized)
-		OnApplyParams(params, gparams);
-}
-
-//void DShaderRes::ApplyParams(int cindex, int coffset, int csize, int stype, float * params)
-//{
-//	if (m_isInitialized)
-//		OnApplyParams(cindex, coffset, csize, stype, params);
-//}
-
-void DShaderProgram::Draw()
-{
-	if (m_isInitialized)
-		OnDraw();
-}
-
-bool DShaderProgram::IsInitialized()
-{
-	return m_isInitialized;
-}
-
-int DShaderProgram::GetVertexUsage()
-{
-	return m_vertexUsage;
-}
-
-
 DGLCore::DGLCore()
 {
 }

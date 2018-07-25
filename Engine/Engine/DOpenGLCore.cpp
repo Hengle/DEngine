@@ -76,7 +76,7 @@ IRenderTextureViewRes * DOpenGLCore::CreateRenderTextureRes(float width, float h
 	return nullptr;
 }
 
-DShaderProgram * DOpenGLCore::CreateShaderProgram(DShaderProgramType)
+DShaderPass * DOpenGLCore::CreateShaderPass()
 {
 	return nullptr;
 }

@@ -234,15 +234,6 @@
     <ClInclude Include="DEngineDefine.h">
       <Filter>头文件\Core</Filter>
     </ClInclude>
-    <ClInclude Include="DShaderProgram11.h">
-      <Filter>头文件\Core\D3D\D3D11Core</Filter>
-    </ClInclude>
-    <ClInclude Include="DShaderProgram10.h">
-      <Filter>头文件\Core\D3D\D3D10Core</Filter>
-    </ClInclude>
-    <ClInclude Include="DShaderProgram9.h">
-      <Filter>头文件\Core\D3D\D3D9Core</Filter>
-    </ClInclude>
     <ClInclude Include="DGeometry.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
@@ -285,11 +276,20 @@
     <ClInclude Include="DGeometryResOpGL.h">
       <Filter>头文件\Core\OpenGL\OpenGLCore</Filter>
     </ClInclude>
-    <ClInclude Include="DShaderProgramOpGL.h">
-      <Filter>头文件\Core\OpenGL\OpenGLCore</Filter>
-    </ClInclude>
     <ClInclude Include="DRenderStateMgrOpGL.h">
       <Filter>头文件\Core\OpenGL\OpenGLCore</Filter>
+    </ClInclude>
+    <ClInclude Include="DShaderPass.h">
+      <Filter>头文件\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="D3DShaderPass11.h">
+      <Filter>头文件\Core\D3D\D3D11Core</Filter>
+    </ClInclude>
+    <ClInclude Include="D3DShaderPass10.h">
+      <Filter>头文件\Core\D3D\D3D10Core</Filter>
+    </ClInclude>
+    <ClInclude Include="D3DShaderPass9.h">
+      <Filter>头文件\Core\D3D\D3D9Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -428,15 +428,6 @@
     <ClCompile Include="DShaderBlock.cpp">
       <Filter>源文件\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="DShaderProgram11.cpp">
-      <Filter>源文件\Core\D3D\D3D11Core</Filter>
-    </ClCompile>
-    <ClCompile Include="DShaderProgram10.cpp">
-      <Filter>源文件\Core\D3D\D3D10Core</Filter>
-    </ClCompile>
-    <ClCompile Include="DShaderProgram9.cpp">
-      <Filter>源文件\Core\D3D\D3D9Core</Filter>
-    </ClCompile>
     <ClCompile Include="DGeometryRes9.cpp">
       <Filter>源文件\Core\D3D\D3D9Core</Filter>
     </ClCompile>
@@ -476,11 +467,20 @@
     <ClCompile Include="DGeometryResOpGL.cpp">
       <Filter>源文件\Core\OpenGL\OpenGLCore</Filter>
     </ClCompile>
-    <ClCompile Include="DShaderProgramOpGL.cpp">
-      <Filter>源文件\Core\OpenGL\OpenGLCore</Filter>
-    </ClCompile>
     <ClCompile Include="DRenderStateMgrOpGL.cpp">
       <Filter>源文件\Core\OpenGL\OpenGLCore</Filter>
+    </ClCompile>
+    <ClCompile Include="DShaderPass.cpp">
+      <Filter>源文件\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="D3DShaderPass11.cpp">
+      <Filter>源文件\Core\D3D\D3D11Core</Filter>
+    </ClCompile>
+    <ClCompile Include="D3DShaderPass10.cpp">
+      <Filter>源文件\Core\D3D\D3D10Core</Filter>
+    </ClCompile>
+    <ClCompile Include="D3DShaderPass9.cpp">
+      <Filter>源文件\Core\D3D\D3D9Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

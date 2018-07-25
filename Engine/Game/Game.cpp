@@ -13,9 +13,9 @@ using namespace std;
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline, int nCmdShow)
 {
-	/*GameFrame* frame = new GameFrame();
-	frame->Create(1024, 768, false, DGRAPHICS_API_OPENGL);
-	frame->Destroy();*/
+	GameFrame* frame = new GameFrame();
+	frame->Create(1024, 768, false, DGRAPHICS_API_D3D11);
+	frame->Destroy();
 	
 	
 	return 0;

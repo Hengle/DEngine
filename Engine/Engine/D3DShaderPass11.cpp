@@ -1,6 +1,8 @@
 ﻿#ifdef _DGAPI_D3D11
-#include "DShaderProgram11.h"
+#include "D3DShaderPass11.h"
 #include "DTextureRes11.h"
+#include "DSystem.h"
+#include "D3D11Core.h"
 #include <d3dcompiler.h>
 #include <fstream>
 
@@ -703,4 +705,21 @@ HRESULT DShaderPixelProgram11::InitPixelShader(ID3DBlob * pShaderBlob, ID3D11Dev
 
 	return hr;
 }
+
+
+D3DShaderPass11::D3DShaderPass11() : D3DShaderPass()
+{
+}
+
+void D3DShaderPass11::OnCompile(const char * content)
+{
+	D3D11Core* core = (D3D11Core*)DSystem::GetGraphicsMgr()->GetGLCore();
+	m_vertexShader = new DShaderVertexProgram11(core->GetDevice(), core->GetDeviceContext());
+	m_pixelShader = new DShaderPixelProgram11(core->GetDevice(), core->GetDeviceContext());
+
+	m_vertexShader->Init(content, m_vertexFuncName);
+	m_pixelShader->Init(content, m_pixelFuncName);
+}
+
 #endif
+

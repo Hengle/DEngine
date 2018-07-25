@@ -1,7 +1,9 @@
 ﻿#pragma once
 #ifdef _DGAPI_D3D10
 
-#include "D3D10Core.h"
+#include "D3DCore.h"
+#include <D3D10_1.h>
+#include <D3D10.h>
 #include <string>
 #include <vector>
 #include <map>
@@ -67,6 +69,16 @@ protected:
 
 private:
 	ID3D10PixelShader *m_pixelShader;
+};
+
+class D3DShaderPass10 : public D3DShaderPass
+{
+public:
+	D3DShaderPass10();
+
+protected:
+	virtual void OnCompile(const char*);
+
 };
 
 #endif

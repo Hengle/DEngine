@@ -1,9 +1,11 @@
 ﻿#ifdef _DGAPI_D3D10
-#include "DShaderProgram10.h"
+#include "D3DShaderPass10.h"
+#include "DSystem.h"
+#include "D3D10Core.h"
 #include <D3DX10.h>
 #include <d3dcompiler.h>
 
-DShaderProgram10::DShaderProgram10(ID3D10Device * device)
+DShaderProgram10::DShaderProgram10(ID3D10Device * device) : DShaderProgram()
 {
 	m_device = device;
 	m_layout = 0;
@@ -638,4 +640,21 @@ void DShaderPixelProgram10::OnSetValue(UINT startSlot, UINT numBuffers, ID3D10Bu
 {
 	m_device->PSSetConstantBuffers(startSlot, numBuffers, buffers);
 }
+
+D3DShaderPass10::D3DShaderPass10() : D3DShaderPass()
+{
+}
+
+void D3DShaderPass10::OnCompile(const char * content)
+{
+	D3D10Core* core = (D3D10Core*)DSystem::GetGraphicsMgr()->GetGLCore();
+	m_vertexShader = new DShaderVertexProgram10(core->GetDevice());
+	m_pixelShader = new DShaderPixelProgram10(core->GetDevice());
+
+	m_vertexShader->Init(content, m_vertexFuncName);
+	m_pixelShader->Init(content, m_pixelFuncName);
+}
+
 #endif
+
+

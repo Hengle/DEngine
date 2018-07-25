@@ -2,7 +2,8 @@
 #include "D3D9Core.h"
 #include <fstream>
 #include "DGeometryRes9.h"
-#include "DShaderProgram9.h"
+//#include "DShaderProgram9.h"
+#include "D3DShaderPass9.h"
 #include "DTextureRes9.h"
 #include "DRenderStateMgr9.h"
 #include <exception>
@@ -174,14 +175,19 @@ IRenderTextureViewRes * D3D9Core::CreateRenderTextureRes(float width, float heig
 	return new DRenderTextureViewRes9(m_device, width, height);
 }
 
-DShaderProgram * D3D9Core::CreateShaderProgram(DShaderProgramType programType)
+//DShaderProgram * D3D9Core::CreateShaderProgram(DShaderProgramType programType)
+//{
+//	if(programType == DShaderProgram_Vertex)
+//		return new DShaderVertexProgram9(m_device);
+//	else if (programType == DShaderProgram_Pixel)
+//		return new DShaderPixelProgram9(m_device);
+//	else
+//		throw std::exception("未知shader类型");
+//}
+
+DShaderPass * D3D9Core::CreateShaderPass()
 {
-	if(programType == DShaderProgram_Vertex)
-		return new DShaderVertexProgram9(m_device);
-	else if (programType == DShaderProgram_Pixel)
-		return new DShaderPixelProgram9(m_device);
-	else
-		throw std::exception("未知shader类型");
+	return new D3DShaderPass9();
 }
 
 void D3D9Core::ApplySamplerState(UINT index, DWrapMode warpmode)

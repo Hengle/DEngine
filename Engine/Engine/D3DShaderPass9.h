@@ -1,10 +1,12 @@
 ﻿#pragma once
 #ifdef _DGAPI_D3D9
 
-#include "D3D9Core.h"
+#include "D3DCore.h"
 #include <string>
 #include <vector>
 #include <map>
+#include <d3d9.h>
+#include <d3dx9.h>
 
 /*Shader程序Direct3d9实现*/
 class DShaderProgram9 : public DShaderProgram
@@ -84,6 +86,16 @@ private:
 	IDirect3DPixelShader9* m_pixelShader;
 	/*常量表*/
 	ID3DXConstantTable* m_pixelConstable;
+};
+
+class D3DShaderPass9 : public D3DShaderPass
+{
+public:
+	D3DShaderPass9();
+
+protected:
+	virtual void OnCompile(const char*);
+
 };
 
 #endif

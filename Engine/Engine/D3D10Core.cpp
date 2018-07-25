@@ -1,7 +1,8 @@
 ﻿#ifdef _DGAPI_D3D10
 #include "D3D10Core.h"
 #include "DGeometryRes10.h"
-#include "DShaderProgram10.h"
+//#include "DShaderProgram10.h"
+#include "D3DShaderPass10.h"
 #include "DTextureRes10.h"
 #include "DRenderStateMgr10.h"
 #include "DRenderBuffer10.h"
@@ -434,12 +435,17 @@ IRenderTextureViewRes * D3D10Core::CreateRenderTextureRes(float width, float hei
 	return new DRenderTextureViewRes10(m_device, width, height);
 }
 
-DShaderProgram * D3D10Core::CreateShaderProgram(DShaderProgramType programType)
+//DShaderProgram * D3D10Core::CreateShaderProgram(DShaderProgramType programType)
+//{
+//	if (programType == DShaderProgram_Vertex)
+//		return new DShaderVertexProgram10(m_device);
+//	else if (programType == DShaderProgram_Pixel)
+//		return new DShaderPixelProgram10(m_device);
+//}
+
+DShaderPass * D3D10Core::CreateShaderPass()
 {
-	if (programType == DShaderProgram_Vertex)
-		return new DShaderVertexProgram10(m_device);
-	else if (programType == DShaderProgram_Pixel)
-		return new DShaderPixelProgram10(m_device);
+	return new D3DShaderPass10();
 }
 
 void D3D10Core::ApplySamplerState(UINT startSlot, DWrapMode warpmode)

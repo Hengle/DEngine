@@ -3,6 +3,7 @@
 #include "DMath.h"
 #include "DGraphicsDefine.h"
 #include "DEngineDefine.h"
+#include "DShaderPass.h"
 #include <d3dcommon.h>
 #include <string>
 #include <map>
@@ -24,22 +25,6 @@ public:
 	bool isGlobal;//是否为全局属性
 	std::string propertyName;//属性名称
 } DShaderPropertyDesc;
-
-/*shader资源描述*/
-typedef struct DShaderResDesc
-{
-public:
-	DShaderResDesc()
-	{
-		offset = 0;
-		isGlobal = false;
-	}
-
-public:
-	UINT offset;//资源偏移
-	std::string resName;//资源名称
-	bool isGlobal;//是否为全局属性
-};
 
 /*shader ConstantBuffer描述*/
 class DShaderCBufferDesc
@@ -149,37 +134,6 @@ public:
 	virtual IRenderBuffer* GetDepthBuffer() = 0;
 };
 
-//抽象shader program-用于实现不同API下的不同shader
-class DShaderProgram
-{
-public:
-	DShaderProgram();
-	/*获得属性数量*/
-	unsigned int GetPropertyCount() const;
-	/*初始化*/
-	void Init(const char* content /*shader内容*/, char* funcName /*函数名*/);
-	/*获得shader资源属性数量*/
-	unsigned int GetResCount() const; 
-	/*应用shader参数*/
-	void ApplyParams(std::map<std::string, float*>&params, std::map<std::string, float*>&gparams);
-	void Draw();
-	bool IsInitialized();
-	int GetVertexUsage();
-	virtual void GetResDesc(unsigned int index, DShaderResDesc&) const = 0;
-	virtual bool HasProperty(const LPCSTR key) const = 0;
-	virtual void Release() = 0;
-
-protected:
-	virtual bool OnInit(const char* content, char* funcName) = 0;
-	virtual void OnApplyParams(std::map<std::string, float*>&params, std::map<std::string, float*>&gparams) = 0;
-	virtual void OnDraw() = 0;
-
-protected:
-	unsigned int m_cbufferCount, m_propertyCount, m_resCount;
-	bool m_isInitialized;
-	int m_vertexUsage;
-};
-
 interface IRenderStateMgr
 {
 public:
@@ -230,7 +184,7 @@ public:
 	/*创建RenderTexture资源*/
 	virtual IRenderTextureViewRes* CreateRenderTextureRes(float, float) = 0;
 	/*创建shader程序*/
-	virtual DShaderProgram* CreateShaderProgram(DShaderProgramType) = 0;
+	virtual DShaderPass* CreateShaderPass() = 0;
 	virtual void ApplySamplerState(UINT, DWrapMode) = 0;
 	/*获取渲染状态管理器*/
 	virtual IRenderStateMgr* GetRenderStateMgr() = 0;

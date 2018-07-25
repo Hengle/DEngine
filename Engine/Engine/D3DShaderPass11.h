@@ -1,7 +1,8 @@
 ﻿#pragma once
 #ifdef _DGAPI_D3D11
 
-#include "D3D11Core.h"
+#include "D3DCore.h"
+#include <D3D11.h>
 #include <vector>
 
 /*Shader程序Direct3d11实现*/
@@ -67,6 +68,16 @@ private:
 
 private:
 	ID3D11PixelShader *m_pixelShader;
+};
+
+class D3DShaderPass11 : public D3DShaderPass
+{
+public:
+	D3DShaderPass11();
+
+protected:
+	virtual void OnCompile(const char*);
+
 };
 
 #endif

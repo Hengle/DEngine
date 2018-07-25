@@ -1,6 +1,7 @@
 ﻿#if _DGAPI_D3D9 || _DGAPI_D3D10 || _DGAPI_D3D11
 
 #include "D3DCore.h"
+#include <string>
 
 unsigned int RasterizerState::GetKey()
 {
@@ -129,6 +130,167 @@ bool DGeometryResD3D::OnInit(DGeometryBufferDesc * desc)
 	vertices = 0;
 
 	return true;
+}
+
+D3DShaderPass::D3DShaderPass() : DShaderPass()
+{
+	m_vertexFuncName = 0;
+	m_pixelFuncName = 0;
+	m_vertexShader = 0;
+	m_pixelShader = 0;
+}
+
+void D3DShaderPass::Release()
+{
+	DShaderPass::Release();
+
+	if (m_vertexFuncName != 0)
+		delete[] m_vertexFuncName;
+	if (m_pixelFuncName != 0)
+		delete[] m_pixelFuncName;
+	m_vertexFuncName = 0;
+	m_pixelFuncName = 0;
+
+	if (m_vertexShader != NULL)
+	{
+		m_vertexShader->Release();
+		delete m_vertexShader;
+		m_vertexShader = NULL;
+	}
+	if (m_pixelShader != NULL)
+	{
+		m_pixelShader->Release();
+		delete m_pixelShader;
+		m_pixelShader = NULL;
+	}
+}
+
+void D3DShaderPass::Draw()
+{
+	if (m_vertexShader != NULL)
+		m_vertexShader->Draw();
+	if (m_pixelShader != NULL)
+		m_pixelShader->Draw();
+}
+
+int D3DShaderPass::GetVertexUsage()
+{
+	if (m_vertexShader != NULL)
+		return m_vertexShader->GetVertexUsage();
+	return 0;
+}
+
+bool D3DShaderPass::HasProperty(LPCSTR key)
+{
+	if (m_vertexShader != NULL && m_vertexShader->HasProperty(key))
+		return true;
+	if (m_pixelShader != NULL && m_pixelShader->HasProperty(key))
+		return true;
+	return false;
+}
+
+void D3DShaderPass::CompileShader(std::ifstream & ifile)
+{
+	char read[64], param[64];
+	while (!ifile.eof())
+	{
+		ifile >> read;
+
+		//if (!isBegin)
+		//{
+		//	if (strcmp(read, "{") == 0)
+		//	{
+		//		isBegin = true;
+		//	}
+		//}
+		//else
+		{
+		//	if (strcmp(read, "}") == 0)
+		//	{
+		//		isBegin = false;
+		//		return;
+		//	}
+			if (strcmp(read, "#vert") == 0)
+			{
+				ifile >> param;
+				SetVertexFuncName(param);
+			}
+			else if (strcmp(read, "#frag") == 0)
+			{
+				ifile >> param;
+				SetPixelFuncName(param);
+			}
+			else if (strcmp(read, "#code") == 0)
+			{
+				CompileShaderContent(ifile);
+				return;
+			}
+		}
+	}
+
+}
+
+int D3DShaderPass::GetShaderProgramCount()
+{
+	return 2;
+}
+
+DShaderProgram * D3DShaderPass::GetShaderProgram(int index)
+{
+	if (index == 0)
+		return m_vertexShader;
+	else if (index == 1)
+		return m_pixelShader;
+}
+
+void D3DShaderPass::CompileShaderContent(std::ifstream & ifile)
+{
+	bool isBegin = false;
+	std::string s;
+	char read = 0;
+	while (!ifile.eof())
+	{
+		read = ifile.get();
+
+		if (!isBegin)
+		{
+			if (read == '[')
+			{
+				isBegin = true;
+			}
+		}
+		else
+		{
+			if (read == ']')
+			{
+				isBegin = false;
+
+				const char* content = s.c_str();
+
+				OnCompile(content);
+
+				return;
+			}
+			else
+			{
+				s.push_back(read);
+			}
+		}
+	}
+}
+
+void D3DShaderPass::SetVertexFuncName(char * vertexFuncName)
+{
+	int len = strlen(vertexFuncName) + 1;
+	m_vertexFuncName = new char[len];
+	strcpy_s(m_vertexFuncName, len, vertexFuncName);
+}
+
+void D3DShaderPass::SetPixelFuncName(char * pixelFuncName)
+{
+	int len = strlen(pixelFuncName) + 1;
+	m_pixelFuncName = new char[len];
+	strcpy_s(m_pixelFuncName, len, pixelFuncName);
 }
 
 #endif

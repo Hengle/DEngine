@@ -3,6 +3,7 @@
 
 #include "DGLCore.h"
 #include "DGraphicsDefine.h"
+#include "DShaderPass.h"
 
 /*光栅化状态集*/
 struct RasterizerState
@@ -57,6 +58,33 @@ protected:
 	virtual bool OnInit(DGeometryBufferDesc* desc);
 	virtual void OnRefresh(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount) = 0;
 	virtual bool OnInit(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount) = 0;
+};
+
+class D3DShaderPass : public DShaderPass
+{
+public:
+	D3DShaderPass();
+	virtual void Release();
+	virtual void Draw();
+	virtual int GetVertexUsage();
+	virtual bool HasProperty(LPCSTR key);
+	virtual void CompileShader(std::ifstream&);
+	virtual int GetShaderProgramCount();
+	virtual DShaderProgram* GetShaderProgram(int index);
+
+protected:
+	virtual void OnCompile(const char*) = 0;
+
+private:
+	void CompileShaderContent(std::ifstream&);
+	void SetVertexFuncName(char*);
+	void SetPixelFuncName(char*);
+
+protected:
+	DShaderProgram* m_vertexShader;
+	DShaderProgram* m_pixelShader;
+	char* m_vertexFuncName;
+	char* m_pixelFuncName;
 };
 
 #endif

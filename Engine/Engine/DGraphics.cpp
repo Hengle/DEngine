@@ -643,7 +643,7 @@ void DGraphics::ApplyActiveMaterial()
 
 bool DGraphics::IsFrustrumZeroToOne()
 {
-	return DSystem::GetGraphicsMgr()->IsFrustrumZeroToOne();
+	return DSystem::GetGraphicsMgr()->GetGLCore()->IsFrustrumZeroToOne();
 }
 
 void DGraphics::InitScreenPlane()

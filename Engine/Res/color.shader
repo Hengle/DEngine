@@ -3,56 +3,56 @@ SubShader {
 		CompileTarget: { d3d10 d3d11 }
 	}
 	Pass {
-		Tags {
-			VertexFunc:   VertMain
-			PixelFunc:  FragMain
-		}
 		State {
 			zwrite on
 			ztest lequal
 		}
 
-		Shader [
+		Shader {
+			#vert VertMain
+			#frag FragMain
+			#code [
 
-			cbuffer MatrixBuffer
-			{
-				matrix g_worldMatrix;
-				matrix g_viewMatrix;
-				matrix g_projectionMatrix;
-			};
+				cbuffer MatrixBuffer
+				{
+					matrix g_worldMatrix;
+					matrix g_viewMatrix;
+					matrix g_projectionMatrix;
+				};
 
-			struct VertexInputType
-			{
-			    float3 position : POSITION;
-			    float4 color    : COLOR;
-			};
+				struct VertexInputType
+				{
+				    float3 position : POSITION;
+				   	float4 color    : COLOR;
+				};
 
-			struct PixelInputType
-			{
-			    float4 position : SV_POSITION;
-			    float4 color : COLOR;
-			};
+				struct PixelInputType
+				{
+				    float4 position : SV_POSITION;
+				    float4 color : COLOR;
+				};
 
-			PixelInputType VertMain(VertexInputType input)
-			{
-			    PixelInputType output;
+				PixelInputType VertMain(VertexInputType input)
+				{
+			    	PixelInputType output;
 
-				float4 vpos = float4(input.position.xyz, 1.0f);
+					float4 vpos = float4(input.position.xyz, 1.0f);
 
-			    output.position  = mul(g_worldMatrix, vpos);
-			    output.position  = mul(g_viewMatrix, output.position);
-			    output.position = mul(g_projectionMatrix, output.position);
+			    	output.position  = mul(g_worldMatrix, vpos);
+			    	output.position  = mul(g_viewMatrix, output.position);
+			    	output.position = mul(g_projectionMatrix, output.position);
 
-			    output.color = input.color;
+			   		output.color = input.color;
 
-			    return output;
-			}
+				    return output;
+				}
 
-			float4 FragMain(PixelInputType input) : SV_TARGET
-			{
-			    return input.color;
-			}
-		]
+				float4 FragMain(PixelInputType input) : SV_TARGET
+				{
+				    return input.color;
+				}
+			]
+		}
 	}
 }
 SubShader {
@@ -60,52 +60,52 @@ SubShader {
 		CompileTarget: { d3d9 }
 	}
 	Pass {
-		Tags {
-			VertexFunc:   VertMain
-			PixelFunc:  FragMain
-		}
 		State {
 			zwrite on
 			ztest lequal
 		}
 
-		Shader [
+		Shader {
+			#vert VertMain
+			#frag FragMain
+			#code [
 
-			matrix g_worldMatrix;
-			matrix g_viewMatrix;
-			matrix g_projectionMatrix;
+				matrix g_worldMatrix;
+				matrix g_viewMatrix;
+				matrix g_projectionMatrix;
 
-			struct VS_INPUT
-			{
-			    float3 position : POSITION;
-	  			float4 color    : COLOR;
-			};
+				struct VS_INPUT
+				{
+				    float3 position : POSITION;
+	  				float4 color    : COLOR;
+				};
 
-			struct VS_OUTPUT
-			{
-			    float4 position : POSITION;
-	    		float4 color  : COLOR;
-			};
+				struct VS_OUTPUT
+				{
+				    float4 position : POSITION;
+	    			float4 color  : COLOR;
+				};
 
-			VS_OUTPUT VertMain(VS_INPUT input)
-			{
-			    VS_OUTPUT output = (VS_OUTPUT)0;
+				VS_OUTPUT VertMain(VS_INPUT input)
+				{
+			    	VS_OUTPUT output = (VS_OUTPUT)0;
 
-			    float4 pos = float4(input.position, 1.0f);
+			    	float4 pos = float4(input.position, 1.0f);
 
-    			output.position = mul(pos, g_worldMatrix);
-    			output.position = mul(output.position, g_viewMatrix);
-    			output.position = mul(output.position, g_projectionMatrix);
+    				output.position = mul(pos, g_worldMatrix);
+    				output.position = mul(output.position, g_viewMatrix);
+    				output.position = mul(output.position, g_projectionMatrix);
 
-    			output.color = input.color;
-    
-    			return output;
-			}
+    				output.color = input.color;
+    	
+    				return output;
+				}
 
-			float4 FragMain(VS_OUTPUT input) : SV_TARGET
-			{
-			    return input.color;
-			}
-		]
+				float4 FragMain(VS_OUTPUT input) : SV_TARGET
+				{
+				    return input.color;
+				}
+			]
+		}
 	}
 }

@@ -414,38 +414,38 @@ void DShaderBlock::InterpretShader(ifstream & ifile, DShaderPass * pass)
 {
 	bool isBegin = false;
 	//string s;
-	char read = 0;
+	char read[128];
 	while (!ifile.eof())
 	{
-		read = ifile.get();
+		ifile >> read;
 
 		if (!isBegin)
 		{
-			if (read == '{')
+			if (strcmp(read, "{") == 0)
 			{
 				isBegin = true;
-			}
-		}
-		else
-		{
-			if (read == '}')
-			{
-				isBegin = false;
 
-				//const char* content = s.c_str();
-
-				//if (pass != NULL)
-				//	pass->CompileShader(content);
-
-				return;
-			}
-			else
-			{
-				//s.push_back(read);
 				if (pass != NULL)
 				{
 					pass->CompileShader(ifile);
 				}
+				else
+				{
+					ifile >> read;
+					while (strcmp(read, "]") != 0)
+					{
+						ifile >> read;
+					}
+				}
+			}
+		}
+		else
+		{
+			if (strcmp(read, "}") == 0)
+			{
+				isBegin = false;
+
+				return;
 			}
 		}
 	}

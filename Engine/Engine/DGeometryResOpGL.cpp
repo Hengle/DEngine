@@ -22,12 +22,41 @@ void DGeometryResOpGL::OnRefresh(DGeometryBufferDesc * desc)
 
 bool DGeometryResOpGL::OnInit(DGeometryBufferDesc * desc)
 {
+	static const GLfloat g_vertex_buffer_data[] = {
+
+		-0.5f,-0.5f,-0.5f,
+		-0.5f, 0.5f,-0.5f,
+		0.5f, 0.5f,-0.5f,
+
+		-0.5f,-0.5f,-0.5f,
+		0.5f,0.5f,-0.5f,
+		0.5f,-0.5f,-0.5f,
+
+
+		0.5f,-0.5f,-0.5f,
+		0.5f,0.5f,-0.5f,
+		0.5f,0.5f,0.5f,
+
+		0.5f,-0.5f,-0.5f,
+		0.5f,0.5f,0.5f,
+		0.5f,-0.5f,0.5f,
+
+
+		-0.5f,0.5f,-0.5f,
+		-0.5f,0.5f,0.5f,
+		0.5f,0.5f,0.5f,
+
+		-0.5f,0.5f,-0.5f,
+		0.5f,0.5f,0.5f,
+		0.5f,0.5f,-0.5f,
+	};
+
 	glGenVertexArrays(1, &m_vertexArrayId);
 	glBindVertexArray(m_vertexArrayId);
 
 	glGenBuffers(1, &m_vertexBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*desc->vertexCount * 3, desc->vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
 
 	/*if (m_normalOffset >= 0)
 	{

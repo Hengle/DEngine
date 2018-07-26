@@ -4,7 +4,7 @@
 #include "D3D9Core.h"
 #include "DSystem.h"
 
-DShaderProgram9::DShaderProgram9(LPDIRECT3DDEVICE9 device) : DShaderProgram()
+DShaderProgram9::DShaderProgram9(LPDIRECT3DDEVICE9 device) : D3DShaderProgram()
 {
 	m_device = device;
 }
@@ -432,11 +432,14 @@ D3DShaderPass9::D3DShaderPass9() : D3DShaderPass()
 void D3DShaderPass9::OnCompile(const char * content)
 {
 	D3D9Core* core = (D3D9Core*)DSystem::GetGraphicsMgr()->GetGLCore();
-	m_vertexShader = new DShaderVertexProgram9(core->GetDevice());
-	m_pixelShader = new DShaderPixelProgram9(core->GetDevice());
+	DShaderVertexProgram9* vshader = new DShaderVertexProgram9(core->GetDevice());
+	DShaderPixelProgram9* pshader = new DShaderPixelProgram9(core->GetDevice());
 
-	m_vertexShader->Init(content, m_vertexFuncName);
-	m_pixelShader->Init(content, m_pixelFuncName);
+	vshader->Init(content, m_vertexFuncName);
+	pshader->Init(content, m_pixelFuncName);
+
+	m_vertexShader = vshader;
+	m_pixelShader = pshader;
 }
 
 #endif

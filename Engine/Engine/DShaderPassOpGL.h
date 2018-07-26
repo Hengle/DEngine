@@ -4,9 +4,20 @@
 #include "DShaderPass.h"
 #include "glad\glad.h"
 #include "GLFW\glfw3.h"
+#include <map>
+#include <string>
 
 class DShaderProgramOpGL : public DShaderProgram
 {
+private:
+	struct ShaderPropertyDescOpGL
+	{
+	public:
+		bool isGlobal;
+		GLenum type;
+		GLuint paramId;
+	};
+
 public:
 	DShaderProgramOpGL();
 	~DShaderProgramOpGL();
@@ -25,6 +36,7 @@ private:
 	GLuint m_vertexShaderID;
 	GLuint m_fragmentShaderID;
 	GLuint m_ProgramID;
+	std::map<std::string, ShaderPropertyDescOpGL> m_properties;
 };
 
 class DShaderPassOpGL : public DShaderPass

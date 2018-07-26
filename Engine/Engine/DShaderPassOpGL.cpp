@@ -79,6 +79,29 @@ void DShaderProgramOpGL::InitProgram()
 	glDeleteShader(m_vertexShaderID);
 	glDeleteShader(m_fragmentShaderID);
 
+	GLint paramLength;
+	glGetProgramiv(ProgramID, GL_ACTIVE_UNIFORMS, &paramLength);
+
+	GLint i;
+	GLchar pname[64];
+	GLsizei length;
+	GLint size;
+	GLenum type;
+
+	ShaderPropertyDescOpGL propert;
+
+	for (i = 0; i < paramLength; i++)
+	{
+		glGetActiveUniform(ProgramID, i, 64, &length, &size, &type, pname);
+		if (strlen(pname) >= 2 && pname[0] == 'g' && pname[1] == '_')
+		{
+			propert.isGlobal = true;
+			propert.type = type;
+			propert.paramId = glGetUniformLocation(ProgramID, pname);
+		}
+		m_properties.insert(std::pair<std::string, ShaderPropertyDescOpGL>(pname, propert));
+	}
+
 	m_ProgramID = ProgramID;
 
 
@@ -111,6 +134,38 @@ void DShaderProgramOpGL::OnDraw()
 
 void DShaderProgramOpGL::OnApplyParams(std::map<std::string, float*>& params, std::map<std::string, float*>& gparams)
 {
+	std::map<std::string, ShaderPropertyDescOpGL>::iterator  iter;
+	for (iter = m_properties.begin(); iter != m_properties.end(); iter++)
+	{
+		if (params.find(iter->first) != params.end())
+		{
+			float* v = params.at(iter->first);
+			if (iter->second.type == GL_FLOAT_MAT4)
+			{
+				GLfloat p[16] = {
+					v[0],v[1],v[2],v[3],
+					v[4],v[5],v[6],v[7],
+					v[8],v[9],v[10],v[11],
+					v[12],v[13],v[14],v[15],
+				};
+				glUniformMatrix4fv(iter->second.paramId, 1, GL_FALSE, &p[0]);
+			}
+		}
+		else if (iter->second.isGlobal && gparams.find(iter->first) != gparams.end())
+		{
+			float* v = gparams.at(iter->first);
+			if (iter->second.type == GL_FLOAT_MAT4)
+			{
+				GLfloat p[16] = {
+					v[0],v[4],v[8],v[12],
+					v[1],v[5],v[9],v[13],
+					v[2],v[6],v[10],v[14],
+					v[3],v[7],v[11],v[15],
+				};
+				glUniformMatrix4fv(iter->second.paramId, 1, GL_FALSE, &p[0]);
+			}
+		}
+	}
 }
 
 DShaderPassOpGL::DShaderPassOpGL() : DShaderPass()
@@ -159,7 +214,7 @@ void DShaderPassOpGL::CompileShader(std::ifstream & ifile)
 	while (!ifile.eof())
 	{
 		ifile >> read;
-		if (strcmp(read, "#code"))
+		if (strcmp(read, "#code") == 0)
 		{
 			CompileShaderCode(ifile);
 			return;
@@ -189,14 +244,14 @@ void DShaderPassOpGL::CompileShaderCode(std::ifstream & ifile)
 		ifile >> read;
 		if (!isBegin)
 		{
-			if (strcmp(read, "["))
+			if (strcmp(read, "[") == 0)
 			{
 				isBegin = true;
 			}
 		}
 		else
 		{
-			if (strcmp(read, "]"))
+			if (strcmp(read, "]") == 0)
 			{
 				isBegin = false;
 				if (m_program != NULL)
@@ -205,11 +260,11 @@ void DShaderPassOpGL::CompileShaderCode(std::ifstream & ifile)
 				}
 				return;
 			}
-			else if(strcmp(read,"#vert"))
+			else if(strcmp(read,"#vert") == 0)
 			{
 				CompileVertexShader(ifile);
 			}
-			else if (strcmp(read, "#frag"))
+			else if (strcmp(read, "#frag") == 0)
 			{
 				CompileFragmentShader(ifile);
 			}

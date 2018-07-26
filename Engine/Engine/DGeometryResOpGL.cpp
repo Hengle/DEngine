@@ -43,7 +43,7 @@ bool DGeometryResOpGL::OnInit(DGeometryBufferDesc * desc)
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*desc->vertexCount * 3, desc->normals, GL_STATIC_DRAW);
 	}*/
 
-	return false;
+	return true;
 }
 
 void DGeometryResOpGL::OnDraw(DGeometryTopology)

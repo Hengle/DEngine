@@ -424,7 +424,7 @@ bool DGeometry::HasUV(int channel) const
 
 void DGeometry::Draw(int vertexUsage)
 {
-	if (vertexUsage <= 0)
+	if (vertexUsage < 0)
 		return;
 	
 	DGraphics::ApplyActiveMaterial();

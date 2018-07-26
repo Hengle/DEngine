@@ -169,6 +169,12 @@ void DShaderBlock::InterpretCompileTarget(ifstream & ifile, DSubShader* subshade
 				subshader->AddCompileTarget(DGRAPHICS_API_D3D11);
 #endif
 			}
+			else if (strcmp(read, "opengl") == 0)
+			{
+#ifdef _DGAPI_OPENGL
+				subshader->AddCompileTarget(DGRAPHICS_API_OPENGL);
+#endif
+			}
 		}
 	}
 }

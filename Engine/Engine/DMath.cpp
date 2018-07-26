@@ -1708,37 +1708,54 @@ void DMatrix4x4::LookAt(DMatrix4x4 * matrix, const DVector3 & eye, const DVector
 	x.Normalize();
 	DVector3::Cross(z, x, y);
 
-	DMatrix4x4 o = DMatrix4x4(x.x, y.x, z.x, 0.0f,
-		x.y, y.y, z.y, 0.0f,
-		x.z, y.z, z.z, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f);
+	if (DGraphics::IsFrustrumZeroToOne())
+	{
 
-	DMatrix4x4 t = DMatrix4x4(1.0f, 0.0f, 0.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f,
-		0.0f, 0.0f, 1.0f, 0.0f,
-		-eye.x, -eye.y, -eye.z, 1.0f);
+		DVector3 be = eye*-1.0f;
 
-	DVector3 be = eye*-1.0f;
+		matrix->m00 = x.x;
+		matrix->m01 = y.x;
+		matrix->m02 = z.x;
+		matrix->m03 = 0.0f;
 
-	matrix->m00 = x.x;
-	matrix->m01 = y.x;
-	matrix->m02 = z.x;
-	matrix->m03 = 0.0f;
+		matrix->m10 = x.y;
+		matrix->m11 = y.y;
+		matrix->m12 = z.y;
+		matrix->m13 = 0.0f;
 
-	matrix->m10 = x.y;
-	matrix->m11 = y.y;
-	matrix->m12 = z.y;
-	matrix->m13 = 0.0f;
+		matrix->m20 = x.z;
+		matrix->m21 = y.z;
+		matrix->m22 = z.z;
+		matrix->m23 = 0.0f;
 
-	matrix->m20 = x.z;
-	matrix->m21 = y.z;
-	matrix->m22 = z.z;
-	matrix->m23 = 0.0f;
+		matrix->m30 = DVector3::Dot(x, be);
+		matrix->m31 = DVector3::Dot(y, be);
+		matrix->m32 = DVector3::Dot(z, be);
+		matrix->m33 = 1.0f;
+	}
+	else
+	{
+		matrix->m00 = x.x;
+		matrix->m10 = x.y;
+		matrix->m20 = x.z;
 
-	matrix->m30 = DVector3::Dot(x, be);
-	matrix->m31 = DVector3::Dot(y, be);
-	matrix->m32 = DVector3::Dot(z, be);
-	matrix->m33 = 1.0f;
+		matrix->m01 = y.x;
+		matrix->m11 = y.y;
+		matrix->m21 = y.z;
+
+		matrix->m02 = -z.x;
+		matrix->m12 = -z.y;
+		matrix->m22 = -z.z;
+
+		matrix->m30 = -DVector3::Dot(x, eye);
+		matrix->m31 = -DVector3::Dot(y, eye);
+		matrix->m32 = DVector3::Dot(z, eye);
+
+		matrix->m03 = 0.0f;
+		matrix->m13 = 0.0f;
+		matrix->m23 = 0.0f;
+		matrix->m33 = 1.0f;
+	}
 }
 
 void DMatrix4x4::Transpose(DMatrix4x4 * out, const DMatrix4x4 & target)

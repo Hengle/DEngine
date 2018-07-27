@@ -15,12 +15,15 @@ DOpenGLCore::~DOpenGLCore()
 bool DOpenGLCore::Init(int width, int height, bool fullscreen, GLFWwindow* window)
 {
 	DGLCore::Init(width, height, fullscreen);
+
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
 		MessageBox(NULL, L"创建GLAD失败", L"初始化失败", MB_ERR_INVALID_CHARS);
 		return false;
 
 	}
+
+	//glFrontFace(GL_CW);
 
 	m_window = window;
 

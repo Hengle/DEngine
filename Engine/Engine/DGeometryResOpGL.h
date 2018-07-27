@@ -24,6 +24,8 @@ private:
 	GLuint m_colorBuffer;
 	GLuint m_normalsBuffer;
 	GLuint m_uv0Buffer;
+
+	GLuint m_indexBuffer;
 };
 
 #endif

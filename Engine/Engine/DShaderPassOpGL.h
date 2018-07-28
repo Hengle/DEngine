@@ -5,6 +5,7 @@
 #include "glad\glad.h"
 #include "GLFW\glfw3.h"
 #include <map>
+#include <vector>
 #include <string>
 
 class DShaderProgramOpGL : public DShaderProgram
@@ -33,10 +34,15 @@ protected:
 	virtual void OnApplyParams(std::map<std::string, float*>&params, std::map<std::string, float*>&gparams);
 
 private:
+	void InitInputLayouts(GLuint);
+	void InitUniforms(GLuint);
+
+private:
 	GLuint m_vertexShaderID;
 	GLuint m_fragmentShaderID;
 	GLuint m_ProgramID;
 	std::map<std::string, ShaderPropertyDescOpGL> m_properties;
+	std::vector<DShaderResDesc> m_resParams;
 };
 
 class DShaderPassOpGL : public DShaderPass

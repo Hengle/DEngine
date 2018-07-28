@@ -201,6 +201,7 @@
     <ClInclude Include="DTextureRes10.h" />
     <ClInclude Include="DTextureRes11.h" />
     <ClInclude Include="DTextureRes9.h" />
+    <ClInclude Include="DTextureResOpGL.h" />
     <ClInclude Include="DTime.h" />
     <ClInclude Include="DTransform.h" />
     <ClInclude Include="DUtils.h" />
@@ -273,6 +274,7 @@
     <ClCompile Include="DTextureRes10.cpp" />
     <ClCompile Include="DTextureRes11.cpp" />
     <ClCompile Include="DTextureRes9.cpp" />
+    <ClCompile Include="DTextureResOpGL.cpp" />
     <ClCompile Include="DTime.cpp" />
     <ClCompile Include="DTransform.cpp" />
     <ClCompile Include="glad.c" />

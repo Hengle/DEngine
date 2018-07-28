@@ -126,3 +126,53 @@ SubShader {
 		}
 	}
 }
+SubShader {
+	Desc {
+		CompileTarget: { opengl }
+	}
+	Pass {
+		State {
+			zwrite on
+			ztest lequal
+		}
+
+		Shader {
+			#code [
+				#vert [
+					#version 330 core
+
+					out vec4 gl_Position;
+					out vec2 uv;
+
+					layout(location = 0) in vec3 input_position;
+					layout(location = 1) in vec2 input_texcoord0;
+
+					uniform mat4 g_worldMatrix;
+					uniform mat4 g_viewMatrix;
+					uniform mat4 g_projectionMatrix;
+
+					void main(){
+ 						gl_Position = g_worldMatrix * vec4(input_position,1);
+						gl_Position = g_viewMatrix * gl_Position;
+						gl_Position = g_projectionMatrix * gl_Position;
+						uv = input_texcoord0;
+					}
+
+				]
+				#frag [
+					#version 330 core
+
+					in vec2 uv;
+
+					uniform sampler2D shaderTexture;
+					uniform sampler2D shaderTexture2;
+
+					out vec4 color;
+					void main(){
+						color = texture(shaderTexture, uv) + texture(shaderTexture2, uv);
+					}
+				]
+			]
+		}
+	}
+}

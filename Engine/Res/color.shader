@@ -125,25 +125,31 @@ SubShader {
 					#version 330 core
 
 					out vec4 gl_Position;
+					out vec4 fragmentColor;
 
-					layout(location = 0) in vec3 vertexPosition_modelspace;
+					layout(location = 0) in vec3 input_position;
+					layout(location = 1) in vec4 input_color;
 
 					uniform mat4 g_worldMatrix;
 					uniform mat4 g_viewMatrix;
 					uniform mat4 g_projectionMatrix;
 
 					void main(){
- 						gl_Position = g_worldMatrix * vec4(vertexPosition_modelspace,1);
+ 						gl_Position = g_worldMatrix * vec4(input_position,1);
 						gl_Position = g_viewMatrix * gl_Position;
 						gl_Position = g_projectionMatrix * gl_Position;
+						fragmentColor = input_color;
 					}
 
 				]
 				#frag [
 					#version 330 core
-					out vec3 color;
+
+					in vec4 fragmentColor;
+
+					out vec4 color;
 					void main(){
-						color = vec3(1,0,0);
+						color = fragmentColor;
 					}
 				]
 			]

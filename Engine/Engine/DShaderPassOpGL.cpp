@@ -79,33 +79,12 @@ void DShaderProgramOpGL::InitProgram()
 	glDeleteShader(m_vertexShaderID);
 	glDeleteShader(m_fragmentShaderID);
 
-	GLint paramLength;
-	glGetProgramiv(ProgramID, GL_ACTIVE_UNIFORMS, &paramLength);
+	InitUniforms(ProgramID);
 
-	GLint i;
-	GLchar pname[64];
-	GLsizei length;
-	GLint size;
-	GLenum type;
-
-	ShaderPropertyDescOpGL propert;
-
-	for (i = 0; i < paramLength; i++)
-	{
-		glGetActiveUniform(ProgramID, i, 64, &length, &size, &type, pname);
-		if (strlen(pname) >= 2 && pname[0] == 'g' && pname[1] == '_')
-		{
-			propert.isGlobal = true;
-			propert.type = type;
-			propert.paramId = glGetUniformLocation(ProgramID, pname);
-		}
-		m_properties.insert(std::pair<std::string, ShaderPropertyDescOpGL>(pname, propert));
-	}
+	InitInputLayouts(ProgramID);
 
 	m_ProgramID = ProgramID;
 
-
-	m_vertexUsage = DVertexUsage_POSITION;
 
 	m_isInitialized = true;
 }
@@ -165,6 +144,80 @@ void DShaderProgramOpGL::OnApplyParams(std::map<std::string, float*>& params, st
 				glUniformMatrix4fv(iter->second.paramId, 1, GL_FALSE, &p[0]);
 			}
 		}
+	}
+}
+
+void DShaderProgramOpGL::InitInputLayouts(GLuint programId)
+{
+	GLint paramLength;
+	glGetProgramiv(programId, GL_ACTIVE_ATTRIBUTES, &paramLength);
+
+	GLint i;
+	GLchar pname[64];
+	GLsizei length;
+	GLint size;
+	GLenum type;
+
+	m_vertexUsage = 0;
+	for (i = 0; i < paramLength; i++)
+	{
+		glGetActiveAttrib(programId, i, 64, &length, &size, &type, pname);
+		
+		if (strcmp(pname, "input_position") == 0)
+		{
+			m_vertexUsage |= DVertexUsage_POSITION;
+		}
+		if (strcmp(pname, "input_color") == 0)
+		{
+			m_vertexUsage |= DVertexUsage_COLOR;
+		}
+		if (strcmp(pname, "input_normal") == 0)
+		{
+			m_vertexUsage |= DVertexUsage_NORMAL;
+		}
+		if (strcmp(pname, "input_texcoord0") == 0)
+		{
+			m_vertexUsage |= DVertexUsage_TEXCOORD0;
+		}
+	}
+}
+
+void DShaderProgramOpGL::InitUniforms(GLuint programId)
+{
+	GLint paramLength;
+	glGetProgramiv(programId, GL_ACTIVE_UNIFORMS, &paramLength);
+
+	GLint i;
+	GLchar pname[64];
+	GLsizei length;
+	GLint size;
+	GLenum type;
+
+	ShaderPropertyDescOpGL propert;
+	DShaderResDesc resdesc;
+
+	for (i = 0; i < paramLength; i++)
+	{
+		glGetActiveUniform(programId, i, 64, &length, &size, &type, pname);
+
+		if (type == GL_SAMPLER_2D)
+		{
+			resdesc.resName = pname;
+			resdesc.offset = glGetUniformLocation(programId, pname);
+			if (strlen(pname) >= 2 && pname[0] == 'g' && pname[1] == '_')
+			{
+				resdesc.isGlobal = true;
+
+			}
+		}
+
+		propert.type = type;
+		propert.paramId = glGetUniformLocation(programId, pname);
+		if (strlen(pname) >= 2 && pname[0] == 'g' && pname[1] == '_')
+		{
+			propert.isGlobal = true;
+		}
+		m_properties.insert(std::pair<std::string, ShaderPropertyDescOpGL>(pname, propert));
 	}
 }
 

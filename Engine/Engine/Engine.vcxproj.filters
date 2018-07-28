@@ -294,6 +294,9 @@
     <ClInclude Include="DShaderPassOpGL.h">
       <Filter>头文件\Core\OpenGL\OpenGLCore</Filter>
     </ClInclude>
+    <ClInclude Include="DTextureResOpGL.h">
+      <Filter>头文件\Core\OpenGL\OpenGLCore</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DMath.cpp">
@@ -486,6 +489,9 @@
       <Filter>源文件\Core\D3D\D3D9Core</Filter>
     </ClCompile>
     <ClCompile Include="DShaderPassOpGL.cpp">
+      <Filter>源文件\Core\OpenGL\OpenGLCore</Filter>
+    </ClCompile>
+    <ClCompile Include="DTextureResOpGL.cpp">
       <Filter>源文件\Core\OpenGL\OpenGLCore</Filter>
     </ClCompile>
   </ItemGroup>

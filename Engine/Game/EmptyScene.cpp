@@ -18,7 +18,7 @@ void EmptyScene::OnLoad()
 	transform->SetEuler(38.503f, -285.023f, 0.0f);
 	transform->SetPosition(4.298018f, 2.176152f, -3.152558f);
 
-	DMaterial* colmat = DRes::Load<DMaterial>(DEFAULT_GROUP, COLOR_MAT);
+	DMaterial* colmat = DRes::Load<DMaterial>(DEFAULT_GROUP, BODY_MAT);
 	DGeometry* obj = DRes::Load<DGeometry>(DEFAULT_GROUP, BODY_MESH);
 	//DGeometry* obj = DGeometry::Create(DGeometry_Plane);
 

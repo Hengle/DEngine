@@ -89,8 +89,12 @@ void DShaderProgramOpGL::InitProgram()
 	m_isInitialized = true;
 }
 
-void DShaderProgramOpGL::GetResDesc(unsigned int index, DShaderResDesc &) const
+void DShaderProgramOpGL::GetResDesc(unsigned int index, DShaderResDesc & desc) const
 {
+	if (index < m_resParams.size())
+	{
+		desc = m_resParams.at(index);
+	}
 }
 
 bool DShaderProgramOpGL::HasProperty(const LPCSTR key) const
@@ -165,19 +169,19 @@ void DShaderProgramOpGL::InitInputLayouts(GLuint programId)
 		
 		if (strcmp(pname, "input_position") == 0)
 		{
-			m_vertexUsage |= DVertexUsage_POSITION;
+			m_vertexUsage |= 1UL << DVertexUsage_POSITION;
 		}
 		if (strcmp(pname, "input_color") == 0)
 		{
-			m_vertexUsage |= DVertexUsage_COLOR;
+			m_vertexUsage |= 1UL << DVertexUsage_COLOR;
 		}
 		if (strcmp(pname, "input_normal") == 0)
 		{
-			m_vertexUsage |= DVertexUsage_NORMAL;
+			m_vertexUsage |= 1UL << DVertexUsage_NORMAL;
 		}
 		if (strcmp(pname, "input_texcoord0") == 0)
 		{
-			m_vertexUsage |= DVertexUsage_TEXCOORD0;
+			m_vertexUsage |= 1UL << DVertexUsage_TEXCOORD0;
 		}
 	}
 }
@@ -196,6 +200,8 @@ void DShaderProgramOpGL::InitUniforms(GLuint programId)
 	ShaderPropertyDescOpGL propert;
 	DShaderResDesc resdesc;
 
+	m_resCount = 0;
+
 	for (i = 0; i < paramLength; i++)
 	{
 		glGetActiveUniform(programId, i, 64, &length, &size, &type, pname);
@@ -207,17 +213,20 @@ void DShaderProgramOpGL::InitUniforms(GLuint programId)
 			if (strlen(pname) >= 2 && pname[0] == 'g' && pname[1] == '_')
 			{
 				resdesc.isGlobal = true;
-
 			}
+			m_resCount += 1;
+			m_resParams.push_back(resdesc);
 		}
-
-		propert.type = type;
-		propert.paramId = glGetUniformLocation(programId, pname);
-		if (strlen(pname) >= 2 && pname[0] == 'g' && pname[1] == '_')
+		else
 		{
-			propert.isGlobal = true;
+			propert.type = type;
+			propert.paramId = glGetUniformLocation(programId, pname);
+			if (strlen(pname) >= 2 && pname[0] == 'g' && pname[1] == '_')
+			{
+				propert.isGlobal = true;
+			}
+			m_properties.insert(std::pair<std::string, ShaderPropertyDescOpGL>(pname, propert));
 		}
-		m_properties.insert(std::pair<std::string, ShaderPropertyDescOpGL>(pname, propert));
 	}
 }
 

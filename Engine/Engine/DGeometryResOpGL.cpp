@@ -59,6 +59,25 @@ bool DGeometryResOpGL::OnInit(DGeometryBufferDesc * desc)
 		(void*)0            // array buffer offset
 		);
 
+	if (m_uv0Offset >= 0)
+	{
+		glGenBuffers(1, &m_uv0Buffer);
+		glBindBuffer(GL_ARRAY_BUFFER, m_uv0Buffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*m_vertexCount * 2, desc->uvs, GL_STATIC_DRAW);
+
+		glEnableVertexAttribArray(1);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_uv0Buffer);
+		glVertexAttribPointer(
+			1,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+			2,                  // size
+			GL_FLOAT,           // type
+			GL_FALSE,           // normalized?
+			0,                  // stride
+			(void*)0            // array buffer offset
+			);
+	}
+
 	unsigned int* indexes = new unsigned int[m_indexCount];
 	int i = 0;
 	for (i = 0; i < m_indexCount; i++)

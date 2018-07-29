@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #ifdef _DGAPI_OPENGL
 
 #include "DOpenGLCore.h"
@@ -13,6 +13,7 @@ public:
 
 private:
 	GLuint LoadBMP(WCHAR* path);
+	GLuint LoadTGA(WCHAR* path, GLuint&);
 
 private:
 	GLuint m_textureId;

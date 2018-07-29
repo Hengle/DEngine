@@ -128,9 +128,11 @@ void DMaterial::ApplyPass()
 
 	m_shader->ApplyStates(m_currentPass);
 
+	m_shader->Draw(m_currentPass);
+
 	m_shader->ApplyParams(m_constantTable, m_currentPass);
 
-	m_shader->Draw(m_currentPass);
+	
 }
 
 bool DMaterial::IsPassEnable(int pass)

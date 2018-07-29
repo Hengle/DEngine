@@ -2,6 +2,8 @@
 #include "DOpenGLCore.h"
 #include "DShaderPassOpGL.h"
 #include "DGeometryResOpGL.h"
+#include "DTextureResOpGL.h"
+#include "DRenderStateMgrOpGL.h"
 
 DOpenGLCore::DOpenGLCore()
 {
@@ -23,6 +25,8 @@ bool DOpenGLCore::Init(int width, int height, bool fullscreen, GLFWwindow* windo
 
 	}
 
+	InitRenderStateMgr();
+
 	//glFrontFace(GL_CW);
 
 	m_window = window;
@@ -33,6 +37,12 @@ bool DOpenGLCore::Init(int width, int height, bool fullscreen, GLFWwindow* windo
 void DOpenGLCore::Destroy()
 {
 	glfwTerminate();
+	if (m_renderStateMgr != NULL)
+	{
+		m_renderStateMgr->Release();
+		delete m_renderStateMgr;
+		m_renderStateMgr = NULL;
+	}
 }
 
 void DOpenGLCore::Present()
@@ -71,9 +81,9 @@ DGeometryRes * DOpenGLCore::CreateGeometryRes(int vertexUsage, bool dynamic)
 	return new DGeometryResOpGL(vertexUsage, dynamic);
 }
 
-ITextureRes * DOpenGLCore::CreateTextureRes(WCHAR *)
+ITextureRes * DOpenGLCore::CreateTextureRes(WCHAR * filename)
 {
-	return nullptr;
+	return new DTextureResOpGL(filename);;
 }
 
 IRenderTextureViewRes * DOpenGLCore::CreateRenderTextureRes(float width, float height)
@@ -92,6 +102,11 @@ void DOpenGLCore::ApplySamplerState(UINT, DWrapMode)
 
 IRenderStateMgr * DOpenGLCore::GetRenderStateMgr()
 {
-	return nullptr;
+	return m_renderStateMgr;
+}
+void DOpenGLCore::InitRenderStateMgr()
+{
+	m_renderStateMgr = new DRenderStateMgrOpGL();
+	m_renderStateMgr->Init();
 }
 #endif

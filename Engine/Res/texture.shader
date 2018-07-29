@@ -165,11 +165,10 @@ SubShader {
 					in vec2 uv;
 
 					uniform sampler2D shaderTexture;
-					uniform sampler2D shaderTexture2;
 
 					out vec4 color;
 					void main(){
-						color = texture(shaderTexture, uv) + texture(shaderTexture2, uv);
+						color = texture(shaderTexture, uv);
 					}
 				]
 			]

@@ -43,12 +43,13 @@ public:
 private:
 	///*初始化采样器状态*/
 	//void InitSamplerStates();
-	///*初始化渲染状态管理器*/
-	//void InitRenderStateMgr();
+	/*初始化渲染状态管理器*/
+	void InitRenderStateMgr();
 	//ID3D11SamplerState* CreateSamplerState(D3D11_TEXTURE_ADDRESS_MODE);
 
 private:
 	GLFWwindow* m_window;
+	IRenderStateMgr* m_renderStateMgr;
 };
 
 #endif

@@ -113,7 +113,8 @@ interface ITextureRes
 {
 public:
 	virtual void Release() = 0;
-	virtual void Apply(UINT, DWrapMode) = 0;
+	virtual void Apply(UINT) = 0;
+	virtual void ApplyWrapMode(DWrapMode) = 0;
 };
 
 /*抽象RenderBuffer接口*/
@@ -124,11 +125,9 @@ public:
 };
 
 /*抽象RenderTextureView接口*/
-interface IRenderTextureViewRes
+interface IRenderTextureViewRes : public ITextureRes
 {
 public:
-	virtual void Release() = 0;
-	virtual void Apply(UINT, DWrapMode) = 0;
 
 	virtual IRenderBuffer* GetColorBuffer() = 0;
 	virtual IRenderBuffer* GetDepthBuffer() = 0;
@@ -183,6 +182,8 @@ public:
 	virtual ITextureRes* CreateTextureRes(WCHAR*) = 0;
 	/*创建RenderTexture资源*/
 	virtual IRenderTextureViewRes* CreateRenderTextureRes(float, float) = 0;
+	/*创建CubeMap资源*/
+	virtual ITextureRes* CreateCubeMapRes(ITextureRes*, ITextureRes*, ITextureRes*, ITextureRes*, ITextureRes*, ITextureRes*) = 0;
 	/*创建shader程序*/
 	virtual DShaderPass* CreateShaderPass() = 0;
 	virtual void ApplySamplerState(UINT, DWrapMode) = 0;

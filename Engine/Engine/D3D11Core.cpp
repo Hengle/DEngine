@@ -428,6 +428,11 @@ ITextureRes * D3D11Core::CreateTextureRes(WCHAR* filename)
 	return new DTextureRes11(m_device, m_deviceContext, filename);
 }
 
+ITextureRes * D3D11Core::CreateCubeMapRes(ITextureRes * right, ITextureRes * left, ITextureRes * top, ITextureRes * bottom, ITextureRes * front, ITextureRes * back)
+{
+	return new DTextureRes11(m_device, m_deviceContext, (DTextureRes11*)right, (DTextureRes11*)left, (DTextureRes11*)top, (DTextureRes11*)bottom, (DTextureRes11*)front, (DTextureRes11*)back);
+}
+
 IRenderTextureViewRes * D3D11Core::CreateRenderTextureRes(float width, float height)
 {
 	return new DRenderTextureViewRes11(m_device, m_deviceContext, width, height);

@@ -86,6 +86,11 @@ ITextureRes * DOpenGLCore::CreateTextureRes(WCHAR * filename)
 	return new DTextureResOpGL(filename);;
 }
 
+ITextureRes * DOpenGLCore::CreateCubeMapRes(ITextureRes *, ITextureRes *, ITextureRes *, ITextureRes *, ITextureRes *, ITextureRes *)
+{
+	return nullptr;
+}
+
 IRenderTextureViewRes * DOpenGLCore::CreateRenderTextureRes(float width, float height)
 {
 	return nullptr;

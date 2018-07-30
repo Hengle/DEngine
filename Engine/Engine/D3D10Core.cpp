@@ -430,6 +430,11 @@ ITextureRes * D3D10Core::CreateTextureRes(WCHAR* filename)
 	return new DTextureRes10(m_device, filename);;
 }
 
+ITextureRes * D3D10Core::CreateCubeMapRes(ITextureRes *, ITextureRes *, ITextureRes *, ITextureRes *, ITextureRes *, ITextureRes *)
+{
+	return nullptr;
+}
+
 IRenderTextureViewRes * D3D10Core::CreateRenderTextureRes(float width, float height)
 {
 	return new DRenderTextureViewRes10(m_device, width, height);

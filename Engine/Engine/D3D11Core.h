@@ -34,6 +34,7 @@ public:
 	virtual DGeometryRes* CreateGeometryRes(int vertexUsage, bool dynamic);
 	/*创建贴图资源*/
 	virtual ITextureRes* CreateTextureRes(WCHAR*);
+	virtual ITextureRes* CreateCubeMapRes(ITextureRes*, ITextureRes*, ITextureRes*, ITextureRes*, ITextureRes*, ITextureRes*);
 	/*创建RenderTexture资源*/
 	virtual IRenderTextureViewRes* CreateRenderTextureRes(float width, float height);
 	/*创建shader程序*/

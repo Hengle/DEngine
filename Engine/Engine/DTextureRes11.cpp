@@ -19,15 +19,90 @@ DTextureRes11::DTextureRes11(ID3D11Device* device, ID3D11DeviceContext * deviceC
 	m_isSuccess = true;
 }
 
+DTextureRes11::DTextureRes11(ID3D11Device * device, ID3D11DeviceContext * deviceContext, DTextureRes11 * right, DTextureRes11 * left, DTextureRes11 * top, DTextureRes11 * bottom, DTextureRes11 * front, DTextureRes11 * back)
+{
+	m_deviceContext = deviceContext;
+
+	m_isSuccess = false;
+
+	ID3D11Resource* srcTex[6];
+
+	right->m_texture->GetResource(&srcTex[0]);
+	left->m_texture->GetResource(&srcTex[1]);
+	top->m_texture->GetResource(&srcTex[2]);
+	bottom->m_texture->GetResource(&srcTex[3]);
+	front->m_texture->GetResource(&srcTex[4]);
+	back->m_texture->GetResource(&srcTex[5]);
+
+
+	D3D11_TEXTURE2D_DESC texElementDesc;
+	((ID3D11Texture2D*)srcTex[0])->GetDesc(&texElementDesc);
+
+	D3D11_TEXTURE2D_DESC texArrayDesc;
+	texArrayDesc.Width = texElementDesc.Width;
+	texArrayDesc.Height = texElementDesc.Height;
+	texArrayDesc.MipLevels = texElementDesc.MipLevels;
+	texArrayDesc.ArraySize = 6;
+	texArrayDesc.Format = texElementDesc.Format;
+	texArrayDesc.SampleDesc.Count = 1;
+	texArrayDesc.SampleDesc.Quality = 0;
+	texArrayDesc.Usage = D3D11_USAGE_DEFAULT;
+	texArrayDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	texArrayDesc.CPUAccessFlags = 0;
+	texArrayDesc.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
+
+	ID3D11Texture2D* texArray = 0;
+	if (FAILED(device->CreateTexture2D(&texArrayDesc, 0, &texArray)))
+		return;
+
+	D3D11_BOX sourceRegion;
+
+	for (UINT x = 0; x < 6; x++)
+	{
+		for (UINT mipLevel = 0; mipLevel < texArrayDesc.MipLevels; mipLevel++)
+		{
+			sourceRegion.left = 0;
+			sourceRegion.right = (texArrayDesc.Width >> mipLevel);
+			sourceRegion.top = 0;
+			sourceRegion.bottom = (texArrayDesc.Height >> mipLevel);
+			sourceRegion.front = 0;
+			sourceRegion.back = 1;
+
+			if (sourceRegion.bottom == 0 || sourceRegion.right == 0)
+				break;
+
+			deviceContext->CopySubresourceRegion(texArray, D3D11CalcSubresource(mipLevel, x, texArrayDesc.MipLevels), 0, 0, 0, srcTex[x], mipLevel, &sourceRegion);
+		}
+	}
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC viewDesc;
+	viewDesc.Format = texArrayDesc.Format;
+	viewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
+	viewDesc.TextureCube.MostDetailedMip = 0;
+	viewDesc.TextureCube.MipLevels = texArrayDesc.MipLevels;
+
+	if (FAILED(device->CreateShaderResourceView(texArray, &viewDesc, &m_texture)))
+		return;
+
+	m_isSuccess = true;
+}
+
 DTextureRes11::~DTextureRes11()
 {
 }
 
-void DTextureRes11::Apply(UINT textureOffset, DWrapMode mode)
+void DTextureRes11::Apply(UINT textureOffset)
 {
 	if (m_isSuccess)
 	{
 		m_deviceContext->PSSetShaderResources(textureOffset, 1, &m_texture);
+	}
+}
+
+void DTextureRes11::ApplyWrapMode(DWrapMode mode)
+{
+	if (m_isSuccess)
+	{
 		DSystem::GetGraphicsMgr()->GetGLCore()->ApplySamplerState(textureOffset, mode);
 	}
 }
@@ -121,6 +196,10 @@ void DRenderTextureViewRes11::Apply(UINT textureOffset, DWrapMode mode)
 		m_deviceContext->PSSetShaderResources(textureOffset, 1, &m_texture);
 		DSystem::GetGraphicsMgr()->GetGLCore()->ApplySamplerState(textureOffset, mode);
 	}
+}
+
+void DRenderTextureViewRes11::ApplyWrapMode(DWrapMode)
+{
 }
 
 void DRenderTextureViewRes11::Release()

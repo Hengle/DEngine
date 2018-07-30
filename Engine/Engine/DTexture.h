@@ -22,7 +22,7 @@ public:
 	virtual void Destroy();
 	virtual void Apply(UINT);
 	DWrapMode GetWrapMode();
-
+	ITextureRes* GetTextureRes();
 	static DTexture2D* Create(WCHAR*);
 	static DTexture2D* Create(WCHAR*, DWrapMode);
 
@@ -33,7 +33,16 @@ private:
 
 class DTextureCube : public DTexture
 {
+private:
+	DTextureCube();
+public:
+	~DTextureCube();
+	virtual void Destroy();
+	virtual void Apply(UINT);
+	static DTextureCube* Create(DTexture2D*, DTexture2D*, DTexture2D*, DTexture2D*, DTexture2D*, DTexture2D*);
 
+private:
+	ITextureRes* m_textureRes;
 };
 
 class DRenderTexture : public DTexture

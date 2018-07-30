@@ -46,6 +46,11 @@ DWrapMode DTexture2D::GetWrapMode()
 	return m_wrapMode;
 }
 
+ITextureRes * DTexture2D::GetTextureRes()
+{
+	return m_textureRes;
+}
+
 DTexture2D * DTexture2D::Create(WCHAR *filename)
 {
 	DTexture2D* tex = new DTexture2D();
@@ -59,6 +64,29 @@ DTexture2D * DTexture2D::Create(WCHAR *filename, DWrapMode wrapmode)
 	DTexture2D* tex = new DTexture2D();
 	tex->m_textureRes = DSystem::GetGraphicsMgr()->GetGLCore()->CreateTextureRes(filename);
 	tex->m_wrapMode = wrapmode;
+	return tex;
+}
+
+
+DTextureCube::~DTextureCube()
+{
+}
+
+void DTextureCube::Destroy()
+{
+}
+
+void DTextureCube::Apply(UINT offset)
+{
+	DTexture::Apply(offset);
+
+	m_textureRes->Apply(offset, m_wrapMode);
+}
+
+DTextureCube * DTextureCube::Create(DTexture2D * right, DTexture2D * left, DTexture2D * top, DTexture2D * bottom, DTexture2D * front, DTexture2D * back)
+{
+	DTextureCube* tex = new DTextureCube();
+	tex->m_textureRes = DSystem::GetGraphicsMgr()->GetGLCore()->CreateCubeMapRes(right->GetTextureRes(), left->GetTextureRes(), top->GetTextureRes(), bottom->GetTextureRes(), front->GetTextureRes(), back->GetTextureRes());
 	return tex;
 }
 
@@ -128,3 +156,4 @@ DRenderTexture * DRenderTexture::Create(float width, float height, DWrapMode wra
 	tex->m_wrapMode = wrapMode;
 	return tex;
 }
+

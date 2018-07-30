@@ -170,6 +170,11 @@ ITextureRes * D3D9Core::CreateTextureRes(WCHAR* filename)
 	return new DTextureRes9(m_device, filename);
 }
 
+ITextureRes * D3D9Core::CreateCubeMapRes(ITextureRes *, ITextureRes *, ITextureRes *, ITextureRes *, ITextureRes *, ITextureRes *)
+{
+	return nullptr;
+}
+
 IRenderTextureViewRes * D3D9Core::CreateRenderTextureRes(float width, float height)
 {
 	return new DRenderTextureViewRes9(m_device, width, height);

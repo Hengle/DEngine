@@ -31,7 +31,8 @@ SubShader {
 				{
 				    float4 position : SV_POSITION;
 				    float3 worldNormal:TEXCOORD0;
-				    float2 tex : TEXCOORD1;
+				    float3 worldPosition:TEXCOORD1;
+				    float2 tex : TEXCOORD2;
 				};
 
 				Texture2D shaderTexture;
@@ -42,6 +43,9 @@ SubShader {
 
 				float4 g_engineCameraPos;
 
+				float gloss;
+				float specular;
+
 				PixelInputType VertMain(VertexInputType input)
 				{
 				    PixelInputType output;
@@ -50,6 +54,7 @@ SubShader {
 
 
 				    output.position  = mul(g_engineWorldMatrix, input.position);
+				    output.worldPosition = output.position.xyz;
 				    output.position  = mul(g_engineViewMatrix, output.position);
 				    output.position = mul(g_engineProjectionMatrix, output.position);
 
@@ -76,12 +81,13 @@ SubShader {
 
 				    float ndl = max(0.0f, dot(input.worldNormal, -g_engineLightDir));
 
-				    //float3 h = normalize()
+				    float3 h = normalize(GetViewDir(input.worldPosition - g_engineLightDir));
 
-				    //float ndh = 
+				    float ndh = max(0.0f, dot(input.worldNormal, h));
 
 
-				    textureColor *= ndl;
+				    textureColor.rgb =  textureColor.rgb * ndl + float3(1.0f,1.0f,1.0f)*pow(ndh,specular*128.0f)*gloss;
+				    textureColor.a = 1.0f;
 
 	    			return textureColor;
 				}

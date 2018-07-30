@@ -140,41 +140,66 @@ DResObject * DTexture2DResItem::OnLoad()
 	return obj;
 }
 
-DMaterialResItem::DMaterialResItem(unsigned int shaderGroupId, unsigned int shaderId)
-{
-	m_shaderId = shaderId;
-	m_shaderGroupId = shaderGroupId;
-}
+//DMaterialResItem::DMaterialResItem(unsigned int shaderGroupId, unsigned int shaderId)
+//{
+//	m_shaderId = shaderId;
+//	m_shaderGroupId = shaderGroupId;
+//	m_path = 0;
+//}
 
-void DMaterialResItem::AddTexture(char * key, unsigned int textureGroupId, unsigned int textureId)
+//void DMaterialResItem::SetPath(char * path)
+//{
+//	int len = strlen(path) + 1;
+//	m_path = new char[len];
+//	strcpy_s(m_path, len, path);
+//}
+
+//void DMaterialResItem::AddTexture(char * key, unsigned int textureGroupId, unsigned int textureId)
+//{
+//	if (m_textureIds.find(key) != m_textureIds.end())
+//	{
+//		m_textureIds[key].resId = textureId;
+//		m_textureIds[key].groupId = textureGroupId;
+//	}
+//	else {
+//		MaterialResTexDesc desc;
+//		desc.groupId = textureGroupId;
+//		desc.resId = textureId;
+//		m_textureIds.insert(std::pair<std::string, MaterialResTexDesc>(key, desc));
+//	}
+//}
+
+DMaterialResItem::DMaterialResItem(char * path)
 {
-	if (m_textureIds.find(key) != m_textureIds.end())
-	{
-		m_textureIds[key].resId = textureId;
-		m_textureIds[key].groupId = textureGroupId;
-	}
-	else {
-		MaterialResTexDesc desc;
-		desc.groupId = textureGroupId;
-		desc.resId = textureId;
-		m_textureIds.insert(std::pair<std::string, MaterialResTexDesc>(key, desc));
-	}
+	int len = strlen(path) + 1;
+	m_path = new char[len];
+	strcpy_s(m_path, len, path);
 }
 
 void DMaterialResItem::Release()
 {
-	m_textureIds.clear();
+	//m_textureIds.clear();
+	if (m_path != 0)
+	{
+		delete[] m_path;
+		m_path = 0;
+	}
 }
 
 DMaterialResItem * DMaterialResItem::LoadManifest(std::ifstream & ifile)
 {
-	char mdef[32], pname[32];
-	unsigned int texid, texgid, shaderid, shadergid;
+	char mdef[32], pname[256];
+	//unsigned int texid, texgid, shaderid, shadergid;
 	DMaterialResItem* item = NULL;
 	while (!ifile.eof())
 	{
 		ifile >> mdef;
-		if (strcmp(mdef, "#SHADER") == 0)
+		if (strcmp(mdef, "#PATH") == 0)
+		{
+			ifile >> pname;
+			item = new DMaterialResItem(pname);
+		}
+		/*if (strcmp(mdef, "#SHADER") == 0)
 		{
 			ifile >> shadergid >> shaderid;
 			item = new DMaterialResItem(shadergid, shaderid);
@@ -186,7 +211,7 @@ DMaterialResItem * DMaterialResItem::LoadManifest(std::ifstream & ifile)
 			{
 				item->AddTexture(pname, texgid, texid);
 			}
-		}
+		}*/
 		else if (strcmp(mdef, "#RES_END") == 0)
 		{
 			return item;
@@ -197,7 +222,9 @@ DMaterialResItem * DMaterialResItem::LoadManifest(std::ifstream & ifile)
 
 DResObject * DMaterialResItem::OnLoad()
 {
-	DShader* shader = DRes::Load<DShader>(m_shaderGroupId, m_shaderId);
+	DResObject* mat = LoadMaterial();
+	return mat;
+	/*DShader* shader = DRes::Load<DShader>(m_shaderGroupId, m_shaderId);
 	if (shader == NULL)
 		return NULL;
 	DMaterial* obj = new DMaterial(shader);
@@ -210,7 +237,110 @@ DResObject * DMaterialResItem::OnLoad()
 			obj->SetTexture(iter->first.c_str(), tex);
 		}
 	}
-	return obj;
+	return obj;*/
+}
+
+DResObject * DMaterialResItem::LoadMaterial()
+{
+	if (m_path == 0)
+		return NULL;
+	std::ifstream ifile;
+	ifile.open(m_path);
+	if (ifile.fail())
+	{
+		return NULL;
+	}
+
+	char ptype[64];
+
+	DResObject* mat = NULL;
+
+	while (!ifile.eof())
+	{
+		ifile >> ptype;
+		if (strcmp(ptype, "#SHADER") == 0)
+		{
+			LoadShader(ifile, &mat);
+		}
+		else if(strcmp(ptype, "#PARAM_TEX") == 0)
+		{
+			LoadTexture(ifile, mat);
+		}
+		else if (strcmp(ptype, "#PARAM_FLOAT") == 0)
+		{
+			LoadNumbers(ifile, mat, 1);
+		}
+		else if (strcmp(ptype, "#PARAM_VECTOR2") == 0)
+		{
+			LoadNumbers(ifile, mat, 2);
+		}
+		else if (strcmp(ptype, "#PARAM_VECTOR3") == 0)
+		{
+			LoadNumbers(ifile, mat, 3);
+		}
+		else if (strcmp(ptype, "#PARAM_VECTOR4") == 0)
+		{
+			LoadNumbers(ifile, mat, 4);
+		}
+	}
+	ifile.close();
+
+	return mat;
+}
+
+void DMaterialResItem::LoadShader(std::ifstream& ifile, DResObject ** mat)
+{
+	unsigned int shaderid, shadergid;
+	ifile >> shadergid >> shaderid;
+	DShader* shader = DRes::Load<DShader>(shadergid, shaderid);
+	if (shader == NULL)
+		return;
+	*mat = new DMaterial(shader);
+}
+
+void DMaterialResItem::LoadTexture(std::ifstream & ifile, DResObject * mat)
+{
+	unsigned int texid, texgid;
+	char texname[64];
+	ifile >> texname >> texgid >> texid;
+	if (mat != NULL)
+	{
+		DTexture2D* tex = DRes::Load<DTexture2D>(texgid, texid);
+		if (tex != NULL)
+		{
+			((DMaterial*)mat)->SetTexture(texname, tex);
+		}
+	}
+}
+
+void DMaterialResItem::LoadNumbers(std::ifstream & ifile, DResObject * mat, int count)
+{
+	if (count <= 0 || count > 4)
+		return;
+	if (mat == NULL)
+		return;
+	char pname[32];
+	float v0, v1, v2, v3;
+	if (count == 1)
+	{
+		ifile >> pname >> v0;
+		((DMaterial*)mat)->SetFloat(pname, v0);
+	}
+	else if (count == 2)
+	{
+		ifile >> pname >> v0 >> v1;
+		((DMaterial*)mat)->SetVector2(pname, DVector2(v0, v1));
+	}
+	else if (count == 3)
+	{
+		ifile >> pname >> v0 >> v1 >> v2;
+		((DMaterial*)mat)->SetVector3(pname, DVector3(v0, v1, v2));
+	}
+	else if (count == 4)
+	{
+		ifile >> pname >> v0 >> v1 >> v2 >> v3;
+		((DMaterial*)mat)->SetVector4(pname, DVector4(v0, v1, v2, v3));
+	}
 }
 
 DGeometryResItem::DGeometryResItem(char * path)

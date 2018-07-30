@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "DResObject.h"
 #include <fstream>
-#include <map>
+//#include <map>
 
 /*资源项*/
 class DResItem
@@ -55,16 +55,9 @@ private:
 /*材质资源项*/
 class DMaterialResItem : public DResItem
 {
-private:
-	struct MaterialResTexDesc
-	{
-	public:
-		unsigned int groupId, resId;
-	};
-
 public:
-	DMaterialResItem(unsigned int shaderGroupId, unsigned int shaderId);
-	void AddTexture(char*, unsigned int, unsigned int);
+	DMaterialResItem(char* path);
+	//void SetPath(char* path);
 	virtual void Release();
 	static DMaterialResItem* LoadManifest(std::ifstream&);
 
@@ -72,9 +65,16 @@ protected:
 	virtual DResObject* OnLoad();
 
 private:
-	unsigned int m_shaderId;
-	unsigned int m_shaderGroupId;
-	std::map<std::string, MaterialResTexDesc> m_textureIds;
+	DResObject* LoadMaterial();
+	void LoadShader(std::ifstream&, DResObject**);
+	void LoadTexture(std::ifstream&, DResObject*);
+	void LoadNumbers(std::ifstream&, DResObject*, int);
+
+private:
+	//unsigned int m_shaderId;
+	//unsigned int m_shaderGroupId;
+	char* m_path;
+	//std::map<std::string, MaterialResTexDesc> m_textureIds;
 };
 
 class DGeometryResItem : public DResItem

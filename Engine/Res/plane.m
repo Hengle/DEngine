@@ -1,0 +1,3 @@
+#SHADER 0 1008
+#PARAM_TEX    shaderTexture 0 2003
+#PARAM_FLOAT  0.3

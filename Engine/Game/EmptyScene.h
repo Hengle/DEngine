@@ -9,5 +9,11 @@ public:
 protected:
 	virtual void OnLoad();
 	virtual void OnUnLoad();
+	virtual void OnUpdate();
+
+private:
+	DCamera* m_camera;
+	DVector3 m_lookAtPoint;
+	float m_lookDistance;
 };
 

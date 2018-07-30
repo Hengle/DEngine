@@ -32,6 +32,10 @@
 		#PATH ../Res/transparent.shader
 	#RES_END
 
+	#RES_BEGIN SHADER 1008 
+		#PATH ../Res/baselighting.shader
+	#RES_END
+
 	#RES_BEGIN TEXTURE2D 2000
 		#PATH ../Res/decal.jpg
 		#WRAPMODE REPEAT
@@ -43,6 +47,18 @@
 
 	#RES_BEGIN TEXTURE2D 2002
 		#PATH ../Res/ground_12.jpg
+	#RES_END
+
+	#RES_BEGIN TEXTURE2D 2003
+		#PATH ../Res/f261504c.jpg
+	#RES_END
+
+	#RES_BEGIN TEXTURE2D 2004
+		#PATH ../Res/FEIJI-N.tga
+	#RES_END
+
+	#RES_BEGIN TEXTURE2D 2005
+		#PATH ../Res/FEIJI-S-2.tga
 	#RES_END
 
 	#RES_BEGIN MATERIAL 3000
@@ -81,8 +97,17 @@
 		#PARAM_TEX shaderTexture 0 2001
 	#RES_END
 
+	#RES_BEGIN MATERIAL 3008
+		#SHADER 0 1008
+		#PARAM_TEX shaderTexture 0 2003
+	#RES_END
+
 	#RES_BEGIN GEOMETRY 4000
 		#PATH ../Res/eboy.obj
+	#RES_END
+
+	#RES_BEGIN GEOMETRY 4001
+		#PATH ../Res/feichuan.obj
 	#RES_END
 
 #RES_GROUP_END

@@ -20,5 +20,7 @@
 #define COLOR_MAT        3004
 #define OUTLINE_MAT      3006
 #define TRANSPARENT_MAT  3007
+#define PLANE_MAT        3008
 
 #define BODY_MESH        4000
+#define PLANE_MESH       4001

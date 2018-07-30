@@ -418,7 +418,11 @@ void DCamera::BackwardMoveCameraNode()
 void DCamera::BeginRender()
 {
 	//context->RSSetViewports(1, &m_viewPort);
+	
+
 	sCurrent = this;
+
+	RefreshCameraDirParam();
 
 	if (m_isProjectionChanged)
 	{
@@ -509,4 +513,20 @@ void DCamera::EndRender()
 		DGraphics::EndScene();
 	}
 	sCurrent = NULL;
+}
+
+void DCamera::RefreshCameraDirParam()
+{
+	if (m_ortho)
+	{
+		DVector3 forward;
+		m_transform->GetForward(forward);
+		DShader::SetGlobalVector4(D_CAMERA_POS, DVector4(forward.x, forward.y, forward.z, 0.0f));
+	}
+	else
+	{
+		DVector3 pos;
+		m_transform->GetPosition(pos);
+		DShader::SetGlobalVector4(D_CAMERA_POS, DVector4(pos.x, pos.y, pos.z, 1.0f));
+	}
 }

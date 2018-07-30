@@ -129,6 +129,7 @@ private:
 	void BackwardMoveCameraNode();
 	void BeginRender();
 	void EndRender();
+	void RefreshCameraDirParam();
 
 protected:
 	int m_sortOrder;

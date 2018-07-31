@@ -83,7 +83,7 @@ DGeometryRes * DOpenGLCore::CreateGeometryRes(int vertexUsage, bool dynamic)
 
 ITextureRes * DOpenGLCore::CreateTextureRes(WCHAR * filename)
 {
-	return new DTextureResOpGL(filename);;
+	return new DTextureResOpGL(filename, DWrapMode_Clamp);;
 }
 
 ITextureRes * DOpenGLCore::CreateCubeMapRes(ITextureRes *, ITextureRes *, ITextureRes *, ITextureRes *, ITextureRes *, ITextureRes *)

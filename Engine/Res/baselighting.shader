@@ -98,3 +98,96 @@ SubShader {
 		}
 	}
 }
+SubShader {
+	Desc {
+		CompileTarget: { opengl }
+	}
+	Pass {
+		State {
+			zwrite on
+			ztest lequal
+		}
+
+		Shader {
+			#vert VertMain
+			#frag FragMain
+			#code [
+				#vert [
+
+					#version 330 core
+
+					out vec4 gl_Position;
+					out vec3 worldNormal;
+					out vec3 worldPosition;
+					out vec2 uv;
+
+					layout(location = 0) in vec3 input_position;
+					layout(location = 1) in vec3 input_normal;
+					layout(location = 2) in vec2 input_texcoord0;
+
+					uniform mat4 g_engineWorldMatrix;
+					uniform mat4 g_engineViewMatrix;
+					uniform mat4 g_engineProjectionMatrix;
+
+					void main(){
+					    gl_Position = g_engineWorldMatrix * vec4(input_position,1);
+					    worldPosition = gl_Position.xyz;
+					    gl_Position = g_engineViewMatrix * gl_Position;
+						gl_Position = g_engineProjectionMatrix * gl_Position;
+						worldNormal = (g_engineWorldMatrix * vec4(input_normal, 0)).xyz;
+						uv = input_texcoord0;
+					}
+				]
+				#frag [
+					#version 330 core
+
+					out vec4 color;
+
+					in vec3 worldNormal;
+					in vec3 worldPosition;
+					in vec2 uv;
+
+					uniform vec3 g_engineLightDir;
+					uniform vec4 g_engineLightColor;
+
+					uniform vec4 g_engineCameraPos;
+
+					uniform float g_engineTime;
+
+					uniform float gloss;
+					uniform float specular;
+
+					uniform sampler2D shaderTexture;
+
+					vec3 GetViewDir(vec3 worldPos) {
+						vec3 viewdir;
+						if(g_engineCameraPos.w == 0.0) {
+							viewdir = -g_engineCameraPos.xyz;
+						}else{
+							viewdir = normalize(g_engineCameraPos.xyz - worldPos);
+						}
+						return viewdir;
+					}
+
+					void main(){
+					    //color = texture(shaderTexture, uv);
+					    color = vec4(uv,0.0,1.0);
+
+					    float ndl = max(0.0, dot(worldNormal, -g_engineLightDir));
+
+					    vec3 h = normalize(GetViewDir(worldPosition) - g_engineLightDir);
+
+					    float ndh = max(0.0, dot(worldNormal, h));
+
+
+					    color.rgb =  color.rgb * ndl + vec3(1.0,1.0,1.0)*pow(ndh,specular*128.0)*gloss;
+					    color.a = 1.0;
+
+					    //color.rgb = vec3(uv,worldNormal.x);
+					}
+				]
+				
+			]
+		}
+	}
+}

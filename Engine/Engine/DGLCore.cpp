@@ -21,53 +21,80 @@ DGeometryRes::DGeometryRes(int vertexUsage, bool dynamic)
 	m_tangentOffset = -1;
 	m_binormalOffset = -1;
 
+	m_uv0Layout = -1;
+	m_uv1Layout = -1;
+	m_uv2Layout = -1;
+	m_uv3Layout = -1;
+	m_colorLayout = -1;
+	m_normalLayout = -1;
+	m_tangentLayout = -1;
+	m_binormalLayout = -1;
+
+	int layout = 1;
+
+	if (vertexUsage & (1UL << DVertexUsage_NORMAL))
+	{
+		//m_dataSize += fsize * 3;
+		m_normalOffset = m_dataCount;
+		m_normalLayout = layout;
+		m_dataCount += 3;
+		layout += 1;
+	}
 	if (vertexUsage & (1UL << DVertexUsage_TEXCOORD0))
 	{
 		//m_dataSize += fsize * 2;
 		m_uv0Offset = m_dataCount;
+		m_uv0Layout = layout;
 		m_dataCount += 2;
+		layout += 1;
 	}
 	if (vertexUsage & (1UL << DVertexUsage_TEXCOORD1))
 	{
 		//m_dataSize += fsize * 2;
 		m_uv1Offset = m_dataCount;
+		m_uv1Layout = layout;
 		m_dataCount += 2;
+		layout += 1;
 	}
 	if (vertexUsage & (1UL << DVertexUsage_TEXCOORD2))
 	{
 		//m_dataSize += fsize * 2;
 		m_uv2Offset = m_dataCount;
+		m_uv2Layout = layout;
 		m_dataCount += 2;
+		layout += 1;
 	}
 	if (vertexUsage & (1UL << DVertexUsage_TEXCOORD3))
 	{
 		//m_dataSize += fsize * 2;
 		m_uv3Offset = m_dataCount;
+		m_uv3Layout = layout;
 		m_dataCount += 2;
-	}
-	if (vertexUsage & (1UL << DVertexUsage_NORMAL))
-	{
-		//m_dataSize += fsize * 3;
-		m_normalOffset = m_dataCount;
-		m_dataCount += 3;
+		layout += 1;
 	}
 	if (vertexUsage & (1UL << DVertexUsage_COLOR))
 	{
 		//m_dataSize += fsize * 4;
 		m_colorOffset = m_dataCount;
+		m_colorLayout = layout;
 		m_dataCount += 4;
+		layout += 1;
 	}
 	if (vertexUsage & (1UL << DVertexUsage_TANGENT))
 	{
 		//m_dataSize += fsize * 4;
 		m_tangentOffset = m_dataCount;
+		m_tangentLayout = layout;
 		m_dataCount += 4;
+		layout += 1;
 	}
 	if (vertexUsage & (1UL << DVertexUsage_BINORMAL))
 	{
 		//m_dataSize += fsize * 3;
 		m_binormalOffset = m_dataCount;
+		m_binormalLayout = layout;
 		m_dataCount += 3;
+		layout += 1;
 	}
 
 	m_dataSize = sizeof(float) * m_dataCount;

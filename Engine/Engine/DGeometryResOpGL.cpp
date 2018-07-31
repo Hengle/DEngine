@@ -45,7 +45,7 @@ bool DGeometryResOpGL::OnInit(DGeometryBufferDesc * desc)
 
 	glGenBuffers(1, &m_vertexBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*m_vertexCount*3, desc->vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*desc ->vertexCount*3, desc->vertices, GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
 
@@ -59,23 +59,47 @@ bool DGeometryResOpGL::OnInit(DGeometryBufferDesc * desc)
 		(void*)0            // array buffer offset
 		);
 
+	//glDisableVertexAttribArray(0);
+
+	if (m_normalOffset >= 0)
+	{
+		glGenBuffers(1, &m_normalsBuffer);
+		glBindBuffer(GL_ARRAY_BUFFER, m_normalsBuffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*desc->vertexCount * 3, desc->normals, GL_STATIC_DRAW);
+
+		glEnableVertexAttribArray(m_normalLayout);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_normalsBuffer);
+		glVertexAttribPointer(
+			m_normalLayout,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+			3,                  // size
+			GL_FLOAT,           // type
+			GL_FALSE,           // normalized?
+			0,                  // stride
+			(void*)0            // array buffer offset
+			);
+
+		//glDisableVertexAttribArray(m_normalLayout);
+	}
 	if (m_uv0Offset >= 0)
 	{
 		glGenBuffers(1, &m_uv0Buffer);
 		glBindBuffer(GL_ARRAY_BUFFER, m_uv0Buffer);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*m_vertexCount * 2, desc->uvs, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*desc->vertexCount * 2, desc->uvs, GL_STATIC_DRAW);
 
-		glEnableVertexAttribArray(1);
+		glEnableVertexAttribArray(m_uv0Layout);
 
 		glBindBuffer(GL_ARRAY_BUFFER, m_uv0Buffer);
 		glVertexAttribPointer(
-			1,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+			m_uv0Layout,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
 			2,                  // size
 			GL_FLOAT,           // type
 			GL_FALSE,           // normalized?
 			0,                  // stride
 			(void*)0            // array buffer offset
 			);
+
+		//glDisableVertexAttribArray(m_uv0Layout);
 	}
 
 	unsigned int* indexes = new unsigned int[m_indexCount];
@@ -87,7 +111,7 @@ bool DGeometryResOpGL::OnInit(DGeometryBufferDesc * desc)
 
 	glGenBuffers(1, &m_indexBuffer);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int)*m_indexCount, indexes, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int)*desc->indexCount, indexes, GL_STATIC_DRAW);
 
 
 	delete[] indexes;

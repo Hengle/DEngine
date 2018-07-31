@@ -96,6 +96,14 @@ protected:
 	int m_normalOffset;
 	int m_tangentOffset;
 	int m_binormalOffset;
+	int m_uv0Layout;
+	int m_uv1Layout;
+	int m_uv2Layout;
+	int m_uv3Layout;
+	int m_colorLayout;
+	int m_normalLayout;
+	int m_tangentLayout;
+	int m_binormalLayout;
 	int m_indexCount;
 	int m_vertexCount;
 	int m_dataCount;

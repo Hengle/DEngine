@@ -1,7 +1,7 @@
 ﻿#ifdef _DGAPI_OPENGL
 
 #include "DShaderPassOpGL.h"
-
+#include <fstream>
 
 DShaderProgramOpGL::DShaderProgramOpGL() : DShaderProgram()
 {
@@ -24,8 +24,25 @@ void DShaderProgramOpGL::InitVertexShader(const char * content)
 	glGetShaderiv(m_vertexShaderID, GL_COMPILE_STATUS, &Result);
 	glGetShaderiv(m_vertexShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
 	if (InfoLogLength > 0) {
-		//std::vector<char> VertexShaderErrorMessage(InfoLogLength + 1);
-		//glGetShaderInfoLog(VertexShaderID, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
+		std::vector<char> VertexShaderErrorMessage(InfoLogLength + 1);
+		glGetShaderInfoLog(m_vertexShaderID, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
+
+		std::ofstream fout;
+
+		fout.open("shader-error.txt");
+
+		//int i;
+		//for (i = 0; i<VertexShaderErrorMessage.size(); i++)
+		//{
+		fout << &VertexShaderErrorMessage[0] << std::endl;
+
+		fout << std::endl;
+
+		fout << content << std::endl;
+		//}
+
+		fout.close();
+
 		//printf("%s\n", &VertexShaderErrorMessage[0]);
 		throw "shader cuowu";
 	}
@@ -67,9 +84,22 @@ void DShaderProgramOpGL::InitProgram()
 	glGetProgramiv(ProgramID, GL_LINK_STATUS, &Result);
 	glGetProgramiv(ProgramID, GL_INFO_LOG_LENGTH, &InfoLogLength);
 	if (InfoLogLength > 0) {
-		/*std::vector<char> ProgramErrorMessage(InfoLogLength + 1);
+		std::vector<char> ProgramErrorMessage(InfoLogLength + 1);
 		glGetProgramInfoLog(ProgramID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
-		printf("%s\n", &ProgramErrorMessage[0]);*/
+		//printf("%s\n", &ProgramErrorMessage[0]);
+
+		std::ofstream fout;
+
+		fout.open("shader-error.txt");
+
+		//int i;
+		//for (i = 0; i<VertexShaderErrorMessage.size(); i++)
+		//{
+		fout << &ProgramErrorMessage[0] << std::endl;
+		//}
+
+		fout.close();
+
 		throw "shader cuowu";
 	}
 

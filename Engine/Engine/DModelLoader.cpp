@@ -282,73 +282,68 @@ bool DModelLoader::CreatePlane(DGeometryBufferDesc* desc)
 
 bool DModelLoader::CreateSphere(DGeometryBufferDesc * desc)
 {
-	//dataSize = sizeof(float) * 5;
+	int tri = 9;
 
-	float width = 20.0f;
-	float height = 20.0f;
-
-	float bx = -width*0.5f;
-	float bz = -height*0.5f;
-
-	int step = 10;
-
-	float deltax = width / step;
-	float deltaz = height / step;
-
-	int i, j;
-
-	desc->vertexCount = (step + 1)*(step + 1);
-	desc->indexCount = (step)*(step)* 6;
-
-	//bufferLength = 5;
+	desc->vertexCount = (tri + 1)*(tri + 1) * 6;
+	desc->indexCount = tri*tri * 2 * 3 * 6;
 
 	desc->vertices = new float[desc->vertexCount * 3];
 	desc->colors = 0;
 	desc->normals = new float[desc->vertexCount * 3];
 	desc->uv2s = 0;
 	desc->uv3s = 0;
-	desc->uvs = new float[desc->vertexCount * 2];
+	desc->uvs = 0;
 	desc->indices = new unsigned long[desc->indexCount];
 
-	float x, z, u, v;
-	int index, id;
+	SetSphereFace(0, tri, DVEC3_RIGHT, DVEC3_UP, DVEC3_FORWARD, desc);
+	SetSphereFace(1, tri, DVEC3_BACK, DVEC3_UP, DVEC3_RIGHT, desc);
+	SetSphereFace(2, tri, DVEC3_LEFT, DVEC3_UP, DVEC3_BACK, desc);
+	SetSphereFace(3, tri, DVEC3_FORWARD, DVEC3_UP, DVEC3_LEFT, desc);
+	SetSphereFace(4, tri, DVEC3_RIGHT, DVEC3_BACK, DVEC3_UP, desc);
+	SetSphereFace(5, tri, DVEC3_RIGHT, DVEC3_FORWARD, DVEC3_DOWN, desc);
 
-	for (i = 0; i <= step; i++)
+	return true;
+}
+
+void DModelLoader::SetSphereFace(int face, int triangleCount, DVector3 & right, DVector3 & up, DVector3 & forward, DGeometryBufferDesc * desc)
+{
+	DMatrix4x4 matrix = DMatrix4x4(right.x, right.y, right.z, 0.0f,
+		up.x, up.y, up.z, 0.0f,
+		forward.x, forward.y, forward.z, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f);
+
+	int index = 0, i, j;
+	for (i = 0; i <= triangleCount; i++)
 	{
-		for (j = 0; j <= step; j++)
+		for (j = 0; j <= triangleCount; j++)
 		{
-			x = bx + i*deltax;
-			z = bz + j*deltaz;
+			float delta = 1.0f / triangleCount;
+			DVector3 pos;
+			matrix.TransformPoint(DVector3(-0.5f + delta*j, -0.5f + delta*i, -0.5f), pos);
+			DVector3 normal;
+			pos.GetNormalized(normal);
+			//pos = normal*0.5f;
+			//Vector3 dir = pos.normalized;
+			int vindex = face * (triangleCount + 1) * (triangleCount + 1) + i * (triangleCount + 1) + j;
+			desc->vertices[vindex * 3] = normal.x * 0.5f;
+			desc->vertices[vindex * 3 + 1] = normal.y * 0.5f;
+			desc->vertices[vindex * 3 + 2] = normal.z * 0.5f;
+			desc->normals[vindex * 3] = normal.x;
+			desc->normals[vindex * 3 + 1] = normal.y;
+			desc->normals[vindex * 3 + 2] = normal.z;
 
-			u = ((float)i) / step;
-			v = ((float)j) / step;
-
-			index = i*(step + 1) + j;
-			id = i*step + j;
-
-			desc->vertices[index * 3] = x;
-			desc->vertices[index * 3 + 1] = 0.0f;
-			desc->vertices[index * 3 + 2] = z;
-
-			desc->uvs[index * 2] = u;
-			desc->uvs[index * 2 + 1] = v;
-
-			desc->normals[index * 3] = 0;
-			desc->normals[index * 3 + 1] = 1.0f;
-			desc->normals[index * 3 + 2] = 0;
-
-			if (i != step&&j != step)
+			if (i != triangleCount && j != triangleCount)
 			{
-				desc->indices[id * 6] = i*(step + 1) + j;
-				desc->indices[id * 6 + 1] = i*(step + 1) + j + 1;
-				desc->indices[id * 6 + 2] = (i + 1)*(step + 1) + j + 1;
+				desc->indices[face*triangleCount*triangleCount * 2 * 3 + index] = face * (triangleCount + 1) * (triangleCount + 1) + i * (triangleCount + 1) + j;
+				desc->indices[face * triangleCount * triangleCount * 2 * 3 + index + 1] = face * (triangleCount + 1) * (triangleCount + 1) + (i + 1) * (triangleCount + 1) + j;
+				desc->indices[face * triangleCount * triangleCount * 2 * 3 + index + 2] = face * (triangleCount + 1) * (triangleCount + 1) + (i + 1) * (triangleCount + 1) + j + 1;
 
-				desc->indices[id * 6 + 3] = i*(step + 1) + j;
-				desc->indices[id * 6 + 4] = (i + 1)*(step + 1) + j + 1;
-				desc->indices[id * 6 + 5] = (i + 1)*(step + 1) + j;
+				desc->indices[face * triangleCount * triangleCount * 2 * 3 + index + 3] = face * (triangleCount + 1) * (triangleCount + 1) + i * (triangleCount + 1) + j;
+				desc->indices[face * triangleCount * triangleCount * 2 * 3 + index + 4] = face * (triangleCount + 1) * (triangleCount + 1) + (i + 1) * (triangleCount + 1) + j + 1;
+				desc->indices[face * triangleCount * triangleCount * 2 * 3 + index + 5] = face * (triangleCount + 1) * (triangleCount + 1) + i * (triangleCount + 1) + j + 1;
+
+				index += 6;
 			}
 		}
 	}
-
-	return true;
 }

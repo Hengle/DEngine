@@ -27,8 +27,8 @@ DTextureRes11::DTextureRes11(ID3D11Device * device, ID3D11DeviceContext * device
 
 	ID3D11Resource* srcTex[6];
 
-	right->m_texture->GetResource(&srcTex[0]);
-	left->m_texture->GetResource(&srcTex[1]);
+	right->m_texture->GetResource(&srcTex[1]);
+	left->m_texture->GetResource(&srcTex[0]);
 	top->m_texture->GetResource(&srcTex[2]);
 	bottom->m_texture->GetResource(&srcTex[3]);
 	front->m_texture->GetResource(&srcTex[4]);

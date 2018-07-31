@@ -462,6 +462,10 @@ DGeometry * DGeometry::Create(DGeometryDefine geometryDefine, bool dynamic)
 	{
 		DModelLoader::CreateCube(&desc);
 	}
+	else if (geometryDefine == DGeometry_Sphere)
+	{
+		DModelLoader::CreateSphere(&desc);
+	}
 	else
 		return NULL;
 

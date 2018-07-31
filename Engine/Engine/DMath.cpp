@@ -318,7 +318,7 @@ void DVector3::Normalize()
 	{
 		x /= m;
 		y /= m;
-		z / m;
+		z /= m;
 	}
 	else {
 		x = 0.0f;

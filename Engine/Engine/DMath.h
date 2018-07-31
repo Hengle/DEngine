@@ -255,28 +255,28 @@ public:
 	DVector3 size;
 } DBounds, *LPDBounds;
 
-#define DVEC2_ZERO DVector2(0.0f, 0.0f);
-#define DVEC2_ONE DVector2(1.0f, 1.0f);
-#define DVEC2_UP DVector2(0.0f, 1.0f);
-#define DVEC2_DOWN DVector2(0.0f, -1.0f);
-#define DVEC2_LEFT DVector2(1.0f, 0.0f);
-#define DVEC2_RIGHT DVector2(-1.0f, 0.0f);
+#define DVEC2_ZERO DVector2(0.0f, 0.0f)
+#define DVEC2_ONE DVector2(1.0f, 1.0f)
+#define DVEC2_UP DVector2(0.0f, 1.0f)
+#define DVEC2_DOWN DVector2(0.0f, -1.0f)
+#define DVEC2_LEFT DVector2(1.0f, 0.0f)
+#define DVEC2_RIGHT DVector2(-1.0f, 0.0f)
 
-#define DVEC3_ZERO DVector3(0.0f, 0.0f, 0.0f);
-#define DVEC3_ONE DVector3(1.0f, 1.0f, 1.0f);
-#define DVEC3_FORWARD DVector3(0.0f, 0.0f, 1.0f);
-#define DVEC3_BACK DVector3(0.0f, 0.0f, -1.0f);
-#define DVEC3_UP DVector3(0.0f, 1.0f, 0.0f);
-#define DVEC3_DOWN DVector3(0.0f, -1.0f, 0.0f);
-#define DVEC3_LEFT DVector3(-1.0f, 0.0f, 0.0f);
-#define DVEC3_RIGHT DVector3(1.0f, 0.0f, 0.0f);
+#define DVEC3_ZERO DVector3(0.0f, 0.0f, 0.0f)
+#define DVEC3_ONE DVector3(1.0f, 1.0f, 1.0f)
+#define DVEC3_FORWARD DVector3(0.0f, 0.0f, 1.0f)
+#define DVEC3_BACK DVector3(0.0f, 0.0f, -1.0f)
+#define DVEC3_UP DVector3(0.0f, 1.0f, 0.0f)
+#define DVEC3_DOWN DVector3(0.0f, -1.0f, 0.0f)
+#define DVEC3_LEFT DVector3(-1.0f, 0.0f, 0.0f)
+#define DVEC3_RIGHT DVector3(1.0f, 0.0f, 0.0f)
 
-#define DVEC4_ZERO DVector4(0.0f, 0.0f, 0.0f, 0.0f);
-#define DVEC4_ONE DVector4(1.0f, 1.0f, 1.0f, 1.0f);
+#define DVEC4_ZERO DVector4(0.0f, 0.0f, 0.0f, 0.0f)
+#define DVEC4_ONE DVector4(1.0f, 1.0f, 1.0f, 1.0f)
 
-#define DMATRIX_IDENTITY = DMatrix4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); 
+#define DMATRIX_IDENTITY = DMatrix4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 
-#define DQUATERNION_IDENTITY = DQuaternion(0, 0, 0, 1);
+#define DQUATERNION_IDENTITY = DQuaternion(0, 0, 0, 1)
 
 
 const DVector2 dvec2_zero = DVector2(0.0f, 0.0f);

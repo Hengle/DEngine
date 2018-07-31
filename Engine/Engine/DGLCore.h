@@ -114,7 +114,7 @@ interface ITextureRes
 public:
 	virtual void Release() = 0;
 	virtual void Apply(UINT) = 0;
-	virtual void ApplyWrapMode(DWrapMode) = 0;
+	virtual void ApplyWrapMode(UINT, DWrapMode) = 0;
 };
 
 /*抽象RenderBuffer接口*/

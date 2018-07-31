@@ -11,7 +11,8 @@ class DTextureRes10 : public ITextureRes
 public:
 	DTextureRes10(ID3D10Device* device, WCHAR* filename);
 	~DTextureRes10();
-	virtual void Apply(UINT, DWrapMode);
+	virtual void Apply(UINT);
+	virtual void ApplyWrapMode(UINT, DWrapMode);
 	virtual void Release();
 
 private:
@@ -28,7 +29,8 @@ class DRenderTextureViewRes10 : public IRenderTextureViewRes
 public:
 	DRenderTextureViewRes10(ID3D10Device* device, float, float);
 	~DRenderTextureViewRes10();
-	virtual void Apply(UINT, DWrapMode);
+	virtual void Apply(UINT);
+	virtual void ApplyWrapMode(UINT, DWrapMode);
 	virtual void Release();
 	virtual IRenderBuffer* GetColorBuffer();
 	virtual IRenderBuffer* GetDepthBuffer();

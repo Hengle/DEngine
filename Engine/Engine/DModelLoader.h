@@ -9,5 +9,7 @@ public:
 	static bool CreateCube(DGeometryBufferDesc*);
 
 	static bool CreatePlane(DGeometryBufferDesc*);
+
+	static bool CreateSphere(DGeometryBufferDesc*);
 };
 

@@ -99,7 +99,7 @@ void DTextureRes11::Apply(UINT textureOffset)
 	}
 }
 
-void DTextureRes11::ApplyWrapMode(DWrapMode mode)
+void DTextureRes11::ApplyWrapMode(UINT textureOffset, DWrapMode mode)
 {
 	if (m_isSuccess)
 	{
@@ -189,17 +189,20 @@ DRenderTextureViewRes11::~DRenderTextureViewRes11()
 {
 }
 
-void DRenderTextureViewRes11::Apply(UINT textureOffset, DWrapMode mode)
+void DRenderTextureViewRes11::Apply(UINT textureOffset)
 {
 	if (m_isSuccess)
 	{
 		m_deviceContext->PSSetShaderResources(textureOffset, 1, &m_texture);
-		DSystem::GetGraphicsMgr()->GetGLCore()->ApplySamplerState(textureOffset, mode);
 	}
 }
 
-void DRenderTextureViewRes11::ApplyWrapMode(DWrapMode)
+void DRenderTextureViewRes11::ApplyWrapMode(UINT textureOffset, DWrapMode mode)
 {
+	if (m_isSuccess)
+	{
+		DSystem::GetGraphicsMgr()->GetGLCore()->ApplySamplerState(textureOffset, mode);
+	}
 }
 
 void DRenderTextureViewRes11::Release()

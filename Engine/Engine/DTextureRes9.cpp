@@ -19,11 +19,18 @@ DTextureRes9::~DTextureRes9()
 {
 }
 
-void DTextureRes9::Apply(UINT textureOffset, DWrapMode mode)
+void DTextureRes9::Apply(UINT textureOffset)
 {
 	if (m_isSuccess)
 	{
 		m_device->SetTexture(textureOffset, m_texture);
+	}
+}
+
+void DTextureRes9::ApplyWrapMode(UINT textureOffset, DWrapMode mode)
+{
+	if (m_isSuccess)
+	{
 		DSystem::GetGraphicsMgr()->GetGLCore()->ApplySamplerState(textureOffset, mode);
 	}
 }
@@ -61,11 +68,18 @@ DRenderTextureViewRes9::~DRenderTextureViewRes9()
 {
 }
 
-void DRenderTextureViewRes9::Apply(UINT textureOffset, DWrapMode mode)
+void DRenderTextureViewRes9::Apply(UINT textureOffset)
 {
 	if (m_isSuccess)
 	{
 		m_device->SetTexture(textureOffset, m_texture);
+	}
+}
+
+void DRenderTextureViewRes9::ApplyWrapMode(UINT textureOffset, DWrapMode mode)
+{
+	if (m_isSuccess)
+	{
 		DSystem::GetGraphicsMgr()->GetGLCore()->ApplySamplerState(textureOffset, mode);
 	}
 }

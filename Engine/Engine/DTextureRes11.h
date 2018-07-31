@@ -13,7 +13,7 @@ public:
 	DTextureRes11(ID3D11Device* device, ID3D11DeviceContext * deviceContext, DTextureRes11*, DTextureRes11*, DTextureRes11*, DTextureRes11*, DTextureRes11*, DTextureRes11*);
 	~DTextureRes11();
 	virtual void Apply(UINT);
-	virtual void ApplyWrapMode(DWrapMode);
+	virtual void ApplyWrapMode(UINT, DWrapMode);
 	virtual void Release();
 
 protected:
@@ -31,7 +31,7 @@ public:
 	DRenderTextureViewRes11(ID3D11Device* device, ID3D11DeviceContext * deviceContext, float, float);
 	~DRenderTextureViewRes11();
 	virtual void Apply(UINT);
-	virtual void ApplyWrapMode(DWrapMode);
+	virtual void ApplyWrapMode(UINT, DWrapMode);
 	virtual void Release();
 	virtual IRenderBuffer* GetColorBuffer();
 	virtual IRenderBuffer* GetDepthBuffer();

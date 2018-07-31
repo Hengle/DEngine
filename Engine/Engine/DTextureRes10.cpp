@@ -24,11 +24,18 @@ DTextureRes10::~DTextureRes10()
 {
 }
 
-void DTextureRes10::Apply(UINT textureOffset, DWrapMode mode)
+void DTextureRes10::Apply(UINT textureOffset)
 {
 	if (m_isSuccess)
 	{
 		m_device->PSSetShaderResources(textureOffset, 1, &m_texture);
+	}
+}
+
+void DTextureRes10::ApplyWrapMode(UINT textureOffset, DWrapMode mode)
+{
+	if (m_isSuccess)
+	{
 		DSystem::GetGraphicsMgr()->GetGLCore()->ApplySamplerState(textureOffset, mode);
 	}
 }
@@ -115,11 +122,18 @@ DRenderTextureViewRes10::~DRenderTextureViewRes10()
 {
 }
 
-void DRenderTextureViewRes10::Apply(UINT textureOffset, DWrapMode mode)
+void DRenderTextureViewRes10::Apply(UINT textureOffset)
 {
 	if (m_isSuccess)
 	{
 		m_device->PSSetShaderResources(textureOffset, 1, &m_texture);
+	}
+}
+
+void DRenderTextureViewRes10::ApplyWrapMode(UINT textureOffset, DWrapMode mode)
+{
+	if (m_isSuccess)
+	{
 		DSystem::GetGraphicsMgr()->GetGLCore()->ApplySamplerState(textureOffset, mode);
 	}
 }

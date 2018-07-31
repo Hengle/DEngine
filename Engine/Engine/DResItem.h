@@ -52,6 +52,27 @@ private:
 	int m_wrapMode;
 };
 
+/*立方体贴图资源*/
+class DTextureCubeResItem :public DResItem
+{
+public:
+	DTextureCubeResItem();
+	void SetFace(int, int, int);
+	virtual void Release();
+	static DTextureCubeResItem* LoadManifest(std::ifstream&);
+
+protected:
+	virtual DResObject* OnLoad();
+
+private:
+	int m_rightGroupId, m_rightId;
+	int m_leftGroupId, m_leftId;
+	int m_topGroupId, m_topId;
+	int m_bottomGroupId, m_bottomId;
+	int m_frontGroupId, m_frontId;
+	int m_backGroupId, m_backId;
+};
+
 /*材质资源项*/
 class DMaterialResItem : public DResItem
 {

@@ -39,7 +39,7 @@ public:
 	~DTextureCube();
 	virtual void Destroy();
 	virtual void Apply(UINT);
-	static DTextureCube* Create(DTexture2D*, DTexture2D*, DTexture2D*, DTexture2D*, DTexture2D*, DTexture2D*);
+	static DTextureCube* Create(DTexture2D * right, DTexture2D * left, DTexture2D * top, DTexture2D * bottom, DTexture2D * front, DTexture2D * back);
 
 private:
 	ITextureRes* m_textureRes;

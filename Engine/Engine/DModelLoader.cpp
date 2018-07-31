@@ -279,3 +279,76 @@ bool DModelLoader::CreatePlane(DGeometryBufferDesc* desc)
 
 	return true;
 }
+
+bool DModelLoader::CreateSphere(DGeometryBufferDesc * desc)
+{
+	//dataSize = sizeof(float) * 5;
+
+	float width = 20.0f;
+	float height = 20.0f;
+
+	float bx = -width*0.5f;
+	float bz = -height*0.5f;
+
+	int step = 10;
+
+	float deltax = width / step;
+	float deltaz = height / step;
+
+	int i, j;
+
+	desc->vertexCount = (step + 1)*(step + 1);
+	desc->indexCount = (step)*(step)* 6;
+
+	//bufferLength = 5;
+
+	desc->vertices = new float[desc->vertexCount * 3];
+	desc->colors = 0;
+	desc->normals = new float[desc->vertexCount * 3];
+	desc->uv2s = 0;
+	desc->uv3s = 0;
+	desc->uvs = new float[desc->vertexCount * 2];
+	desc->indices = new unsigned long[desc->indexCount];
+
+	float x, z, u, v;
+	int index, id;
+
+	for (i = 0; i <= step; i++)
+	{
+		for (j = 0; j <= step; j++)
+		{
+			x = bx + i*deltax;
+			z = bz + j*deltaz;
+
+			u = ((float)i) / step;
+			v = ((float)j) / step;
+
+			index = i*(step + 1) + j;
+			id = i*step + j;
+
+			desc->vertices[index * 3] = x;
+			desc->vertices[index * 3 + 1] = 0.0f;
+			desc->vertices[index * 3 + 2] = z;
+
+			desc->uvs[index * 2] = u;
+			desc->uvs[index * 2 + 1] = v;
+
+			desc->normals[index * 3] = 0;
+			desc->normals[index * 3 + 1] = 1.0f;
+			desc->normals[index * 3 + 2] = 0;
+
+			if (i != step&&j != step)
+			{
+				desc->indices[id * 6] = i*(step + 1) + j;
+				desc->indices[id * 6 + 1] = i*(step + 1) + j + 1;
+				desc->indices[id * 6 + 2] = (i + 1)*(step + 1) + j + 1;
+
+				desc->indices[id * 6 + 3] = i*(step + 1) + j;
+				desc->indices[id * 6 + 4] = (i + 1)*(step + 1) + j + 1;
+				desc->indices[id * 6 + 5] = (i + 1)*(step + 1) + j;
+			}
+		}
+	}
+
+	return true;
+}

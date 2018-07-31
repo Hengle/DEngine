@@ -36,6 +36,10 @@
 		#PATH ../Res/baselighting.shader
 	#RES_END
 
+	#RES_BEGIN SHADER 1009 
+		#PATH ../Res/cubemap.shader
+	#RES_END
+
 	#RES_BEGIN TEXTURE2D 2000
 		#PATH ../Res/decal.jpg
 		#WRAPMODE REPEAT
@@ -59,6 +63,39 @@
 
 	#RES_BEGIN TEXTURE2D 2005
 		#PATH ../Res/FEIJI-S-2.tga
+	#RES_END
+
+	#RES_BEGIN TEXTURE2D 2006
+		#PATH ../Res/right.jpg
+	#RES_END
+
+	#RES_BEGIN TEXTURE2D 2007
+		#PATH ../Res/left.jpg
+	#RES_END
+
+	#RES_BEGIN TEXTURE2D 2008
+		#PATH ../Res/top.jpg
+	#RES_END
+
+	#RES_BEGIN TEXTURE2D 2009
+		#PATH ../Res/bottom.jpg
+	#RES_END
+
+	#RES_BEGIN TEXTURE2D 2010
+		#PATH ../Res/front.jpg
+	#RES_END
+
+	#RES_BEGIN TEXTURE2D 2011
+		#PATH ../Res/back.jpg
+	#RES_END
+
+	#RES_BEGIN TEXTURECUBE 2012
+		#RIGHT 0 2006
+		#LEFT 0 2007
+		#TOP 0 2008
+		#BOTTOM 0 2009
+		#FRONT 0 2010
+		#BACK 0 2011
 	#RES_END
 
 	#RES_BEGIN MATERIAL 3000
@@ -99,6 +136,10 @@
 
 	#RES_BEGIN MATERIAL 3008
 		#PATH ../Res/plane.m
+	#RES_END
+
+	#RES_BEGIN MATERIAL 3009
+		#PATH ../Res/cube.m
 	#RES_END
 
 	#RES_BEGIN GEOMETRY 4000

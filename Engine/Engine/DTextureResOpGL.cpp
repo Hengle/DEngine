@@ -23,7 +23,7 @@ DTextureResOpGL::~DTextureResOpGL()
 {
 }
 
-void DTextureResOpGL::Apply(UINT location, DWrapMode)
+void DTextureResOpGL::Apply(UINT location)
 {
 	if (location != -1) 
 	{
@@ -34,6 +34,10 @@ void DTextureResOpGL::Apply(UINT location, DWrapMode)
 		//glBindTexture(GL_TEXTURE_2D, m_textureId);
 		glUniform1i(location, 0);
 	}
+}
+
+void DTextureResOpGL::ApplyWrapMode(UINT, DWrapMode)
+{
 }
 
 void DTextureResOpGL::Release()

@@ -24,7 +24,6 @@ SubShader {
 				{
 				    float4 position : POSITION;
 				    float3 normal   : NORMAL;
-				    float2 tex : TEXCOORD0;
 				};
 
 				struct PixelInputType
@@ -32,19 +31,12 @@ SubShader {
 				    float4 position : SV_POSITION;
 				    float3 worldNormal:TEXCOORD0;
 				    float3 worldPosition:TEXCOORD1;
-				    float2 tex : TEXCOORD2;
 				};
 
-				Texture2D shaderTexture;
+				TextureCube shaderTexture;
 				SamplerState SampleType;
 
-				float3 g_engineLightDir;
-				float4 g_engineLightColor;
-
 				float4 g_engineCameraPos;
-
-				float gloss;
-				float specular;
 
 				PixelInputType VertMain(VertexInputType input)
 				{
@@ -57,10 +49,8 @@ SubShader {
 				    output.worldPosition = output.position.xyz;
 				    output.position  = mul(g_engineViewMatrix, output.position);
 				    output.position = mul(g_engineProjectionMatrix, output.position);
-
-				    output.worldNormal = mul(g_engineWorldMatrix, float4(input.normal, 0.0f)).xyz;
-	    
-					output.tex = input.tex;
+	    			
+	    			output.worldNormal = mul(g_engineWorldMatrix, float4(input.normal, 0.0f)).xyz;
 	    
 				    return output;
 				}
@@ -77,17 +67,10 @@ SubShader {
 
 				float4 FragMain(PixelInputType input) : SV_TARGET
 				{
-				    float4 textureColor = shaderTexture.Sample(SampleType, input.tex);
+				    float3 viewdir = GetViewDir(input.worldPosition);
+				    float3 refl = reflect(viewdir, input.worldNormal);
 
-				    float ndl = max(0.0f, dot(input.worldNormal, -g_engineLightDir));
-
-				    float3 h = normalize(GetViewDir(input.worldPosition) - g_engineLightDir);
-
-				    float ndh = max(0.0f, dot(input.worldNormal, h));
-
-
-				    textureColor.rgb =  textureColor.rgb * ndl + float3(1.0f,1.0f,1.0f)*pow(ndh,specular*128.0f)*gloss;
-				    textureColor.a = 1.0f;
+				    float4 textureColor = shaderTexture.Sample(SampleType, refl);
 
 	    			return textureColor;
 				}

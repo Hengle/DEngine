@@ -287,9 +287,9 @@ void DGLDrawerProcess::ProcessDraw(DMatrix4x4& modelview, DMatrix4x4& projection
 	DMatrix4x4 world;
 	DMatrix4x4::Identity(&world);
 
-	DShader::SetGlobalMatrix(D_MATRIX_M, world);
-	DShader::SetGlobalMatrix(D_MATRIX_V, modelview);
-	DShader::SetGlobalMatrix(D_MATRIX_P, projection);
+	DShader::SetGlobalMatrix(D_SC_MATRIX_M, world);
+	DShader::SetGlobalMatrix(D_SC_MATRIX_V, modelview);
+	DShader::SetGlobalMatrix(D_SC_MATRIX_P, projection);
 
 	DGraphics::ApplyActiveMaterial();
 	m_geometryRes->DrawPrimitive(DGeometryTopology_LineList);

@@ -22,6 +22,7 @@ public:
 	virtual void Destroy();
 	virtual void Apply(UINT);
 	DWrapMode GetWrapMode();
+	void SetWrapMode(DWrapMode);
 	ITextureRes* GetTextureRes();
 	static DTexture2D* Create(WCHAR*);
 	static DTexture2D* Create(WCHAR*, DWrapMode);
@@ -54,6 +55,7 @@ public:
 	virtual void Destroy();
 	virtual void Apply(UINT);
 	DWrapMode GetWrapMode();
+	void SetWrapMode(DWrapMode);
 	IRenderTextureViewRes* GetTextureRes();
 	float GetWidth() const;
 	float GetHeight() const;

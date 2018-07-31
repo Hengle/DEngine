@@ -42,6 +42,7 @@ public:
 	virtual IRenderStateMgr* GetRenderStateMgr();
 
 	virtual bool IsFrustrumZeroToOne() { return true; }
+	virtual bool IsUVStartsAtTop() { return true; }
 	ID3D10Device* GetDevice() const;
 
 private:

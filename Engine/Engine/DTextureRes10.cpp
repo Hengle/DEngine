@@ -20,6 +20,74 @@ DTextureRes10::DTextureRes10(ID3D10Device * device, WCHAR * filename)
 	m_isSuccess = true;
 }
 
+DTextureRes10::DTextureRes10(ID3D10Device * device, DTextureRes10 * right, DTextureRes10 * left, DTextureRes10 * top, DTextureRes10 * bottom, DTextureRes10 * front, DTextureRes10 * back)
+{
+	m_device = device;
+
+	m_isSuccess = false;
+
+	ID3D10Resource* srcTex[6];
+
+	right->m_texture->GetResource(&srcTex[1]);
+	left->m_texture->GetResource(&srcTex[0]);
+	top->m_texture->GetResource(&srcTex[2]);
+	bottom->m_texture->GetResource(&srcTex[3]);
+	front->m_texture->GetResource(&srcTex[4]);
+	back->m_texture->GetResource(&srcTex[5]);
+
+
+	D3D10_TEXTURE2D_DESC texElementDesc;
+	((ID3D10Texture2D*)srcTex[0])->GetDesc(&texElementDesc);
+
+	D3D10_TEXTURE2D_DESC texArrayDesc;
+	texArrayDesc.Width = texElementDesc.Width;
+	texArrayDesc.Height = texElementDesc.Height;
+	texArrayDesc.MipLevels = texElementDesc.MipLevels;
+	texArrayDesc.ArraySize = 6;
+	texArrayDesc.Format = texElementDesc.Format;
+	texArrayDesc.SampleDesc.Count = 1;
+	texArrayDesc.SampleDesc.Quality = 0;
+	texArrayDesc.Usage = D3D10_USAGE_DEFAULT;
+	texArrayDesc.BindFlags = D3D10_BIND_SHADER_RESOURCE;
+	texArrayDesc.CPUAccessFlags = 0;
+	texArrayDesc.MiscFlags = D3D10_RESOURCE_MISC_TEXTURECUBE;
+
+	ID3D10Texture2D* texArray = 0;
+	if (FAILED(device->CreateTexture2D(&texArrayDesc, 0, &texArray)))
+		return;
+
+	D3D10_BOX sourceRegion;
+
+	for (UINT x = 0; x < 6; x++)
+	{
+		for (UINT mipLevel = 0; mipLevel < texArrayDesc.MipLevels; mipLevel++)
+		{
+			sourceRegion.left = 0;
+			sourceRegion.right = (texArrayDesc.Width >> mipLevel);
+			sourceRegion.top = 0;
+			sourceRegion.bottom = (texArrayDesc.Height >> mipLevel);
+			sourceRegion.front = 0;
+			sourceRegion.back = 1;
+
+			if (sourceRegion.bottom == 0 || sourceRegion.right == 0)
+				break;
+
+			m_device->CopySubresourceRegion(texArray, D3D10CalcSubresource(mipLevel, x, texArrayDesc.MipLevels), 0, 0, 0, srcTex[x], mipLevel, &sourceRegion);
+		}
+	}
+
+	D3D10_SHADER_RESOURCE_VIEW_DESC viewDesc;
+	viewDesc.Format = texArrayDesc.Format;
+	viewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
+	viewDesc.TextureCube.MostDetailedMip = 0;
+	viewDesc.TextureCube.MipLevels = texArrayDesc.MipLevels;
+
+	if (FAILED(device->CreateShaderResourceView(texArray, &viewDesc, &m_texture)))
+		return;
+
+	m_isSuccess = true;
+}
+
 DTextureRes10::~DTextureRes10()
 {
 }

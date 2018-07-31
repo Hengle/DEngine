@@ -191,6 +191,7 @@ public:
 	virtual IRenderStateMgr* GetRenderStateMgr() = 0;
 
 	virtual bool IsFrustrumZeroToOne() = 0;
+	virtual bool IsUVStartsAtTop() = 0;
 	/*获取屏幕分辨率*/
 	void GetResolution(float&, float&);
 

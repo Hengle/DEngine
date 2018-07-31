@@ -521,12 +521,12 @@ void DCamera::RefreshCameraDirParam()
 	{
 		DVector3 forward;
 		m_transform->GetForward(forward);
-		DShader::SetGlobalVector4(D_CAMERA_POS, DVector4(forward.x, forward.y, forward.z, 0.0f));
+		DShader::SetGlobalVector4(D_SC_CAMERA_POS, DVector4(forward.x, forward.y, forward.z, 0.0f));
 	}
 	else
 	{
 		DVector3 pos;
 		m_transform->GetPosition(pos);
-		DShader::SetGlobalVector4(D_CAMERA_POS, DVector4(pos.x, pos.y, pos.z, 1.0f));
+		DShader::SetGlobalVector4(D_SC_CAMERA_POS, DVector4(pos.x, pos.y, pos.z, 1.0f));
 	}
 }

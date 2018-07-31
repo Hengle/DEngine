@@ -43,6 +43,7 @@ public:
 	virtual IRenderStateMgr* GetRenderStateMgr();
 
 	virtual bool IsFrustrumZeroToOne() { return true; }
+	virtual bool IsUVStartsAtTop() { return true; }
 
 	LPDIRECT3DDEVICE9 GetDevice()
 	{

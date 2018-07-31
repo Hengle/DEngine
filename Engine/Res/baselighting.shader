@@ -43,6 +43,8 @@ SubShader {
 
 				float4 g_engineCameraPos;
 
+				float g_engineTime;
+
 				float gloss;
 				float specular;
 

@@ -430,9 +430,9 @@ ITextureRes * D3D10Core::CreateTextureRes(WCHAR* filename)
 	return new DTextureRes10(m_device, filename);;
 }
 
-ITextureRes * D3D10Core::CreateCubeMapRes(ITextureRes *, ITextureRes *, ITextureRes *, ITextureRes *, ITextureRes *, ITextureRes *)
+ITextureRes * D3D10Core::CreateCubeMapRes(ITextureRes * right, ITextureRes * left, ITextureRes * top, ITextureRes * bottom, ITextureRes * front, ITextureRes * back)
 {
-	return nullptr;
+	return new DTextureRes10(m_device, (DTextureRes10*)right, (DTextureRes10*)left, (DTextureRes10*)top, (DTextureRes10*)bottom, (DTextureRes10*)front, (DTextureRes10*)back);
 }
 
 IRenderTextureViewRes * D3D10Core::CreateRenderTextureRes(float width, float height)

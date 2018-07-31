@@ -1,5 +1,6 @@
 ﻿#include "DModelLoader.h"
 #include "DMath.h"
+#include "DSystem.h"
 #include <string>
 #include <vector>
 #include <map>
@@ -56,7 +57,11 @@ bool DModelLoader::LoadObj(const char * file, DGeometryBufferDesc* desc)
 			{
 				ifile >> v[0] >> v[1] >> v[2];
 				uvs.push_back(v[0]);
-				uvs.push_back(v[1]);
+				bool uvstartsAtTop = DSystem::GetGraphicsMgr()->GetGLCore()->IsUVStartsAtTop();
+				if (uvstartsAtTop)
+					uvs.push_back(1.0f - v[1]);
+				else
+					uvs.push_back(v[1]);
 			}
 			if (input == 'n')
 			{
@@ -258,7 +263,11 @@ bool DModelLoader::CreatePlane(DGeometryBufferDesc* desc)
 			desc->vertices[index * 3 + 2] = z;
 
 			desc->uvs[index * 2] = u;
-			desc->uvs[index * 2 + 1] = v;
+			bool uvstartsAtTop = DSystem::GetGraphicsMgr()->GetGLCore()->IsUVStartsAtTop();
+			if(uvstartsAtTop)
+				desc->uvs[index * 2 + 1] = 1.0f - v;
+			else
+				desc->uvs[index * 2 + 1] = v;
 
 			desc->normals[index * 3] = 0;
 			desc->normals[index * 3 + 1] = 1.0f;

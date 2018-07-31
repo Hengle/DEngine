@@ -21,6 +21,16 @@ private:
 	LPDIRECT3DDEVICE9 m_device;
 };
 
+class DCubeTextureRes9 : public ITextureRes
+{
+public:
+	DCubeTextureRes9(LPDIRECT3DDEVICE9 device, DTextureRes9* right, DTextureRes9* left, DTextureRes9* top, DTextureRes9* bottom, DTextureRes9* front, DTextureRes9* back);
+
+private:
+	bool m_isSuccess;
+	LPDIRECT3DDEVICE9 m_device;
+};
+
 /*
 	RenderTexture Direct3D9底层
 */

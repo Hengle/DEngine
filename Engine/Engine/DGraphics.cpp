@@ -288,9 +288,9 @@ void DGraphics::DrawGeometry(DGeometry * geometry, const DMatrix4x4 & matrix, DM
 
 	DMatrix4x4 world = matrix;
 
-	material->SetMatrix(D_MATRIX_M, world);
-	material->SetMatrix(D_MATRIX_V, view);
-	material->SetMatrix(D_MATRIX_P, proj);
+	material->SetMatrix(D_SC_MATRIX_M, world);
+	material->SetMatrix(D_SC_MATRIX_V, view);
+	material->SetMatrix(D_SC_MATRIX_P, proj);
 
 	int passcount = material->GetPassCount();
 	int i;
@@ -330,10 +330,10 @@ void DGraphics::DrawTexture(DTexture * texture, DMaterial * material)
 	DSystem::GetGraphicsMgr()->GetGLCore()->GetResolution(screenWidth, screenHeight);
 	DMatrix4x4::Ortho(&proj, screenWidth, screenHeight, -100.0f, 100.0f);
 
-	material->SetMatrix(D_MATRIX_M, world);
-	material->SetMatrix(D_MATRIX_V, view);
-	material->SetMatrix(D_MATRIX_P, proj);
-	material->SetTexture(D_TEXTURE_SCREEN, texture);
+	material->SetMatrix(D_SC_MATRIX_M, world);
+	material->SetMatrix(D_SC_MATRIX_V, view);
+	material->SetMatrix(D_SC_MATRIX_P, proj);
+	material->SetTexture(D_SC_TEXTURE_SCREEN, texture);
 
 	int passcount = material->GetPassCount();
 	int i;

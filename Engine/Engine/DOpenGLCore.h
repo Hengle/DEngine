@@ -40,6 +40,7 @@ public:
 	virtual IRenderStateMgr* GetRenderStateMgr();
 
 	virtual bool IsFrustrumZeroToOne() { return false; }
+	virtual bool IsUVStartsAtTop() { return false; }
 
 private:
 	///*初始化采样器状态*/

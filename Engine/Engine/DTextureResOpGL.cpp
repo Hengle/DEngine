@@ -13,10 +13,10 @@ struct TargaHeader
 	unsigned char data2;
 };
 
-DTextureResOpGL::DTextureResOpGL(WCHAR * filename)
+DTextureResOpGL::DTextureResOpGL(WCHAR * filename, DWrapMode wrapMode)
 {
-	//m_textureId = LoadBMP(filename);
 	LoadTGA(filename, m_textureId);
+	m_wrapMode = wrapMode;
 }
 
 DTextureResOpGL::~DTextureResOpGL()
@@ -36,8 +36,12 @@ void DTextureResOpGL::Apply(UINT location)
 	}
 }
 
-void DTextureResOpGL::ApplyWrapMode(UINT, DWrapMode)
+void DTextureResOpGL::ApplyWrapMode(UINT location, DWrapMode wrapMode)
 {
+	if (m_wrapMode != wrapMode)
+	{
+		m_wrapMode = wrapMode;
+	}
 }
 
 void DTextureResOpGL::Release()

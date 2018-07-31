@@ -45,6 +45,23 @@ void DTextureRes9::Release()
 	m_device = NULL;
 }
 
+DCubeTextureRes9::DCubeTextureRes9(LPDIRECT3DDEVICE9 device, DTextureRes9 * right, DTextureRes9 * left, DTextureRes9 * top, DTextureRes9 * bottom, DTextureRes9 * front, DTextureRes9 * back)
+{
+	LPDIRECT3DCUBETEXTURE9 cubemap;
+	m_isSuccess = false;
+
+	m_device = device;
+
+	//HRESULT result = D3DXCreateCubeTexture(device, 256, 0, 0, 0, 0, &cubemap);
+	/*if (FAILED(result))
+	{
+		return;
+	}*/
+	//cubemap->
+
+	//m_isSuccess = true;
+}
+
 DRenderTextureViewRes9::DRenderTextureViewRes9(LPDIRECT3DDEVICE9 device, float width, float height)
 {
 	HRESULT hr;

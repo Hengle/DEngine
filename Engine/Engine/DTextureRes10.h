@@ -10,6 +10,7 @@ class DTextureRes10 : public ITextureRes
 {
 public:
 	DTextureRes10(ID3D10Device* device, WCHAR* filename);
+	DTextureRes10(ID3D10Device* device, DTextureRes10*, DTextureRes10*, DTextureRes10*, DTextureRes10*, DTextureRes10*, DTextureRes10*);
 	~DTextureRes10();
 	virtual void Apply(UINT);
 	virtual void ApplyWrapMode(UINT, DWrapMode);

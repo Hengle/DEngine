@@ -201,7 +201,7 @@ void DLight::BeginRenderShadow()
 		m_transform->GetPosition(position);
 		m_transform->GetForward(lookAt);
 
-		DShader::SetGlobalVector3(D_LIGHT_DIR, lookAt);
+		DShader::SetGlobalVector3(D_SC_LIGHT_DIR, lookAt);
 
 		lookAt = position + lookAt;
 
@@ -221,7 +221,7 @@ void DLight::BeginRenderShadow()
 	DGraphics::GlMultiMatrix(m_view);
 	DGraphics::GlLoadProjectionMatrix(m_proj);
 
-	DShader::SetGlobalVector4(D_PARAMS_SHADOW, DVector4(1.0f, 0.0f, m_far, 1.0f / m_far));
+	DShader::SetGlobalVector4(D_SC_PARAMS_SHADOW, DVector4(1.0f, 0.0f, m_far, 1.0f / m_far));
 
 	DGraphics::BeginScene(true, false, true, DColor(1,1,1,1.0f), m_shadowMap);
 }
@@ -231,9 +231,9 @@ void DLight::EndRenderShadow()
 	DGraphics::EndScene(m_shadowMap);
 	DGraphics::GlPopMatrix();
 
-	DShader::SetGlobalTexture(D_TEXTURE_SHADOW, m_shadowMap);
-	DShader::SetGlobalMatrix(D_MATRIX_SHADOW_V, m_view);
-	DShader::SetGlobalMatrix(D_MATRIX_SHADOW_P, m_proj);
+	DShader::SetGlobalTexture(D_SC_TEXTURE_SHADOW, m_shadowMap);
+	DShader::SetGlobalMatrix(D_SC_MATRIX_SHADOW_V, m_view);
+	DShader::SetGlobalMatrix(D_SC_MATRIX_SHADOW_P, m_proj);
 }
 
 //void DLight::GetCameraBounds(DCamera * cam, DVector3 * outCenter, DVector3 * outSize)

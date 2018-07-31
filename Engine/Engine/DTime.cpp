@@ -1,4 +1,4 @@
-#include "DTime.h"
+ï»¿#include "DTime.h"
 #include "DSystem.h"
 #include <windows.h>
 
@@ -37,7 +37,7 @@ void DTime::Update()
 	m_timer = ((double)(m_currentTime - m_beginTime)) * 0.001f;
 	m_previousTime = m_currentTime;
 
-	//¸ù¾İÊµ¼ÊdeltaTime½øĞĞ²¹³¥
+	//æ ¹æ®å®é™…deltaTimeè¿›è¡Œè¡¥å¿
 	m_lag += m_deltaTime;
 
 	m_frameCount++;
@@ -48,6 +48,8 @@ void DTime::Update()
 		m_frameTime = m_currentTime;
 		m_frameCount = 0;
 	}
+
+	DShader::SetGlobalFloat(D_SC_TIME, m_timer);
 }
 
 void DTime::Wait()

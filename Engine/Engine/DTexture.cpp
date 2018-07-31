@@ -47,6 +47,11 @@ DWrapMode DTexture2D::GetWrapMode()
 	return m_wrapMode;
 }
 
+void DTexture2D::SetWrapMode(DWrapMode wrapMode)
+{
+	m_wrapMode = wrapMode;
+}
+
 ITextureRes * DTexture2D::GetTextureRes()
 {
 	return m_textureRes;
@@ -136,6 +141,11 @@ void DRenderTexture::Apply(UINT offset)
 DWrapMode DRenderTexture::GetWrapMode()
 {
 	return m_wrapMode;
+}
+
+void DRenderTexture::SetWrapMode(DWrapMode wrapMode)
+{
+	m_wrapMode = wrapMode;
 }
 
 IRenderTextureViewRes * DRenderTexture::GetTextureRes()

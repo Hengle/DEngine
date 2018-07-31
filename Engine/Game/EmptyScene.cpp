@@ -22,7 +22,7 @@ void EmptyScene::OnLoad()
 	transform->SetEuler(33.346f, -41.563f, 0.0f);
 	transform->SetPosition(3.975387f, 2.588932f, -3.703708f);
 
-	DMaterial* colmat = DRes::Load<DMaterial>(DEFAULT_GROUP, CUBEMAP_MAT);
+	DMaterial* colmat = DRes::Load<DMaterial>(DEFAULT_GROUP, PLANE_MAT);
 	DGeometry* obj = DRes::Load<DGeometry>(DEFAULT_GROUP, PLANE_MESH);
 	//DGeometry* obj = DGeometry::Create(DGeometry_Sphere);
 	//DGeometry* obj = DGeometry::Create(DGeometry_Plane);
@@ -46,7 +46,11 @@ void EmptyScene::OnUnLoad()
 void EmptyScene::OnUpdate()
 {
 
-
+	if (DInput::IsKeyDown(0x10))
+	{
+		DTexture2D* tex = DRes::Load<DTexture2D>(0, 2003);
+		tex->SetWrapMode(DWrapMode_Repeat);
+	}
 	if (DInput::IsMousePress(0) && !DGUI::IsGUIActive())
 	{
 		int dtx, dty;

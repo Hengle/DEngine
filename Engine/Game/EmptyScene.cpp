@@ -46,67 +46,59 @@ void EmptyScene::OnUnLoad()
 void EmptyScene::OnUpdate()
 {
 
-	if (DInput::IsKeyDown(0x10))
+	//if (DInput::IsKeyDown(0x10))
+	if (DInput::IsKeyDown(81))
 	{
 		DTexture2D* tex = DRes::Load<DTexture2D>(0, 2003);
 		tex->SetWrapMode(DWrapMode_Repeat);
 	}
-	//if (DInput::IsMousePress(0) && !DGUI::IsGUIActive())
-	//{
-	//	int dtx, dty;
-	//	DInput::GetDeltaMouseMove(dtx, dty);
-	//	DVector3 euler;
-	//	DVector3 forward;
-	//	m_camera->GetTransform()->GetEuler(euler);
-
-	//	//euler.y += DTime::GetDeltaTime()*20.0f;
-	//	euler.y += dtx;
-	//	euler.x += dty;
-
-	//	m_camera->GetTransform()->SetEuler(euler);
-
-	//	m_camera->GetTransform()->GetForward(forward);
-
-	//	DVector3 position = m_lookAtPoint - forward*m_lookDistance;
-	//	m_camera->GetTransform()->SetPosition(position);
-	//}
-	//if (DInput::IsMousePress(1) && !DGUI::IsGUIActive())
-	//{
-	//	int dtx, dty;
-	//	DInput::GetDeltaMouseMove(dtx, dty);
-
-	//	m_lookDistance += dty*0.2f;
-	//	DVector3 forward;
-	//	m_camera->GetTransform()->GetForward(forward);
-	//	DVector3 position = m_lookAtPoint - forward*m_lookDistance;
-	//	m_camera->GetTransform()->SetPosition(position);
-	//}
-	//if (DInput::IsMousePress(2) && !DGUI::IsGUIActive())
-	//{
-	//	int dtx, dty;
-	//	DInput::GetDeltaMouseMove(dtx, dty);
-	//	DTransform* transform;
-	//	transform = m_camera->GetTransform();
-
-	//	DVector3 camRight, camUp;
-	//	transform->GetRight(camRight);
-	//	transform->GetUp(camUp);
-
-	//	m_lookAtPoint = camUp*dty*0.1f + m_lookAtPoint;
-	//	m_lookAtPoint = camRight*dtx*-0.1f + m_lookAtPoint;
-
-	//	DVector3 forward;
-	//	m_camera->GetTransform()->GetForward(forward);
-	//	DVector3 position = m_lookAtPoint - forward*m_lookDistance;
-	//	m_camera->GetTransform()->SetPosition(position);
-	//}
-	if (DInput::IsKeyPress(263))
+	if (DInput::IsMousePress(0) && !DGUI::IsGUIActive())
 	{
-			DTransform* transform;
-			transform = m_camera->GetTransform();
-			DVector3 euler;
-			transform->GetEuler(euler);
-			euler.y += 10;
-			transform->SetEuler(euler);
+		int dtx, dty;
+		DInput::GetDeltaMouseMove(dtx, dty);
+		DVector3 euler;
+		DVector3 forward;
+		m_camera->GetTransform()->GetEuler(euler);
+
+		//euler.y += DTime::GetDeltaTime()*20.0f;
+		euler.y += dtx;
+		euler.x += dty;
+
+		m_camera->GetTransform()->SetEuler(euler);
+
+		m_camera->GetTransform()->GetForward(forward);
+
+		DVector3 position = m_lookAtPoint - forward*m_lookDistance;
+		m_camera->GetTransform()->SetPosition(position);
+	}
+	if (DInput::IsMousePress(1) && !DGUI::IsGUIActive())
+	{
+		int dtx, dty;
+		DInput::GetDeltaMouseMove(dtx, dty);
+
+		m_lookDistance += dty*0.2f;
+		DVector3 forward;
+		m_camera->GetTransform()->GetForward(forward);
+		DVector3 position = m_lookAtPoint - forward*m_lookDistance;
+		m_camera->GetTransform()->SetPosition(position);
+	}
+	if (DInput::IsMousePress(2) && !DGUI::IsGUIActive())
+	{
+		int dtx, dty;
+		DInput::GetDeltaMouseMove(dtx, dty);
+		DTransform* transform;
+		transform = m_camera->GetTransform();
+
+		DVector3 camRight, camUp;
+		transform->GetRight(camRight);
+		transform->GetUp(camUp);
+
+		m_lookAtPoint = camUp*dty*0.1f + m_lookAtPoint;
+		m_lookAtPoint = camRight*dtx*-0.1f + m_lookAtPoint;
+
+		DVector3 forward;
+		m_camera->GetTransform()->GetForward(forward);
+		DVector3 position = m_lookAtPoint - forward*m_lookDistance;
+		m_camera->GetTransform()->SetPosition(position);
 	}
 }

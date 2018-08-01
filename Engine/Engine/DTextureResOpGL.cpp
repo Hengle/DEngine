@@ -38,10 +38,15 @@ void DTextureResOpGL::Apply(UINT location)
 
 void DTextureResOpGL::ApplyWrapMode(UINT location, DWrapMode wrapMode)
 {
-	if (m_wrapMode != wrapMode)
+	if (m_wrapMode == wrapMode)
 	{
-		m_wrapMode = wrapMode;
+		return;
 	}
+	m_wrapMode = wrapMode;
+	glBindTexture(GL_TEXTURE_2D, m_textureId);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GetWrapMode(m_wrapMode));
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GetWrapMode(m_wrapMode));
 }
 
 void DTextureResOpGL::Release()
@@ -195,16 +200,10 @@ GLuint DTextureResOpGL::LoadTGA(WCHAR * path, GLuint& textureId)
 
 
 	// Set the texture color to either wrap around or clamp to the edge.
-	//if (wrap)
-	{
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	}
-	//else
-	{
-	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	}
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GetWrapMode(m_wrapMode));
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GetWrapMode(m_wrapMode));
+
 
 	// Set the texture filtering.
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -223,6 +222,15 @@ GLuint DTextureResOpGL::LoadTGA(WCHAR * path, GLuint& textureId)
 	// Set that the texture is loaded.
 
 	return true;
+}
+
+GLint DTextureResOpGL::GetWrapMode(DWrapMode wrapMode)
+{
+	if (wrapMode == DWrapMode_Clamp)
+		return GL_CLAMP;
+	else if (wrapMode == DWrapMode_Repeat)
+		return GL_REPEAT;
+	return GL_CLAMP;
 }
 
 #endif

@@ -15,6 +15,7 @@ public:
 private:
 	GLuint LoadBMP(WCHAR* path);
 	GLuint LoadTGA(WCHAR* path, GLuint&);
+	GLint GetWrapMode(DWrapMode);
 
 private:
 	GLuint m_textureId;

@@ -3,7 +3,7 @@
 #include <vector>
 #include <exception>
 
-DGeometryRes9::DGeometryRes9(LPDIRECT3DDEVICE9 device, int vertexUsage, bool dynamic) : DGeometryResD3D(vertexUsage, dynamic)
+DGeometryRes9::DGeometryRes9(LPDIRECT3DDEVICE9 device, int vertexUsage, bool dynamic) : DGeometryRes(vertexUsage, dynamic)
 {
 	m_device = device;
 	m_vertexBuffer = 0;

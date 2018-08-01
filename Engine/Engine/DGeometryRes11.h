@@ -7,7 +7,7 @@
 /*
 	Geometry资源Direct3D11底层
 */
-class DGeometryRes11 : public DGeometryResD3D
+class DGeometryRes11 : public DGeometryRes
 {
 public:
 	DGeometryRes11(ID3D11Device* device, ID3D11DeviceContext* deviceContext, int vertexUsage /*顶点用法*/, bool dynamic);

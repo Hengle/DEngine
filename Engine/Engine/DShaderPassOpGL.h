@@ -36,6 +36,7 @@ protected:
 private:
 	void InitInputLayouts(GLuint);
 	void InitUniforms(GLuint);
+	void SetParam(float*, GLenum, GLuint);
 
 private:
 	GLuint m_vertexShaderID;

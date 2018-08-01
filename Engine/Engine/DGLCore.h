@@ -66,16 +66,16 @@ class DGeometryRes
 public:
 	DGeometryRes(int vertexUsage /*顶点用法描述*/, bool dynamic /*是否为动态mesh*/);
 	void Refresh(DGeometryBufferDesc* desc); //更新顶点缓存
-	//void Refresh(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount);//更新顶点缓存
+	void Refresh(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount);//更新顶点缓存
 	void DrawPrimitive(DGeometryTopology topology);//绘制
 	virtual void Release() = 0; //释放资源
 	bool IsInitialized();
 
 protected:
-	virtual void OnRefresh(DGeometryBufferDesc* desc) = 0;
-	virtual bool OnInit(DGeometryBufferDesc* desc) = 0;
-	//virtual void OnRefresh(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount) = 0;
-	//virtual bool OnInit(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount) = 0;
+	//virtual void OnRefresh(DGeometryBufferDesc* desc) = 0;
+	//virtual bool OnInit(DGeometryBufferDesc* desc) = 0;
+	virtual void OnRefresh(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount) = 0;
+	virtual bool OnInit(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount) = 0;
 	virtual void OnDraw(DGeometryTopology) = 0;
 
 protected:

@@ -18,9 +18,9 @@ private:
 	void ProcessDraw(DMatrix4x4&, DMatrix4x4&);
 
 private:
-	//float* m_vertices;
-	//unsigned long* m_indices;
-	DGeometryBufferDesc m_geoDesc;
+	float* m_vertices;
+	unsigned long* m_indices;
+	//DGeometryBufferDesc m_geoDesc;
 	DColor m_currentColor;
 	DGeometryRes* m_geometryRes;
 	unsigned long m_currentIndex, m_preIndex;

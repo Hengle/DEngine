@@ -7,7 +7,7 @@
 /*
 	Geometry资源Direct3D10底层
 */
-class DGeometryRes10 : public DGeometryResD3D
+class DGeometryRes10 : public DGeometryRes
 {
 public:
 	DGeometryRes10(ID3D10Device* device, int vertexUsage, bool dynamic);

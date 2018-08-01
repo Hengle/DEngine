@@ -14,16 +14,16 @@ public:
 	virtual void Release();
 
 protected:
-	virtual void OnRefresh(DGeometryBufferDesc* desc);
-	virtual bool OnInit(DGeometryBufferDesc* desc);
+	virtual void OnRefresh(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount);
+	virtual bool OnInit(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount);
 	virtual void OnDraw(DGeometryTopology);
 
 private:
 	GLuint m_vertexArrayId;
 	GLuint m_vertexBuffer;
-	GLuint m_colorBuffer;
-	GLuint m_normalsBuffer;
-	GLuint m_uv0Buffer;
+	//GLuint m_colorBuffer;
+	//GLuint m_normalsBuffer;
+	//GLuint m_uv0Buffer;
 
 	GLuint m_indexBuffer;
 };

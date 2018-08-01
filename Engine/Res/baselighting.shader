@@ -134,7 +134,7 @@ SubShader {
 					    worldPosition = gl_Position.xyz;
 					    gl_Position = g_engineViewMatrix * gl_Position;
 						gl_Position = g_engineProjectionMatrix * gl_Position;
-						worldNormal = (g_engineWorldMatrix * vec4(input_normal, 0)).xyz;
+						worldNormal = mat3(g_engineWorldMatrix) * input_normal;
 						uv = input_texcoord0;
 					}
 				]
@@ -170,16 +170,17 @@ SubShader {
 					}
 
 					void main(){
-					    //color = texture(shaderTexture, uv);
-					    color = vec4(uv,0.0,1.0);
+					    color = texture(shaderTexture, uv);
+					    //color = vec4(uv,0.0,1.0);
 
 					    float ndl = max(0.0, dot(worldNormal, -g_engineLightDir));
+					    //float ndl = dot(worldNormal, g_engineLightDir)*0.5+0.5;
 
 					    vec3 h = normalize(GetViewDir(worldPosition) - g_engineLightDir);
 
 					    float ndh = max(0.0, dot(worldNormal, h));
 
-
+					    //color.rgb = color.rgb * ndl;
 					    color.rgb =  color.rgb * ndl + vec3(1.0,1.0,1.0)*pow(ndh,specular*128.0)*gloss;
 					    color.a = 1.0;
 

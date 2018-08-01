@@ -6,7 +6,7 @@
 /*
 	Geometry资源Direct3D9底层
 */
-class DGeometryRes9 : public DGeometryResD3D
+class DGeometryRes9 : public DGeometryRes
 {
 public:
 	DGeometryRes9(LPDIRECT3DDEVICE9, int vertexUsage /*顶点用法*/, bool dynamic);

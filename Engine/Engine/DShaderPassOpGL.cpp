@@ -153,30 +153,14 @@ void DShaderProgramOpGL::OnApplyParams(std::map<std::string, float*>& params, st
 		if (params.find(iter->first) != params.end())
 		{
 			float* v = params.at(iter->first);
-			if (iter->second.type == GL_FLOAT_MAT4)
-			{
-				GLfloat p[16] = {
-					v[0],v[1],v[2],v[3],
-					v[4],v[5],v[6],v[7],
-					v[8],v[9],v[10],v[11],
-					v[12],v[13],v[14],v[15],
-				};
-				glUniformMatrix4fv(iter->second.paramId, 1, GL_FALSE, &p[0]);
-			}
+			SetParam(v, iter->second.type, iter->second.paramId);
+			
 		}
 		else if (iter->second.isGlobal && gparams.find(iter->first) != gparams.end())
 		{
 			float* v = gparams.at(iter->first);
-			if (iter->second.type == GL_FLOAT_MAT4)
-			{
-				GLfloat p[16] = {
-					v[0],v[4],v[8],v[12],
-					v[1],v[5],v[9],v[13],
-					v[2],v[6],v[10],v[14],
-					v[3],v[7],v[11],v[15],
-				};
-				glUniformMatrix4fv(iter->second.paramId, 1, GL_FALSE, &p[0]);
-			}
+			SetParam(v, iter->second.type, iter->second.paramId);
+			
 		}
 	}
 }
@@ -257,6 +241,40 @@ void DShaderProgramOpGL::InitUniforms(GLuint programId)
 			}
 			m_properties.insert(std::pair<std::string, ShaderPropertyDescOpGL>(pname, propert));
 		}
+	}
+}
+
+void DShaderProgramOpGL::SetParam(float * v, GLenum type, GLuint id)
+{
+	if (type == GL_FLOAT)
+	{
+		GLfloat p = v[0];
+		glUniform1fv(id, 1, &p);
+	}
+	else if (type == GL_FLOAT_VEC2)
+	{
+		GLfloat p[2] = { v[0],v[1] };
+		glUniform2fv(id, 1, &p[0]);
+	}
+	else if (type == GL_FLOAT_VEC3)
+	{
+		GLfloat p[3] = { v[0],v[1], v[2] };
+		glUniform3fv(id, 1, &p[0]);
+	}
+	else if (type == GL_FLOAT_VEC4)
+	{
+		GLfloat p[4] = { v[0],v[1], v[2] };
+		glUniform4fv(id, 1, &p[0]);
+	}
+	else if (type == GL_FLOAT_MAT4)
+	{
+		GLfloat p[16] = {
+			v[0],v[1],v[2],v[3],
+			v[4],v[5],v[6],v[7],
+			v[8],v[9],v[10],v[11],
+			v[12],v[13],v[14],v[15],
+		};
+		glUniformMatrix4fv(id, 1, GL_FALSE, &p[0]);
 	}
 }
 

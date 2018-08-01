@@ -35,6 +35,43 @@ public:
 	virtual void SetStencilPassOp(DRSStencilOp);
 	virtual void SetStencilFailOp(DRSStencilOp);
 	virtual void SetStencilZFailOp(DRSStencilOp);
+
+private:
+	void ChangeCullMode(DCullMode);
+	void ChangeFillMode(DFillMode);
+	void ChangeZWrite(bool);
+	void ChangeZTest(DRSCompareFunc);
+	void ChangeBlendEnable(bool);
+	void ChangeBlendOp(DRSBlendOp);
+	void ChangeBlendSrcFactor(DRSBlendFactor);
+	void ChangeBlendDstFactor(DRSBlendFactor);
+	void ChangeStencilEnable(bool);
+	void ChangeStencilId(unsigned short);
+	void ChangeStencilCompFunc(DRSCompareFunc);
+	void ChangeStencilPassOp(DRSStencilOp);
+	void ChangeStencilFailOp(DRSStencilOp);
+	void ChangeStencilZFailOp(DRSStencilOp);
+	void ChangeStencilReadMask(unsigned short);
+	void ChangeStencilWriteMask(unsigned short);
+	GLenum GetComparisonFunc(DRSCompareFunc);
+
+private:
+	DCullMode m_currentCullMode;
+	DFillMode m_currentFillMode;
+	bool m_zwrite;
+	DRSCompareFunc m_ztest;
+	bool m_enableBlend;
+	DRSBlendOp m_blendOp;
+	DRSBlendFactor m_blendSrcFactor;
+	DRSBlendFactor m_blendDstFactor;
+	bool m_enableStencil;
+	unsigned short m_stencilId;
+	DRSCompareFunc m_stencilComp;
+	DRSStencilOp m_stencilPass;
+	DRSStencilOp m_stencilFail;
+	DRSStencilOp m_stencilZFail;
+	unsigned short m_stencilReadMask;
+	unsigned short m_stencilWriteMask;
 };
 
 #endif

@@ -46,11 +46,11 @@ void EmptyScene::OnUnLoad()
 void EmptyScene::OnUpdate()
 {
 
-	//if (DInput::IsKeyDown(0x10))
-	//{
-	//	DTexture2D* tex = DRes::Load<DTexture2D>(0, 2003);
-	//	tex->SetWrapMode(DWrapMode_Repeat);
-	//}
+	if (DInput::IsKeyDown(0x10))
+	{
+		DTexture2D* tex = DRes::Load<DTexture2D>(0, 2003);
+		tex->SetWrapMode(DWrapMode_Repeat);
+	}
 	//if (DInput::IsMousePress(0) && !DGUI::IsGUIActive())
 	//{
 	//	int dtx, dty;
@@ -100,4 +100,13 @@ void EmptyScene::OnUpdate()
 	//	DVector3 position = m_lookAtPoint - forward*m_lookDistance;
 	//	m_camera->GetTransform()->SetPosition(position);
 	//}
+	if (DInput::IsKeyPress(263))
+	{
+			DTransform* transform;
+			transform = m_camera->GetTransform();
+			DVector3 euler;
+			transform->GetEuler(euler);
+			euler.y += 10;
+			transform->SetEuler(euler);
+	}
 }

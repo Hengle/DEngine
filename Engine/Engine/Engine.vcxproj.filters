@@ -297,6 +297,12 @@
     <ClInclude Include="DTextureResOpGL.h">
       <Filter>头文件\Core\OpenGL\OpenGLCore</Filter>
     </ClInclude>
+    <ClInclude Include="DirectInputCore.h">
+      <Filter>头文件\Core\D3D</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenGLInputCore.h">
+      <Filter>头文件\Core\OpenGL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DMath.cpp">
@@ -455,9 +461,6 @@
     <ClCompile Include="DCuller.cpp">
       <Filter>源文件\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="DInputCore.cpp">
-      <Filter>源文件\Core</Filter>
-    </ClCompile>
     <ClCompile Include="glad.c">
       <Filter>源文件\Core\OpenGL\OpenGLCore</Filter>
     </ClCompile>
@@ -493,6 +496,12 @@
     </ClCompile>
     <ClCompile Include="DTextureResOpGL.cpp">
       <Filter>源文件\Core\OpenGL\OpenGLCore</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectInputCore.cpp">
+      <Filter>源文件\Core\D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGLInputCore.cpp">
+      <Filter>源文件\Core\OpenGL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

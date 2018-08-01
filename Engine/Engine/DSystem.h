@@ -3,8 +3,9 @@
 #include "DGraphics.h"
 #include "DSceneManager.h"
 #include "DLog.h"
-#include "DInput.h"
+#include "DInputCore.h"
 #include "DRes.h"
+#include "DInput.h"
 
 /*
 	系统模块管理类
@@ -32,7 +33,7 @@ public:
 	/*获取时间模块*/
 	static DTime* GetTimeMgr();
 	/*获取输入控制模块*/
-	static DInput* GetInputMgr();
+	static IInputCore* GetInputMgr();
 	/*获取资源管理模块*/
 	static DRes* GetResMgr();
 
@@ -44,15 +45,16 @@ public:
 protected:
 	virtual bool OnInit(int screenWidth, int screenHeight, bool fullScreen, DGraphicsAPI api) = 0;
 	virtual void OnShutdown() = 0;
+	virtual void OnFrameBegin() {};
 	virtual void OnFrameEnd() {};
 	virtual bool IsWindowShouldClose() { return false; }
+	virtual IInputCore* GetInputCore() { return nullptr; }
 
 private:
 	bool Loop();
 
 protected:
 	DGraphics* m_graphicsMgr;
-	DInput* m_inputMgr;
 
 private:
 	DTime* m_timeMgr;

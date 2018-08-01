@@ -5,6 +5,7 @@
 
 DOpenGLSystem::DOpenGLSystem()
 {
+	m_inputCore = 0;
 }
 
 
@@ -46,6 +47,9 @@ bool DOpenGLSystem::OnInit(int screenWidth, int screenHeight, bool fullScreen, D
 		return false;
 	}
 
+	m_inputCore = new OpenGLInputCore();
+	m_inputCore->Init(m_window);
+
 	return true;
 }
 
@@ -58,9 +62,22 @@ void DOpenGLSystem::OnShutdown()
 {
 }
 
+void DOpenGLSystem::OnFrameBegin()
+{
+	if (m_inputCore != NULL)
+	{
+		m_inputCore->Update();
+	}
+}
+
 void DOpenGLSystem::OnFrameEnd()
 {
 	glfwPollEvents();
+}
+
+IInputCore * DOpenGLSystem::GetInputCore()
+{
+	return (IInputCore*)m_inputCore;
 }
 
 #endif

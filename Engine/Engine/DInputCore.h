@@ -1,8 +1,13 @@
 ﻿#pragma once
-class DInputCore
+#include "DEngineDefine.h"
+
+interface IInputCore
 {
-public:
-	DInputCore();
-	~DInputCore();
+	virtual void GetMousePosition(int&, int&) = 0;
+	virtual void GetDeltaMouseMove(int&, int&) = 0;
+	virtual bool IsMousePress(int button) = 0;
+	virtual bool IsMouseDown(int button) = 0;
+	virtual bool IsKeyPress(int keycode) = 0;
+	virtual bool IsKeyDown(int keycode) = 0;
 };
 

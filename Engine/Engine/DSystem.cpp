@@ -9,7 +9,6 @@ DSystem::DSystem()
 	m_timeMgr = 0;
 	m_graphicsMgr = 0;
 	m_logMgr = 0;
-	m_inputMgr = 0;
 	m_sceneMgr = 0;
 	m_res = 0;
 	//m_hInstance = 0;
@@ -76,13 +75,6 @@ bool DSystem::Run()
 void DSystem::Shutdown()
 {
 
-	if (m_inputMgr != NULL)
-	{
-		m_inputMgr->Shutdown();
-		delete m_inputMgr;
-	}
-	m_inputMgr = NULL;
-
 	if (m_timeMgr != NULL)
 	{
 		m_timeMgr->Shutdown();
@@ -126,10 +118,11 @@ void DSystem::Shutdown()
 
 bool DSystem::Loop()
 {
-	if (m_inputMgr != NULL && !m_inputMgr->InputLoop())
+	/*if (m_inputMgr != NULL && !m_inputMgr->InputLoop())
 	{
 		return false;
-	}
+	}*/
+	OnFrameBegin();
 	if (!m_graphicsMgr->Frame())
 	{
 		return false;
@@ -184,9 +177,9 @@ DTime * DSystem::GetTimeMgr()
 	return System->m_timeMgr;
 }
 
-DInput * DSystem::GetInputMgr()
+IInputCore * DSystem::GetInputMgr()
 {
-	return System->m_inputMgr;
+	return System->GetInputCore();
 }
 
 DRes * DSystem::GetResMgr()

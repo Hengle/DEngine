@@ -9,6 +9,7 @@ D3DSystem::D3DSystem() : DSystem()
 	m_title = 0;
 	m_hInstance = 0;
 	m_hwnd = 0;
+	m_inputCore = 0;
 }
 
 
@@ -38,8 +39,9 @@ bool D3DSystem::OnInit(int screenWidth, int screenHeight, bool fullScreen, DGrap
 {
 	InitWindow(screenWidth, screenHeight, fullScreen);
 
-	m_inputMgr = new DInput();
-	if (!m_inputMgr->Init(m_hInstance, m_hwnd, screenWidth, screenHeight))
+	//m_inputMgr = new DInput();
+	m_inputCore = new DirectInputCore();
+	if (!m_inputCore->Init(m_hInstance, m_hwnd, screenWidth, screenHeight))
 	{
 		return false;
 	}
@@ -53,12 +55,32 @@ bool D3DSystem::OnInit(int screenWidth, int screenHeight, bool fullScreen, DGrap
 
 void D3DSystem::OnShutdown()
 {
+	if (m_inputCore != NULL)
+	{
+		m_inputCore->Shutdown();
+		delete m_inputCore;
+		m_inputCore = NULL;
+	}
+
 	DestroyWindow(m_hwnd);
 
 	m_hwnd = NULL;
 	m_applicationName = NULL;
 
 	m_hInstance = NULL;
+}
+
+void D3DSystem::OnFrameBegin()
+{
+	if (m_inputCore != NULL)
+	{
+		m_inputCore->InputLoop();
+	}
+}
+
+IInputCore * D3DSystem::GetInputCore()
+{
+	return (IInputCore*)m_inputCore;
 }
 
 void D3DSystem::InitWindow(int & width, int & height, bool)

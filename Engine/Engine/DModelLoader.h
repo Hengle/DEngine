@@ -14,5 +14,6 @@ public:
 
 private:
 	static void SetSphereFace(int, int, DVector3&, DVector3&, DVector3&, DGeometryBufferDesc*);
+	static void CalculateTangent(DVector3*, int, int, int, DGeometryBufferDesc*);
 };
 

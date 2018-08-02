@@ -56,6 +56,7 @@ public:
 	float*uv2s; 
 	float*uv3s;
 	float*normals;
+	float*tangents;
 	float*colors;
 	unsigned long*indices;
 } DGeometryBufferDesc;

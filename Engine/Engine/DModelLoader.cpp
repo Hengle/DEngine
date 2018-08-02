@@ -8,6 +8,13 @@
 
 using namespace std;
 
+struct DModelLoaderTangent
+{
+public:
+	float x = 0.0f, y = 0.0f, z = 0.0f;
+	int count = 0;
+};
+
 bool DModelLoader::LoadObj(const char * file, DGeometryBufferDesc* desc)
 //bool DObjModelLoader::LoadObj(const char*file)
 {
@@ -118,11 +125,16 @@ bool DModelLoader::LoadObj(const char * file, DGeometryBufferDesc* desc)
 	desc->uv3s = 0;
 	desc->uvs = new float[desc->vertexCount * 2];
 	desc->vertices = new float[desc->vertexCount * 3];
+	desc->tangents = new float[desc->vertexCount * 4];
+
+	DModelLoaderTangent* tangents = new DModelLoaderTangent[desc->vertexCount];
 	//dataSize = sizeof(float) * 5;
 	//bufferLength = 5;
 
 	//(*buffer) = new float[vertexCount * 5];
 	//(*indexBuffer) = new unsigned long[indexCount];
+
+	DVector3 tangent;
 
 	int i, j, k;
 	for (i = 0, j = 0, k = 0; i < desc->vertexCount; i++, j += 3, k += 2)
@@ -137,9 +149,54 @@ bool DModelLoader::LoadObj(const char * file, DGeometryBufferDesc* desc)
 		desc->normals[i * 3] = outnormals[j];
 		desc->normals[i * 3 + 1] = outnormals[j + 1];
 		desc->normals[i * 3 + 2] = outnormals[j + 2];
+
 	}
-	for (i = 0; i < desc->indexCount; i++) {
+	for (i = 0; i < desc->indexCount; i+=3) {
+		if (i + 1 >= desc->indexCount || i + 2 >= desc->indexCount)
+			continue;
 		desc->indices[i] = outindexes[i];
+		desc->indices[i + 1] = outindexes[i + 1];
+		desc->indices[i + 2] = outindexes[i + 2];
+
+		CalculateTangent(&tangent, outindexes[i], outindexes[i + 1], outindexes[i + 2], desc);
+
+		tangents[outindexes[i]].x += tangent.x;
+		tangents[outindexes[i]].y += tangent.y;
+		tangents[outindexes[i]].z += tangent.z;
+		tangents[outindexes[i]].count += 1;
+
+		tangents[outindexes[i + 1]].x += tangent.x;
+		tangents[outindexes[i + 1]].y += tangent.y;
+		tangents[outindexes[i + 1]].z += tangent.z;
+		tangents[outindexes[i + 1]].count += 1;
+
+		tangents[outindexes[i + 2]].x += tangent.x;
+		tangents[outindexes[i + 2]].y += tangent.y;
+		tangents[outindexes[i + 2]].z += tangent.z;
+		tangents[outindexes[i + 2]].count += 1;
+	}
+	for (i = 0; i < desc->vertexCount; i++)
+	{
+		DModelLoaderTangent t = tangents[i];
+		float tx = t.x;
+		float ty = t.y;
+		float tz = t.z;
+		if (t.count > 0)
+		{
+			tx /= t.count;
+			ty /= t.count;
+			tz /= t.count;
+		}
+		float len = sqrtf(tx*tx + ty*ty + tz*tz);
+		if (IS_FLOAT_EQUAL(len, 0.0f) == false) {
+			tx /= len;
+			ty /= len;
+			tz /= len;
+		}
+		desc->tangents[i * 4] = tx;
+		desc->tangents[i * 4 + 1] = ty;
+		desc->tangents[i * 4 + 2] = tz;
+		desc->tangents[i * 4 + 3] = -1.0f;
 	}
 
 	ifile.close();
@@ -152,6 +209,9 @@ bool DModelLoader::LoadObj(const char * file, DGeometryBufferDesc* desc)
 	outindexes.clear();
 
 	maps.clear();
+
+	delete[] tangents;
+	tangents = 0;
 
 	return true;
 }
@@ -241,6 +301,7 @@ bool DModelLoader::CreatePlane(DGeometryBufferDesc* desc)
 	desc->uv3s = 0;
 	desc->uvs = new float[desc->vertexCount * 2];
 	desc->indices = new unsigned long[desc->indexCount];
+	desc->tangents = new float[desc->vertexCount * 4];
 
 	float x, z, u, v;
 	int index, id;
@@ -286,6 +347,57 @@ bool DModelLoader::CreatePlane(DGeometryBufferDesc* desc)
 		}
 	}
 
+	DModelLoaderTangent* tangents = new DModelLoaderTangent[desc->vertexCount];
+	DVector3 tangent;
+
+	for (i = 0; i < desc->indexCount; i += 3) {
+		if (i + 1 >= desc->indexCount || i + 2 >= desc->indexCount)
+			continue;
+
+		CalculateTangent(&tangent, desc->indices[i], desc->indices[i + 1], desc->indices[i + 2], desc);
+
+		tangents[desc->indices[i]].x += tangent.x;
+		tangents[desc->indices[i]].y += tangent.y;
+		tangents[desc->indices[i]].z += tangent.z;
+		tangents[desc->indices[i]].count += 1;
+
+		tangents[desc->indices[i + 1]].x += tangent.x;
+		tangents[desc->indices[i + 1]].y += tangent.y;
+		tangents[desc->indices[i + 1]].z += tangent.z;
+		tangents[desc->indices[i + 1]].count += 1;
+
+		tangents[desc->indices[i + 2]].x += tangent.x;
+		tangents[desc->indices[i + 2]].y += tangent.y;
+		tangents[desc->indices[i + 2]].z += tangent.z;
+		tangents[desc->indices[i + 2]].count += 1;
+	}
+	for (i = 0; i < desc->vertexCount; i++)
+	{
+		DModelLoaderTangent t = tangents[i];
+		float tx = t.x;
+		float ty = t.y;
+		float tz = t.z;
+		if (t.count > 0)
+		{
+			tx /= t.count;
+			ty /= t.count;
+			tz /= t.count;
+		}
+		float len = sqrtf(tx*tx + ty*ty + tz*tz);
+		if (IS_FLOAT_EQUAL(len, 0.0f) == false) {
+			tx /= len;
+			ty /= len;
+			tz /= len;
+		}
+		desc->tangents[i * 4] = tx;
+		desc->tangents[i * 4 + 1] = ty;
+		desc->tangents[i * 4 + 2] = tz;
+		desc->tangents[i * 4 + 3] = -1.0f;
+	}
+
+	delete[] tangents;
+	tangents = 0;
+
 	return true;
 }
 
@@ -303,6 +415,7 @@ bool DModelLoader::CreateSphere(DGeometryBufferDesc * desc)
 	desc->uv3s = 0;
 	desc->uvs = 0;
 	desc->indices = new unsigned long[desc->indexCount];
+	desc->tangents = new float[desc->vertexCount * 4];
 
 	SetSphereFace(0, tri, DVEC3_RIGHT, DVEC3_UP, DVEC3_FORWARD, desc);
 	SetSphereFace(1, tri, DVEC3_BACK, DVEC3_UP, DVEC3_RIGHT, desc);
@@ -310,6 +423,58 @@ bool DModelLoader::CreateSphere(DGeometryBufferDesc * desc)
 	SetSphereFace(3, tri, DVEC3_FORWARD, DVEC3_UP, DVEC3_LEFT, desc);
 	SetSphereFace(4, tri, DVEC3_RIGHT, DVEC3_BACK, DVEC3_UP, desc);
 	SetSphereFace(5, tri, DVEC3_RIGHT, DVEC3_FORWARD, DVEC3_DOWN, desc);
+
+	DModelLoaderTangent* tangents = new DModelLoaderTangent[desc->vertexCount];
+	DVector3 tangent;
+
+	int i;
+	for (i = 0; i < desc->indexCount; i += 3) {
+		if (i + 1 >= desc->indexCount || i + 2 >= desc->indexCount)
+			continue;
+
+		CalculateTangent(&tangent, desc->indices[i], desc->indices[i + 1], desc->indices[i + 2], desc);
+
+		tangents[desc->indices[i]].x += tangent.x;
+		tangents[desc->indices[i]].y += tangent.y;
+		tangents[desc->indices[i]].z += tangent.z;
+		tangents[desc->indices[i]].count += 1;
+
+		tangents[desc->indices[i + 1]].x += tangent.x;
+		tangents[desc->indices[i + 1]].y += tangent.y;
+		tangents[desc->indices[i + 1]].z += tangent.z;
+		tangents[desc->indices[i + 1]].count += 1;
+
+		tangents[desc->indices[i + 2]].x += tangent.x;
+		tangents[desc->indices[i + 2]].y += tangent.y;
+		tangents[desc->indices[i + 2]].z += tangent.z;
+		tangents[desc->indices[i + 2]].count += 1;
+	}
+	for (i = 0; i < desc->vertexCount; i++)
+	{
+		DModelLoaderTangent t = tangents[i];
+		float tx = t.x;
+		float ty = t.y;
+		float tz = t.z;
+		if (t.count > 0)
+		{
+			tx /= t.count;
+			ty /= t.count;
+			tz /= t.count;
+		}
+		float len = sqrtf(tx*tx + ty*ty + tz*tz);
+		if (IS_FLOAT_EQUAL(len, 0.0f) == false) {
+			tx /= len;
+			ty /= len;
+			tz /= len;
+		}
+		desc->tangents[i * 4] = tx;
+		desc->tangents[i * 4 + 1] = ty;
+		desc->tangents[i * 4 + 2] = tz;
+		desc->tangents[i * 4 + 3] = -1.0f;
+	}
+
+	delete[] tangents;
+	tangents = 0;
 
 	return true;
 }
@@ -356,3 +521,24 @@ void DModelLoader::SetSphereFace(int face, int triangleCount, DVector3 & right, 
 		}
 	}
 }
+
+void DModelLoader::CalculateTangent(DVector3 * out, int index0, int index1, int index2, DGeometryBufferDesc * desc)
+{
+	DVector3 v0 = DVector3(desc->vertices[index0 * 3], desc->vertices[index0 * 3 + 1], desc->vertices[index0 * 3 + 2]);
+	DVector3 v1 = DVector3(desc->vertices[index1 * 3], desc->vertices[index1 * 3 + 1], desc->vertices[index1 * 3 + 2]);
+	DVector3 v2 = DVector3(desc->vertices[index2 * 3], desc->vertices[index2 * 3 + 1], desc->vertices[index2 * 3 + 2]);
+
+	float udelta20y = desc->uvs[index2 * 2 + 1] - desc->uvs[index0 * 2 + 1];
+	float udelta10y = desc->uvs[index1 * 2 + 1] - desc->uvs[index0 * 2 + 1];
+	float udelta10x = desc->uvs[index1 * 2] - desc->uvs[index0 * 2];
+	float udelta20x = desc->uvs[index2 * 2] - desc->uvs[index0 * 2];
+
+	float denominator = udelta10x * udelta20y - udelta20x * udelta10y;
+	if (IS_FLOAT_EQUAL(denominator, 0.0f)) {
+		*out = DVector3(0.0f, 0.0f, 0.0f);
+		return;
+	}
+
+	*out = (udelta20y * (v1 - v0) - udelta10y * (v2 - v0)) / denominator;
+}
+

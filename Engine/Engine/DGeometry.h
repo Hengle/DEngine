@@ -24,6 +24,7 @@ public:
 	int GetVertexCount() const;
 	void GetVertex(int index, DVector3* vertex) const;
 	void GetNormal(int index, DVector3* normal) const;
+	void GetTangent(int index, DVector4* tangent) const;
 	void GetColor(int index, DColor* color) const;
 	void GetUV(int index, int channel, DVector2* uv) const;
 	void GetBoundsRange(DVector3* center, DVector3* size);

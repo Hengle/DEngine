@@ -73,6 +73,11 @@ void DGeometry::Destroy()
 		delete[] m_geometryDesc.indices;
 		m_geometryDesc.indices = 0;
 	}
+	if (m_geometryDesc.tangents != NULL)
+	{
+		delete[] m_geometryDesc.tangents;
+		m_geometryDesc.tangents = 0;
+	}
 }
 
 int DGeometry::GetIndexCount() const
@@ -111,6 +116,22 @@ void DGeometry::GetNormal(int index, DVector3 * normal) const
 	normal->x = x;
 	normal->y = y;
 	normal->z = z;
+}
+
+void DGeometry::GetTangent(int index, DVector4 * tangent) const
+{
+	if (index < 0 || index >= m_geometryDesc.vertexCount)
+		return;
+	if (m_geometryDesc.tangents == 0)
+		return;
+	float x = m_geometryDesc.tangents[index * 4];
+	float y = m_geometryDesc.tangents[index * 4 + 1];
+	float z = m_geometryDesc.tangents[index * 4 + 2];
+	float w = m_geometryDesc.tangents[index * 4 + 3];
+	tangent->x = x;
+	tangent->y = y;
+	tangent->z = z;
+	tangent->w = w;
 }
 
 void DGeometry::GetColor(int index, DColor * color) const

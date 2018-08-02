@@ -91,7 +91,7 @@ DTextureRes11::~DTextureRes11()
 {
 }
 
-void DTextureRes11::Apply(UINT textureOffset)
+void DTextureRes11::Apply(UINT textureOffset, int)
 {
 	if (m_isSuccess)
 	{
@@ -189,7 +189,7 @@ DRenderTextureViewRes11::~DRenderTextureViewRes11()
 {
 }
 
-void DRenderTextureViewRes11::Apply(UINT textureOffset)
+void DRenderTextureViewRes11::Apply(UINT textureOffset, int)
 {
 	if (m_isSuccess)
 	{

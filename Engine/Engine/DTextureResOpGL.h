@@ -8,7 +8,7 @@ class DTextureResOpGL : public ITextureRes
 public:
 	DTextureResOpGL(WCHAR* filename, DWrapMode);
 	~DTextureResOpGL();
-	virtual void Apply(UINT);
+	virtual void Apply(UINT, int);
 	virtual void ApplyWrapMode(UINT, DWrapMode);
 	virtual void Release();
 

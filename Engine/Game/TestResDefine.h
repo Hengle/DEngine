@@ -22,6 +22,7 @@
 #define TRANSPARENT_MAT  3007
 #define PLANE_MAT        3008
 #define CUBEMAP_MAT      3009
+#define PLANEBUMP_MAT    3010
 
 #define BODY_MESH        4000
 #define PLANE_MESH       4001

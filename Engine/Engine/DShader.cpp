@@ -258,12 +258,12 @@ void DShader::ApplyShaderProgramParams(DShaderProgram * program, DShaderConstant
 				if (constantTable->textures.find(rdesc.resName) != constantTable->textures.end())
 				{
 					tex = constantTable->textures.at(rdesc.resName);
-					tex->Apply(rdesc.offset);
+					tex->Apply(rdesc.offset, i);
 				}
 				else if (rdesc.isGlobal && sGlobalShaderConstants->textures.find(rdesc.resName) != sGlobalShaderConstants->textures.end())
 				{
 					tex = sGlobalShaderConstants->textures.at(rdesc.resName);
-					tex->Apply(rdesc.offset);
+					tex->Apply(rdesc.offset, i);
 				}
 			}
 		}

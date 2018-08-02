@@ -63,6 +63,27 @@ void DShaderProgramOpGL::InitFragmentShader(const char * content)
 	glGetShaderiv(m_fragmentShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
 
 	if (InfoLogLength > 0) {
+
+		std::vector<char> FragmentShaderErrorMessage(InfoLogLength + 1);
+		glGetShaderInfoLog(m_fragmentShaderID, InfoLogLength, NULL, &FragmentShaderErrorMessage[0]);
+
+		std::ofstream fout;
+
+		fout.open("shader-error.txt");
+
+		//int i;
+		//for (i = 0; i<VertexShaderErrorMessage.size(); i++)
+		//{
+		fout << &FragmentShaderErrorMessage[0] << std::endl;
+
+		fout << std::endl;
+
+		fout << content << std::endl;
+		//}
+
+		fout.close();
+
+		//printf("%s\n", &VertexShaderErrorMessage[0]);
 		/*std::vector<char> FragmentShaderErrorMessage(InfoLogLength + 1);
 		glGetShaderInfoLog(FragmentShaderID, InfoLogLength, NULL, &FragmentShaderErrorMessage[0]);
 		printf("%s\n", &FragmentShaderErrorMessage[0]);*/
@@ -196,6 +217,10 @@ void DShaderProgramOpGL::InitInputLayouts(GLuint programId)
 		if (strcmp(pname, "input_texcoord0") == 0)
 		{
 			m_vertexUsage |= 1UL << DVertexUsage_TEXCOORD0;
+		}
+		if (strcmp(pname, "input_tangent") == 0)
+		{
+			m_vertexUsage |= 1UL << DVertexUsage_TANGENT;
 		}
 	}
 }

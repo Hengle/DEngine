@@ -12,7 +12,7 @@ public:
 	DTextureRes11(ID3D11Device* device, ID3D11DeviceContext * deviceContext, WCHAR* filename);
 	DTextureRes11(ID3D11Device* device, ID3D11DeviceContext * deviceContext, DTextureRes11*, DTextureRes11*, DTextureRes11*, DTextureRes11*, DTextureRes11*, DTextureRes11*);
 	~DTextureRes11();
-	virtual void Apply(UINT);
+	virtual void Apply(UINT, int);
 	virtual void ApplyWrapMode(UINT, DWrapMode);
 	virtual void Release();
 
@@ -30,7 +30,7 @@ class DRenderTextureViewRes11 : public IRenderTextureViewRes
 public:
 	DRenderTextureViewRes11(ID3D11Device* device, ID3D11DeviceContext * deviceContext, float, float);
 	~DRenderTextureViewRes11();
-	virtual void Apply(UINT);
+	virtual void Apply(UINT, int);
 	virtual void ApplyWrapMode(UINT, DWrapMode);
 	virtual void Release();
 	virtual IRenderBuffer* GetColorBuffer();

@@ -40,6 +40,14 @@ DGeometryRes::DGeometryRes(int vertexUsage, bool dynamic)
 		m_dataCount += 3;
 		layout += 1;
 	}
+	if (vertexUsage & (1UL << DVertexUsage_COLOR))
+	{
+		//m_dataSize += fsize * 4;
+		m_colorOffset = m_dataCount;
+		m_colorLayout = layout;
+		m_dataCount += 4;
+		layout += 1;
+	}
 	if (vertexUsage & (1UL << DVertexUsage_TEXCOORD0))
 	{
 		//m_dataSize += fsize * 2;
@@ -70,14 +78,6 @@ DGeometryRes::DGeometryRes(int vertexUsage, bool dynamic)
 		m_uv3Offset = m_dataCount;
 		m_uv3Layout = layout;
 		m_dataCount += 2;
-		layout += 1;
-	}
-	if (vertexUsage & (1UL << DVertexUsage_COLOR))
-	{
-		//m_dataSize += fsize * 4;
-		m_colorOffset = m_dataCount;
-		m_colorLayout = layout;
-		m_dataCount += 4;
 		layout += 1;
 	}
 	if (vertexUsage & (1UL << DVertexUsage_TANGENT))
@@ -148,6 +148,14 @@ void DGeometryRes::Refresh(DGeometryBufferDesc * desc)
 			vertices[i*m_dataCount + j] = desc->uvs != 0 ? desc->uvs[i * 2] : 0.0f;
 			vertices[i*m_dataCount + j + 1] = desc->uvs != 0 ? desc->uvs[i * 2 + 1] : 0.0f;
 			j += 2;
+		}
+		if (m_tangentOffset >= 0)
+		{
+			vertices[i*m_dataCount + j] = desc->tangents != 0 ? desc->tangents[i * 4] : 0.0f;
+			vertices[i*m_dataCount + j + 1] = desc->tangents != 0 ? desc->tangents[i * 4 + 1] : 0.0f;
+			vertices[i*m_dataCount + j + 2] = desc->tangents != 0 ? desc->tangents[i * 4 + 2] : 0.0f;
+			vertices[i*m_dataCount + j + 3] = desc->tangents != 0 ? desc->tangents[i * 4 + 3] : 0.0f;
+			j += 4;
 		}
 	}
 

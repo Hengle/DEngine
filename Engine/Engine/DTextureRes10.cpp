@@ -92,7 +92,7 @@ DTextureRes10::~DTextureRes10()
 {
 }
 
-void DTextureRes10::Apply(UINT textureOffset)
+void DTextureRes10::Apply(UINT textureOffset, int)
 {
 	if (m_isSuccess)
 	{
@@ -190,7 +190,7 @@ DRenderTextureViewRes10::~DRenderTextureViewRes10()
 {
 }
 
-void DRenderTextureViewRes10::Apply(UINT textureOffset)
+void DRenderTextureViewRes10::Apply(UINT textureOffset, int)
 {
 	if (m_isSuccess)
 	{

@@ -9,7 +9,7 @@ DTexture::~DTexture()
 {
 }
 
-void DTexture::Apply(UINT)
+void DTexture::Apply(UINT, int)
 {
 }
 
@@ -34,11 +34,11 @@ void DTexture2D::Destroy()
 	return;
 }
 
-void DTexture2D::Apply(UINT offset)
+void DTexture2D::Apply(UINT offset, int index)
 {
-	DTexture::Apply(offset);
+	DTexture::Apply(offset, index);
 	
-	m_textureRes->Apply(offset);
+	m_textureRes->Apply(offset, index);
 	m_textureRes->ApplyWrapMode(offset, m_wrapMode);
 }
 
@@ -92,11 +92,11 @@ void DTextureCube::Destroy()
 	}
 }
 
-void DTextureCube::Apply(UINT offset)
+void DTextureCube::Apply(UINT offset, int index)
 {
-	DTexture::Apply(offset);
+	DTexture::Apply(offset, index);
 
-	m_textureRes->Apply(offset);
+	m_textureRes->Apply(offset, index);
 }
 
 DTextureCube * DTextureCube::Create(DTexture2D * right, DTexture2D * left, DTexture2D * top, DTexture2D * bottom, DTexture2D * front, DTexture2D * back)
@@ -130,11 +130,11 @@ void DRenderTexture::Destroy()
 	return;
 }
 
-void DRenderTexture::Apply(UINT offset)
+void DRenderTexture::Apply(UINT offset, int index)
 {
-	DTexture::Apply(offset);
+	DTexture::Apply(offset, index);
 
-	m_renderTextureRes->Apply(offset);
+	m_renderTextureRes->Apply(offset, index);
 	m_renderTextureRes->ApplyWrapMode(offset, m_wrapMode);
 }
 

@@ -147,6 +147,10 @@ bool DGeometryResOpGL::OnInit(float * vertexbuffer, unsigned long * indexbuffer,
 	{
 		glEnableVertexAttribArray(m_uv0Layout);
 	}
+	if (m_tangentLayout >= 0)
+	{
+		glEnableVertexAttribArray(m_tangentLayout);
+	}
 
 	glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
 	glVertexAttribPointer(
@@ -182,6 +186,19 @@ bool DGeometryResOpGL::OnInit(float * vertexbuffer, unsigned long * indexbuffer,
 		offset += 3;
 		//glDisableVertexAttribArray(m_normalLayout);
 	}
+	if (m_colorOffset >= 0)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
+		glVertexAttribPointer(
+			m_colorLayout,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+			4,                  // size
+			GL_FLOAT,           // type
+			GL_FALSE,           // normalized?
+			m_dataSize,                  // stride
+			(unsigned char*)NULL + (offset * sizeof(float))           // array buffer offset
+			);
+		offset += 4;
+	}
 	if (m_uv0Offset >= 0)
 	{
 		//glGenBuffers(1, &m_uv0Buffer);
@@ -201,6 +218,19 @@ bool DGeometryResOpGL::OnInit(float * vertexbuffer, unsigned long * indexbuffer,
 			);
 		offset += 2;
 		//glDisableVertexAttribArray(m_uv0Layout);
+	}
+	if (m_tangentOffset >= 0)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
+		glVertexAttribPointer(
+			m_tangentLayout,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+			4,                  // size
+			GL_FLOAT,           // type
+			GL_FALSE,           // normalized?
+			m_dataSize,                  // stride
+			(unsigned char*)NULL + (offset * sizeof(float))           // array buffer offset
+			);
+		offset += 4;
 	}
 
 	unsigned int* indexes = new unsigned int[m_indexCount];

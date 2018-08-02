@@ -40,6 +40,10 @@
 		#PATH ../Res/cubemap.shader
 	#RES_END
 
+	#RES_BEGIN SHADER 1010 
+		#PATH ../Res/bump.shader
+	#RES_END
+
 	#RES_BEGIN TEXTURE2D 2000
 		#PATH ../Res/decal.jpg
 		#WRAPMODE REPEAT
@@ -55,6 +59,10 @@
 
 	#RES_BEGIN TEXTURE2D 2003
 		#PATH ../Res/f261504c.tga
+	#RES_END
+
+	#RES_BEGIN TEXTURE2D 2013
+		#PATH ../Res/94f83594.tga
 	#RES_END
 
 	#RES_BEGIN TEXTURE2D 2004
@@ -140,6 +148,10 @@
 
 	#RES_BEGIN MATERIAL 3009
 		#PATH ../Res/cube.m
+	#RES_END
+
+	#RES_BEGIN MATERIAL 3010
+		#PATH ../Res/planebump.m
 	#RES_END
 
 	#RES_BEGIN GEOMETRY 4000

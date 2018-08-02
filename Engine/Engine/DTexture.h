@@ -9,7 +9,7 @@ class DTexture : public DResObject
 public:
 	DTexture();
 	~DTexture();
-	virtual void Apply(UINT);
+	virtual void Apply(UINT, int = 0);
 };
 
 /*2d纹理*/
@@ -20,7 +20,7 @@ private:
 public:
 	~DTexture2D();
 	virtual void Destroy();
-	virtual void Apply(UINT);
+	virtual void Apply(UINT, int = 0);
 	DWrapMode GetWrapMode();
 	void SetWrapMode(DWrapMode);
 	ITextureRes* GetTextureRes();
@@ -39,7 +39,7 @@ private:
 public:
 	~DTextureCube();
 	virtual void Destroy();
-	virtual void Apply(UINT);
+	virtual void Apply(UINT, int = 0);
 	static DTextureCube* Create(DTexture2D * right, DTexture2D * left, DTexture2D * top, DTexture2D * bottom, DTexture2D * front, DTexture2D * back);
 
 private:
@@ -53,7 +53,7 @@ private:
 public:
 	~DRenderTexture();
 	virtual void Destroy();
-	virtual void Apply(UINT);
+	virtual void Apply(UINT, int = 0);
 	DWrapMode GetWrapMode();
 	void SetWrapMode(DWrapMode);
 	IRenderTextureViewRes* GetTextureRes();

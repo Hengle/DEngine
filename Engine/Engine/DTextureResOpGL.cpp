@@ -23,16 +23,16 @@ DTextureResOpGL::~DTextureResOpGL()
 {
 }
 
-void DTextureResOpGL::Apply(UINT location)
+void DTextureResOpGL::Apply(UINT location, int index)
 {
 	if (location != -1) 
 	{
 		//GLint ac = glGetUniformLocation(3, "shaderTexture");
-		//glActiveTexture(GL_TEXTURE0);
-		//glBindTexture(GL_TEXTURE_2D, m_textureId);
+		glActiveTexture(GL_TEXTURE0 + index);
+		glBindTexture(GL_TEXTURE_2D, m_textureId);
 		
 		//glBindTexture(GL_TEXTURE_2D, m_textureId);
-		glUniform1i(location, 0);
+		glUniform1i(location, index);
 	}
 }
 
@@ -185,7 +185,7 @@ GLuint DTextureResOpGL::LoadTGA(WCHAR * path, GLuint& textureId)
 	glGenTextures(1, &textureId);
 
 	// Set the unique texture unit in which to store the data.
-	glActiveTexture(GL_TEXTURE0);
+	//glActiveTexture(GL_TEXTURE0);
 
 	// Bind the texture as a 2D texture.
 	glBindTexture(GL_TEXTURE_2D, textureId);

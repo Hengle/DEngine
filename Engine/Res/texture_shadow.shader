@@ -15,15 +15,15 @@ SubShader {
 
 				cbuffer MatrixBuffer
 				{
-					matrix g_worldMatrix;
-					matrix g_viewMatrix;
-					matrix g_projectionMatrix;
+					matrix g_engineWorldMatrix;
+					matrix g_engineViewMatrix;
+					matrix g_engineProjectionMatrix;
 				};
 
 				//cbuffer ShadowBuffer
 				//{
-					matrix g_shadowView;
-					matrix g_shadowProj;
+					matrix g_engineShadowView;
+					matrix g_engineShadowProj;
 				//};
 
 				struct VertexInputType
@@ -40,10 +40,10 @@ SubShader {
 				};
 
 				Texture2D shaderTexture;
-				Texture2D g_shadowMap;
+				Texture2D g_engineShadowMap;
 				SamplerState SampleType;
 
-				float4 g_shadowParams;
+				float4 g_engineShadowParams;
 
 				PixelInputType VertMain(VertexInputType input)
 				{
@@ -55,18 +55,18 @@ SubShader {
 
 					// Calculate the position of the vertex against the world, view, and projection matrices.
 
-				    output.position  = mul(g_worldMatrix, input.position);
+				    output.position  = mul(g_engineWorldMatrix, input.position);
 
-						float4 shadowPos = mul(g_shadowView, output.position);
+						float4 shadowPos = mul(g_engineShadowView, output.position);
 
-						output.shadowUV.z = shadowPos.z * g_shadowParams.w;
-						shadowPos = mul(g_shadowProj, shadowPos);
+						output.shadowUV.z = shadowPos.z * g_engineShadowParams.w;
+						shadowPos = mul(g_engineShadowProj, shadowPos);
 
 						output.shadowUV.x = shadowPos.x / shadowPos.w * 0.5f + 0.5f;
 						output.shadowUV.y = -(shadowPos.y / shadowPos.w * 0.5f)+0.5f;
 
-				    output.position  = mul(g_viewMatrix, output.position);
-				    output.position = mul(g_projectionMatrix, output.position);
+				    output.position  = mul(g_engineViewMatrix, output.position);
+				    output.position = mul(g_engineProjectionMatrix, output.position);
 
 					// Store the texture coordinates for the pixel shader.
 					output.tex = input.tex;
@@ -80,7 +80,7 @@ SubShader {
 
 	    			// Sample the pixel color from the texture using the sampler at this texture coordinate location.
 	    			textureColor = shaderTexture.Sample(SampleType, input.tex);
-						float4 depthColor = g_shadowMap.Sample(SampleType, input.shadowUV.xy);
+						float4 depthColor = g_engineShadowMap.Sample(SampleType, input.shadowUV.xy);
 
 						if(input.shadowUV.z - depthColor.r > 0.0001f)
 							textureColor.rgb *= 0.3f;
@@ -107,14 +107,14 @@ SubShader {
 			#frag FragMain
 			#code [
 
-				matrix g_worldMatrix;
-				matrix g_viewMatrix;
-				matrix g_projectionMatrix;
+				matrix g_engineWorldMatrix;
+				matrix g_engineViewMatrix;
+				matrix g_engineProjectionMatrix;
 
-				matrix g_shadowView;
-				matrix g_shadowProj;
+				matrix g_engineShadowView;
+				matrix g_engineShadowProj;
 
-				float4 g_shadowParams;
+				float4 g_engineShadowParams;
 
 				struct VS_INPUT
 				{
@@ -130,7 +130,7 @@ SubShader {
 				};
 
 				sampler shaderTexture;
-				sampler g_shadowMap;
+				sampler g_engineShadowMap;
 
 				VS_OUTPUT VertMain(VS_INPUT input)
 				{
@@ -138,18 +138,18 @@ SubShader {
 
 	    			float4 pos = float4(input.position, 1.0f);
 
-	    			output.position = mul(pos, g_worldMatrix);
+	    			output.position = mul(pos, g_engineWorldMatrix);
 
-						float4 shadowPos = mul(output.position, g_shadowView);
+						float4 shadowPos = mul(output.position, g_engineShadowView);
 
-						output.shadowUV.z = shadowPos.z * g_shadowParams.w;
-						shadowPos = mul(shadowPos, g_shadowProj);
+						output.shadowUV.z = shadowPos.z * g_engineShadowParams.w;
+						shadowPos = mul(shadowPos, g_engineShadowProj);
 
 						output.shadowUV.x = shadowPos.x / shadowPos.w * 0.5 + 0.5;
 						output.shadowUV.y = -(shadowPos.y / shadowPos.w * 0.5)+0.5;
 
-	    			output.position = mul(output.position, g_viewMatrix);
-	    			output.position = mul(output.position, g_projectionMatrix);
+	    			output.position = mul(output.position, g_engineViewMatrix);
+	    			output.position = mul(output.position, g_engineProjectionMatrix);
 
 	    			output.uv = input.uv;
 
@@ -159,7 +159,7 @@ SubShader {
 				float4 FragMain(VS_OUTPUT input) : SV_TARGET
 				{
 				    float4 col = tex2D(shaderTexture,      input.uv);
-				    float4 depthColor = tex2D(g_shadowMap, input.shadowUV.xy);
+				    float4 depthColor = tex2D(g_engineShadowMap, input.shadowUV.xy);
 
 						if(input.shadowUV.z - depthColor.r > 0.01)
 							col.rgb *= 0.3;

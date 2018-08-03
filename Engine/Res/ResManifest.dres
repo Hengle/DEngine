@@ -50,7 +50,7 @@
 	#RES_END
 
 	#RES_BEGIN TEXTURE2D 2001
-		#PATH ../Res/eboy.tga
+		#PATH ../Res/eboy.jpg
 	#RES_END
 
 	#RES_BEGIN TEXTURE2D 2002
@@ -107,39 +107,35 @@
 	#RES_END
 
 	#RES_BEGIN MATERIAL 3000
-		#SHADER 0 1006
-		#PARAM_TEX shaderTexture 0 2000
+		#PATH ../Res/decal.m
 	#RES_END
 
 	#RES_BEGIN MATERIAL 3001
-		#SHADER 0 1000
-		#PARAM_TEX shaderTexture 0 2001
+		#PATH ../Res/body.m
 	#RES_END
 
 	#RES_BEGIN MATERIAL 3002
-		#SHADER 0 1000
-		#PARAM_TEX shaderTexture 0 2002
+		#PATH ../Res/ground.m
 	#RES_END
 
 	#RES_BEGIN MATERIAL 3003
-		#SHADER 0 1001
+		#PATH ../Res/sky.m
 	#RES_END
 
 	#RES_BEGIN MATERIAL 3004
-		#SHADER 0 1002
+		#PATH ../Res/color.m
 	#RES_END
 
 	#RES_BEGIN MATERIAL 3005
-		#SHADER 0 1003
+		#PATH ../Res/posteffect.m
 	#RES_END
 
 	#RES_BEGIN MATERIAL 3006
-		#SHADER 0 1004
+		#PATH ../Res/outline.m
 	#RES_END
 
 	#RES_BEGIN MATERIAL 3007
-		#SHADER 0 1007
-		#PARAM_TEX shaderTexture 0 2001
+		#PATH ../Res/transparent.m
 	#RES_END
 
 	#RES_BEGIN MATERIAL 3008

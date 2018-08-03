@@ -324,15 +324,20 @@ void DGraphics::DrawTexture(DTexture * texture, DMaterial * material)
 	{
 		DSystem::GetGraphicsMgr()->InitScreenPlane();
 	}
-	DMatrix4x4 world, proj;
+	DMatrix4x4 world, view, proj;
 	DMatrix4x4::Identity(&world);
-	DMatrix4x4 view = DMatrix4x4(1.0f, 0.0f, 0.0f, 0.0f,
+	view = DMatrix4x4(1.0f, 0.0f, 0.0f, 0.0f,
 		0.0f, 1.0f, 0.0f, 0.0f,
 		0.0f, 0.0f, -1.0f, 0.0f,
 		0.0f, -1.0f, 0.0f, 1.0f);
 	float screenWidth, screenHeight;
 	DSystem::GetGraphicsMgr()->GetGLCore()->GetResolution(screenWidth, screenHeight);
 	DMatrix4x4::Ortho(&proj, screenWidth, screenHeight, -100.0f, 100.0f);
+	//DVector3 eye = DVector3(-3.598946f, 3.81879f, -2.127061f);
+	//DVector3 up = DVector3(0.6086f, 0.5487f, 0.5731f);
+	//DVector3 lookat = DVector3(0.3995f, -0.8360f, 0.3762f) + DVector3(-3.598946f, 3.81879f, -2.127061f);
+	//DMatrix4x4::LookAt(&view, eye, lookat, up);
+	//DMatrix4x4::Perspective(&proj, 60.0f*DEG_TO_RAD, 1024.0f / 768.0f, 0.03f, 100.0f);
 
 	material->SetMatrix(D_SC_MATRIX_M, world);
 	material->SetMatrix(D_SC_MATRIX_V, view);
@@ -670,12 +675,8 @@ bool DGraphics::IsFrustrumZeroToOne()
 
 void DGraphics::InitScreenPlane()
 {
-	//DMeshBufferDesc desc;
-
-	//int dataSize = sizeof(float) * 5;
 	int vertexCount = 4;
 	int indexCount = 6;
-	//int bufferLength = 5;
 
 	float *vertices,*uvs;
 	unsigned long *indexBuffer;
@@ -692,10 +693,20 @@ void DGraphics::InitScreenPlane()
 	vertices[6] = 0.5f*screenWidth; vertices[7] = 0.5f*screenHeight; vertices[8] = 0.0f;
 	vertices[9] = 0.5f*screenWidth; vertices[10] = -0.5f*screenHeight; vertices[11] = 0.0f;
 
-	uvs[0] = 0.0f; uvs[1] = 1.0f;
-	uvs[2] = 0.0f; uvs[3] = 0.0f;
-	uvs[4] = 1.0f; uvs[5] = 0.0f;
-	uvs[6] = 1.0f; uvs[7] = 1.0f;
+	if (m_GL->IsUVStartsAtTop())
+	{
+		uvs[0] = 0.0f; uvs[1] = 1.0f;
+		uvs[2] = 0.0f; uvs[3] = 0.0f;
+		uvs[4] = 1.0f; uvs[5] = 0.0f;
+		uvs[6] = 1.0f; uvs[7] = 1.0f;
+	}
+	else
+	{
+		uvs[0] = 0.0f; uvs[1] = 0.0f;
+		uvs[2] = 0.0f; uvs[3] = 1.0f;
+		uvs[4] = 1.0f; uvs[5] = 1.0f;
+		uvs[6] = 1.0f; uvs[7] = 0.0f;
+	}
 
 	indexBuffer[0] = 0; indexBuffer[1] = 1; indexBuffer[2] = 2;
 	indexBuffer[3] = 0; indexBuffer[4] = 2; indexBuffer[5] = 3;

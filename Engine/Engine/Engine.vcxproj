@@ -179,6 +179,7 @@
     <ClInclude Include="DOpenGLSystem.h" />
     <ClInclude Include="DRenderBuffer10.h" />
     <ClInclude Include="DRenderBuffer11.h" />
+    <ClInclude Include="DRenderBufferOpGL.h" />
     <ClInclude Include="DRenderer.h" />
     <ClInclude Include="DRenderStateMgr10.h" />
     <ClInclude Include="DRenderStateMgr11.h" />
@@ -255,6 +256,7 @@
     <ClCompile Include="DOpenGLSystem.cpp" />
     <ClCompile Include="DRenderBuffer10.cpp" />
     <ClCompile Include="DRenderBuffer11.cpp" />
+    <ClCompile Include="DRenderBufferOpGL.cpp" />
     <ClCompile Include="DRenderer.cpp" />
     <ClCompile Include="DRenderStateMgr10.cpp" />
     <ClCompile Include="DRenderStateMgr11.cpp" />

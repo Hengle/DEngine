@@ -309,6 +309,9 @@
     <ClInclude Include="D3DImGUICore.h">
       <Filter>头文件\Core\D3D</Filter>
     </ClInclude>
+    <ClInclude Include="DRenderBufferOpGL.h">
+      <Filter>头文件\Core\OpenGL\OpenGLCore</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DMath.cpp">
@@ -511,6 +514,9 @@
     </ClCompile>
     <ClCompile Include="D3DImGUICore.cpp">
       <Filter>源文件\Core\D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="DRenderBufferOpGL.cpp">
+      <Filter>源文件\Core\OpenGL\OpenGLCore</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

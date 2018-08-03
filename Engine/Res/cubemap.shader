@@ -87,7 +87,6 @@ SubShader {
 		State {
 			zwrite on
 			ztest lequal
-			blend one one
 		}
 
 		Shader {

@@ -1,0 +1,2 @@
+#SHADER 0 1000
+#PARAM_TEX shaderTexture 0 2001

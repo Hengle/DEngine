@@ -252,7 +252,7 @@ bool DGeometryResOpGL::OnInit(float * vertexbuffer, unsigned long * indexbuffer,
 
 void DGeometryResOpGL::OnDraw(DGeometryTopology)
 {
-
+	glBindVertexArray(m_vertexArrayId);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
 
 	int size;  glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);

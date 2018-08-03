@@ -14,9 +14,9 @@ SubShader {
 			#code [
 				cbuffer MatrixBuffer
 				{
-					matrix g_worldMatrix;
-					matrix g_viewMatrix;
-					matrix g_projectionMatrix;
+					matrix g_engineWorldMatrix;
+					matrix g_engineViewMatrix;
+					matrix g_engineProjectionMatrix;
 				};
 
 				struct VertexInputType
@@ -30,7 +30,7 @@ SubShader {
 				    float depth     : TEXCOORD0;
 				};
 
-				float4 g_shadowParams;
+				float4 g_engineShadowParams;
 
 				PixelInputType VertMain(VertexInputType input)
 				{
@@ -38,12 +38,12 @@ SubShader {
 
 					float4 vpos = float4(input.position.xyz, 1.0f);
 
-				    output.position  = mul(g_worldMatrix, vpos);
-				    output.position  = mul(g_viewMatrix, output.position);
+				    output.position  = mul(g_engineWorldMatrix, vpos);
+				    output.position  = mul(g_engineViewMatrix, output.position);
 
-				    output.depth = output.position.z/output.position.w   * g_shadowParams.w;
+				    output.depth = output.position.z/output.position.w   * g_engineShadowParams.w;
 
-				    output.position = mul(g_projectionMatrix, output.position);
+				    output.position = mul(g_engineProjectionMatrix, output.position);
 
 				    return output;
 				}
@@ -71,11 +71,11 @@ SubShader {
 			#frag FragMain
 			#code [
 
-				matrix g_worldMatrix;
-				matrix g_viewMatrix;
-				matrix g_projectionMatrix;
+				matrix g_engineWorldMatrix;
+				matrix g_engineViewMatrix;
+				matrix g_engineProjectionMatrix;
 
-				float4 g_shadowParams;
+				float4 g_engineShadowParams;
 
 				struct VS_INPUT
 				{
@@ -94,12 +94,12 @@ SubShader {
 
 				    float4 pos = float4(input.position, 1.0f);
 
-	    			output.position = mul(pos, g_worldMatrix);
-	    			output.position = mul(output.position, g_viewMatrix);
+	    			output.position = mul(pos, g_engineWorldMatrix);
+	    			output.position = mul(output.position, g_engineViewMatrix);
 
-	    			output.depth = output.position.z * g_shadowParams.w;
+	    			output.depth = output.position.z * g_engineShadowParams.w;
 
-	    			output.position = mul(output.position, g_projectionMatrix);
+	    			output.position = mul(output.position, g_engineProjectionMatrix);
 	    
 	    			return output;
 				}

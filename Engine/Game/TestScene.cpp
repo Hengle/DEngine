@@ -262,10 +262,10 @@ void TestScene::TestLoad()
 	float w, h;
 	DSystem::GetGraphicsMgr()->GetResolution(w, h);
 	m_rt = DRenderTexture::Create(w,h);
-	//cam->SetRenderTexture(m_rt);
+	//m_camera->SetRenderTexture(m_rt);
 
 	m_filter = new TestFilter();
-	//cam->SetFilter(m_filter);
+	//m_camera->SetFilter(m_filter);
 	m_camera->SetSkyBox(skymat);
 
 	transform = m_camera->GetTransform();

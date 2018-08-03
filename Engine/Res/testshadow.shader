@@ -15,9 +15,9 @@ SubShader {
 
 				cbuffer MatrixBuffer
 				{
-					matrix g_worldMatrix;
-					matrix g_viewMatrix;
-					matrix g_projectionMatrix;
+					matrix g_engineWorldMatrix;
+					matrix g_engineViewMatrix;
+					matrix g_engineProjectionMatrix;
 				};
 
 				struct VertexInputType
@@ -33,7 +33,7 @@ SubShader {
 				};
 
 				Texture2D screenTexture;
-				Texture2D g_shadowMap;
+				Texture2D g_engineShadowMap;
 				SamplerState SampleType;
 				
 				PixelInputType VertMain(VertexInputType input)
@@ -46,9 +46,9 @@ SubShader {
 
 					// Calculate the position of the vertex against the world, view, and projection matrices.
 
-				    output.position  = mul(g_worldMatrix, input.position);
-				    output.position  = mul(g_viewMatrix, output.position);
-				    output.position = mul(g_projectionMatrix, output.position);
+				    output.position  = mul(g_engineWorldMatrix, input.position);
+				    output.position  = mul(g_engineViewMatrix, output.position);
+				    output.position = mul(g_engineProjectionMatrix, output.position);
 	    
 					// Store the texture coordinates for the pixel shader.
 					output.tex = input.tex;
@@ -62,7 +62,7 @@ SubShader {
 
 
 	    // Sample the pixel color from the texture using the sampler at this texture coordinate location.
-	    textureColor = g_shadowMap.Sample(SampleType, input.tex);
+	    textureColor = g_engineShadowMap.Sample(SampleType, input.tex);
 
 	    return textureColor;
 				}
@@ -85,9 +85,9 @@ SubShader {
 			#frag FragMain
 			#code [
 
-				matrix g_worldMatrix;
-				matrix g_viewMatrix;
-				matrix g_projectionMatrix;
+				matrix g_engineWorldMatrix;
+				matrix g_engineViewMatrix;
+				matrix g_engineProjectionMatrix;
 
 				struct VS_INPUT
 				{
@@ -109,9 +109,9 @@ SubShader {
 
 	    			float4 pos = float4(input.position, 1.0f);
 
-	    			output.position = mul(pos, g_worldMatrix);
-	    			output.position = mul(output.position, g_viewMatrix);
-	    			output.position = mul(output.position, g_projectionMatrix);
+	    			output.position = mul(pos, g_engineWorldMatrix);
+	    			output.position = mul(output.position, g_engineViewMatrix);
+	    			output.position = mul(output.position, g_engineProjectionMatrix);
 
 	    			output.uv = input.uv;
 	    

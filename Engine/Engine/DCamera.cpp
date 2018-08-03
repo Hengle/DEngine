@@ -465,7 +465,7 @@ void DCamera::BeginRender()
 
 		bool clearDepth = m_clearFlags != DClearFlags_DontClear;
 		bool clearColor = m_clearFlags != DClearFlags_Depth && m_clearFlags != DClearFlags_DontClear;
-		DGraphics::BeginScene(clearDepth, clearDepth, clearColor, m_backgroundColor);
+		DGraphics::BeginScene(clearDepth, clearDepth, clearColor, m_backgroundColor, m_renderTexture);
 		/*if (m_testDrawScene)
 			DGraphics::BeginScene(true, true, true, m_backgroundColor, m_renderTexture);
 		else

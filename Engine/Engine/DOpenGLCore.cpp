@@ -63,8 +63,16 @@ void DOpenGLCore::Clear(bool clearDepth, bool clearStencil, bool clearColor, DCo
 	glClearColor(color.r, color.g, color.b, color.a);
 }
 
-void DOpenGLCore::SetRenderTarget(IRenderTextureViewRes *)
+void DOpenGLCore::SetRenderTarget(IRenderTextureViewRes * view)
 {
+	if (view != NULL)
+	{
+		((DRenderTextureViewResOpGL*)view)->BindFBO();
+	}
+	else
+	{
+		((DRenderTextureViewResOpGL*)view)->UnBindFBO();
+	}
 }
 
 void DOpenGLCore::SetViewPort(float x, float y, float width, float height)
@@ -72,8 +80,12 @@ void DOpenGLCore::SetViewPort(float x, float y, float width, float height)
 	glViewport(x, y, width, height);
 }
 
-void DOpenGLCore::EndSetRenderTarget(IRenderTextureViewRes *)
+void DOpenGLCore::EndSetRenderTarget(IRenderTextureViewRes * view)
 {
+	if (view != NULL)
+	{
+		((DRenderTextureViewResOpGL*)view)->UnBindFBO();
+	}
 }
 
 DGeometryRes * DOpenGLCore::CreateGeometryRes(int vertexUsage, bool dynamic)
@@ -93,7 +105,7 @@ ITextureRes * DOpenGLCore::CreateCubeMapRes(ITextureRes * right, ITextureRes * l
 
 IRenderTextureViewRes * DOpenGLCore::CreateRenderTextureRes(float width, float height)
 {
-	return nullptr;
+	return new DRenderTextureViewResOpGL(width, height, DWrapMode_Clamp);
 }
 
 DShaderPass * DOpenGLCore::CreateShaderPass()

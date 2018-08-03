@@ -267,4 +267,108 @@ GLint DTextureResOpGL::GetWrapMode(DWrapMode wrapMode)
 	return GL_CLAMP;
 }
 
+DRenderTextureViewResOpGL::DRenderTextureViewResOpGL(float width, float height, DWrapMode wrapMode)
+{
+	m_isSuccess = false;
+	m_wrapMode = wrapMode;
+
+	m_frameBufferId = 0;
+	glGenFramebuffers(1, &m_frameBufferId);
+	glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferId);
+
+	glGenTextures(1, &m_renderTextureId);
+
+	glBindTexture(GL_TEXTURE_2D, m_renderTextureId);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GetWrapMode(m_wrapMode));
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GetWrapMode(m_wrapMode));
+
+	// Set "renderedTexture" as our colour attachement #0
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, m_renderTextureId, 0);
+
+	// Set the list of draw buffers.
+	GLenum DrawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
+	glDrawBuffers(1, DrawBuffers);
+
+	m_isSuccess = true;
+}
+
+DRenderTextureViewResOpGL::~DRenderTextureViewResOpGL()
+{
+}
+
+void DRenderTextureViewResOpGL::Apply(UINT location, int index)
+{
+	if (!m_isSuccess)
+		return;
+	if (location != -1)
+	{
+		//GLint ac = glGetUniformLocation(3, "shaderTexture");
+		glActiveTexture(GL_TEXTURE0 + index);
+		glBindTexture(GL_TEXTURE_2D, m_frameBufferId);
+
+		//glBindTexture(GL_TEXTURE_2D, m_textureId);
+		glUniform1i(location, index);
+	}
+}
+
+void DRenderTextureViewResOpGL::ApplyWrapMode(UINT, DWrapMode wrapMode)
+{
+	if (!m_isSuccess)
+		return;
+	if (m_wrapMode == wrapMode)
+	{
+		return;
+	}
+	m_wrapMode = wrapMode;
+	glBindTexture(GL_TEXTURE_2D, m_frameBufferId);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GetWrapMode(m_wrapMode));
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GetWrapMode(m_wrapMode));
+}
+
+void DRenderTextureViewResOpGL::Release()
+{
+	if (m_isSuccess)
+		glDeleteTextures(1, &m_frameBufferId);
+	glDeleteFramebuffers(1, &m_frameBufferId);
+}
+
+IRenderBuffer * DRenderTextureViewResOpGL::GetColorBuffer()
+{
+	return nullptr;
+}
+
+IRenderBuffer * DRenderTextureViewResOpGL::GetDepthBuffer()
+{
+	return nullptr;
+}
+
+void DRenderTextureViewResOpGL::BindFBO()
+{
+	if(m_isSuccess)
+		glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferId);
+}
+
+void DRenderTextureViewResOpGL::UnBindFBO()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+GLint DRenderTextureViewResOpGL::GetWrapMode(DWrapMode wrapMode)
+{
+	if (wrapMode == DWrapMode_Clamp)
+		return GL_CLAMP;
+	else if (wrapMode == DWrapMode_Repeat)
+		return GL_REPEAT;
+	return GL_CLAMP;
+}
+
 #endif
+
+

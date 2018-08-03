@@ -15,9 +15,9 @@ SubShader {
 
 				cbuffer MatrixBuffer
 				{
-					matrix g_worldMatrix;
-					matrix g_viewMatrix;
-					matrix g_projectionMatrix;
+					matrix g_engineWorldMatrix;
+					matrix g_engineViewMatrix;
+					matrix g_engineProjectionMatrix;
 				};
 
 				struct VertexInputType
@@ -31,7 +31,7 @@ SubShader {
 				    float3 viewDir : TEXCOORD0;
 				};
 
-				float3 g_lightdir;
+				float3 g_engineLightDir;
 
 				float3 GetSkyColor(float3 dir) {
 		float3 col = float3(0,0,0);
@@ -51,7 +51,7 @@ SubShader {
 		col += 0.3*float3(0.8, 0.9, 1.0)*exp2(hort*20.0 - 20.0);
 		col += 0.1*float3(0.8, 0.9, 1.0)*exp2(hort*15.0 - 15.0);
 
-		float sun = clamp(dot(normalize(g_lightdir.xyz), dir), 0.0, 1.0);
+		float sun = clamp(dot(normalize(g_engineLightDir.xyz), dir), 0.0, 1.0);
 		col += 0.2*float3(1.0, 0.8, 0.2)*pow(sun, 2.0);
 		col += 0.5*float3(1.0, 0.8, 0.9)*exp2(sun*650. - 650.0f);
 		col += 0.1*float3(1.0, 1.0, 0.8)*exp2(sun*100. - 100.0f);
@@ -67,9 +67,9 @@ SubShader {
 	    
 	    			input.position.w = 1.0f;
 
-	    			output.position  = mul(g_worldMatrix, input.position);
-	    output.position  = mul(g_viewMatrix, output.position);
-	    output.position = mul(g_projectionMatrix, output.position);
+	    			output.position  = mul(g_engineWorldMatrix, input.position);
+	    output.position  = mul(g_engineViewMatrix, output.position);
+	    output.position = mul(g_engineProjectionMatrix, output.position);
 
 		output.viewDir = -input.position.xyz;
 	    
@@ -106,9 +106,9 @@ SubShader {
 			#frag FragMain
 			#code [
 
-				matrix g_worldMatrix;
-	matrix g_viewMatrix;
-	matrix g_projectionMatrix;
+				matrix g_engineWorldMatrix;
+	matrix g_engineViewMatrix;
+	matrix g_engineProjectionMatrix;
 
 	struct VS_INPUT
 	{
@@ -121,7 +121,7 @@ SubShader {
 	    float3 viewDir  : TEXCOORD0;
 	};
 
-	float3 g_lightdir;
+	float3 g_engineLightDir;
 
 	float3 GetSkyColor(float3 dir) {
 		float3 col = float3(0,0,0);
@@ -141,7 +141,7 @@ SubShader {
 		col += 0.3*float3(0.8, 0.9, 1.0)*exp2(hort*20.0 - 20.0);
 		col += 0.1*float3(0.8, 0.9, 1.0)*exp2(hort*15.0 - 15.0);
 
-		float sun = clamp(dot(normalize(g_lightdir.xyz), dir), 0.0, 1.0);
+		float sun = clamp(dot(normalize(g_engineLightDir.xyz), dir), 0.0, 1.0);
 		col += 0.2*float3(1.0, 0.8, 0.2)*pow(sun, 2.0);
 		col += 0.5*float3(1.0, 0.8, 0.9)*exp2(sun*650. - 650.0f);
 		col += 0.1*float3(1.0, 1.0, 0.8)*exp2(sun*100. - 100.0f);
@@ -157,9 +157,9 @@ SubShader {
 	    
 	    float4 pos = float4(input.position, 1.0f);
 
-	    output.position = mul(pos, g_worldMatrix);
-	    output.position = mul(output.position, g_viewMatrix);
-	    output.position = mul(output.position, g_projectionMatrix);
+	    output.position = mul(pos, g_engineWorldMatrix);
+	    output.position = mul(output.position, g_engineViewMatrix);
+	    output.position = mul(output.position, g_engineProjectionMatrix);
 
 		output.viewDir = -input.position.xyz;
 	    

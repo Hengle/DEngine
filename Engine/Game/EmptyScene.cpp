@@ -16,6 +16,17 @@ void EmptyScene::OnLoad()
 	m_camera = new DCamera();
 	m_camera->Create();
 
+	float w, h;
+	DSystem::GetGraphicsMgr()->GetResolution(w, h);
+	m_rt = DRenderTexture::Create(w, h);
+	m_filter = new TestFilter();
+
+	//testmat = DRes::Load<DMaterial>(DEFAULT_GROUP, PEFFECT_MAT);
+	//testtex = DRes::Load<DTexture2D>(DEFAULT_GROUP, 2003);
+
+	m_camera->SetRenderTexture(m_rt);
+	m_camera->SetFilter(m_filter);
+
 	DTransform* transform;
 
 	transform = m_camera->GetTransform();
@@ -31,15 +42,22 @@ void EmptyScene::OnLoad()
 	obj0->Create();
 
 
-	DLight* light = new DLight();
+	/*DLight* light = new DLight();
 	light->Create();
 	transform = light->GetTransform();
-	transform->SetEuler(50.0f, -30.0f, 0.0f);
+	transform->SetEuler(50.0f, -30.0f, 0.0f);*/
 
 }
 
 void EmptyScene::OnUnLoad()
 {
+	m_filter->Release();
+	delete m_filter;
+	m_filter = 0;
+	m_rt->Destroy();
+	delete m_rt;
+	m_rt = 0;
+
 	DRes::UnLoadGroup(DEFAULT_GROUP);
 }
 
@@ -101,4 +119,8 @@ void EmptyScene::OnUpdate()
 		DVector3 position = m_lookAtPoint - forward*m_lookDistance;
 		m_camera->GetTransform()->SetPosition(position);
 	}
+}
+
+void EmptyScene::OnRender()
+{
 }

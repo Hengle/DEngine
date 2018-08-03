@@ -12,7 +12,7 @@
 #define D_SC_LIGHT_COLOR      "g_engineLightColor"
 #define D_SC_CAMERA_POS       "g_engineCameraPos"
 
-#define D_SC_TEXTURE_SHADOW   "g_shadowMap"
+#define D_SC_TEXTURE_SHADOW   "g_engineShadowMap"
 
 #define D_SC_TIME             "g_engineTime"
 

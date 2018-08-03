@@ -1,7 +1,17 @@
-﻿#include "DImGUICore.h"
-#include "imgui.h"
+#if _DGAPI_D3D9 || _DGAPI_D3D10 || _DGAPI_D3D11
+#include "D3DImGUICore.h"
 
-LRESULT DImGUICore::GUIMessageHandler(HWND hwnd, UINT uMsg, WPARAM wparam, LPARAM lparam)
+
+D3DImGUICore::D3DImGUICore()
+{
+}
+
+
+D3DImGUICore::~D3DImGUICore()
+{
+}
+
+LRESULT D3DImGUICore::GUIMessageHandler(HWND hwnd, UINT uMsg, WPARAM wparam, LPARAM lparam)
 {
 	if (ImGui_ImplWin32_WndProcHandler(hwnd, uMsg, wparam, lparam))
 		return true;
@@ -12,7 +22,7 @@ LRESULT DImGUICore::GUIMessageHandler(HWND hwnd, UINT uMsg, WPARAM wparam, LPARA
 #define WM_MOUSEHWHEEL 0x020E
 #endif
 
-LRESULT DImGUICore::ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT D3DImGUICore::ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	if (ImGui::GetCurrentContext() == NULL)
 		return 0;
@@ -78,7 +88,7 @@ LRESULT DImGUICore::ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM w
 	}
 }
 
-bool DImGUICore::ImGui_ImplWin32_UpdateMouseCursor()
+bool D3DImGUICore::ImGui_ImplWin32_UpdateMouseCursor()
 {
 	ImGuiIO& io = ImGui::GetIO();
 	if (io.ConfigFlags & ImGuiConfigFlags_NoMouseCursorChange)
@@ -108,3 +118,4 @@ bool DImGUICore::ImGui_ImplWin32_UpdateMouseCursor()
 	}
 	return true;
 }
+#endif

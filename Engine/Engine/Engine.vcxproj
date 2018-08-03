@@ -143,6 +143,7 @@
     <ClInclude Include="D3D11Core.h" />
     <ClInclude Include="D3D9Core.h" />
     <ClInclude Include="D3DCore.h" />
+    <ClInclude Include="D3DImGUICore.h" />
     <ClInclude Include="D3DSystem.h" />
     <ClInclude Include="DCamera.h" />
     <ClInclude Include="DColor.h" />
@@ -160,6 +161,7 @@
     <ClInclude Include="DImGUICore10.h" />
     <ClInclude Include="DImGUICore11.h" />
     <ClInclude Include="DImGUICore9.h" />
+    <ClInclude Include="DImGUICoreOpGL.h" />
     <ClInclude Include="DInput.h" />
     <ClInclude Include="DInputCore.h" />
     <ClInclude Include="DirectInputCore.h" />
@@ -221,6 +223,7 @@
     <ClCompile Include="D3D11Core.cpp" />
     <ClCompile Include="D3D9Core.cpp" />
     <ClCompile Include="D3DCore.cpp" />
+    <ClCompile Include="D3DImGUICore.cpp" />
     <ClCompile Include="D3DSystem.cpp" />
     <ClCompile Include="DCamera.cpp" />
     <ClCompile Include="DColor.cpp" />
@@ -232,10 +235,10 @@
     <ClCompile Include="DGLDrawer.cpp" />
     <ClCompile Include="DGraphics.cpp" />
     <ClCompile Include="DGUI.cpp" />
-    <ClCompile Include="DImGUICore.cpp" />
     <ClCompile Include="DImGUICore10.cpp" />
     <ClCompile Include="DImGUICore11.cpp" />
     <ClCompile Include="DImGUICore9.cpp" />
+    <ClCompile Include="DImGUICoreOpGL.cpp" />
     <ClCompile Include="DInput.cpp" />
     <ClCompile Include="DirectInputCore.cpp" />
     <ClCompile Include="DLight.cpp" />

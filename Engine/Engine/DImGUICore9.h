@@ -1,11 +1,11 @@
 ﻿#pragma once
 #ifdef _DGAPI_D3D9
 
-#include "DImGUICore.h"
+#include "D3DImGUICore.h"
 #include <d3d9.h>
 
 /*Direct3d9 ImGUI渲染与管理模块*/
-class DImGUICore9 : public DImGUICore
+class DImGUICore9 : public D3DImGUICore
 {
 public:
 	DImGUICore9();

@@ -197,6 +197,10 @@ void DRenderStateMgr9::SetStencilZFailOp(DRSStencilOp stencilZFail)
 	ChangeStencilZFailOp(stencilZFail);
 }
 
+void DRenderStateMgr9::SetStencilOp(DRSStencilOp stencilFail, DRSStencilOp zFail, DRSStencilOp stencilPass)
+{
+}
+
 void DRenderStateMgr9::ChangeCullMode(DCullMode cullMode)
 {
 	if (cullMode == DCullMode_Back)

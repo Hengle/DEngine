@@ -1,11 +1,11 @@
 ﻿#pragma once
 #ifdef _DGAPI_D3D11
 
-#include "DImGUICore.h"
+#include "D3DImGUICore.h"
 #include <D3D11.h>
 
 /*Direct3d11 ImGUI渲染与管理模块*/
-class DImGUICore11 : public DImGUICore
+class DImGUICore11 : public D3DImGUICore
 {
 public:
 	DImGUICore11();

@@ -263,6 +263,10 @@ void DRenderStateMgr10::SetStencilZFailOp(DRSStencilOp stencilZFail)
 	RefreshDepthStencilState();
 }
 
+void DRenderStateMgr10::SetStencilOp(DRSStencilOp stencilFail, DRSStencilOp zFail, DRSStencilOp stencilPass)
+{
+}
+
 void DRenderStateMgr10::RefreshDepthStencilState()
 {
 	unsigned long key = m_currentDepthStencilState.GetKey();

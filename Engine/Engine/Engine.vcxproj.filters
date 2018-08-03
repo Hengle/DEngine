@@ -303,6 +303,12 @@
     <ClInclude Include="OpenGLInputCore.h">
       <Filter>头文件\Core\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="DImGUICoreOpGL.h">
+      <Filter>头文件\Core\OpenGL\OpenGLCore</Filter>
+    </ClInclude>
+    <ClInclude Include="D3DImGUICore.h">
+      <Filter>头文件\Core\D3D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DMath.cpp">
@@ -391,9 +397,6 @@
     </ClCompile>
     <ClCompile Include="DFrameBase.cpp">
       <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="DImGUICore.cpp">
-      <Filter>源文件\Core</Filter>
     </ClCompile>
     <ClCompile Include="DImGUICore9.cpp">
       <Filter>源文件\Core\D3D\D3D9Core</Filter>
@@ -502,6 +505,12 @@
     </ClCompile>
     <ClCompile Include="OpenGLInputCore.cpp">
       <Filter>源文件\Core\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="DImGUICoreOpGL.cpp">
+      <Filter>源文件\Core\OpenGL\OpenGLCore</Filter>
+    </ClCompile>
+    <ClCompile Include="D3DImGUICore.cpp">
+      <Filter>源文件\Core\D3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

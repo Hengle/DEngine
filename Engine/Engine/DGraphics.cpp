@@ -7,6 +7,7 @@
 #include "DImGUICore11.h"
 #include "DImGUICore10.h"
 #include "DImGUICore9.h"
+#include "DImGUICoreOpGL.h"
 #include "D3DSystem.h"
 #include "DOpenGLSystem.h"
 
@@ -38,7 +39,7 @@ bool DGraphics::Init(int width, int height, bool fullScreen, DGraphicsAPI api)
 		{
 			return false;
 		}
-		m_GUI = new DImGUICore11();
+		m_GUI = (IImGUICore*)new DImGUICore11();
 		((DImGUICore11*)m_GUI)->Init(hwnd, gl->GetDevice(), gl->GetDeviceContext());
 		m_GL = gl;
 	}
@@ -52,7 +53,7 @@ bool DGraphics::Init(int width, int height, bool fullScreen, DGraphicsAPI api)
 		{
 			return false;
 		}
-		m_GUI = new DImGUICore10();
+		m_GUI = (IImGUICore*)new DImGUICore10();
 		((DImGUICore10*)m_GUI)->Init(hwnd, gl->GetDevice());
 		m_GL = gl;
 	}
@@ -66,7 +67,7 @@ bool DGraphics::Init(int width, int height, bool fullScreen, DGraphicsAPI api)
 		{
 			return false;
 		}
-		m_GUI = new DImGUICore9();
+		m_GUI = (IImGUICore*)new DImGUICore9();
 		((DImGUICore9*)m_GUI)->Init(hwnd, gl->GetDevice());
 		m_GL = gl;
 	}
@@ -80,6 +81,9 @@ bool DGraphics::Init(int width, int height, bool fullScreen, DGraphicsAPI api)
 		{
 			return false;
 		}
+		DImGUICoreOpGL* gui = new DImGUICoreOpGL();
+		gui->Init(window, true);
+		m_GUI = (IImGUICore*)gui;
 		m_GL = gl;
 	}
 #endif
@@ -184,7 +188,7 @@ DGLCore * DGraphics::GetGLCore()
 	return m_GL;
 }
 
-DImGUICore * DGraphics::GetGUICore()
+IImGUICore * DGraphics::GetGUICore()
 {
 	return m_GUI;
 }

@@ -20,7 +20,7 @@ public:
 	/*关闭图形模块*/
 	void Shutdown();
 	DGLCore* GetGLCore();
-	DImGUICore* GetGUICore();
+	IImGUICore* GetGUICore();
 	LRESULT CALLBACK MessageHandler(HWND, UINT, WPARAM, LPARAM);
 	void GetResolution(float&, float&);
 	DGraphicsAPI GetAPI();
@@ -110,7 +110,7 @@ private:
 	unsigned int* m_glIndices;
 	DGLCore* m_GL;
 	DGraphicsAPI m_API;
-	DImGUICore* m_GUI;
+	IImGUICore* m_GUI;
 	DGLDrawer* m_glDrawer;
 	DGeometry* m_screenPlane;
 	DGeometry* m_skyGeometry;

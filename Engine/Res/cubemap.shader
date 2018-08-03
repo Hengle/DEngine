@@ -79,3 +79,74 @@ SubShader {
 		}
 	}
 }
+SubShader {
+	Desc {
+		CompileTarget: { opengl }
+	}
+	Pass {
+		State {
+			zwrite on
+			ztest lequal
+		}
+
+		Shader {
+			#vert VertMain
+			#frag FragMain
+			#code [
+				#vert [
+
+					#version 330 core
+
+					out vec4 gl_Position;
+					out vec3 worldPos;
+					out vec3 worldNormal;
+
+					layout(location = 0) in vec3 input_position;
+					layout(location = 1) in vec3 input_normal;
+
+					uniform mat4 g_engineWorldMatrix;
+					uniform mat4 g_engineViewMatrix;
+					uniform mat4 g_engineProjectionMatrix;
+
+					void main(){
+					    gl_Position = g_engineWorldMatrix * vec4(input_position,1);
+					    worldPos = gl_Position.xyz;
+					    gl_Position = g_engineViewMatrix * gl_Position;
+						gl_Position = g_engineProjectionMatrix * gl_Position;
+						worldNormal = mat3(g_engineWorldMatrix) * input_normal;
+					}
+				]
+				#frag [
+					#version 330 core
+
+					out vec4 color;
+
+					in vec3 worldPos;
+					in vec3 worldNormal;
+
+					uniform vec4 g_engineCameraPos;
+
+					uniform samplerCube shaderTexture;
+
+					vec3 GetViewDir(vec3 worldPos) {
+						vec3 viewdir;
+						if(g_engineCameraPos.w == 0.0) {
+							viewdir = -g_engineCameraPos.xyz;
+						}else{
+							viewdir = normalize(g_engineCameraPos.xyz - worldPos);
+						}
+						return viewdir;
+					}
+
+					void main(){
+					    vec3 viewDir = GetViewDir(worldPos);
+					    vec3 refl = reflect(viewDir, worldNormal);
+
+					    color = vec4(texture(shaderTexture, refl).rgb, 1.0);
+					}
+				]
+				
+			]
+		}
+	}
+}

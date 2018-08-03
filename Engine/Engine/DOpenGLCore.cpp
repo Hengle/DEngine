@@ -86,9 +86,9 @@ ITextureRes * DOpenGLCore::CreateTextureRes(WCHAR * filename)
 	return new DTextureResOpGL(filename, DWrapMode_Clamp);;
 }
 
-ITextureRes * DOpenGLCore::CreateCubeMapRes(ITextureRes *, ITextureRes *, ITextureRes *, ITextureRes *, ITextureRes *, ITextureRes *)
+ITextureRes * DOpenGLCore::CreateCubeMapRes(ITextureRes * right, ITextureRes * left, ITextureRes * top, ITextureRes * bottom, ITextureRes * front, ITextureRes * back)
 {
-	return nullptr;
+	return new DTextureResOpGL((DTextureResOpGL*)right, (DTextureResOpGL*)left, (DTextureResOpGL*)top, (DTextureResOpGL*)bottom, (DTextureResOpGL*)front, (DTextureResOpGL*)back);
 }
 
 IRenderTextureViewRes * DOpenGLCore::CreateRenderTextureRes(float width, float height)

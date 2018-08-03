@@ -524,6 +524,11 @@ void DModelLoader::SetSphereFace(int face, int triangleCount, DVector3 & right, 
 
 void DModelLoader::CalculateTangent(DVector3 * out, int index0, int index1, int index2, DGeometryBufferDesc * desc)
 {
+	if (desc->uvs == 0)
+	{
+		*out = DVector3(0.0f, 0.0f, 0.0f);
+		return;
+	}
 	DVector3 v0 = DVector3(desc->vertices[index0 * 3], desc->vertices[index0 * 3 + 1], desc->vertices[index0 * 3 + 2]);
 	DVector3 v1 = DVector3(desc->vertices[index1 * 3], desc->vertices[index1 * 3 + 1], desc->vertices[index1 * 3 + 2]);
 	DVector3 v2 = DVector3(desc->vertices[index2 * 3], desc->vertices[index2 * 3 + 1], desc->vertices[index2 * 3 + 2]);
@@ -534,7 +539,8 @@ void DModelLoader::CalculateTangent(DVector3 * out, int index0, int index1, int 
 	float udelta20x = desc->uvs[index2 * 2] - desc->uvs[index0 * 2];
 
 	float denominator = udelta10x * udelta20y - udelta20x * udelta10y;
-	if (IS_FLOAT_EQUAL(denominator, 0.0f)) {
+	if (IS_FLOAT_EQUAL(denominator, 0.0f)) 
+	{
 		*out = DVector3(0.0f, 0.0f, 0.0f);
 		return;
 	}

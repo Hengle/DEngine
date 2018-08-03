@@ -245,7 +245,7 @@ void DShaderProgramOpGL::InitUniforms(GLuint programId)
 	{
 		glGetActiveUniform(programId, i, 64, &length, &size, &type, pname);
 
-		if (type == GL_SAMPLER_2D)
+		if (type == GL_SAMPLER_2D || type == GL_SAMPLER_CUBE)
 		{
 			resdesc.resName = pname;
 			resdesc.offset = glGetUniformLocation(programId, pname);

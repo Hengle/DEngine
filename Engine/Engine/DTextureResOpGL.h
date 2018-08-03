@@ -7,19 +7,24 @@ class DTextureResOpGL : public ITextureRes
 {
 public:
 	DTextureResOpGL(WCHAR* filename, DWrapMode);
+	DTextureResOpGL(DTextureResOpGL*, DTextureResOpGL*, DTextureResOpGL*, DTextureResOpGL*, DTextureResOpGL*, DTextureResOpGL*);
 	~DTextureResOpGL();
 	virtual void Apply(UINT, int);
 	virtual void ApplyWrapMode(UINT, DWrapMode);
 	virtual void Release();
 
 private:
-	GLuint LoadBMP(WCHAR* path);
-	GLuint LoadTGA(WCHAR* path, GLuint&);
+	unsigned char* LoadBMP(WCHAR* path, unsigned int&, unsigned int&);
+	unsigned char* LoadTGA(WCHAR* path, unsigned int&, unsigned int&);
 	GLint GetWrapMode(DWrapMode);
 
 private:
 	GLuint m_textureId;
 	DWrapMode m_wrapMode;
+	unsigned char* m_data;
+	unsigned int m_width, m_height;
+	GLenum m_textureType;
+	bool m_isSuccess;
 };
 
 #endif

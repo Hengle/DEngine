@@ -15,8 +15,76 @@ struct TargaHeader
 
 DTextureResOpGL::DTextureResOpGL(WCHAR * filename, DWrapMode wrapMode)
 {
-	LoadTGA(filename, m_textureId);
+	m_isSuccess = false;
+
+	m_data = LoadTGA(filename, m_width, m_height);
+	if (m_data == 0)
+		return;
+	glGenTextures(1, &m_textureId);
+
+	glBindTexture(GL_TEXTURE_2D, m_textureId);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, GL_BGRA, GL_UNSIGNED_BYTE, m_data);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GetWrapMode(m_wrapMode));
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GetWrapMode(m_wrapMode));
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+
+	m_textureType = GL_TEXTURE_2D;
+
 	m_wrapMode = wrapMode;
+
+	m_isSuccess = true;
+}
+
+DTextureResOpGL::DTextureResOpGL(DTextureResOpGL * right, DTextureResOpGL * left, DTextureResOpGL * top, DTextureResOpGL * bottom, DTextureResOpGL * front, DTextureResOpGL* back)
+{
+	m_isSuccess = false;
+
+	if (right == NULL || right->m_data == 0)
+		return;
+	if (left == NULL || left->m_data == 0)
+		return;
+	if (top == NULL || top->m_data == 0)
+		return;
+	if (bottom == NULL || bottom->m_data == 0)
+		return;
+	if (front == NULL || front->m_data == 0)
+		return;
+	if (back == NULL || back->m_data == 0)
+		return;
+
+	glGenTextures(1, &m_textureId);
+	
+	glBindTexture(GL_TEXTURE_CUBE_MAP, m_textureId);
+	glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGBA, right->m_width, right->m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, right->m_data);
+	
+	glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGBA, left->m_width, left->m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, left->m_data);
+
+	glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGBA, top->m_width, top->m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, top->m_data);
+	
+	glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGBA, bottom->m_width, bottom->m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, bottom->m_data);
+
+	glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGBA, front->m_width, front->m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, front->m_data);
+	
+	glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGBA, back->m_width, back->m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, back->m_data);
+
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+	glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+
+	m_textureType = GL_TEXTURE_CUBE_MAP;
+
+	m_isSuccess = true;
 }
 
 DTextureResOpGL::~DTextureResOpGL()
@@ -25,11 +93,13 @@ DTextureResOpGL::~DTextureResOpGL()
 
 void DTextureResOpGL::Apply(UINT location, int index)
 {
+	if (!m_isSuccess)
+		return;
 	if (location != -1) 
 	{
 		//GLint ac = glGetUniformLocation(3, "shaderTexture");
 		glActiveTexture(GL_TEXTURE0 + index);
-		glBindTexture(GL_TEXTURE_2D, m_textureId);
+		glBindTexture(m_textureType, m_textureId);
 		
 		//glBindTexture(GL_TEXTURE_2D, m_textureId);
 		glUniform1i(location, index);
@@ -38,28 +108,35 @@ void DTextureResOpGL::Apply(UINT location, int index)
 
 void DTextureResOpGL::ApplyWrapMode(UINT location, DWrapMode wrapMode)
 {
+	if (!m_isSuccess)
+		return;
 	if (m_wrapMode == wrapMode)
 	{
 		return;
 	}
 	m_wrapMode = wrapMode;
-	glBindTexture(GL_TEXTURE_2D, m_textureId);
+	glBindTexture(m_textureType, m_textureId);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GetWrapMode(m_wrapMode));
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GetWrapMode(m_wrapMode));
+	glTexParameteri(m_textureType, GL_TEXTURE_WRAP_S, GetWrapMode(m_wrapMode));
+	glTexParameteri(m_textureType, GL_TEXTURE_WRAP_T, GetWrapMode(m_wrapMode));
 }
 
 void DTextureResOpGL::Release()
 {
-	glDeleteTextures(1, &m_textureId);
+	if (m_isSuccess)
+		glDeleteTextures(1, &m_textureId);
+	if (m_data != 0)
+	{
+		delete[] m_data;
+		m_data = 0;
+	}
 }
 
-GLuint DTextureResOpGL::LoadBMP(WCHAR * path)
+unsigned char* DTextureResOpGL::LoadBMP(WCHAR * path, unsigned int& width, unsigned int& height)
 {
 	// Data read from the header of the BMP file
 	unsigned char header[54]; // Each BMP file begins by a 54-bytes header
 	unsigned int dataPos;     // Position in the file where the actual data begins
-	unsigned int width, height;
 	unsigned int imageSize;   // = width*height*3
 							  // Actual RGB data
 	unsigned char * data;
@@ -77,7 +154,7 @@ GLuint DTextureResOpGL::LoadBMP(WCHAR * path)
 
 	if (fread(header, 1, 54, file) != 54) { // If not 54 bytes read : problem
 		printf("Not a correct BMP file\n");
-		return false;
+		return 0;
 	}
 
 	if (header[0] != 'B' || header[1] != 'M') {
@@ -104,26 +181,12 @@ GLuint DTextureResOpGL::LoadBMP(WCHAR * path)
 	//Everything is in memory now, the file can be closed
 	fclose(file);
 
-	GLuint textureID;
-	glGenTextures(1, &textureID);
-
-	// "Bind" the newly created texture : all future texture functions will modify this texture
-	glBindTexture(GL_TEXTURE_2D, textureID);
-
-	// Give the image to OpenGL
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-	
-
-	return textureID;
+	return data;
 }
 
-GLuint DTextureResOpGL::LoadTGA(WCHAR * path, GLuint& textureId)
+unsigned char* DTextureResOpGL::LoadTGA(WCHAR * path, unsigned int& width, unsigned int& height)
 {
-	int error, width, height, bpp, imageSize;
+	int error, bpp, imageSize;
 	FILE* filePtr;
 	unsigned int count;
 	TargaHeader targaFileHeader;
@@ -136,14 +199,14 @@ GLuint DTextureResOpGL::LoadTGA(WCHAR * path, GLuint& textureId)
 	error = fopen_s(&filePtr, p, "rb");
 	if (error != 0)
 	{
-		return false;
+		return 0;
 	}
 
 	// Read in the file header.
 	count = fread(&targaFileHeader, sizeof(TargaHeader), 1, filePtr);
 	if (count != 1)
 	{
-		return false;
+		return 0;
 	}
 
 	// Get the important information from the header.
@@ -154,7 +217,7 @@ GLuint DTextureResOpGL::LoadTGA(WCHAR * path, GLuint& textureId)
 	// Check that it is 32 bit and not 24 bit.
 	if (bpp != 32)
 	{
-		return false;
+		return 0;
 	}
 
 	// Calculate the size of the 32 bit image data.
@@ -164,64 +227,35 @@ GLuint DTextureResOpGL::LoadTGA(WCHAR * path, GLuint& textureId)
 	targaImage = new unsigned char[imageSize];
 	if (!targaImage)
 	{
-		return false;
+		return 0;
 	}
 
 	// Read in the targa image data.
 	count = fread(targaImage, 1, imageSize, filePtr);
 	if (count != imageSize)
 	{
-		return false;
+		return 0;
 	}
 
 	// Close the file.
 	error = fclose(filePtr);
 	if (error != 0)
 	{
-		return false;
+		return 0;
 	}
 
 	// Generate an ID for the texture.
-	glGenTextures(1, &textureId);
-
-	// Set the unique texture unit in which to store the data.
-	//glActiveTexture(GL_TEXTURE0);
-
-	// Bind the texture as a 2D texture.
-	glBindTexture(GL_TEXTURE_2D, textureId);
-
-	// Load the image data into the texture unit.
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, targaImage);
-	/*float pixels[] = {
-		0.0f, 0.0f, 0.0f,   1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,   0.0f, 0.0f, 0.0f
-	};
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 2, 2, 0, GL_RGB, GL_FLOAT, pixels);*/
-
-
-	// Set the texture color to either wrap around or clamp to the edge.
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GetWrapMode(m_wrapMode));
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GetWrapMode(m_wrapMode));
-
-
-	// Set the texture filtering.
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-
-	// Generate mipmaps for the texture.
-	glGenerateMipmap(GL_TEXTURE_2D);
 
 	//glUniform1i(3, m_textureId);
 	
 
 	// Release the targa image data.
-	delete[] targaImage;
-	targaImage = 0;
+	//delete[] targaImage;
+	//targaImage = 0;
 
 	// Set that the texture is loaded.
 
-	return true;
+	return targaImage;
 }
 
 GLint DTextureResOpGL::GetWrapMode(DWrapMode wrapMode)

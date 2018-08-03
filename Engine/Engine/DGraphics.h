@@ -52,6 +52,8 @@ public:
 	static void SetBlendEnable(bool);
 	static void SetBlendSrcFactor(DRSBlendFactor);
 	static void SetBlendDstFactor(DRSBlendFactor);
+	static void SetBlendFactor(DRSBlendFactor, DRSBlendFactor);
+	static void SetStencilOp(DRSStencilOp stencilFail, DRSStencilOp zFail, DRSStencilOp stencilPass);
 
 	/*设置视口区域*/
 	static void SetViewPort(float x, float y, float width, float height);

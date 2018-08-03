@@ -15,6 +15,28 @@ DTextureRes9::DTextureRes9(LPDIRECT3DDEVICE9 device, WCHAR * filename)
 	m_isSuccess = true;
 }
 
+DTextureRes9::DTextureRes9(LPDIRECT3DDEVICE9 device)
+{
+	/*m_device = device;
+
+	HRESULT result = device->CreateTexture(64, 64, 1, D3DUSAGE_DYNAMIC, D3DFMT_R8G8B8, D3DPOOL_MANAGED, &m_texture, NULL);
+
+	m_isSuccess = false;
+	if (FAILED(result))
+	{
+		return;
+	}
+	m_isSuccess = true;
+
+	D3DLOCKED_RECT rect;
+	RECT r;
+	r.left = 0;
+	r.right = 64;
+	r.top = 0;
+	r.bottom = 64;
+	m_texture->LockRect(0, &rect, &r, );*/
+}
+
 DTextureRes9::~DTextureRes9()
 {
 }
@@ -52,14 +74,14 @@ DCubeTextureRes9::DCubeTextureRes9(LPDIRECT3DDEVICE9 device, DTextureRes9 * righ
 
 	m_device = device;
 
-	//HRESULT result = D3DXCreateCubeTexture(device, 256, 0, 0, 0, 0, &cubemap);
-	/*if (FAILED(result))
+	/*HRESULT result = device->CreateCubeTexture()
+	if (FAILED(result))
 	{
 		return;
-	}*/
-	//cubemap->
+	}
+	cubemap->*/
 
-	//m_isSuccess = true;
+	m_isSuccess = true;
 }
 
 DRenderTextureViewRes9::DRenderTextureViewRes9(LPDIRECT3DDEVICE9 device, float width, float height)

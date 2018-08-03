@@ -23,8 +23,8 @@ void EmptyScene::OnLoad()
 	transform->SetPosition(3.975387f, 2.588932f, -3.703708f);
 
 	DMaterial* colmat = DRes::Load<DMaterial>(DEFAULT_GROUP, CUBEMAP_MAT);
-	//DGeometry* obj = DRes::Load<DGeometry>(DEFAULT_GROUP, PLANE_MESH);
-	DGeometry* obj = DGeometry::Create(DGeometry_Sphere);
+	DGeometry* obj = DRes::Load<DGeometry>(DEFAULT_GROUP, PLANE_MESH);
+	//DGeometry* obj = DGeometry::Create(DGeometry_Sphere);
 	//DGeometry* obj = DGeometry::Create(DGeometry_Plane);
 
 	DDisplayObject* obj0 = new DDisplayObject(obj, colmat);

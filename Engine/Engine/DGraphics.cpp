@@ -442,6 +442,24 @@ void DGraphics::SetBlendDstFactor(DRSBlendFactor factor)
 	}
 }
 
+void DGraphics::SetBlendFactor(DRSBlendFactor src, DRSBlendFactor dst)
+{
+	IRenderStateMgr* mgr = DSystem::GetGraphicsMgr()->GetGLCore()->GetRenderStateMgr();
+	if (mgr != NULL)
+	{
+		mgr->SetBlendFactor(src, dst);
+	}
+}
+
+void DGraphics::SetStencilOp(DRSStencilOp stencilFail, DRSStencilOp zFail, DRSStencilOp stencilPass)
+{
+	IRenderStateMgr* mgr = DSystem::GetGraphicsMgr()->GetGLCore()->GetRenderStateMgr();
+	if (mgr != NULL)
+	{
+		mgr->SetStencilOp(stencilFail, zFail, stencilPass);
+	}
+}
+
 void DGraphics::SetViewPort(float x, float y, float width, float height)
 {
 	DGLCore* gl = DSystem::GetGraphicsMgr()->GetGLCore();

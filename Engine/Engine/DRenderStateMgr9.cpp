@@ -111,6 +111,20 @@ void DRenderStateMgr9::SetBlendDstFactor(DRSBlendFactor dst)
 	ChangeBlendDstFactor(dst);
 }
 
+void DRenderStateMgr9::SetBlendFactor(DRSBlendFactor src, DRSBlendFactor dst)
+{
+	if (m_device == NULL)
+		return;
+	if (m_blendSrcFactor != src)
+	{
+		ChangeBlendSrcFactor(src);
+	}
+	if (m_blendDstFactor != dst)
+	{
+		ChangeBlendDstFactor(dst);
+	}
+}
+
 void DRenderStateMgr9::SetStencilRefId(UINT stencilId)
 {
 	if (m_device == NULL)

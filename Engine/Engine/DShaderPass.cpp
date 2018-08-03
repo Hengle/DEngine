@@ -229,8 +229,9 @@ void DShaderPass::ApplyStates()
 	DGraphics::SetZWriteEnable(m_zwrite);
 	DGraphics::SetBlendEnable(m_enableBlend);
 	DGraphics::SetBlendOp(m_blendOp);
-	DGraphics::SetBlendDstFactor(m_blendDst);
-	DGraphics::SetBlendSrcFactor(m_blendSrc);
+	//DGraphics::SetBlendDstFactor(m_blendDst);
+	//DGraphics::SetBlendSrcFactor(m_blendSrc);
+	DGraphics::SetBlendFactor(m_blendSrc, m_blendDst);
 }
 
 void DShaderPass::SetPassEnable(bool enable)

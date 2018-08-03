@@ -30,6 +30,7 @@ public:
 	virtual void SetBlendSrcFactor(DRSBlendFactor);
 	/*设置混合目标因子*/
 	virtual void SetBlendDstFactor(DRSBlendFactor);
+	virtual void SetBlendFactor(DRSBlendFactor, DRSBlendFactor);
 	virtual void SetStencilRefId(UINT);
 	virtual void SetStencilEnable(bool);
 	virtual void SetStencilReadMask(unsigned short);
@@ -38,6 +39,7 @@ public:
 	virtual void SetStencilPassOp(DRSStencilOp);
 	virtual void SetStencilFailOp(DRSStencilOp);
 	virtual void SetStencilZFailOp(DRSStencilOp);
+	virtual void SetStencilOp(DRSStencilOp stencilFail, DRSStencilOp zFail, DRSStencilOp stencilPass);
 
 private:
 	void ChangeCullMode(DCullMode);

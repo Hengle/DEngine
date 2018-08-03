@@ -27,6 +27,7 @@ public:
 	virtual void SetBlendSrcFactor(DRSBlendFactor);
 	/*设置混合目标因子*/
 	virtual void SetBlendDstFactor(DRSBlendFactor);
+	virtual void SetBlendFactor(DRSBlendFactor, DRSBlendFactor);
 	virtual void SetStencilRefId(UINT);
 	virtual void SetStencilEnable(bool);
 	virtual void SetStencilReadMask(unsigned short);
@@ -35,6 +36,7 @@ public:
 	virtual void SetStencilPassOp(DRSStencilOp);
 	virtual void SetStencilFailOp(DRSStencilOp);
 	virtual void SetStencilZFailOp(DRSStencilOp);
+	virtual void SetStencilOp(DRSStencilOp stencilFail, DRSStencilOp zFail, DRSStencilOp stencilPass);
 
 private:
 	void ChangeCullMode(DCullMode);
@@ -43,17 +45,17 @@ private:
 	void ChangeZTest(DRSCompareFunc);
 	void ChangeBlendEnable(bool);
 	void ChangeBlendOp(DRSBlendOp);
-	void ChangeBlendSrcFactor(DRSBlendFactor);
-	void ChangeBlendDstFactor(DRSBlendFactor);
+	void ChangeBlendFactor(DRSBlendFactor src, DRSBlendFactor dst);
 	void ChangeStencilEnable(bool);
 	void ChangeStencilId(unsigned short);
 	void ChangeStencilCompFunc(DRSCompareFunc);
-	void ChangeStencilPassOp(DRSStencilOp);
-	void ChangeStencilFailOp(DRSStencilOp);
-	void ChangeStencilZFailOp(DRSStencilOp);
+	void ChangeStencilOp(DRSStencilOp, DRSStencilOp, DRSStencilOp);
 	void ChangeStencilReadMask(unsigned short);
 	void ChangeStencilWriteMask(unsigned short);
 	GLenum GetComparisonFunc(DRSCompareFunc);
+	GLenum GetBlendOp(DRSBlendOp);
+	GLenum GetBlendFactor(DRSBlendFactor);
+	GLenum GetStencilOp(DRSStencilOp);
 
 private:
 	DCullMode m_currentCullMode;

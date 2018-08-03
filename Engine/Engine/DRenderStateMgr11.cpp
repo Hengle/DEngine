@@ -32,7 +32,7 @@ void DRenderStateMgr11::Init()
 
 	
 	m_currentBlendState.enableBlend = false;
-	RefreshBlendStencilState();
+	RefreshBlendState();
 }
 
 void DRenderStateMgr11::Release()
@@ -128,7 +128,7 @@ void DRenderStateMgr11::SetBlendOp(DRSBlendOp op)
 	m_currentBlendState.blendOp = op;
 	if (m_currentBlendState.enableBlend == false)
 		return;
-	RefreshBlendStencilState();
+	RefreshBlendState();
 }
 
 void DRenderStateMgr11::SetBlendEnable(bool enableBlend)
@@ -138,7 +138,7 @@ void DRenderStateMgr11::SetBlendEnable(bool enableBlend)
 	if (m_currentBlendState.enableBlend == enableBlend)
 		return;
 	m_currentBlendState.enableBlend = enableBlend;
-	RefreshBlendStencilState();
+	RefreshBlendState();
 }
 
 void DRenderStateMgr11::SetBlendSrcFactor(DRSBlendFactor factor)
@@ -150,7 +150,7 @@ void DRenderStateMgr11::SetBlendSrcFactor(DRSBlendFactor factor)
 	m_currentBlendState.srcfactor = factor;
 	if (m_currentBlendState.enableBlend == false)
 		return;
-	RefreshBlendStencilState();
+	RefreshBlendState();
 }
 
 void DRenderStateMgr11::SetBlendDstFactor(DRSBlendFactor factor)
@@ -162,7 +162,20 @@ void DRenderStateMgr11::SetBlendDstFactor(DRSBlendFactor factor)
 	m_currentBlendState.dstfactor = factor;
 	if (m_currentBlendState.enableBlend == false)
 		return;
-	RefreshBlendStencilState();
+	RefreshBlendState();
+}
+
+void DRenderStateMgr11::SetBlendFactor(DRSBlendFactor src, DRSBlendFactor dst)
+{
+	if (m_device == NULL || m_deviceContext == NULL)
+		return;
+	if (m_currentBlendState.srcfactor == src && m_currentBlendState.dstfactor == dst)
+		return;
+	m_currentBlendState.srcfactor = src;
+	m_currentBlendState.dstfactor = dst;
+	if (m_currentBlendState.enableBlend == false)
+		return;
+	RefreshBlendState();
 }
 
 void DRenderStateMgr11::SetStencilRefId(UINT stencilId)
@@ -275,7 +288,7 @@ void DRenderStateMgr11::RefreshDepthStencilState()
 	}
 }
 
-void DRenderStateMgr11::RefreshBlendStencilState()
+void DRenderStateMgr11::RefreshBlendState()
 {
 	float blendFactor[4];
 

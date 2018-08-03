@@ -10,6 +10,7 @@ class DTextureRes9 : public ITextureRes
 {
 public:
 	DTextureRes9(LPDIRECT3DDEVICE9 device, WCHAR* filename);
+	DTextureRes9(LPDIRECT3DDEVICE9 device);
 	~DTextureRes9();
 	virtual void Apply(UINT, int);
 	virtual void ApplyWrapMode(UINT, DWrapMode);

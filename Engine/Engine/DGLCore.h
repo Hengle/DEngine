@@ -155,11 +155,13 @@ public:
 	virtual void SetBlendEnable(bool) = 0;
 	virtual void SetBlendSrcFactor(DRSBlendFactor) = 0;
 	virtual void SetBlendDstFactor(DRSBlendFactor) = 0;
+	virtual void SetBlendFactor(DRSBlendFactor, DRSBlendFactor) = 0;
 	virtual void SetStencilRefId(UINT) = 0;
 	virtual void SetStencilEnable(bool) = 0;
 	virtual void SetStencilReadMask(unsigned short) = 0;
 	virtual void SetStencilWriteMask(unsigned short) = 0;
 	virtual void SetStencilComparisonFunc(DRSCompareFunc) = 0;
+	virtual void SetStencilOp(DRSStencilOp stencilFail, DRSStencilOp zFail, DRSStencilOp stencilPass) = 0;
 	virtual void SetStencilPassOp(DRSStencilOp) = 0;
 	virtual void SetStencilFailOp(DRSStencilOp) = 0;
 	virtual void SetStencilZFailOp(DRSStencilOp) = 0;

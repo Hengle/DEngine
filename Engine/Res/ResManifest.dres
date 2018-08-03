@@ -74,27 +74,27 @@
 	#RES_END
 
 	#RES_BEGIN TEXTURE2D 2006
-		#PATH ../Res/right.tga
+		#PATH ../Res/right.jpg
 	#RES_END
 
 	#RES_BEGIN TEXTURE2D 2007
-		#PATH ../Res/left.tga
+		#PATH ../Res/left.jpg
 	#RES_END
 
 	#RES_BEGIN TEXTURE2D 2008
-		#PATH ../Res/top.tga
+		#PATH ../Res/top.jpg
 	#RES_END
 
 	#RES_BEGIN TEXTURE2D 2009
-		#PATH ../Res/bottom.tga
+		#PATH ../Res/bottom.jpg
 	#RES_END
 
 	#RES_BEGIN TEXTURE2D 2010
-		#PATH ../Res/front.tga
+		#PATH ../Res/front.jpg
 	#RES_END
 
 	#RES_BEGIN TEXTURE2D 2011
-		#PATH ../Res/back.tga
+		#PATH ../Res/back.jpg
 	#RES_END
 
 	#RES_BEGIN TEXTURECUBE 2012

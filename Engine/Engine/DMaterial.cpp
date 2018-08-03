@@ -133,9 +133,6 @@ void DMaterial::ApplyPass()
 	m_shader->ApplyParams(m_constantTable, m_currentPass);
 
 	
-
-	
-
 	
 }
 

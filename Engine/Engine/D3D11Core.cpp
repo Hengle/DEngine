@@ -414,7 +414,9 @@ void D3D11Core::SetViewPort(float x, float y, float width, float height)
 
 void D3D11Core::EndSetRenderTarget(IRenderTextureViewRes *)
 {
-
+	ID3D11RenderTargetView* rv = ((DColorBuffer11*)m_colorBuffer)->GetView();
+	ID3D11DepthStencilView* dv = ((DDepthBuffer11*)m_depthBuffer)->GetView();
+	m_deviceContext->OMSetRenderTargets(1, &rv, dv);
 }
 
 DGeometryRes * D3D11Core::CreateGeometryRes(int vertexUsage, bool dynamic)

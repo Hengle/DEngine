@@ -39,8 +39,9 @@ public:
 	/*立即绘制Geometry*/
 	static void DrawGeometry(DGeometry*, const DMatrix4x4&, DMaterial*);
 	static void PushRenderQueue(DDisplayObject*, DRenderQueue);
-	/*绘制屏幕纹理*/
-	static void DrawTexture(DTexture*, DMaterial*);
+
+	static void Blit(DTexture* src, DMaterial* material);
+	static void Blit(DTexture* src, DRenderTexture* dst, DMaterial* material);
 	/*绘制天空盒*/
 	static void DrawSkyBox(DMaterial*, const DCamera*);
 	

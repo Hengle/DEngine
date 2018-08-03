@@ -13,6 +13,7 @@ public:
 
 private:
 	DMaterial* m_mat;
+	DRenderTexture* m_dst;
 	//DShader* m_shader;
 	//DShader* testshadow;
 };

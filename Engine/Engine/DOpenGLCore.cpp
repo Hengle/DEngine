@@ -60,7 +60,8 @@ void DOpenGLCore::Clear(bool clearDepth, bool clearStencil, bool clearColor, DCo
 	if (clearColor)
 		clearFlag |= GL_COLOR_BUFFER_BIT;
 	glClear(clearFlag);
-	glClearColor(color.r, color.g, color.b, color.a);
+	if(clearColor)
+		glClearColor(color.r, color.g, color.b, color.a);
 }
 
 void DOpenGLCore::SetRenderTarget(IRenderTextureViewRes * view)

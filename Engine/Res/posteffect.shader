@@ -34,6 +34,8 @@ SubShader {
 
 				Texture2D screenTexture;
 				SamplerState SampleType;
+
+				float2 offset;
 				
 				PixelInputType VertMain(VertexInputType input)
 				{
@@ -60,10 +62,18 @@ SubShader {
 				    float4 textureColor;
 
 
-	    // Sample the pixel color from the texture using the sampler at this texture coordinate location.
-	    textureColor = screenTexture.Sample(SampleType, input.tex);
+	    			// Sample the pixel color from the texture using the sampler at this texture coordinate location.
+	    			textureColor.rgb = screenTexture.Sample(SampleType, input.tex).rgb*0.45f;
 
-	    return textureColor;
+	    			textureColor.rgb += screenTexture.Sample(SampleType, input.tex + offset).rgb*0.175f;
+	    			textureColor.rgb += screenTexture.Sample(SampleType, input.tex - offset).rgb*0.175f;
+
+	    			textureColor.rgb += screenTexture.Sample(SampleType, input.tex + offset).rgb*0.1f;
+	    			textureColor.rgb += screenTexture.Sample(SampleType, input.tex - offset).rgb*0.1f;
+
+	    			textureColor.a = 1.0f;
+
+	    			return textureColor;
 				}
 			]
 		}
@@ -102,6 +112,8 @@ SubShader {
 
 				sampler screenTexture;
 
+				float2 offset;
+
 				VS_OUTPUT VertMain(VS_INPUT input)
 				{
 				    VS_OUTPUT output = (VS_OUTPUT)0;
@@ -119,9 +131,17 @@ SubShader {
 
 				float4 FragMain(VS_OUTPUT input) : SV_TARGET
 				{
-				    float4 c = tex2D(screenTexture,      input.uv);
-	    c.r = 1.0 - c.r;
-	    return c;
+				    float4 textureColor = tex2D(screenTexture,      input.uv) * 0.45;
+
+	    			textureColor.rgb += tex2D(screenTexture, input.uv + offset).rgb*0.175;
+	    			textureColor.rgb += tex2D(screenTexture, input.uv - offset).rgb*0.175;
+
+	    			textureColor.rgb += tex2D(screenTexture, input.uv + offset).rgb*0.1;
+	    			textureColor.rgb += tex2D(screenTexture, input.uv - offset).rgb*0.1;
+
+	    			 textureColor.a = 1.0;
+
+	    			return textureColor;
 				}
 			]
 		}
@@ -167,10 +187,16 @@ SubShader {
 
 					uniform sampler2D screenTexture;
 
+					uniform vec2 offset;
+
 					out vec4 color;
 					void main(){
-						color = texture(screenTexture, uv);
+						color = texture(screenTexture, uv)*0.5;
+						color.rgb += texture(screenTexture, uv + offset).rgb*0.25;
+						color.rgb += texture(screenTexture, uv - offset).rgb*0.25;
 						//color = vec4(1.0,0.0,0.0,1.0);
+
+	    				color.a = 1.0;
 					}
 				]
 			]

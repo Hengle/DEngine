@@ -318,7 +318,7 @@ void DGraphics::PushRenderQueue(DDisplayObject * displayObject, DRenderQueue ren
 	}
 }
 
-void DGraphics::DrawTexture(DTexture * texture, DMaterial * material)
+void DGraphics::Blit(DTexture * src, DMaterial * material)
 {
 	if (DSystem::GetGraphicsMgr()->m_screenPlane == NULL)
 	{
@@ -333,16 +333,11 @@ void DGraphics::DrawTexture(DTexture * texture, DMaterial * material)
 	float screenWidth, screenHeight;
 	DSystem::GetGraphicsMgr()->GetGLCore()->GetResolution(screenWidth, screenHeight);
 	DMatrix4x4::Ortho(&proj, screenWidth, screenHeight, -100.0f, 100.0f);
-	//DVector3 eye = DVector3(-3.598946f, 3.81879f, -2.127061f);
-	//DVector3 up = DVector3(0.6086f, 0.5487f, 0.5731f);
-	//DVector3 lookat = DVector3(0.3995f, -0.8360f, 0.3762f) + DVector3(-3.598946f, 3.81879f, -2.127061f);
-	//DMatrix4x4::LookAt(&view, eye, lookat, up);
-	//DMatrix4x4::Perspective(&proj, 60.0f*DEG_TO_RAD, 1024.0f / 768.0f, 0.03f, 100.0f);
 
 	material->SetMatrix(D_SC_MATRIX_M, world);
 	material->SetMatrix(D_SC_MATRIX_V, view);
 	material->SetMatrix(D_SC_MATRIX_P, proj);
-	material->SetTexture(D_SC_TEXTURE_SCREEN, texture);
+	material->SetTexture(D_SC_TEXTURE_SCREEN, src);
 
 	int passcount = material->GetPassCount();
 	int i;
@@ -356,7 +351,23 @@ void DGraphics::DrawTexture(DTexture * texture, DMaterial * material)
 			DSystem::GetGraphicsMgr()->m_drawCall += 1;
 		}
 	}
+}
 
+void DGraphics::Blit(DTexture * src, DRenderTexture * dst, DMaterial * material)
+{
+	float rtw, rth;
+	rtw = dst->GetWidth();
+	rth = dst->GetHeight();
+	DGraphics::SetViewPort(0, 0, rtw, rth);
+
+	DGraphics::BeginScene(true, true, false, DCOLOR_BLACK, dst);
+
+	Blit(src, material);
+
+	DGraphics::EndScene(dst);
+	float screenWidth, screenHeight;
+	DSystem::GetGraphicsMgr()->GetGLCore()->GetResolution(screenWidth, screenHeight);
+	DGraphics::SetViewPort(0, 0, screenWidth, screenHeight);
 }
 
 void DGraphics::DrawSkyBox(DMaterial * material, const DCamera * camera)

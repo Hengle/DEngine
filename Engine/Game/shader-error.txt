@@ -1,16 +1,4 @@
-0(10) : error C1008: undefined variable "shaderTexture"
+Fragment info
+-------------
+0(8) : warning C7050: "offset" might be used before being initialized
 
-
-
-					#version 330 core
-
-					in vec2 uv;
-
-					uniform sampler2D screenTexture;
-
-					out vec4 color;
-					void main(){
-						color = texture(shaderTexture, uv);
-						color.r = 1.0 - color.r;
-					}
-				

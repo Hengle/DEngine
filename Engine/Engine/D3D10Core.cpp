@@ -418,6 +418,9 @@ void D3D10Core::SetViewPort(float x, float y, float width, float height)
 
 void D3D10Core::EndSetRenderTarget(IRenderTextureViewRes *)
 {
+	ID3D10RenderTargetView* rv = ((DColorBuffer10*)m_colorBuffer)->GetView();
+	ID3D10DepthStencilView* dv = ((DDepthBuffer10*)m_depthBuffer)->GetView();
+	m_device->OMSetRenderTargets(1, &rv, dv);
 }
 
 DGeometryRes * D3D10Core::CreateGeometryRes(int vertexUsage, bool dynamic)

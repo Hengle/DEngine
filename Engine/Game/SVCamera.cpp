@@ -38,16 +38,17 @@ void SVCamera::OnPostRender()
 {
 	DCamera::OnPostRender();
 
-	/*m_lineMat->SetPass(0);
+	m_lineMat->SetPass(0);
 
 	DGraphics::GlPushMatrix();
 	DGraphics::GlLoadOrtho();
-	DGraphics::GlBegin();
+	DGraphics::GlBegin(DGeometryTopology_LineList);
 
 	DGraphics::GlVertex3(0, 0, 0.0f);
-	DGraphics::GlVertex3(3.0f, 3.0f, 3.0f);
+	DGraphics::GlVertex3(1.0f, 1.0f, 0.0f);
 
 	DGraphics::GlEnd();
 
-	DGraphics::GlPopMatrix();*/
+	DGraphics::GlPopMatrix();
+
 }

@@ -35,6 +35,8 @@ public:
 	void SetFar(float);
 	void SetSize(float);
 	void SetIntensity(float);
+	void SetShadowActive(bool);
+	bool GetShadowActive();
 
 	void SetLayerMask(DLAYER);
 	DLAYER GetLayerMask();
@@ -49,6 +51,7 @@ protected:
 	virtual void OnFixedUpdate();
 
 private:
+	void ApplyLightDirParam();
 	void BeginRenderShadow();
 	void EndRenderShadow();
 	//void GetCameraBounds(DCamera* cam, DVector3* outCenter, DVector3* outSize);
@@ -65,6 +68,7 @@ private:
 	bool m_isProjChanged;
 
 	DLightNode* m_node;
+	bool m_isShadowActive;
 
 	DLAYER m_layerMask;
 };

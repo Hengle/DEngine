@@ -1,4 +1,4 @@
-#ifdef _DGAPI_OPENGL
+﻿#ifdef _DGAPI_OPENGL
 #include "DImGUICoreOpGL.h"
 
 #if defined(_MSC_VER) && !defined(_CRT_SECURE_NO_WARNINGS)
@@ -40,6 +40,7 @@ void DImGUICoreOpGL::Init(GLFWwindow * window, bool install_callbacks, const cha
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, NULL, io.Fonts->GetGlyphRangesChinese());
 
 	ImGui_ImplGlfwGL3_Init(window, install_callbacks);
 

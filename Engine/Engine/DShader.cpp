@@ -322,6 +322,7 @@ void DShader::ApplyParams(DShaderConstantTable * constantTable, int index)
 		if (sGlobalShaderConstants == nullptr)
 			sGlobalShaderConstants = new DShaderConstantTable();
 		//pass->ApplyParams(constantTable, sGlobalShaderConstants);
+		pass->Draw();
 		int programCount = pass->GetShaderProgramCount();
 		int i;
 		DShaderProgram* program = 0;
@@ -350,25 +351,19 @@ void DShader::ApplyStates(int index)
 	}
 }
 
-void DShader::Draw(int index)
-{
-	if (m_shaderBlock != NULL)
-	{
-		int passcount = m_shaderBlock->GetPassCount();
-		if (index < 0 || index >= passcount)
-			return;
-		DShaderPass* pass = m_shaderBlock->GetPass(index);
-		if (pass == NULL)
-			return;
-		pass->Draw();
-		/*DShaderProgram* prog = pass->GetVertexShader();
-		if (prog != NULL)
-			prog->Draw();
-		prog = pass->GetPixelShader();
-		if (prog != NULL)
-			prog->Draw();*/
-	}
-}
+//void DShader::Draw(int index)
+//{
+//	if (m_shaderBlock != NULL)
+//	{
+//		int passcount = m_shaderBlock->GetPassCount();
+//		if (index < 0 || index >= passcount)
+//			return;
+//		DShaderPass* pass = m_shaderBlock->GetPass(index);
+//		if (pass == NULL)
+//			return;
+//		pass->Draw();
+//	}
+//}
 
 int DShader::GetVertexUsage(int index)
 {

@@ -112,3 +112,53 @@ SubShader {
 		}
 	}
 }
+SubShader {
+	Desc {
+		CompileTarget: { opengl }
+	}
+	Pass {
+		State {
+			zwrite on
+			ztest lequal
+		}
+
+		Shader {
+			#code [
+				#vert [
+					#version 330 core
+
+					out vec4 gl_Position;
+					out float depth;
+
+					layout(location = 0) in vec3 input_position;
+
+					uniform mat4 g_engineWorldMatrix;
+					uniform mat4 g_engineViewMatrix;
+					uniform mat4 g_engineProjectionMatrix;
+
+					uniform vec4 g_engineShadowParams;
+
+					void main(){
+ 						gl_Position = g_engineWorldMatrix * vec4(input_position,1);
+						gl_Position = g_engineViewMatrix * gl_Position;
+
+						depth = gl_Position.z * g_engineShadowParams.w;
+
+						gl_Position = g_engineProjectionMatrix * gl_Position;
+					}
+
+				]
+				#frag [
+					#version 330 core
+
+					in float depth;
+
+					out vec4 color;
+					void main(){
+						color = vec4(depth,depth,depth,1.0);
+					}
+				]
+			]
+		}
+	}
+}

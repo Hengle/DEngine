@@ -1,4 +1,0 @@
-Fragment info
--------------
-0(8) : warning C7050: "offset" might be used before being initialized
-

@@ -181,3 +181,75 @@ SubShader {
 		}
 	}
 }
+SubShader {
+	Desc {
+		CompileTarget: { opengl }
+	}
+	Pass {
+		State {
+			zwrite on
+			ztest lequal
+		}
+
+		Shader {
+			#code [
+				#vert [
+					#version 330 core
+
+					out vec4 gl_Position;
+					out vec3 viewDir;
+
+					layout(location = 0) in vec3 input_position;
+
+					uniform mat4 g_engineWorldMatrix;
+					uniform mat4 g_engineViewMatrix;
+					uniform mat4 g_engineProjectionMatrix;
+
+					void main(){
+ 						gl_Position = g_engineWorldMatrix * vec4(input_position,1);
+						gl_Position = g_engineViewMatrix * gl_Position;
+						gl_Position = g_engineProjectionMatrix * gl_Position;
+						viewDir = -input_position.xyz;
+					}
+
+				]
+				#frag [
+					#version 330 core
+
+					in vec3 viewDir;
+
+					uniform vec3 g_engineLightDir;
+
+					vec3 GetSkyColor(vec3 dir) {
+						vec3 col = vec3(0,0,0);
+
+						float sign = step(0.0, -dir.y);
+
+						float hort = 1.0 - clamp(abs(dir.y), 0.0, 1.0);
+
+						vec3 skyC = mix(vec3(0.302, 0.38, 0.537), vec3(0.435, 0.545, 0.702), exp2(hort*1.4 - 1.4));
+						vec3 groundC = mix(vec3(0.412, 0.384, 0.365), vec3(0.435, 0.545, 0.702), exp2(hort*4.4*2.7 - 4.4*2.7));
+						col += lerp(groundC, skyC, sign);
+
+						col += 0.3*vec3(0.8, 0.9, 1.0)*exp2(hort*20.0 - 20.0);
+						col += 0.1*vec3(0.8, 0.9, 1.0)*exp2(hort*15.0 - 15.0);
+
+						float sun = clamp(dot(normalize(g_engineLightDir.xyz), dir), 0.0, 1.0);
+						col += 0.2*vec3(1.0, 0.8, 0.2)*pow(sun, 2.0);
+						col += 0.5*vec3(1.0, 0.8, 0.9)*exp2(sun*650 - 650.0);
+						col += 0.1*vec3(1.0, 1.0, 0.8)*exp2(sun*100 - 100.0);
+						col += 0.3*vec3(1.0, 0.8, 0.8)*exp2(sun*50 - 50.0);
+						col += 0.5*vec3(0.7, 0.3, 0.05)*exp2(sun*10 - 10.0);
+
+						return col;
+					}
+
+					out vec4 color;
+					void main(){
+						color = vec4(GetSkyColor(normalize(viewDir)), 1.0);
+					}
+				]
+			]
+		}
+	}
+}

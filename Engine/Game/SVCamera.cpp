@@ -38,7 +38,7 @@ void SVCamera::OnPostRender()
 {
 	DCamera::OnPostRender();
 
-	m_lineMat->SetPass(0);
+	/*m_lineMat->SetPass(0);
 
 	DGraphics::GlPushMatrix();
 	DGraphics::GlLoadOrtho();
@@ -49,5 +49,5 @@ void SVCamera::OnPostRender()
 
 	DGraphics::GlEnd();
 
-	DGraphics::GlPopMatrix();
+	DGraphics::GlPopMatrix();*/
 }

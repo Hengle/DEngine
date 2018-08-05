@@ -37,7 +37,6 @@ public:
 	bool HasProperty(const LPCSTR key) const;
 	void ApplyStates(int);
 	void ApplyParams(DShaderConstantTable*, int);
-	void Draw(int);
 	int GetVertexUsage(int);
 	int GetPassCount();
 	DRenderQueue GetRenderQueue();

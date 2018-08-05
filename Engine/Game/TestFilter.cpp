@@ -22,15 +22,17 @@ TestFilter::~TestFilter()
 
 void TestFilter::Render(DRenderTexture * screenTexture)
 {
-	m_mat->SetVector2("offset", DVector2(0.008f, 0.008f));
-	/*DGraphics::Blit(screenTexture, m_dst, m_mat);
+	/*m_mat->SetVector2("offset", DVector2(0.008f, 0.008f));
+	DGraphics::Blit(screenTexture, m_dst, m_mat);
 	m_mat->SetVector2("offset", DVector2(-0.008f, -0.008f));
 	DGraphics::Blit(m_dst, screenTexture, m_mat);
 	m_mat->SetVector2("offset", DVector2(0.008f, 0.008f));
 	DGraphics::Blit(screenTexture, m_dst, m_mat);
-	m_mat->SetVector2("offset", DVector2(-0.008f, -0.008f));*/
+	m_mat->SetVector2("offset", DVector2(-0.008f, -0.008f));
+	DGraphics::Blit(m_dst, m_mat);*/
+
+
 	DGraphics::Blit(screenTexture, m_mat);
-	//DGraphics::Blit(m_dst, m_mat);
 }
 
 void TestFilter::Release()

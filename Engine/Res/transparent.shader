@@ -133,3 +133,55 @@ SubShader {
 		}
 	}
 }
+SubShader {
+	Desc {
+		CompileTarget: { opengl }
+		Queue Transparent
+	}
+	Pass {
+		State {
+			zwrite on
+			ztest lequal
+			blend srcalpha oneminussrcalpha
+		}
+
+		Shader {
+			#code [
+				#vert [
+					#version 330 core
+
+					out vec4 gl_Position;
+					out vec2 uv;
+
+					layout(location = 0) in vec3 input_position;
+					layout(location = 1) in vec2 input_texcoord0;
+
+					uniform mat4 g_engineWorldMatrix;
+					uniform mat4 g_engineViewMatrix;
+					uniform mat4 g_engineProjectionMatrix;
+
+					void main(){
+ 						gl_Position = g_engineWorldMatrix * vec4(input_position,1);
+						gl_Position = g_engineViewMatrix * gl_Position;
+						gl_Position = g_engineProjectionMatrix * gl_Position;
+						uv = input_texcoord0;
+					}
+
+				]
+				#frag [
+					#version 330 core
+
+					in vec2 uv;
+
+					uniform sampler2D shaderTexture;
+
+					out vec4 color;
+					void main(){
+						color = texture(shaderTexture, uv);
+						color.a = 0.5;
+					}
+				]
+			]
+		}
+	}
+}

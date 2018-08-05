@@ -169,3 +169,60 @@ SubShader {
 		}
 	}
 }
+SubShader {
+	Desc {
+		CompileTarget: { opengl }
+	}
+	Pass {
+		State {
+			zwrite on
+			ztest lequal
+		}
+
+		Shader {
+			#code [
+				#vert [
+					#version 330 core
+
+					out vec4 gl_Position;
+					out vec2 uv;
+					out vec3 shadowUV;
+
+					layout(location = 0) in vec3 input_position;
+					layout(location = 1) in vec2 input_texcoord0;
+
+					uniform mat4 g_engineWorldMatrix;
+					uniform mat4 g_engineViewMatrix;
+					uniform mat4 g_engineProjectionMatrix;
+
+					void main(){
+ 						gl_Position = g_engineWorldMatrix * vec4(input_position,1);
+
+ 						vec4 shadowPos = g_engineShadowView * gl_Position;
+ 						shadowUV.z = shadowPos.z * g_engineShadowParams.w;
+ 						shadowUV.x = shadowPos.x / shadowPos.w * 0.5 + 0.5;
+ 						shadowUV.y = -(shadowPos.y / shadowPos.w * 0.5)+0.5;
+
+						gl_Position = g_engineViewMatrix * gl_Position;
+						gl_Position = g_engineProjectionMatrix * gl_Position;
+						uv = input_texcoord0;
+					}
+
+				]
+				#frag [
+					#version 330 core
+
+					in vec2 uv;
+
+					uniform sampler2D shaderTexture;
+					uniform sampler2D g_engineShadowMap;
+
+					out vec4 color;
+					void main(){
+						color = texture(g_engineShadowMap, uv);
+					}
+				]
+			]
+		}
+	}
+}

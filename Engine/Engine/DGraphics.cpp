@@ -643,13 +643,13 @@ void DGraphics::GetProjection(DMatrix4x4 & projection)
 	}
 }
 
-void DGraphics::PostGL()
-{
-	if (DSystem::GetGraphicsMgr()->m_glDrawer != NULL)
-	{
-		DSystem::GetGraphicsMgr()->m_glDrawer->PostGL();
-	}
-}
+//void DGraphics::PostGL()
+//{
+//	if (DSystem::GetGraphicsMgr()->m_glDrawer != NULL)
+//	{
+//		DSystem::GetGraphicsMgr()->m_glDrawer->PostGL();
+//	}
+//}
 
 unsigned int DGraphics::GetDrawCall()
 {

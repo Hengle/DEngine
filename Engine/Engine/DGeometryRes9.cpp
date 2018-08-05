@@ -17,12 +17,11 @@ DGeometryRes9::~DGeometryRes9()
 
 void DGeometryRes9::OnRefresh(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
 {
-	return;
-	float* vertices;
+	float* vertices = 0;
 	int i;
 	int vlen = m_dataCount*vertexCount;
 
-	m_vertexBuffer->Lock(0, 0, (void**)vertices, 0);
+	m_vertexBuffer->Lock(0, 0, (void**)&vertices, 0);
 	for (i = 0; i < vlen; i++)
 	{
 		vertices[i] = vertexbuffer[i];

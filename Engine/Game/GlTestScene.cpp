@@ -62,7 +62,7 @@ void GlTestScene::OnRender()
 	DGraphics::GlPopMatrix();
 
 
-	/*if (cam != NULL)
+	if (cam != NULL)
 	{
 		DTransform* tran = cam->GetTransform();
 		DMatrix4x4 ltw;
@@ -88,7 +88,7 @@ void GlTestScene::OnRender()
 
 	DGraphics::GlEnd();
 
-	DGraphics::GlPopMatrix();*/
+	DGraphics::GlPopMatrix();
 }
 
 void GlTestScene::OnUpdate()

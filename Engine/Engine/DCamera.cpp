@@ -503,7 +503,7 @@ void DCamera::BeginRender()
 
 void DCamera::EndRender()
 {
-	DGraphics::PostGL();
+	//DGraphics::PostGL();
 	if (m_renderTexture != NULL)
 	{
 		DGraphics::EndScene(m_renderTexture);

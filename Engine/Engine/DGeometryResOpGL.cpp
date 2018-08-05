@@ -121,6 +121,25 @@ void DGeometryResOpGL::Release()
 
 void DGeometryResOpGL::OnRefresh(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
 {
+	glBindVertexArray(m_vertexArrayId);
+
+	glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
+
+	glBufferData(GL_ARRAY_BUFFER, vertexCount*m_dataSize, vertexbuffer, GL_STATIC_DRAW);
+
+	unsigned int* indexes = new unsigned int[m_indexCount];
+	int i = 0;
+	for (i = 0; i < m_indexCount; i++)
+	{
+		indexes[i] = indexbuffer[i];
+	}
+
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int)*indexCount, indexes, GL_STATIC_DRAW);
+
+
+	delete[] indexes;
 }
 
 bool DGeometryResOpGL::OnInit(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
@@ -128,11 +147,10 @@ bool DGeometryResOpGL::OnInit(float * vertexbuffer, unsigned long * indexbuffer,
 	int offset = 0;
 
 	glGenVertexArrays(1, &m_vertexArrayId);
-	glBindVertexArray(m_vertexArrayId);
-
 	glGenBuffers(1, &m_vertexBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, vertexCount*m_dataSize, vertexbuffer, GL_STATIC_DRAW);
+	glGenBuffers(1, &m_indexBuffer);
+	
+	OnRefresh(vertexbuffer, indexbuffer, vertexCount, indexCount);
 
 	glEnableVertexAttribArray(0);
 	if (m_normalLayout >= 0)
@@ -164,17 +182,10 @@ bool DGeometryResOpGL::OnInit(float * vertexbuffer, unsigned long * indexbuffer,
 
 	offset += 3;
 
-	//glDisableVertexAttribArray(0);
-
 	if (m_normalOffset >= 0)
 	{
-		//glGenBuffers(1, &m_normalsBuffer);
 		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
-		//glBufferData(GL_ARRAY_BUFFER, sizeof(float)*desc->vertexCount * 3, desc->normals, GL_STATIC_DRAW);
 
-		//glEnableVertexAttribArray(m_normalLayout);
-
-		//glBindBuffer(GL_ARRAY_BUFFER, m_normalsBuffer);
 		glVertexAttribPointer(
 			m_normalLayout,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
 			3,                  // size
@@ -184,7 +195,6 @@ bool DGeometryResOpGL::OnInit(float * vertexbuffer, unsigned long * indexbuffer,
 			(unsigned char*)NULL + (offset * sizeof(float))           // array buffer offset
 			);
 		offset += 3;
-		//glDisableVertexAttribArray(m_normalLayout);
 	}
 	if (m_colorOffset >= 0)
 	{
@@ -201,13 +211,8 @@ bool DGeometryResOpGL::OnInit(float * vertexbuffer, unsigned long * indexbuffer,
 	}
 	if (m_uv0Offset >= 0)
 	{
-		//glGenBuffers(1, &m_uv0Buffer);
 		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
-		//glBufferData(GL_ARRAY_BUFFER, sizeof(float)*desc->vertexCount * 2, desc->uvs, GL_STATIC_DRAW);
 
-		//glEnableVertexAttribArray(m_uv0Layout);
-
-		//glBindBuffer(GL_ARRAY_BUFFER, m_uv0Buffer);
 		glVertexAttribPointer(
 			m_uv0Layout,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
 			2,                  // size
@@ -217,7 +222,6 @@ bool DGeometryResOpGL::OnInit(float * vertexbuffer, unsigned long * indexbuffer,
 			(unsigned char*)NULL + (offset * sizeof(float))          // array buffer offset
 			);
 		offset += 2;
-		//glDisableVertexAttribArray(m_uv0Layout);
 	}
 	if (m_tangentOffset >= 0)
 	{
@@ -233,31 +237,39 @@ bool DGeometryResOpGL::OnInit(float * vertexbuffer, unsigned long * indexbuffer,
 		offset += 4;
 	}
 
-	unsigned int* indexes = new unsigned int[m_indexCount];
-	int i = 0;
-	for (i = 0; i < m_indexCount; i++)
-	{
-		indexes[i] = indexbuffer[i];
-	}
-
-	glGenBuffers(1, &m_indexBuffer);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int)*indexCount, indexes, GL_STATIC_DRAW);
-
-
-	delete[] indexes;
-
 	return true;
 }
 
-void DGeometryResOpGL::OnDraw(DGeometryTopology)
+void DGeometryResOpGL::OnDraw(DGeometryTopology topology)
 {
+	GLenum mode;
+	switch (topology)
+	{
+	case DGeometryTopology_LineList:
+		mode = GL_LINES;
+		break;
+	case DGeometryTopology_LineStrip:
+		mode = GL_LINE_STRIP;
+		break;
+	case DGeometryTopology_PointList:
+		mode = GL_POINTS;
+		break;
+	case DGeometryTopology_TriangleList:
+		mode = GL_TRIANGLES;
+		break;
+	case DGeometryTopology_TriangleStrip:
+		mode = GL_TRIANGLE_STRIP;
+		break;
+	default:
+		mode = GL_TRIANGLES;
+		break;
+	}
 	glBindVertexArray(m_vertexArrayId);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
 
 	int size;  glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
 	glDrawElements(
-		GL_TRIANGLES,      // mode
+		mode,      // mode
 		size / sizeof(unsigned int),    // count
 		GL_UNSIGNED_INT,   // type
 		(void*)0           // element array buffer offset

@@ -90,7 +90,7 @@ public:
 	/*获取当前投影矩阵*/
 	static void GetProjection(DMatrix4x4&);
 
-	static void PostGL();
+	//static void PostGL();
 
 	static unsigned int GetDrawCall();
 

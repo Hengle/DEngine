@@ -82,6 +82,18 @@ void DGeometryRes10::Release()
 
 void DGeometryRes10::OnRefresh(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
 {
+
+	void* pdata;
+	m_vertexBuffer->Map(D3D10_MAP_WRITE_DISCARD, 0, &pdata);
+	float* dataPtr = (float*)pdata;
+	memcpy(dataPtr, vertexbuffer, m_dataSize* vertexCount);
+	m_vertexBuffer->Unmap();
+
+	void* idata;
+	m_indexBuffer->Map(D3D10_MAP_WRITE_DISCARD, 0, &idata);
+	unsigned long* idataPtr = (unsigned long*)idata;
+	memcpy(idataPtr, indexbuffer, sizeof(unsigned long)*indexCount);
+	m_indexBuffer->Unmap();
 }
 
 bool DGeometryRes10::OnInit(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)

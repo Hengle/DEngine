@@ -229,7 +229,7 @@ SubShader {
 
 						vec3 skyC = mix(vec3(0.302, 0.38, 0.537), vec3(0.435, 0.545, 0.702), exp2(hort*1.4 - 1.4));
 						vec3 groundC = mix(vec3(0.412, 0.384, 0.365), vec3(0.435, 0.545, 0.702), exp2(hort*4.4*2.7 - 4.4*2.7));
-						col += lerp(groundC, skyC, sign);
+						col += mix(groundC, skyC, sign);
 
 						col += 0.3*vec3(0.8, 0.9, 1.0)*exp2(hort*20.0 - 20.0);
 						col += 0.1*vec3(0.8, 0.9, 1.0)*exp2(hort*15.0 - 15.0);

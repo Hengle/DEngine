@@ -27,6 +27,7 @@ TestScene::TestScene(SCENEID sceneId, char * sceneName) : DScene(sceneId, sceneN
 
 	m_light = 0;
 	m_lookDistance = 17.0f;
+	m_glPos = DVector3(3.0f, 3.0f, 3.0f);
 }
 
 void TestScene::OnGUI()
@@ -147,6 +148,10 @@ void TestScene::OnGUI()
 		transform->SetEuler(0.0f, eulerV, 0.0f);
 		transform->SetLocalScale(sizeV, sizeV, sizeV);*/
 	}
+
+	ImGui::SliderFloat("GLPosX", &m_glPos.x, 0.0f, 7.0f);
+	ImGui::SliderFloat("GLPosY", &m_glPos.y, 0.0f, 7.0f);
+	ImGui::SliderFloat("GLPosZ", &m_glPos.z, 0.0f, 7.0f);
 	//transform->GetForward(forward);
 	//DShader::SetGlobalVector3("g_sundir", forward);
 }
@@ -415,24 +420,24 @@ void TestScene::OnUnLoad()
 
 void TestScene::OnRender()
 {
-	//m_testColorMat->SetPass(0);
-	////DGraphics::GlSetMaterial(testcolormat);
-	//DGraphics::GlPushMatrix();
+	m_testColorMat->SetPass(0);
+	//DGraphics::GlSetMaterial(testcolormat);
+	DGraphics::GlPushMatrix();
 
-	//DGraphics::GlBegin();
+	DGraphics::GlBegin(DGeometryTopology_LineList);
 
-	//DGraphics::GlVertex3(0.0f, 0.0f, 0.0f);
-	//DGraphics::GlVertex3(3.2f, 3.78f, 2.3f);
+	DGraphics::GlVertex3(0.0f, 0.0f, 0.0f);
+	DGraphics::GlVertex(m_glPos);
 
-	///*DGraphics::GlVertex3(3.2f, 3.78f, 2.3f);
-	//DGraphics::GlVertex3(3.2f, 7.0f, 2.3f);
+	/*DGraphics::GlVertex3(3.2f, 3.78f, 2.3f);
+	DGraphics::GlVertex3(3.2f, 7.0f, 2.3f);
 
-	//DGraphics::GlVertex3(3.2f, 7.0f, 2.3f);
-	//DGraphics::GlVertex3(-3.2f, 2.0f, -2.3f);*/
+	DGraphics::GlVertex3(3.2f, 7.0f, 2.3f);
+	DGraphics::GlVertex3(-3.2f, 2.0f, -2.3f);*/
 
-	//DGraphics::GlEnd();
+	DGraphics::GlEnd();
 
-	//DGraphics::GlPopMatrix();
+	DGraphics::GlPopMatrix();
 
 
 	//testd->Render();

@@ -7,6 +7,7 @@ DGLDrawer::DGLDrawer()
 	m_currentP = dmat_identity;
 	//m_currentPLen = 0;
 	//m_prePLen = 0;
+	m_currentColor = DCOLOR_WHITE;
 	m_geometryRes = 0;
 	m_vertexCount = 0;
 	m_indexCount = 0;
@@ -28,12 +29,13 @@ DGLDrawer::~DGLDrawer()
 //
 //}
 
-void DGLDrawer::GlBegin()
+void DGLDrawer::GlBegin(DGeometryTopology mode)
 {
 	m_vertexCount = 0;
 	m_indexCount = 0;
 	m_vertices.clear();
 	m_indecies.clear();
+	m_mode = mode;
 	/*if (m_currentPLen < m_prePLen)
 	{
 		m_currentProcess = m_processVector.at(m_currentPLen);
@@ -59,7 +61,7 @@ void DGLDrawer::GlEnd()
 	DShader::SetGlobalMatrix(D_SC_MATRIX_P, m_currentP);
 
 	DGraphics::ApplyActiveMaterial();
-	m_geometryRes->DrawPrimitive(DGeometryTopology_LineList);
+	m_geometryRes->DrawPrimitive(m_mode);
 	/*if (m_currentProcess != NULL)
 	{
 		m_currentProcess->PostProcess(m_currentMV, m_currentP);

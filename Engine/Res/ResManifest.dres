@@ -45,12 +45,12 @@
 	#RES_END
 
 	#RES_BEGIN TEXTURE2D 2000
-		#PATH ../Res/decal.jpg
+		#PATH ../Res/decal.tga
 		#WRAPMODE REPEAT
 	#RES_END
 
 	#RES_BEGIN TEXTURE2D 2001
-		#PATH ../Res/eboy.jpg
+		#PATH ../Res/eboy.tga
 	#RES_END
 
 	#RES_BEGIN TEXTURE2D 2002

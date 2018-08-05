@@ -67,7 +67,7 @@ public:
 	/*清除当前全局渲染shader*/
 	static void ClearGlobalRenderShader();
 
-	static void GlBegin();
+	static void GlBegin(DGeometryTopology mode);
 	static void GlEnd();
 	static void GlVertex(DVector3&);
 	static void GlVertex3(float, float, float);

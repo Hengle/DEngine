@@ -526,12 +526,12 @@ void DGraphics::ClearGlobalRenderShader()
 	}
 }
 
-void DGraphics::GlBegin()
+void DGraphics::GlBegin(DGeometryTopology mode)
 {
 	DGLDrawer* drawer = DSystem::GetGraphicsMgr()->m_glDrawer;
 	if (drawer != NULL)
 	{
-		drawer->GlBegin();
+		drawer->GlBegin(mode);
 	}
 }
 

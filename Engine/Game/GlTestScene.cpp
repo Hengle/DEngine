@@ -52,7 +52,7 @@ void GlTestScene::OnRender()
 	m_testcolormat->SetPass(0);
 	DGraphics::GlPushMatrix();
 
-	DGraphics::GlBegin();
+	DGraphics::GlBegin(DGeometryTopology_LineList);
 
 	DGraphics::GlVertex3(0.0f, 0.0f, 0.0f);
 	DGraphics::GlVertex3(-1.0f, 1.0f, -1.0f);
@@ -69,7 +69,7 @@ void GlTestScene::OnRender()
 		tran->GetLocalToWorld(ltw);
 		DGraphics::GlPushMatrix();
 		DGraphics::GlMultiMatrix(ltw);
-		DGraphics::GlBegin();
+		DGraphics::GlBegin(DGeometryTopology_LineList);
 
 		DGraphics::GlVertex3(0.0f, 0.0f, 10.0f);
 		DGraphics::GlVertex3(-2.0f, 3.0f, 20.0f);
@@ -81,7 +81,7 @@ void GlTestScene::OnRender()
 
 	DGraphics::GlPushMatrix();
 	DGraphics::GlLoadOrtho();
-	DGraphics::GlBegin();
+	DGraphics::GlBegin(DGeometryTopology_LineList);
 
 	DGraphics::GlVertex3(-1.0f, -1.0f, 0.0f);
 	DGraphics::GlVertex3(1.0f, 1.0f, 0.0f);

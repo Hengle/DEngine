@@ -195,13 +195,19 @@ SubShader {
 					uniform mat4 g_engineViewMatrix;
 					uniform mat4 g_engineProjectionMatrix;
 
+					uniform mat4 g_engineShadowView;
+					uniform mat4 g_engineShadowProj;
+
+					uniform vec4 g_engineShadowParams;
+
 					void main(){
  						gl_Position = g_engineWorldMatrix * vec4(input_position,1);
 
  						vec4 shadowPos = g_engineShadowView * gl_Position;
- 						shadowUV.z = shadowPos.z * g_engineShadowParams.w;
+ 						shadowUV.z = -shadowPos.z / g_engineShadowParams.z;
+ 						shadowPos = g_engineShadowProj * shadowPos;
  						shadowUV.x = shadowPos.x / shadowPos.w * 0.5 + 0.5;
- 						shadowUV.y = -(shadowPos.y / shadowPos.w * 0.5)+0.5;
+ 						shadowUV.y = (shadowPos.y / shadowPos.w * 0.5)+0.5;
 
 						gl_Position = g_engineViewMatrix * gl_Position;
 						gl_Position = g_engineProjectionMatrix * gl_Position;
@@ -213,13 +219,17 @@ SubShader {
 					#version 330 core
 
 					in vec2 uv;
+					in vec3 shadowUV;
 
 					uniform sampler2D shaderTexture;
 					uniform sampler2D g_engineShadowMap;
 
 					out vec4 color;
 					void main(){
-						color = texture(g_engineShadowMap, uv);
+						color = texture(shaderTexture,uv);
+						vec4 depthColor = texture(g_engineShadowMap, shadowUV.xy);
+						if(shadowUV.z - depthColor.r > 0.01)
+							color.rgb *= 0.3;
 					}
 				]
 			]

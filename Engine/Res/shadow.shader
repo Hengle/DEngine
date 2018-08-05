@@ -142,7 +142,8 @@ SubShader {
  						gl_Position = g_engineWorldMatrix * vec4(input_position,1);
 						gl_Position = g_engineViewMatrix * gl_Position;
 
-						depth = gl_Position.z * g_engineShadowParams.w;
+
+						depth = -gl_Position.z/g_engineShadowParams.z;
 
 						gl_Position = g_engineProjectionMatrix * gl_Position;
 					}
@@ -151,9 +152,11 @@ SubShader {
 				#frag [
 					#version 330 core
 
+					out vec4 color;
+
 					in float depth;
 
-					out vec4 color;
+					
 					void main(){
 						color = vec4(depth,depth,depth,1.0);
 					}

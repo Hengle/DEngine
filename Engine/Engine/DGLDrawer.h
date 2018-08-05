@@ -34,7 +34,7 @@ public:
 	~DGLDrawer();
 
 	//void PostGL();
-	void GlBegin();
+	void GlBegin(DGeometryTopology mode);
 	void GlEnd();
 	void GlVertex(DVector3*);
 	void GlVertex3(float, float, float);
@@ -66,6 +66,7 @@ private:
 	int m_vertexCount;
 	int m_indexCount;
 	DColor m_currentColor;
+	DGeometryTopology m_mode;
 	//std::vector<DGLDrawerProcess*> m_processVector;
 
 	//DGLDrawerProcess* m_currentProcess;

@@ -39,5 +39,6 @@ private:
 	/*DMesh* testcolormesh;
 	DDisplayObject* testcolorobj;*/
 	DMaterial* m_testColorMat;
+	DVector3 m_glPos;
 	
 };

@@ -274,6 +274,70 @@ DClearFlags DCamera::GetClearFlags()
 	return m_clearFlags;
 }
 
+void DCamera::ScreenToWorldPoint(const DVector3, DVector3 * out)
+{
+}
+
+void DCamera::ScreenToWorldPoint(float x, float y, float z, DVector3 * out)
+{
+}
+
+void DCamera::ScreenToViewportPoint(const DVector3, DVector3 * out)
+{
+}
+
+void DCamera::ScreenToViewportPoint(float x, float y, float z, DVector3 * out)
+{
+}
+
+void DCamera::ViewportToScreenPoint(const DVector3, DVector3 * out)
+{
+}
+
+void DCamera::ViewportToScreenPoint(float x, float y, float z, DVector3 * out)
+{
+}
+
+void DCamera::ViewportToWorldPoint(const DVector3, DVector3 * out)
+{
+}
+
+void DCamera::ViewportToWorldPoint(float x, float y, float z, DVector3 * out)
+{
+}
+
+void DCamera::WorldToScreenPoint(const DVector3, DVector3 * out)
+{
+}
+
+void DCamera::WorldToScreenPoint(float x, float y, float z, DVector3 * out)
+{
+}
+
+void DCamera::WorldToViewportPoint(const DVector3, DVector3 * out)
+{
+}
+
+void DCamera::WorldToViewportPoint(float x, float y, float z, DVector3 * out)
+{
+}
+
+void DCamera::ScreenPointToRay(const DVector3, DRay * out)
+{
+}
+
+void DCamera::ScreenPointToRay(float x, float y, float z, DRay * out)
+{
+}
+
+void DCamera::ViewportPointToRay(const DVector3, DRay * out)
+{
+}
+
+void DCamera::ViewportPointToRay(float x, float y, float z, DRay * out)
+{
+}
+
 void DCamera::SetLayerMask(DLAYER layerMask)
 {
 	m_layerMask = layerMask;

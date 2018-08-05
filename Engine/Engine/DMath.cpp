@@ -1978,9 +1978,9 @@ void DBounds::GetSize(DVector3 * size) const
 
 void DBounds::GetClosestPoint(const DVector3 & point, DVector3 * out) const
 {
-	out->x = DClamp(point.x, center.x - halfSize.x, center.x + halfSize.x);
-	out->y = DClamp(point.y, center.y - halfSize.y, center.y + halfSize.y);
-	out->z = DClamp(point.z, center.z - halfSize.z, center.z + halfSize.z);
+	out->x = clamp(point.x, center.x - halfSize.x, center.x + halfSize.x);
+	out->y = clamp(point.y, center.y - halfSize.y, center.y + halfSize.y);
+	out->z = clamp(point.z, center.z - halfSize.z, center.z + halfSize.z);
 }
 
 bool DBounds::Contains(const DVector3 & point) const
@@ -2209,5 +2209,12 @@ DRay::DRay(const DRay & ray)
 DRay::DRay(DVector3 origin, DVector3 direction)
 {
 	this->origin = origin;
-	this->direction = direction;
+	direction.GetNormalized(this->direction);
+}
+
+void DRay::GetPoint(float t, DVector3 * out) const
+{
+	out->x = origin.x + t * direction.x;
+	out->y = origin.y + t * direction.y;
+	out->z = origin.z + t * direction.z;
 }

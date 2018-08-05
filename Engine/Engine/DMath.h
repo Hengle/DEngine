@@ -8,7 +8,7 @@
 
 #define IS_FLOAT_EQUAL(a, b) (a>=b-EPSILNON&&a<=b+EPSILNON)   //浮点数比较
 
-float DClamp(float value, float min, float max)
+float clamp(float value, float min, float max)
 {
 	if (value < min)
 		value = min;
@@ -17,12 +17,12 @@ float DClamp(float value, float min, float max)
 	return value;
 }
 
-float DClamp01(float value)
+float clamp01(float value)
 {
-	return DClamp(value, 0.0f, 1.0f);
+	return clamp(value, 0.0f, 1.0f);
 }
 
-float DLerp(float a, float b, float t)
+float lerp(float a, float b, float t)
 {
 	return a + (b - a)*t;
 }
@@ -256,6 +256,7 @@ public:
 	DRay();
 	DRay(const DRay&);
 	DRay(DVector3 origin, DVector3 direction);
+	void GetPoint(float t, DVector3* out) const;
 
 public:
 	DVector3 origin;

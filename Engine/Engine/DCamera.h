@@ -103,6 +103,23 @@ public:
 	void ResetReplaceShader();
 	void SetClearFlags(DClearFlags);
 	DClearFlags GetClearFlags();
+	void ScreenToWorldPoint(const DVector3, DVector3* out);
+	void ScreenToWorldPoint(float x, float y, float z, DVector3* out);
+	void ScreenToViewportPoint(const DVector3, DVector3* out);
+	void ScreenToViewportPoint(float x, float y, float z, DVector3* out);
+	void ViewportToScreenPoint(const DVector3, DVector3* out);
+	void ViewportToScreenPoint(float x, float y, float z, DVector3* out);
+	void ViewportToWorldPoint(const DVector3, DVector3* out);
+	void ViewportToWorldPoint(float x, float y, float z, DVector3* out);
+	void WorldToScreenPoint(const DVector3, DVector3* out);
+	void WorldToScreenPoint(float x, float y, float z, DVector3* out);
+	void WorldToViewportPoint(const DVector3, DVector3* out);
+	void WorldToViewportPoint(float x, float y, float z, DVector3* out);
+
+	void ScreenPointToRay(const DVector3, DRay* out);
+	void ScreenPointToRay(float x, float y, float z, DRay* out);
+	void ViewportPointToRay(const DVector3, DRay* out);
+	void ViewportPointToRay(float x, float y, float z, DRay* out);
 
 	void SetLayerMask(DLAYER);
 	DLAYER GetLayerMask();

@@ -44,19 +44,16 @@ DCamera::~DCamera()
 void DCamera::Render()
 {
 	BeginRender();
-	//if (m_replacementShader != NULL) {
-		DGraphics::SetGlobalRenderShader(m_replacementShader);
-	//}
-	//	DScene::Draw(true, m_replacementShader);
-	//else
-	//	DScene::Draw(true);
-		OnPreRender();
 
-		DScene::Draw(true, m_layerMask);
+	DGraphics::SetGlobalRenderShader(m_replacementShader);
 
-		OnPostRender();
+	OnPreRender();
 
-		
+	DScene::Draw(true, m_layerMask);
+
+	OnPostRender();
+
+
 	EndRender();
 	DGraphics::ClearGlobalRenderShader();
 
@@ -417,9 +414,7 @@ void DCamera::BackwardMoveCameraNode()
 
 void DCamera::BeginRender()
 {
-	//context->RSSetViewports(1, &m_viewPort);
 	
-
 	sCurrent = this;
 
 	RefreshCameraDirParam();

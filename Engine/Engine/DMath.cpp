@@ -13,6 +13,14 @@ DRect::DRect()
 	height = 0;
 }
 
+DRect::DRect(const DRect & rect)
+{
+	x = rect.x;
+	y = rect.y;
+	width = rect.width;
+	height = rect.height;
+}
+
 DRect::DRect(float x, float y, float width, float height)
 {
 	this->x = x;
@@ -1926,37 +1934,276 @@ void DMatrix4x4::Inverse(DMatrix4x4 * out, const DMatrix4x4 & target)
 DBounds::DBounds()
 {
 	center = DVector3(0.0f, 0.0f, 0.0f);
-	size = DVector3(0.0f, 0.0f, 0.0f);
+	halfSize = DVector3(0.0f, 0.0f, 0.0f);
+}
+
+DBounds::DBounds(const DBounds & bounds)
+{
+	center = bounds.center;
+	halfSize = bounds.halfSize;
 }
 
 DBounds::DBounds(float maxX, float maxY, float maxZ, float minX, float minY, float minZ)
 {
-	size = DVector3(maxX - minX, maxY - minY, maxZ - minZ);
-	center = DVector3(minX + size.x*0.5f, minY + size.y*0.5f, minZ + size.z*0.5f);
+	halfSize = DVector3(maxX - minX, maxY - minY, maxZ - minZ)*0.5f;
+	center = DVector3(minX + halfSize.x, minY + halfSize.y, minZ + halfSize.z);
 }
 
 DBounds::DBounds(DVector3 center, DVector3 size)
 {
 	this->center = center;
-	this->size = size;
+	this->halfSize = size*0.5f;
 }
 
 void DBounds::GetMin(DVector3 * min) const
 {
-	min->x = min(center.x + size.x*0.5f, center.x - size.x*0.5f);
-	min->y = min(center.y + size.y*0.5f, center.y - size.y*0.5f);
-	min->z = min(center.z + size.z*0.5f, center.z - size.z*0.5f);
+	min->x = min(center.x + halfSize.x, center.x - halfSize.x);
+	min->y = min(center.y + halfSize.y, center.y - halfSize.y);
+	min->z = min(center.z + halfSize.z, center.z - halfSize.z);
 }
 
 void DBounds::GetMax(DVector3 * max) const
 {
-	max->x = max(center.x + size.x*0.5f, center.x - size.x*0.5f);
-	max->y = max(center.y + size.y*0.5f, center.y - size.y*0.5f);
-	max->z = max(center.z + size.z*0.5f, center.z - size.z*0.5f);
+	max->x = max(center.x + halfSize.x, center.x - halfSize.x);
+	max->y = max(center.y + halfSize.y, center.y - halfSize.y);
+	max->z = max(center.z + halfSize.z, center.z - halfSize.z);
+}
+
+void DBounds::GetSize(DVector3 * size) const
+{
+	size->x = halfSize.x * 2;
+	size->y = halfSize.y * 2;
+	size->z = halfSize.z * 2;
+}
+
+void DBounds::GetClosestPoint(const DVector3 & point, DVector3 * out) const
+{
+	out->x = DClamp(point.x, center.x - halfSize.x, center.x + halfSize.x);
+	out->y = DClamp(point.y, center.y - halfSize.y, center.y + halfSize.y);
+	out->z = DClamp(point.z, center.z - halfSize.z, center.z + halfSize.z);
+}
+
+bool DBounds::Contains(const DVector3 & point) const
+{
+	if (point.x<center.x - halfSize.x || point.x>center.x + halfSize.x)
+		return false;
+	if (point.y<center.y - halfSize.y || point.y>center.y + halfSize.y)
+		return false;
+	if (point.z<center.z - halfSize.z || point.z>center.z + halfSize.z)
+		return false;
+	return true;
+}
+
+bool DBounds::Contains(const DBounds & bounds) const
+{
+	if (!Contains(bounds.center + DVector3(-bounds.halfSize.x, bounds.halfSize.y, -bounds.halfSize.z)))
+		return false;
+	if (!Contains(bounds.center + DVector3(bounds.halfSize.x, bounds.halfSize.y, -bounds.halfSize.z)))
+		return false;
+	if (!Contains(bounds.center + DVector3(bounds.halfSize.x, bounds.halfSize.y, bounds.halfSize.z)))
+		return false;
+	if (!Contains(bounds.center + DVector3(-bounds.halfSize.x, bounds.halfSize.y, bounds.halfSize.z)))
+		return false;
+	if (!Contains(bounds.center + DVector3(-bounds.halfSize.x, -bounds.halfSize.y, -bounds.halfSize.z)))
+		return false;
+	if (!Contains(bounds.center + DVector3(bounds.halfSize.x, -bounds.halfSize.y, -bounds.halfSize.z)))
+		return false;
+	if (!Contains(bounds.center + DVector3(bounds.halfSize.x, -bounds.halfSize.y, bounds.halfSize.z)))
+		return false;
+	if (!Contains(bounds.center + DVector3(-bounds.halfSize.x, -bounds.halfSize.y, bounds.halfSize.z)))
+		return false;
+	return true;
+}
+
+void DBounds::Encapsulate(const DVector3 & point)
+{
+	DVector3 minV, maxV;
+	GetMin(&minV);
+	GetMax(&maxV);
+
+	minV.x = min(minV.x, point.x);
+	minV.y = min(minV.y, point.y);
+	minV.z = min(minV.z, point.z);
+
+	maxV.x = max(maxV.x, point.x);
+	maxV.y = max(maxV.y, point.y);
+	maxV.z = max(maxV.z, point.z);
+
+	halfSize = DVector3(maxV.x - minV.x, maxV.y - minV.y, maxV.z - minV.z)*0.5f;
+	center = DVector3(minV.x + halfSize.x, minV.y + halfSize.y, minV.z + halfSize.z);
+}
+
+void DBounds::Encapsulate(const DBounds & bounds)
+{
+	DVector3 minA, maxA, minB, maxB;
+	GetMin(&minA);
+	GetMax(&maxA);
+	bounds.GetMin(&minB);
+	bounds.GetMax(&maxB);
+
+	minA.x = min(minA.x, minB.x);
+	minA.y = min(minA.y, minB.y);
+	minA.z = min(minA.z, minB.z);
+
+	maxA.x = max(maxA.x, maxB.x);
+	maxA.y = max(maxA.y, maxB.y);
+	maxA.z = max(maxA.z, maxB.z);
+
+	halfSize = DVector3(maxA.x - minA.x, maxA.y - minA.y, maxA.z - minA.z)*0.5f;
+	center = DVector3(minA.x + halfSize.x, minA.y + halfSize.y, minA.z + halfSize.z);
+}
+
+void DBounds::Expand(float amound)
+{
+	halfSize = halfSize*amound;
+}
+
+bool DBounds::IntersectRay(const DRay & ray, float * distance) const
+{
+	float lowt = 0.0f;
+	float t;
+	bool hit = false;
+	DVector3 hitpoint;
+	DVector3 minV, maxV;
+	GetMin(&minV);
+	GetMax(&maxV);
+	DVector3 rayorig = ray.origin;
+	DVector3 raydir = ray.direction;
+
+	if (rayorig.x > minV.x && rayorig.y > minV.y && rayorig.z > minV.z && rayorig.x < maxV.x && rayorig.y < maxV.y && rayorig.z < maxV.z)
+	{
+		*distance = 0.0f;
+		return true;
+	}
+
+	if (rayorig.x < minV.x && raydir.x > 0)
+	{
+		t = (minV.x - rayorig.x) / raydir.x;
+
+		if (t > 0)
+		{
+			hitpoint = rayorig + raydir * t;
+			if (hitpoint.y >= minV.y && hitpoint.y <= maxV.y && hitpoint.z >= minV.z && hitpoint.z <= maxV.z && (!hit || t < lowt))
+			{
+				hit = true;
+				lowt = t;
+			}
+		}
+	}
+
+	if (rayorig.x > maxV.x && raydir.x < 0)
+	{
+		t = (maxV.x - rayorig.x) / raydir.x;
+		if (t > 0)
+		{
+			hitpoint = rayorig + raydir * t;
+			if (hitpoint.y > minV.y && hitpoint.y <= maxV.y &&
+				hitpoint.z >= minV.z && hitpoint.z <= maxV.z &&
+				(!hit || t < lowt))
+			{
+				hit = true;
+				lowt = t;
+			}
+		}
+	}
+
+	if (rayorig.y < minV.y && raydir.y > 0)
+	{
+		t = (minV.y - rayorig.y) / raydir.y;
+		if (t > 0)
+		{
+			hitpoint = rayorig + raydir * t;
+			if (hitpoint.x >= minV.x && hitpoint.x <= maxV.x &&
+				hitpoint.z >= minV.z && hitpoint.z <= maxV.z &&
+				(!hit || t < lowt))
+			{
+				hit = true;
+				lowt = t;
+			}
+		}
+	}
+
+	if (rayorig.y > maxV.y && raydir.y < 0)
+	{
+		t = (maxV.y - rayorig.y) / raydir.y;
+		if (t > 0)
+		{
+			hitpoint = rayorig + raydir * t;
+			if (hitpoint.x >= minV.x && hitpoint.x <= maxV.x &&
+				hitpoint.z >= minV.z && hitpoint.z <= maxV.z &&
+				(!hit || t < lowt))
+			{
+				hit = true;
+				lowt = t;
+			}
+		}
+	}
+
+	if (rayorig.z < minV.z && raydir.z > 0)
+	{
+		t = (minV.z - rayorig.z) / raydir.z;
+		if (t > 0)
+		{
+			hitpoint = rayorig + raydir * t;
+			if (hitpoint.x >= minV.x && hitpoint.x <= maxV.x &&
+				hitpoint.y >= minV.y && hitpoint.y <= maxV.y &&
+				(!hit || t < lowt))
+			{
+				hit = true;
+				lowt = t;
+			}
+		}
+	}
+
+	if (rayorig.z > maxV.z && raydir.z < 0)
+	{
+		t = (maxV.z - rayorig.z) / raydir.z;
+		if (t > 0)
+		{
+			hitpoint = rayorig + raydir * t;
+			if (hitpoint.x >= minV.x && hitpoint.x <= maxV.x &&
+				hitpoint.y >= minV.y && hitpoint.y <= maxV.y &&
+				(!hit || t < lowt))
+			{
+				hit = true;
+				lowt = t;
+			}
+		}
+	}
+	*distance = lowt;
+	return hit;
+}
+
+bool DBounds::IntersectRay(const DRay & ray) const
+{
+	float dis;
+	return IntersectRay(ray, &dis);
+}
+
+bool DBounds::Intersects(const DBounds & bounds) const
+{
+	DVector3 minA, maxA, minB, maxB;
+	GetMin(&minA);
+	GetMax(&maxA);
+	bounds.GetMin(&minB);
+	bounds.GetMax(&maxB);
+	if (maxA.x<minB.x || minA.x>maxB.x)
+		return false;
+	if (maxA.y<minB.y || minA.y>maxB.y)
+		return false;
+	if (maxA.z<minB.z || minA.z>maxB.z)
+		return false;
+	return true;
 }
 
 DRay::DRay()
 {
+}
+
+DRay::DRay(const DRay & ray)
+{
+	origin = ray.origin;
+	direction = ray.direction;
 }
 
 DRay::DRay(DVector3 origin, DVector3 direction)

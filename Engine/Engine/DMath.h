@@ -8,10 +8,30 @@
 
 #define IS_FLOAT_EQUAL(a, b) (a>=b-EPSILNON&&a<=b+EPSILNON)   //浮点数比较
 
+float DClamp(float value, float min, float max)
+{
+	if (value < min)
+		value = min;
+	if (value > max)
+		value = max;
+	return value;
+}
+
+float DClamp01(float value)
+{
+	return DClamp(value, 0.0f, 1.0f);
+}
+
+float DLerp(float a, float b, float t)
+{
+	return a + (b - a)*t;
+}
+
 typedef struct DRect
 {
 public:
 	DRect();
+	DRect(const DRect&);
 	DRect(float, float, float, float);
 	bool Contains(float x, float y) const;
 	bool Contains(const DRect& rect) const;
@@ -234,6 +254,7 @@ typedef struct DRay
 {
 public:
 	DRay();
+	DRay(const DRay&);
 	DRay(DVector3 origin, DVector3 direction);
 
 public:
@@ -245,14 +266,25 @@ typedef struct DBounds
 {
 public:
 	DBounds();
+	DBounds(const DBounds&);
 	DBounds(float maxX, float maxY, float maxZ, float minX, float minY, float minZ);
 	DBounds(DVector3 center, DVector3 size);
 	void GetMin(DVector3* min) const;
 	void GetMax(DVector3* max) const;
+	void GetSize(DVector3* size) const;
+	void GetClosestPoint(const DVector3&, DVector3* out) const;
+	bool Contains(const DVector3&) const;
+	bool Contains(const DBounds&) const;
+	void Encapsulate(const DVector3&);
+	void Encapsulate(const DBounds&);
+	void Expand(float amound);
+	bool IntersectRay(const DRay&, float*) const;
+	bool IntersectRay(const DRay&) const;
+	bool Intersects(const DBounds&) const;
 
 public:
 	DVector3 center;
-	DVector3 size;
+	DVector3 halfSize;
 } DBounds, *LPDBounds;
 
 #define DVEC2_ZERO DVector2(0.0f, 0.0f)

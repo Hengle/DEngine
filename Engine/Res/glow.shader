@@ -35,7 +35,7 @@ SubShader {
 				Texture2D screenTexture;
 				SamplerState SampleType;
 
-				float2 offset;
+				float blackness;
 				
 				PixelInputType VertMain(VertexInputType input)
 				{
@@ -63,13 +63,9 @@ SubShader {
 
 
 	    			// Sample the pixel color from the texture using the sampler at this texture coordinate location.
-	    			textureColor.rgb = screenTexture.Sample(SampleType, input.tex).rgb*0.5;
+	    			textureColor.rgb = screenTexture.Sample(SampleType, input.tex).rgb;
 
-	    			textureColor.rgb += screenTexture.Sample(SampleType, input.tex + offset).rgb*0.3f;
-	    			textureColor.rgb += screenTexture.Sample(SampleType, input.tex - offset).rgb*0.3f;
-
-	    			textureColor.rgb += screenTexture.Sample(SampleType, input.tex + offset).rgb*0.1f;
-	    			textureColor.rgb += screenTexture.Sample(SampleType, input.tex - offset).rgb*0.1f;
+	    			textureColor.rgb = saturate(textureColor.rgb - float3(blackness,blackness,blackness))/(1.0f - blackness);
 
 	    			textureColor.a = 1.0f;
 

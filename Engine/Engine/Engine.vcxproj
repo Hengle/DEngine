@@ -186,6 +186,7 @@
     <ClInclude Include="DRenderStateMgr9.h" />
     <ClInclude Include="DRenderStateMgrOpGL.h" />
     <ClInclude Include="DRes.h" />
+    <ClInclude Include="DResDefine.h" />
     <ClInclude Include="DResGroup.h" />
     <ClInclude Include="DResItem.h" />
     <ClInclude Include="DResObject.h" />

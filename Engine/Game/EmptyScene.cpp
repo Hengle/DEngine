@@ -15,6 +15,7 @@ void EmptyScene::OnLoad()
 {
 	m_camera = new DCamera();
 	m_camera->Create();
+	m_camera->SetBackgroundColor(DCOLOR_BLACK);
 
 	float w, h;
 	DSystem::GetGraphicsMgr()->GetResolution(w, h);
@@ -33,7 +34,7 @@ void EmptyScene::OnLoad()
 	transform->SetEuler(33.346f, -41.563f, 0.0f);
 	transform->SetPosition(3.975387f, 2.588932f, -3.703708f);
 
-	DMaterial* colmat = DRes::Load<DMaterial>(DEFAULT_GROUP, BODY_MAT);
+	DMaterial* colmat = DRes::Load<DMaterial>(DEFAULT_GROUP, PLANE_MAT);
 	DGeometry* obj = DRes::Load<DGeometry>(DEFAULT_GROUP, PLANE_MESH);
 	//DGeometry* obj = DGeometry::Create(DGeometry_Sphere);
 	//DGeometry* obj = DGeometry::Create(DGeometry_Plane);
@@ -42,10 +43,10 @@ void EmptyScene::OnLoad()
 	obj0->Create();
 
 
-	/*DLight* light = new DLight();
+	DLight* light = new DLight();
 	light->Create();
 	transform = light->GetTransform();
-	transform->SetEuler(50.0f, -30.0f, 0.0f);*/
+	transform->SetEuler(50.0f, -30.0f, 0.0f);
 
 }
 

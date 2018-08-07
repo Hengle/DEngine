@@ -312,6 +312,9 @@
     <ClInclude Include="DRenderBufferOpGL.h">
       <Filter>头文件\Core\OpenGL\OpenGLCore</Filter>
     </ClInclude>
+    <ClInclude Include="DResDefine.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DMath.cpp">

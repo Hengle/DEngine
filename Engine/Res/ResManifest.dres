@@ -44,6 +44,14 @@
 		#PATH ../Res/bump.shader
 	#RES_END
 
+	#RES_BEGIN SHADER 1011 
+		#PATH ../Res/glow.shader
+	#RES_END
+
+	#RES_BEGIN SHADER 1012 
+		#PATH ../Res/mix.shader
+	#RES_END
+
 	#RES_BEGIN TEXTURE2D 2000
 		#PATH ../Res/decal.tga
 		#WRAPMODE REPEAT
@@ -58,7 +66,7 @@
 	#RES_END
 
 	#RES_BEGIN TEXTURE2D 2003
-		#PATH ../Res/f261504c.tga
+		#PATH ../Res/f261504c.jpg
 	#RES_END
 
 	#RES_BEGIN TEXTURE2D 2013
@@ -148,6 +156,14 @@
 
 	#RES_BEGIN MATERIAL 3010
 		#PATH ../Res/planebump.m
+	#RES_END
+
+	#RES_BEGIN MATERIAL 3011
+		#PATH ../Res/glow.m
+	#RES_END
+
+	#RES_BEGIN MATERIAL 3012
+		#PATH ../Res/mix.m
 	#RES_END
 
 	#RES_BEGIN GEOMETRY 4000

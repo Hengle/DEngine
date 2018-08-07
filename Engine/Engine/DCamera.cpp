@@ -244,7 +244,7 @@ void DCamera::ClearFilter()
 	m_filter = NULL;
 }
 
-DRenderTexture * DCamera::GetRenderTexture()
+DRenderTexture * DCamera::GetRenderTexture() const
 {
 	return m_renderTexture;
 }
@@ -269,73 +269,170 @@ void DCamera::SetClearFlags(DClearFlags clearFlags)
 	m_clearFlags = clearFlags;
 }
 
-DClearFlags DCamera::GetClearFlags()
+DClearFlags DCamera::GetClearFlags() const
 {
 	return m_clearFlags;
 }
 
-void DCamera::ScreenToWorldPoint(const DVector3, DVector3 * out)
+void DCamera::ScreenToWorldPoint(const DVector3 point, DVector3 * out) const
 {
+	ScreenToWorldPoint(point.x, point.z, point.z, out);
 }
 
-void DCamera::ScreenToWorldPoint(float x, float y, float z, DVector3 * out)
+void DCamera::ScreenToWorldPoint(float x, float y, float z, DVector3 * out) const
 {
+	FLOAT width, height;
+
+	DSystem::GetGraphicsMgr()->GetResolution(width, height);
+	float pixx = m_viewPort.x * width;
+	float pixy = m_viewPort.y * height;
+	float pixw = m_viewPort.width * width;
+	float pixh = m_viewPort.height * height;
+
+	float vx = (x - pixx) / pixw;
+	float vy = (y - pixy) / pixh;
+
+	CameraPointToWorldPoint(vx, vy, z, out);
 }
 
-void DCamera::ScreenToViewportPoint(const DVector3, DVector3 * out)
+void DCamera::ScreenToViewportPoint(const DVector3 point, DVector3 * out) const
 {
+	ScreenToViewportPoint(point.x, point.y, point.z, out);
 }
 
-void DCamera::ScreenToViewportPoint(float x, float y, float z, DVector3 * out)
+void DCamera::ScreenToViewportPoint(float x, float y, float z, DVector3 * out) const
 {
+	FLOAT width, height;
+
+	DSystem::GetGraphicsMgr()->GetResolution(width, height);
+	float pixx = m_viewPort.x * width;
+	float pixy = m_viewPort.y * height;
+	float pixw = m_viewPort.width * width;
+	float pixh = m_viewPort.height * height;
+	float vx = (x - pixx) / pixw;
+	float vy = (y - pixy) / pixh;
+
+	out->x = vx;
+	out->y = vy;
+	out->z = z;
 }
 
-void DCamera::ViewportToScreenPoint(const DVector3, DVector3 * out)
+void DCamera::ViewportToScreenPoint(const DVector3 point, DVector3 * out) const
 {
+	ViewportToScreenPoint(point.x, point.y, point.z, out);
 }
 
-void DCamera::ViewportToScreenPoint(float x, float y, float z, DVector3 * out)
+void DCamera::ViewportToScreenPoint(float x, float y, float z, DVector3 * out) const
 {
+	FLOAT width, height;
+
+	DSystem::GetGraphicsMgr()->GetResolution(width, height);
+	float vx = (m_viewPort.x + m_viewPort.width*x)*width;
+	float vy = (m_viewPort.y + m_viewPort.height * y) * height;
+
+	out->x = vx;
+	out->y = vy;
+	out->z = z;
 }
 
-void DCamera::ViewportToWorldPoint(const DVector3, DVector3 * out)
+void DCamera::ViewportToWorldPoint(const DVector3 point, DVector3 * out) const
 {
+	ViewportToWorldPoint(point.x, point.y, point.z, out);
 }
 
-void DCamera::ViewportToWorldPoint(float x, float y, float z, DVector3 * out)
+void DCamera::ViewportToWorldPoint(float x, float y, float z, DVector3 * out) const
 {
+
+	float vx = (m_viewPort.x + m_viewPort.width*x - m_viewPort.x) / m_viewPort.width;
+	float vy = (m_viewPort.y + m_viewPort.height * y - m_viewPort.y) / m_viewPort.height;
+	
+	CameraPointToWorldPoint(vx, vy, z, out);
 }
 
-void DCamera::WorldToScreenPoint(const DVector3, DVector3 * out)
+void DCamera::WorldToScreenPoint(const DVector3 point, DVector3 * out) const
 {
+	WorldToScreenPoint(point.x, point.y, point.z, out);
 }
 
-void DCamera::WorldToScreenPoint(float x, float y, float z, DVector3 * out)
+void DCamera::WorldToScreenPoint(float x, float y, float z, DVector3 * out) const
 {
+	DVector3 viewport;
+	WorldToViewportPoint(x, y, z, &viewport);
+	ViewportToScreenPoint(viewport, out);
 }
 
-void DCamera::WorldToViewportPoint(const DVector3, DVector3 * out)
+void DCamera::WorldToViewportPoint(const DVector3 point, DVector3 * out) const
 {
+	WorldToViewportPoint(point.x, point.y, point.z, out);
 }
 
-void DCamera::WorldToViewportPoint(float x, float y, float z, DVector3 * out)
+void DCamera::WorldToViewportPoint(float x, float y, float z, DVector3 * out) const
 {
+	DVector3 right, up, forward, position;
+	m_transform->GetRight(right);
+	m_transform->GetUp(up);
+	m_transform->GetForward(forward);
+	m_transform->GetPosition(position);
+
+	float localX = x - position.x;
+	float localY = y - position.y;
+	float localZ = z - position.z;
+	localX = x*right.x + y*right.y + z*right.z;
+	localY = x*up.x + y*up.y + z*up.z;
+	localZ = x*forward.x + y*forward.y + z*forward.z;
+
+	float vx, vy;
+	if (m_ortho)
+	{
+		vx = localX / (m_orthoSize * m_aspect*0.5f);
+		vy = localY / (m_orthoSize*0.5f);
+
+	}
+	else
+	{
+		float height = tanf(m_fieldOfView * 0.5f) * localZ;
+		vx = localX / (height * m_aspect);
+		vy = localY / height;
+	}
+	vx = vx * 0.5f + 0.5f;
+	vy = vy * 0.5f + 0.5f;
+
+	out->x = vx;
+	out->y = vy;
+	out->z = localZ;
 }
 
-void DCamera::ScreenPointToRay(const DVector3, DRay * out)
+void DCamera::ScreenPointToRay(const DVector3 point, DRay * out) const
 {
+	ScreenPointToRay(point.x, point.y, point.z, out);
 }
 
-void DCamera::ScreenPointToRay(float x, float y, float z, DRay * out)
+void DCamera::ScreenPointToRay(float x, float y, float z, DRay * out) const
 {
+	FLOAT width, height;
+
+	DSystem::GetGraphicsMgr()->GetResolution(width, height);
+	float pixx = m_viewPort.x * width;
+	float pixy = m_viewPort.y * height;
+	float pixw = m_viewPort.width * width;
+	float pixh = m_viewPort.height * height;
+
+	float vx = (x - pixx) / pixw;
+	float vy = (y - pixy) / pixh;
+	
+	CameraPointToRay(vx, vy, z, out);
 }
 
-void DCamera::ViewportPointToRay(const DVector3, DRay * out)
+void DCamera::ViewportPointToRay(const DVector3 point, DRay * out) const
 {
+	ViewportPointToRay(point.x, point.y, point.z, out);
 }
 
-void DCamera::ViewportPointToRay(float x, float y, float z, DRay * out)
+void DCamera::ViewportPointToRay(float x, float y, float z, DRay * out) const
 {
+	float vx = (m_viewPort.x + m_viewPort.width*x - m_viewPort.x) / m_viewPort.width;
+	float vy = (m_viewPort.y + m_viewPort.height * y - m_viewPort.y) / m_viewPort.height;
+	CameraPointToRay(vx, vy, z, out);
 }
 
 void DCamera::SetLayerMask(DLAYER layerMask)
@@ -343,7 +440,7 @@ void DCamera::SetLayerMask(DLAYER layerMask)
 	m_layerMask = layerMask;
 }
 
-DLAYER DCamera::GetLayerMask()
+DLAYER DCamera::GetLayerMask() const
 {
 	return m_layerMask;
 }
@@ -359,7 +456,7 @@ void DCamera::RemoveLayer(DLAYER layer)
 		m_layerMask ^= layer;
 }
 
-bool DCamera::IsLayerVisible(DLAYER layer)
+bool DCamera::IsLayerVisible(DLAYER layer) const
 {
 	return (m_layerMask&layer) != 0;
 }
@@ -587,5 +684,76 @@ void DCamera::RefreshCameraDirParam()
 		DVector3 pos;
 		m_transform->GetPosition(pos);
 		DShader::SetGlobalVector4(D_SC_CAMERA_POS, DVector4(pos.x, pos.y, pos.z, 1.0f));
+	}
+}
+
+void DCamera::CameraPointToWorldPoint(float x, float y, float z, DVector3 * out) const
+{
+	x = x * 2.0f - 1.0f;
+	y = y * 2.0f - 1.0f;
+
+	if (m_ortho)
+	{
+		x = x*m_orthoSize*m_aspect;
+		y = y*m_orthoSize;
+	}
+	else
+	{
+		float height = tanf(m_fieldOfView*0.5f)*m_near;
+		x = x * height * m_aspect;
+		y = y * height;
+	}
+	DVector3 right, up, forward, position;
+	m_transform->GetRight(right);
+	m_transform->GetUp(up);
+	m_transform->GetForward(forward);
+	m_transform->GetPosition(position);
+	DVector3 dir = right*x + up*y + forward*z;
+
+	out->x = position.x + dir.x;
+	out->y = position.y + dir.y;
+	out->z = position.z + dir.z;
+}
+
+void DCamera::CameraPointToRay(float x, float y, float z, DRay * out) const
+{
+	x = x * 2.0f - 1.0f;
+	y = y * 2.0f - 1.0f;
+
+	if (m_ortho)
+	{
+		x = x * m_orthoSize * m_aspect;
+		y = y * m_orthoSize;
+		DVector3 right, up, forward, position;
+		m_transform->GetRight(right);
+		m_transform->GetUp(up);
+		m_transform->GetForward(forward);
+		m_transform->GetPosition(position);
+		DVector3 dir = right*x + up*y + forward*z;
+		out->origin.x = position.x + dir.x;
+		out->origin.y = position.y + dir.y;
+		out->origin.z = position.z + dir.z;
+		out->direction.x = forward.x;
+		out->direction.y = forward.y;
+		out->direction.z = forward.z;
+	}
+	else
+	{
+		float height = tanf(m_fieldOfView * 0.5f) * m_near;
+		x = x * height * m_aspect;
+		y = y * height;
+		DVector3 right, up, forward, position;
+		m_transform->GetRight(right);
+		m_transform->GetUp(up);
+		m_transform->GetForward(forward);
+		m_transform->GetPosition(position);
+		DVector3 dir = right*x + up*y + forward*z;
+		out->origin.x = position.x + dir.x;
+		out->origin.y = position.y + dir.y;
+		out->origin.z = position.z + dir.z;
+		dir.Normalize();
+		out->direction.x = dir.x;
+		out->direction.y = dir.y;
+		out->direction.z = dir.z;
 	}
 }

@@ -97,35 +97,35 @@ public:
 	void SetSortOrder(int);
 	void ClearSkyBox();
 	void ClearFilter();
-	DRenderTexture* GetRenderTexture();
+	DRenderTexture* GetRenderTexture() const;
 	void SetRenderTexture(DRenderTexture*);
 	void SetReplaceShader(DShader* replacement);
 	void ResetReplaceShader();
 	void SetClearFlags(DClearFlags);
-	DClearFlags GetClearFlags();
-	void ScreenToWorldPoint(const DVector3, DVector3* out);
-	void ScreenToWorldPoint(float x, float y, float z, DVector3* out);
-	void ScreenToViewportPoint(const DVector3, DVector3* out);
-	void ScreenToViewportPoint(float x, float y, float z, DVector3* out);
-	void ViewportToScreenPoint(const DVector3, DVector3* out);
-	void ViewportToScreenPoint(float x, float y, float z, DVector3* out);
-	void ViewportToWorldPoint(const DVector3, DVector3* out);
-	void ViewportToWorldPoint(float x, float y, float z, DVector3* out);
-	void WorldToScreenPoint(const DVector3, DVector3* out);
-	void WorldToScreenPoint(float x, float y, float z, DVector3* out);
-	void WorldToViewportPoint(const DVector3, DVector3* out);
-	void WorldToViewportPoint(float x, float y, float z, DVector3* out);
+	DClearFlags GetClearFlags() const;
+	void ScreenToWorldPoint(const DVector3, DVector3* out) const;
+	void ScreenToWorldPoint(float x, float y, float z, DVector3* out) const;
+	void ScreenToViewportPoint(const DVector3, DVector3* out) const;
+	void ScreenToViewportPoint(float x, float y, float z, DVector3* out) const;
+	void ViewportToScreenPoint(const DVector3, DVector3* out) const;
+	void ViewportToScreenPoint(float x, float y, float z, DVector3* out) const;
+	void ViewportToWorldPoint(const DVector3, DVector3* out) const;
+	void ViewportToWorldPoint(float x, float y, float z, DVector3* out) const;
+	void WorldToScreenPoint(const DVector3, DVector3* out) const;
+	void WorldToScreenPoint(float x, float y, float z, DVector3* out) const;
+	void WorldToViewportPoint(const DVector3, DVector3* out) const;
+	void WorldToViewportPoint(float x, float y, float z, DVector3* out) const;
 
-	void ScreenPointToRay(const DVector3, DRay* out);
-	void ScreenPointToRay(float x, float y, float z, DRay* out);
-	void ViewportPointToRay(const DVector3, DRay* out);
-	void ViewportPointToRay(float x, float y, float z, DRay* out);
+	void ScreenPointToRay(const DVector3, DRay* out) const;
+	void ScreenPointToRay(float x, float y, float z, DRay* out) const;
+	void ViewportPointToRay(const DVector3, DRay* out) const;
+	void ViewportPointToRay(float x, float y, float z, DRay* out) const;
 
 	void SetLayerMask(DLAYER);
-	DLAYER GetLayerMask();
+	DLAYER GetLayerMask() const;
 	void AddLayer(DLAYER);
 	void RemoveLayer(DLAYER);
-	bool IsLayerVisible(DLAYER);
+	bool IsLayerVisible(DLAYER) const;
 
 	static void GetCurrentCamera(DCamera** cam);
 
@@ -145,6 +145,8 @@ private:
 	void BeginRender();
 	void EndRender();
 	void RefreshCameraDirParam();
+	void CameraPointToWorldPoint(float x, float y, float z, DVector3* out) const;
+	void CameraPointToRay(float x, float y, float z, DRay* out) const;
 
 protected:
 	int m_sortOrder;

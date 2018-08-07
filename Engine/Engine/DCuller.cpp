@@ -23,36 +23,36 @@ bool DCuller::Culling(DBounds bounds)
 
 		mv = view*proj;
 
-		int code = ComputeOutCode(DVector4(bounds.center.x + bounds.size.x * 0.5f, bounds.center.y + bounds.size.y * 0.5f,
-			bounds.center.z + bounds.size.z * 0.5f, 1), mv);
+		int code = ComputeOutCode(DVector4(bounds.center.x + bounds.halfSize.x, bounds.center.y + bounds.halfSize.y,
+			bounds.center.z + bounds.halfSize.z, 1), mv);
 
 		code &=
-			ComputeOutCode(DVector4(bounds.center.x - bounds.size.x * 0.5f, bounds.center.y + bounds.size.y * 0.5f,
-				bounds.center.z + bounds.size.z * 0.5f, 1), mv);
+			ComputeOutCode(DVector4(bounds.center.x - bounds.halfSize.x , bounds.center.y + bounds.halfSize.y,
+				bounds.center.z + bounds.halfSize.z, 1), mv);
 
 		code &=
-			ComputeOutCode(DVector4(bounds.center.x + bounds.size.x * 0.5f, bounds.center.y - bounds.size.y * 0.5f,
-				bounds.center.z + bounds.size.z * 0.5f, 1), mv);
+			ComputeOutCode(DVector4(bounds.center.x + bounds.halfSize.x, bounds.center.y - bounds.halfSize.y,
+				bounds.center.z + bounds.halfSize.z, 1), mv);
 
 		code &=
-			ComputeOutCode(DVector4(bounds.center.x - bounds.size.x * 0.5f, bounds.center.y - bounds.size.y * 0.5f,
-				bounds.center.z + bounds.size.z * 0.5f, 1), mv);
+			ComputeOutCode(DVector4(bounds.center.x - bounds.halfSize.x, bounds.center.y - bounds.halfSize.y,
+				bounds.center.z + bounds.halfSize.z, 1), mv);
 
 		code &=
-			ComputeOutCode(DVector4(bounds.center.x + bounds.size.x * 0.5f, bounds.center.y + bounds.size.y * 0.5f,
-				bounds.center.z - bounds.size.z * 0.5f, 1), mv);
+			ComputeOutCode(DVector4(bounds.center.x + bounds.halfSize.x, bounds.center.y + bounds.halfSize.y,
+				bounds.center.z - bounds.halfSize.z, 1), mv);
 
 		code &=
-			ComputeOutCode(DVector4(bounds.center.x - bounds.size.x * 0.5f, bounds.center.y + bounds.size.y * 0.5f,
-				bounds.center.z - bounds.size.z * 0.5f, 1), mv);
+			ComputeOutCode(DVector4(bounds.center.x - bounds.halfSize.x, bounds.center.y + bounds.halfSize.y,
+				bounds.center.z - bounds.halfSize.z, 1), mv);
 
 		code &=
-			ComputeOutCode(DVector4(bounds.center.x + bounds.size.x * 0.5f, bounds.center.y - bounds.size.y * 0.5f,
-				bounds.center.z - bounds.size.z * 0.5f, 1), mv);
+			ComputeOutCode(DVector4(bounds.center.x + bounds.halfSize.x, bounds.center.y - bounds.halfSize.y,
+				bounds.center.z - bounds.halfSize.z, 1), mv);
 
 		code &=
-			ComputeOutCode(DVector4(bounds.center.x - bounds.size.x * 0.5f, bounds.center.y - bounds.size.y * 0.5f,
-				bounds.center.z - bounds.size.z * 0.5f, 1), mv);
+			ComputeOutCode(DVector4(bounds.center.x - bounds.halfSize.x, bounds.center.y - bounds.halfSize.y,
+				bounds.center.z - bounds.halfSize.z, 1), mv);
 
 		if (code != 0) return false;
 

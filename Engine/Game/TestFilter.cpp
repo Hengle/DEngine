@@ -10,7 +10,7 @@ TestFilter::TestFilter()
 	m_mat = DRes::Load<DMaterial>(DEFAULT_GROUP, PEFFECT_MAT);
 	//m_mat->SetFloat("offset", 0.008f);
 
-	m_dst = DRenderTexture::Create(1024.0f, 768.0f);
+	m_dst = DRenderTexture::Create(256.0f, 256.0f);
 	//testshadow = DShader::Create("../Res/testshadow.shader");
 	//m_mat = new DMaterial(testshadow);
 }
@@ -22,17 +22,17 @@ TestFilter::~TestFilter()
 
 void TestFilter::Render(DRenderTexture * screenTexture)
 {
-	/*m_mat->SetVector2("offset", DVector2(0.008f, 0.008f));
+	m_mat->SetVector2("offset", DVector2(0.01f, 0.0f));
 	DGraphics::Blit(screenTexture, m_dst, m_mat);
-	m_mat->SetVector2("offset", DVector2(-0.008f, -0.008f));
 	DGraphics::Blit(m_dst, screenTexture, m_mat);
-	m_mat->SetVector2("offset", DVector2(0.008f, 0.008f));
 	DGraphics::Blit(screenTexture, m_dst, m_mat);
-	m_mat->SetVector2("offset", DVector2(-0.008f, -0.008f));
-	DGraphics::Blit(m_dst, m_mat);*/
+	m_mat->SetVector2("offset", DVector2(0.00f, 0.01f));
+	DGraphics::Blit(m_dst, screenTexture, m_mat);
+	DGraphics::Blit(screenTexture, m_dst, m_mat);
+	DGraphics::Blit(m_dst, m_mat);
 
 
-	DGraphics::Blit(screenTexture, m_mat);
+	//DGraphics::Blit(screenTexture, m_mat);
 }
 
 void TestFilter::Release()

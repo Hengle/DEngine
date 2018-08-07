@@ -191,11 +191,11 @@ SubShader {
 
 					out vec4 color;
 					void main(){
-						color = texture(screenTexture, uv);//*0.45;
-						// color.rgb += texture(screenTexture, uv + offset).rgb*0.175;
-						// color.rgb += texture(screenTexture, uv - offset).rgb*0.175;
-						// color.rgb += texture(screenTexture, uv + offset).rgb*0.1;
-						// color.rgb += texture(screenTexture, uv - offset).rgb*0.1;
+						color = texture(screenTexture, uv)*0.5;
+						color.rgb += texture(screenTexture, uv + offset).rgb*0.15;
+						color.rgb += texture(screenTexture, uv - offset).rgb*0.15;
+						color.rgb += texture(screenTexture, uv + offset).rgb*0.1;
+						color.rgb += texture(screenTexture, uv - offset).rgb*0.1;
 						//color = vec4(1.0,0.0,0.0,1.0);
 
 	    				color.a = 1.0;

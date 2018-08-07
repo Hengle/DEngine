@@ -135,11 +135,11 @@ void DDisplayObject::UpdateBounds()
 	for (i = 0; i < 3; i++)
 	{
 		m_bounds.center[i] = ltw[12+i];
-		m_bounds.size[i] = 0.0f;
+		m_bounds.halfSize[i] = 0.0f;
 		for (j = 0; j < 3; j++)
 		{
 			m_bounds.center[i] += ltw[j * 4 + i] * center[j];
-			m_bounds.size[i] += fabsf(ltw[j * 4 + i])*size[j];
+			m_bounds.halfSize[i] += fabsf(ltw[j * 4 + i])*size[j]*0.5f;
 		}
 	}
 

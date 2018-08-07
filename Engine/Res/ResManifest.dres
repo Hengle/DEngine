@@ -50,7 +50,7 @@
 	#RES_END
 
 	#RES_BEGIN TEXTURE2D 2001
-		#PATH ../Res/eboy.tga
+		#PATH ../Res/eboy.jpg
 	#RES_END
 
 	#RES_BEGIN TEXTURE2D 2002

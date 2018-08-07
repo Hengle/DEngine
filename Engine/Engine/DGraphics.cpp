@@ -686,8 +686,8 @@ bool DGraphics::IsFrustrumZeroToOne()
 
 void DGraphics::InitScreenPlane()
 {
-	int vertexCount = 4;
-	int indexCount = 6;
+	int vertexCount = 8;
+	int indexCount = 30;
 
 	float *vertices,*uvs;
 	unsigned long *indexBuffer;
@@ -704,12 +704,22 @@ void DGraphics::InitScreenPlane()
 	vertices[6] = 0.5f*screenWidth; vertices[7] = 0.5f*screenHeight; vertices[8] = 0.0f;
 	vertices[9] = 0.5f*screenWidth; vertices[10] = -0.5f*screenHeight; vertices[11] = 0.0f;
 
+	vertices[12] = -0.7f*screenWidth; vertices[13] = -0.7f*screenHeight; vertices[14] = 0.0f;
+	vertices[15] = -0.7f*screenWidth; vertices[16] = 0.7f*screenHeight; vertices[17] = 0.0f;
+	vertices[18] = 0.7f*screenWidth; vertices[19] = 0.7f*screenHeight; vertices[20] = 0.0f;
+	vertices[21] = 0.7f*screenWidth; vertices[22] = -0.7f*screenHeight; vertices[23] = 0.0f;
+
 	if (m_GL->IsUVStartsAtTop())
 	{
 		uvs[0] = 0.0f; uvs[1] = 1.0f;
 		uvs[2] = 0.0f; uvs[3] = 0.0f;
 		uvs[4] = 1.0f; uvs[5] = 0.0f;
 		uvs[6] = 1.0f; uvs[7] = 1.0f;
+
+		uvs[8] = 0.0f; uvs[9] = 1.0f;
+		uvs[10] = 0.0f; uvs[11] = 0.0f;
+		uvs[12] = 1.0f; uvs[13] = 0.0f;
+		uvs[14] = 1.0f; uvs[15] = 1.0f;
 	}
 	else
 	{
@@ -717,15 +727,32 @@ void DGraphics::InitScreenPlane()
 		uvs[2] = 0.0f; uvs[3] = 1.0f;
 		uvs[4] = 1.0f; uvs[5] = 1.0f;
 		uvs[6] = 1.0f; uvs[7] = 0.0f;
+
+		uvs[8] = 0.0f; uvs[9] = 0.0f;
+		uvs[10] = 0.0f; uvs[11] = 1.0f;
+		uvs[12] = 1.0f; uvs[13] = 1.0f;
+		uvs[14] = 1.0f; uvs[15] = 0.0f;
 	}
 
 	indexBuffer[0] = 0; indexBuffer[1] = 1; indexBuffer[2] = 2;
 	indexBuffer[3] = 0; indexBuffer[4] = 2; indexBuffer[5] = 3;
 
+	indexBuffer[6] = 0; indexBuffer[7] = 3; indexBuffer[8] = 7;
+	indexBuffer[9] = 0; indexBuffer[10] = 7; indexBuffer[11] = 4;
+
+	indexBuffer[12] = 0; indexBuffer[13] = 5; indexBuffer[14] = 1;
+	indexBuffer[15] = 0; indexBuffer[16] = 4; indexBuffer[17] = 5;
+
+	indexBuffer[18] = 1; indexBuffer[19] = 5; indexBuffer[20] = 6;
+	indexBuffer[21] = 1; indexBuffer[22] = 6; indexBuffer[23] = 2;
+
+	indexBuffer[24] = 2; indexBuffer[25] = 6; indexBuffer[26] = 7;
+	indexBuffer[27] = 2; indexBuffer[28] = 7; indexBuffer[29] = 3;
+
 	m_screenPlane = new DGeometry();
-	m_screenPlane->SetVertices(vertices, 4);
-	m_screenPlane->SetUVs(0, uvs, 4);
-	m_screenPlane->SetIndices(indexBuffer, 6);
+	m_screenPlane->SetVertices(vertices, 8);
+	m_screenPlane->SetUVs(0, uvs, 8);
+	m_screenPlane->SetIndices(indexBuffer, 30);
 
 }
 

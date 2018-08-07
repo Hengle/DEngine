@@ -8,7 +8,7 @@
 
 #define IS_FLOAT_EQUAL(a, b) (a>=b-EPSILNON&&a<=b+EPSILNON)   //浮点数比较
 
-float clamp(float value, float min, float max)
+inline float clamp(float value, float min, float max)
 {
 	if (value < min)
 		value = min;
@@ -17,12 +17,12 @@ float clamp(float value, float min, float max)
 	return value;
 }
 
-float clamp01(float value)
+inline float clamp01(float value)
 {
 	return clamp(value, 0.0f, 1.0f);
 }
 
-float lerp(float a, float b, float t)
+inline float lerp(float a, float b, float t)
 {
 	return a + (b - a)*t;
 }

@@ -95,7 +95,11 @@ DRenderTextureViewRes9::DRenderTextureViewRes9(LPDIRECT3DDEVICE9 device, float w
 	}
 	D3DSURFACE_DESC desc;
 	hr = m_texture->GetSurfaceLevel(0, &m_surface);
+	if (FAILED(hr))
+		return;
 	hr = m_surface->GetDesc(&desc);
+	if (FAILED(hr))
+		return;
 	if (FAILED(hr = D3DXCreateRenderToSurface(device, desc.Width, desc.Height, desc.Format, TRUE, D3DFMT_D16, &m_interface)))
 		return;
 

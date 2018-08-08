@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "DResObject.h"
 #include "DResGroup.h"
+#include "DResDefine.h"
 #include <map>
 #include <fstream>
 
@@ -20,6 +21,9 @@ public:
 	template<class T>
 	/*加载资源*/
 	static T* Load(unsigned int groupid /*资源组id*/, unsigned int resid /*资源id*/);
+	template<class T>
+	/*加载内部资源*/
+	static T* LoadInternal(unsigned int resid /*内部资源id*/);
 	/*卸载资源*/
 	static void UnLoad(unsigned int groupid /*资源组id*/, unsigned int resid /*资源id*/);
 	/*加载资源组*/
@@ -45,5 +49,15 @@ private:
 template<class T>
 inline T * DRes::Load(unsigned int groupid, unsigned int resid)
 {
+	if (groupid == D_INTERNAL_RES_GROUP)
+	{
+		throw "请使用LoadInternal加载内部资源";
+	}
 	return (T*)LoadRes(groupid, resid);
+}
+
+template<class T>
+inline T * DRes::LoadInternal(unsigned int resid)
+{
+	return (T*)LoadRes(D_INTERNAL_RES_GROUP, resid);
 }

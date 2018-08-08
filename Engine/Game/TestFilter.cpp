@@ -7,8 +7,8 @@ TestFilter::TestFilter()
 {
 	//m_shader = DRes::Load<DShader>(DEFAULT_GROUP, PEFFECT_SHADER);
 	//m_mat = new DMaterial(m_shader);
-	m_glowMat = DRes::Load<DMaterial>(DEFAULT_GROUP, 3011);
-	m_mixMat = DRes::Load<DMaterial>(DEFAULT_GROUP, 3012);
+	//m_glowMat = DRes::Load<DMaterial>(DEFAULT_GROUP, 3011);
+	//m_mixMat = DRes::Load<DMaterial>(DEFAULT_GROUP, 3012);
 	m_mat = DRes::Load<DMaterial>(DEFAULT_GROUP, PEFFECT_MAT);
 	//m_mat->SetFloat("offset", 0.008f);
 
@@ -25,7 +25,7 @@ TestFilter::~TestFilter()
 
 void TestFilter::Render(DRenderTexture * screenTexture)
 {
-	m_glowMat->SetFloat("blackness", 0.2f);
+	/*m_glowMat->SetFloat("blackness", 0.2f);
 
 	DGraphics::Blit(screenTexture, m_dst, m_glowMat);
 	m_mat->SetVector2("offset", DVector2(0.01f, 0.0f));
@@ -37,10 +37,10 @@ void TestFilter::Render(DRenderTexture * screenTexture)
 	DGraphics::Blit(m_dst, m_dst2, m_mat);
 	DGraphics::Blit(m_dst2, m_dst, m_mat);
 	m_mixMat->SetTexture("mix", m_dst);
-	DGraphics::Blit(screenTexture, m_mixMat);
+	DGraphics::Blit(screenTexture, m_mixMat);*/
 
 
-	//DGraphics::Blit(screenTexture, m_mat);
+	DGraphics::Blit(screenTexture, m_mat);
 }
 
 void TestFilter::Release()

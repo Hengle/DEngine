@@ -4,6 +4,7 @@
 
 DShaderBlock::DShaderBlock()
 {
+	m_renderQueue = DRenderQueue_Opaque;
 }
 
 DShaderBlock::~DShaderBlock()
@@ -12,12 +13,20 @@ DShaderBlock::~DShaderBlock()
 
 void DShaderBlock::Release()
 {
-	if (m_supportShader != NULL)
+	int i;
+	for (i = 0; i < m_passes.size(); i++)
+	{
+		DShaderPass* pass = m_passes[i];
+		pass->Release();
+		delete pass;
+	}
+	m_passes.clear();
+	/*if (m_supportShader != NULL)
 	{
 		m_supportShader->Release();
 		delete m_supportShader;
 		m_supportShader = NULL;
-	}
+	}*/
 }
 
 bool DShaderBlock::Compile(char * fileName)
@@ -33,9 +42,10 @@ bool DShaderBlock::Compile(char * fileName)
 	while (!ifile.eof())
 	{
 		ifile >> read;
-		if (strcmp(read, "SubShader") == 0)
+		if (strcmp(read, "ShaderBlock") == 0)
 		{
-			result = InterpretSubShader(ifile);
+			result = InterpretShaderBlock(ifile);
+			//result = InterpretSubShader(ifile);
 			if (result)
 				break;
 		}
@@ -46,11 +56,60 @@ bool DShaderBlock::Compile(char * fileName)
 	return true;
 }
 
-bool DShaderBlock::InterpretSubShader(ifstream & ifile)
+//bool DShaderBlock::InterpretSubShader(ifstream & ifile)
+//{
+//	bool isBegin = false;
+//	char read[128];
+//	DSubShader* subshader = NULL;
+//	while (!ifile.eof())
+//	{
+//		ifile >> read;
+//
+//		if (!isBegin)
+//		{
+//			if (strcmp(read, "{") == 0)
+//			{
+//				subshader = new DSubShader();
+//				//m_subShaders.push_back(subshader);
+//				isBegin = true;
+//			}
+//		}
+//		else
+//		{
+//			if (strcmp(read, "}") == 0) 
+//			{
+//				isBegin = false;
+//				if (subshader != NULL)
+//				{
+//					if (subshader->IsSupport(DSystem::GetGraphicsMgr()->GetAPI()))
+//					{
+//						m_supportShader = subshader;
+//						return true;
+//					}
+//					subshader->Release();
+//					delete subshader;
+//					subshader = NULL;
+//				}
+//				return false;
+//			}
+//			else if (strcmp(read, "Desc") == 0)
+//			{
+//				InterpretDesc(ifile, subshader);
+//			}
+//			else if (strcmp(read, "Pass") == 0)
+//			{
+//				InterpretPass(ifile, subshader);
+//			}
+//		}
+//	}
+//	return false;
+//}
+
+bool DShaderBlock::InterpretShaderBlock(ifstream & ifile)
 {
 	bool isBegin = false;
 	char read[128];
-	DSubShader* subshader = NULL;
+	//DSubShader* subshader = NULL;
 	while (!ifile.eof())
 	{
 		ifile >> read;
@@ -59,17 +118,17 @@ bool DShaderBlock::InterpretSubShader(ifstream & ifile)
 		{
 			if (strcmp(read, "{") == 0)
 			{
-				subshader = new DSubShader();
+				//subshader = new DSubShader();
 				//m_subShaders.push_back(subshader);
 				isBegin = true;
 			}
 		}
 		else
 		{
-			if (strcmp(read, "}") == 0) 
+			if (strcmp(read, "}") == 0)
 			{
 				isBegin = false;
-				if (subshader != NULL)
+				/*if (subshader != NULL)
 				{
 					if (subshader->IsSupport(DSystem::GetGraphicsMgr()->GetAPI()))
 					{
@@ -79,23 +138,23 @@ bool DShaderBlock::InterpretSubShader(ifstream & ifile)
 					subshader->Release();
 					delete subshader;
 					subshader = NULL;
-				}
-				return false;
+				}*/
+				return true;
 			}
 			else if (strcmp(read, "Desc") == 0)
 			{
-				InterpretDesc(ifile, subshader);
+				InterpretDesc(ifile);
 			}
 			else if (strcmp(read, "Pass") == 0)
 			{
-				InterpretPass(ifile, subshader);
+				InterpretPass(ifile);
 			}
 		}
 	}
 	return false;
 }
 
-void DShaderBlock::InterpretDesc(ifstream & ifile, DSubShader * subshader)
+void DShaderBlock::InterpretDesc(ifstream & ifile)
 {
 	bool isBegin = false;
 	char read[128], funcname[32];
@@ -117,87 +176,91 @@ void DShaderBlock::InterpretDesc(ifstream & ifile, DSubShader * subshader)
 				isBegin = false;
 				return;
 			}
-			else if (strcmp(read, "CompileTarget:") == 0)
+			/*else if (strcmp(read, "CompileTarget:") == 0)
 			{
 				InterpretCompileTarget(ifile, subshader);
-			}
+			}*/
 			else if (strcmp(read, "Queue") == 0)
 			{
-				InterpretRenderQueue(ifile, subshader);
+				InterpretRenderQueue(ifile);
 			}
 		}
 	}
 }
 
-void DShaderBlock::InterpretCompileTarget(ifstream & ifile, DSubShader* subshader)
-{
-	bool isBegin = false;
-	char read[64];
-	while (!ifile.eof())
-	{
-		ifile >> read;
+//void DShaderBlock::InterpretCompileTarget(ifstream & ifile, DSubShader* subshader)
+//{
+//	bool isBegin = false;
+//	char read[64];
+//	while (!ifile.eof())
+//	{
+//		ifile >> read;
+//
+//		if (!isBegin)
+//		{
+//			if (strcmp(read, "{") == 0)
+//			{
+//				isBegin = true;
+//			}
+//		}
+//		else
+//		{
+//			if (strcmp(read, "}") == 0)
+//			{
+//				isBegin = false;
+//				return;
+//			}
+//			else if (strcmp(read, "d3d9") == 0)
+//			{
+//#ifdef _DGAPI_D3D9
+//				subshader->AddCompileTarget(DGRAPHICS_API_D3D9);
+//#endif
+//			}
+//			else if (strcmp(read, "d3d10") == 0)
+//			{
+//#ifdef _DGAPI_D3D10
+//				subshader->AddCompileTarget(DGRAPHICS_API_D3D10);
+//#endif
+//			}
+//			else if (strcmp(read, "d3d11") == 0)
+//			{
+//#ifdef _DGAPI_D3D11
+//				subshader->AddCompileTarget(DGRAPHICS_API_D3D11);
+//#endif
+//			}
+//			else if (strcmp(read, "opengl") == 0)
+//			{
+//#ifdef _DGAPI_OPENGL
+//				subshader->AddCompileTarget(DGRAPHICS_API_OPENGL);
+//#endif
+//			}
+//		}
+//	}
+//}
 
-		if (!isBegin)
-		{
-			if (strcmp(read, "{") == 0)
-			{
-				isBegin = true;
-			}
-		}
-		else
-		{
-			if (strcmp(read, "}") == 0)
-			{
-				isBegin = false;
-				return;
-			}
-			else if (strcmp(read, "d3d9") == 0)
-			{
-#ifdef _DGAPI_D3D9
-				subshader->AddCompileTarget(DGRAPHICS_API_D3D9);
-#endif
-			}
-			else if (strcmp(read, "d3d10") == 0)
-			{
-#ifdef _DGAPI_D3D10
-				subshader->AddCompileTarget(DGRAPHICS_API_D3D10);
-#endif
-			}
-			else if (strcmp(read, "d3d11") == 0)
-			{
-#ifdef _DGAPI_D3D11
-				subshader->AddCompileTarget(DGRAPHICS_API_D3D11);
-#endif
-			}
-			else if (strcmp(read, "opengl") == 0)
-			{
-#ifdef _DGAPI_OPENGL
-				subshader->AddCompileTarget(DGRAPHICS_API_OPENGL);
-#endif
-			}
-		}
-	}
-}
-
-void DShaderBlock::InterpretRenderQueue(ifstream &ifile, DSubShader * subShader)
+void DShaderBlock::InterpretRenderQueue(ifstream &ifile)
 {
 	char read[64];
 	ifile >> read;
 	if (strcmp(read, "Opaque") == 0)
-		subShader->SetRenderQueue(DRenderQueue_Opaque);
+		//subShader->SetRenderQueue(DRenderQueue_Opaque);
+		m_renderQueue = DRenderQueue_Opaque;
 	else if (strcmp(read, "Transparent") == 0)
-		subShader->SetRenderQueue(DRenderQueue_Transparent);
+		//subShader->SetRenderQueue(DRenderQueue_Transparent);
+		m_renderQueue = DRenderQueue_Transparent;
 }
 
-void DShaderBlock::InterpretPass(ifstream & ifile, DSubShader* subshader)
+void DShaderBlock::InterpretPass(ifstream & ifile)
 {
 	bool isBegin = false;
 	char read[128];
 	DShaderPass* pass = NULL;
-	if (subshader->IsSupport(DSystem::GetGraphicsMgr()->GetAPI())) {
+	DGraphicsAPI api = DSystem::GetGraphicsMgr()->GetAPI();
+	//if (subshader->IsSupport(DSystem::GetGraphicsMgr()->GetAPI())) {
 		pass = DSystem::GetGraphicsMgr()->GetGLCore()->CreateShaderPass();//new DShaderPass();
-		subshader->AddPass(pass);
-	}
+	//	subshader->AddPass(pass);
+	//}
+		bool isSupport = false;
 	while (!ifile.eof())
 	{
 		ifile >> read;
@@ -214,6 +277,8 @@ void DShaderBlock::InterpretPass(ifstream & ifile, DSubShader* subshader)
 			if (strcmp(read, "}") == 0)
 			{
 				isBegin = false;
+				if (isSupport)
+					m_passes.push_back(pass);
 				return;
 			}
 			/*else if (strcmp(read, "Tags") == 0)
@@ -224,9 +289,28 @@ void DShaderBlock::InterpretPass(ifstream & ifile, DSubShader* subshader)
 			{
 				InterpretState(ifile, pass);
 			}
-			else if (strcmp(read, "Shader") == 0)
+			else if (strcmp(read, "SHADER_BEGIN:") == 0)
 			{
-				InterpretShader(ifile, pass);
+				int targets = InterpretCompileTarget(ifile); //先解析该shader块的支持api
+				if ((targets & api) != 0) //如果该shader块支持则解析并编译该shader代码
+				{
+					//InterpretShader(ifile, pass);
+					if (pass != NULL)
+					{
+						pass->CompileShader(ifile);
+					}
+					isSupport = true;
+				}
+				//else
+				//{
+					while (!ifile.eof()) //如果该shader不支持，则将剩余部分读完并跳过
+					{
+						ifile >> read;
+						if (strcmp(read, "SHADER_END") == 0)
+							break;
+					}
+				//}
+				
 			}
 		}
 	}
@@ -416,119 +500,187 @@ void DShaderBlock::InterpretStencil(ifstream & ifile, DShaderPass * pass)
 	}
 }
 
-void DShaderBlock::InterpretShader(ifstream & ifile, DShaderPass * pass)
+//void DShaderBlock::InterpretShader(ifstream & ifile, DShaderPass * pass)
+//{
+//	//bool isBegin = false;
+//	//string s;
+//	char read[128];
+//	//int compileTarget = 0;
+//	//DGraphicsAPI api = DSystem::GetGraphicsMgr()->GetAPI();
+//	while (!ifile.eof())
+//	{
+//		ifile >> read;
+//
+//		if (strcmp(read, "SHADER_END") == 0)
+//		{
+//			return;
+//		}
+//		if (pass != NULL)
+//		{
+//			pass->CompileShader(ifile);
+//		}
+//
+//		/*if (!isBegin)
+//		{
+//			if (strcmp(read, "{") == 0)
+//			{
+//				isBegin = true;
+//
+//				if (pass != NULL)
+//				{
+//					pass->CompileShader(ifile);
+//				}
+//				else
+//				{
+//					ifile >> read;
+//					while (strcmp(read, "]") != 0)
+//					{
+//						ifile >> read;
+//					}
+//				}
+//			}
+//		}
+//		else
+//		{
+//			if (strcmp(read, "}") == 0)
+//			{
+//				isBegin = false;
+//
+//				return;
+//			}
+//		}*/
+//	}
+//}
+
+int DShaderBlock::InterpretCompileTarget(ifstream & ifile)
 {
 	bool isBegin = false;
-	//string s;
-	char read[128];
+	char read[64];
+	int compileTarget = 0;
 	while (!ifile.eof())
 	{
 		ifile >> read;
 
 		if (!isBegin)
 		{
-			if (strcmp(read, "{") == 0)
+			if (strcmp(read, "[") == 0)
 			{
 				isBegin = true;
-
-				if (pass != NULL)
-				{
-					pass->CompileShader(ifile);
-				}
-				else
-				{
-					ifile >> read;
-					while (strcmp(read, "]") != 0)
-					{
-						ifile >> read;
-					}
-				}
 			}
 		}
 		else
 		{
-			if (strcmp(read, "}") == 0)
+			if (strcmp(read, "]") == 0)
 			{
 				isBegin = false;
-
-				return;
+				return compileTarget;
+			}
+			else if (strcmp(read, "d3d9") == 0)
+			{
+#ifdef _DGAPI_D3D9
+				compileTarget |= DGRAPHICS_API_D3D9;
+#endif
+			}
+			else if (strcmp(read, "d3d10") == 0)
+			{
+#ifdef _DGAPI_D3D10
+				compileTarget |= DGRAPHICS_API_D3D10;
+#endif
+			}
+			else if (strcmp(read, "d3d11") == 0)
+			{
+#ifdef _DGAPI_D3D11
+				compileTarget |= DGRAPHICS_API_D3D11;
+#endif
+			}
+			else if (strcmp(read, "opengl") == 0)
+			{
+#ifdef _DGAPI_OPENGL
+				compileTarget |= DGRAPHICS_API_OPENGL;
+#endif
 			}
 		}
 	}
+	return compileTarget;
 }
 
 bool DShaderBlock::IsSupported()
 {
-	return m_supportShader != NULL;
+	return m_passes.size() > 0;
+	//return m_supportShader != NULL;
 }
 
 int DShaderBlock::GetPassCount()
 {
-	return m_supportShader->GetPassCount();
+	return m_passes.size();
+	//return m_supportShader->GetPassCount();
 }
 
 DShaderPass * DShaderBlock::GetPass(int index)
 {
-	return m_supportShader->GetPass(index);
+	if (index < 0 || index >= m_passes.size())
+		return NULL;
+	return m_passes.at(index);
+	//return m_supportShader->GetPass(index);
 }
 
 DRenderQueue DShaderBlock::GetRenderQueue()
 {
-	return m_supportShader->GetRenderQueue();;
-}
-
-DSubShader::DSubShader()
-{
-	m_compileTarget = 0;
-	m_renderQueue = DRenderQueue_Opaque;
-}
-
-void DSubShader::Release()
-{
-	
-	int i;
-	for (i = 0; i < m_passes.size(); i++)
-	{
-		DShaderPass* pass = m_passes[i];
-		pass->Release();
-		delete pass;
-	}
-	m_passes.clear();
-}
-
-void DSubShader::AddCompileTarget(DGraphicsAPI api)
-{
-	m_compileTarget |= api;
-}
-
-void DSubShader::AddPass(DShaderPass * pass)
-{
-	m_passes.push_back(pass);
-}
-
-bool DSubShader::IsSupport(DGraphicsAPI api)
-{
-	return (m_compileTarget & api) != 0;
-}
-
-void DSubShader::SetRenderQueue(DRenderQueue renderQueue)
-{
-	m_renderQueue = renderQueue;
-}
-
-int DSubShader::GetPassCount()
-{
-	return m_passes.size();
-}
-
-DRenderQueue DSubShader::GetRenderQueue()
-{
 	return m_renderQueue;
 }
 
-DShaderPass * DSubShader::GetPass(int index)
-{
-	if (index >= 0 && index < m_passes.size())
-		return m_passes.at(index);
-	return NULL;
-}
+//DSubShader::DSubShader()
+//{
+//	m_compileTarget = 0;
+//	m_renderQueue = DRenderQueue_Opaque;
+//}
+//
+//void DSubShader::Release()
+//{
+//	
+//	int i;
+//	for (i = 0; i < m_passes.size(); i++)
+//	{
+//		DShaderPass* pass = m_passes[i];
+//		pass->Release();
+//		delete pass;
+//	}
+//	m_passes.clear();
+//}
+//
+//void DSubShader::AddCompileTarget(DGraphicsAPI api)
+//{
+//	m_compileTarget |= api;
+//}
+//
+//void DSubShader::AddPass(DShaderPass * pass)
+//{
+//	m_passes.push_back(pass);
+//}
+//
+//bool DSubShader::IsSupport(DGraphicsAPI api)
+//{
+//	return (m_compileTarget & api) != 0;
+//}
+//
+//void DSubShader::SetRenderQueue(DRenderQueue renderQueue)
+//{
+//	m_renderQueue = renderQueue;
+//}
+//
+//int DSubShader::GetPassCount()
+//{
+//	return m_passes.size();
+//}
+//
+//DRenderQueue DSubShader::GetRenderQueue()
+//{
+//	return m_renderQueue;
+//}
+//
+//DShaderPass * DSubShader::GetPass(int index)
+//{
+//	if (index >= 0 && index < m_passes.size())
+//		return m_passes.at(index);
+//	return NULL;
+//}

@@ -1,14 +1,11 @@
-SubShader {
-	Desc {
-		CompileTarget: { d3d10 d3d11 }
-	}
+ShaderBlock {
 	Pass {
 		State {
 			zwrite on
 			ztest lequal
 		}
 
-		Shader {
+		SHADER_BEGIN: [ d3d10 d3d11 ]
 			#vert VertMain
 			#frag FragMain
 			#code [
@@ -110,22 +107,8 @@ SubShader {
 				}
 				
 			]
-		}
-	}
-}
-SubShader {
-	Desc {
-		CompileTarget: { opengl }
-	}
-	Pass {
-		State {
-			zwrite on
-			ztest lequal
-		}
-
-		Shader {
-			#vert VertMain
-			#frag FragMain
+		SHADER_END
+		SHADER_BEGIN: [ opengl ]
 			#code [
 				#vert [
 
@@ -221,6 +204,6 @@ SubShader {
 				]
 				
 			]
-		}
+		SHADER_END
 	}
 }

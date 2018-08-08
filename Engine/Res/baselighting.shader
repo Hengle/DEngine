@@ -1,14 +1,11 @@
-SubShader {
-	Desc {
-		CompileTarget: { d3d10 d3d11 }
-	}
+ShaderBlock {
 	Pass {
 		State {
 			zwrite on
 			ztest lequal
 		}
 
-		Shader {
+		SHADER_BEGIN: [ d3d10 d3d11 ]
 			#vert VertMain
 			#frag FragMain
 			#code [
@@ -95,22 +92,92 @@ SubShader {
 				}
 				
 			]
-		}
-	}
-}
-SubShader {
-	Desc {
-		CompileTarget: { opengl }
-	}
-	Pass {
-		State {
-			zwrite on
-			ztest lequal
-		}
-
-		Shader {
+		SHADER_END
+		SHADER_BEGIN: [ d3d9 ]
 			#vert VertMain
 			#frag FragMain
+			#code [
+
+				
+				matrix g_engineWorldMatrix;
+				matrix g_engineViewMatrix;
+				matrix g_engineProjectionMatrix;
+
+				struct VS_INPUT
+				{
+				    float3 position : POSITION;
+				    float3 normal   : NORMAL;
+				    float2 tex : TEXCOORD0;
+				};
+
+				struct VS_OUTPUT
+				{
+				    float4 position : SV_POSITION;
+				    float3 worldNormal:TEXCOORD0;
+				    float3 worldPosition:TEXCOORD1;
+				    float2 tex : TEXCOORD2;
+				};
+
+				sampler shaderTexture;
+
+				float3 g_engineLightDir;
+				float4 g_engineLightColor;
+
+				float4 g_engineCameraPos;
+
+				float g_engineTime;
+
+				float gloss;
+				float specular;
+
+				VS_OUTPUT VertMain(VS_INPUT input)
+				{
+				    VS_OUTPUT output = (VS_OUTPUT)0;
+
+				    float4 pos = float4(input.position, 1.0);
+
+				    output.position  = mul(pos, g_engineWorldMatrix);
+				    output.worldPosition = output.position.xyz;
+				    output.position  = mul(output.position, g_engineViewMatrix);
+				    output.position = mul(output.position, g_engineProjectionMatrix);
+
+				    output.worldNormal = mul(float4(input.normal, 0.0f), g_engineWorldMatrix).xyz;
+	    
+					output.tex = input.tex;
+	    
+				    return output;
+				}
+
+				float3 GetViewDir(float3 worldPos) {
+					float3 viewdir;
+					if(g_engineCameraPos.w == 0.0) {
+						viewdir = -g_engineCameraPos.xyz;
+					}else{
+						viewdir = normalize(g_engineCameraPos.xyz - worldPos);
+					}
+					return viewdir;
+				}
+
+				float4 FragMain(VS_OUTPUT input) : SV_TARGET
+				{
+				    float4 textureColor = tex2D(shaderTexture,      input.tex);
+
+				    float ndl = max(0.0f, dot(input.worldNormal, -g_engineLightDir));
+
+				    float3 h = normalize(GetViewDir(input.worldPosition) - g_engineLightDir);
+
+				    float ndh = max(0.0f, dot(input.worldNormal, h));
+
+
+				    textureColor.rgb =  textureColor.rgb * ndl + float3(1.0f,1.0f,1.0f)*pow(ndh,specular*128.0f)*gloss;
+				    textureColor.a = 1.0f;
+
+	    			return textureColor;
+				}
+				
+			]
+		SHADER_END
+		SHADER_BEGIN: [ opengl ]
 			#code [
 				#vert [
 
@@ -189,6 +256,6 @@ SubShader {
 				]
 				
 			]
-		}
+		SHADER_END
 	}
 }

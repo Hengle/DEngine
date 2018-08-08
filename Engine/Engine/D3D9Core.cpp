@@ -117,22 +117,25 @@ void D3D9Core::Clear(bool clearDepth, bool clearStencil, bool clearColor, DColor
 		flag |= D3DCLEAR_STENCIL;
 	D3DCOLOR c = D3DCOLOR_COLORVALUE(color.r, color.g, color.b, color.a);
 
-	if (res != NULL)
-	{
-		DRenderTextureViewRes9* r = (DRenderTextureViewRes9*)res;
-		LPD3DXRENDERTOSURFACE isurface = r->GetInterface();
-		isurface->BeginScene(r->GetSurface(), &m_viewPort);
-		m_device->Clear(0, NULL, flag, c, 1.0f, 0);
-	}
-	else
-	{
-		m_device->Clear(0, NULL, flag, c, 1.0f, 0);
-		m_device->BeginScene();
-	}
+	m_device->Clear(0, NULL, flag, c, 1.0f, 0);
 }
 
 void D3D9Core::SetRenderTarget(IRenderTextureViewRes * res)
 {
+	if (res != NULL)
+	{
+		DRenderTextureViewRes9* r = (DRenderTextureViewRes9*)res;
+		//LPD3DXRENDERTOSURFACE isurface = r->GetInterface();
+
+		//isurface->BeginScene(r->GetSurface(), &m_viewPort);
+		LPDIRECT3DSURFACE9 surface = r->GetSurface();
+		m_device->SetRenderTarget(0, surface);
+	}
+	//else
+	//{
+	//	m_device->BeginScene();
+	//}
+	m_device->BeginScene();
 }
 
 void D3D9Core::SetViewPort(float x, float y, float width, float height)

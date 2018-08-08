@@ -1,6 +1,7 @@
 ﻿#if _DGAPI_D3D9 || _DGAPI_D3D10 || _DGAPI_D3D11
 
 #include "D3DCore.h"
+#include "DSystem.h"
 #include <string>
 
 unsigned int RasterizerState::GetKey()
@@ -201,34 +202,20 @@ void D3DShaderPass::CompileShader(std::ifstream & ifile)
 	{
 		ifile >> read;
 
-		//if (!isBegin)
-		//{
-		//	if (strcmp(read, "{") == 0)
-		//	{
-		//		isBegin = true;
-		//	}
-		//}
-		//else
+		if (strcmp(read, "#vert") == 0)
 		{
-			//if (strcmp(read, "}") == 0)
-			//{
-			//	return;
-			//}
-			if (strcmp(read, "#vert") == 0)
-			{
-				ifile >> param;
-				SetVertexFuncName(param);
-			}
-			else if (strcmp(read, "#frag") == 0)
-			{
-				ifile >> param;
-				SetPixelFuncName(param);
-			}
-			else if (strcmp(read, "#code") == 0)
-			{
-				CompileShaderContent(ifile);
-				return;
-			}
+			ifile >> param;
+			SetVertexFuncName(param);
+		}
+		else if (strcmp(read, "#frag") == 0)
+		{
+			ifile >> param;
+			SetPixelFuncName(param);
+		}
+		else if (strcmp(read, "#code") == 0)
+		{
+			CompileShaderContent(ifile);
+			return;
 		}
 	}
 

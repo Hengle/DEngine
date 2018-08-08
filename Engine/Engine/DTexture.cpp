@@ -167,7 +167,7 @@ DRenderTexture * DRenderTexture::Create(float width, float height)
 {
 	DRenderTexture* tex = new DRenderTexture(width, height);
 	tex->m_renderTextureRes = DSystem::GetGraphicsMgr()->GetGLCore()->CreateRenderTextureRes(width, height);
-	tex->m_wrapMode = DWrapMode_Repeat;
+	tex->m_wrapMode = DWrapMode_Clamp;
 	return tex;
 }
 

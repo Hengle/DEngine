@@ -1,14 +1,11 @@
-SubShader {
-	Desc {
-		CompileTarget: { d3d10 d3d11 }
-	}
+ShaderBlock {
 	Pass {
 		State {
 			zwrite on
 			ztest lequal
 		}
 
-		Shader {
+		SHADER_BEGIN: [ d3d10 d3d11 ]
 			#vert VertMain
 			#frag FragMain
 			#code [
@@ -67,20 +64,8 @@ SubShader {
 				}
 				
 			]
-		}
-	}
-}
-SubShader {
-	Desc {
-		CompileTarget: { d3d9 }
-	}
-	Pass {
-		State {
-			zwrite on
-			ztest lequal
-		}
-
-		Shader {
+		SHADER_END
+		SHADER_BEGIN: [ d3d9 ]
 			#vert VertMain
 			#frag FragMain
 			#code [
@@ -123,20 +108,8 @@ SubShader {
 				    return tex2D(shaderTexture,      input.uv);
 				}
 			]
-		}
-	}
-}
-SubShader {
-	Desc {
-		CompileTarget: { opengl }
-	}
-	Pass {
-		State {
-			zwrite on
-			ztest lequal
-		}
-
-		Shader {
+		SHADER_END
+		SHADER_BEGIN: [ opengl ]
 			#code [
 				#vert [
 					#version 330 core
@@ -172,6 +145,6 @@ SubShader {
 					}
 				]
 			]
-		}
+		SHADER_END
 	}
 }

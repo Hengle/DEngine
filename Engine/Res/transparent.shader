@@ -1,6 +1,5 @@
-SubShader {
+ShaderBlock {
 	Desc {
-		CompileTarget: { d3d10 d3d11 }
 		Queue Transparent
 	}
 	Pass {
@@ -10,7 +9,7 @@ SubShader {
 			blend srcalpha oneminussrcalpha
 		}
 
-		Shader {
+		SHADER_BEGIN: [ d3d10 d3d11 ]
 			#vert VertMain
 			#frag FragMain
 			#code [
@@ -70,22 +69,8 @@ SubShader {
 				}
 				
 			]
-		}
-	}
-}
-SubShader {
-	Desc {
-		CompileTarget: { d3d9 }
-		Queue Transparent
-	}
-	Pass {
-		State {
-			zwrite on
-			ztest lequal
-			blend srcalpha oneminussrcalpha
-		}
-
-		Shader {
+		SHADER_END
+		SHADER_BEGIN: [ d3d9 ]
 			#vert VertMain
 			#frag FragMain
 			#code [
@@ -130,22 +115,8 @@ SubShader {
 				    return col;
 				}
 			]
-		}
-	}
-}
-SubShader {
-	Desc {
-		CompileTarget: { opengl }
-		Queue Transparent
-	}
-	Pass {
-		State {
-			zwrite on
-			ztest lequal
-			blend srcalpha oneminussrcalpha
-		}
-
-		Shader {
+		SHADER_END
+		SHADER_BEGIN: [ opengl ]
 			#code [
 				#vert [
 					#version 330 core
@@ -182,6 +153,6 @@ SubShader {
 					}
 				]
 			]
-		}
+		SHADER_END
 	}
 }

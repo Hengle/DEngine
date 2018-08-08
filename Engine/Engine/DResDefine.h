@@ -1,9 +1,6 @@
 #pragma once
 
-
-#define D_INTERNAL_RES_GROUP       0 
-
-//Internal Res Begin From 0
+#define D_INTERNAL_RES_GROUP       0
 
 //Internal Mesh Res Begin:
 #define D_RES_PLANE                0
@@ -21,7 +18,3 @@
 
 
 
-
-
-
-//Internal Res End To 1000

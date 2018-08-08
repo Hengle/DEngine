@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#define DEFAULT_GROUP 100
+#define DEFAULT_GROUP 101
 
 #define TEXTURE_SHADER   1000
 #define SKY_SHADER       1001

@@ -111,15 +111,3 @@ protected:
 private:
 	char* m_path;
 };
-
-class DInternalResItem : public DResItem
-{
-public:
-	DInternalResItem(unsigned int);
-
-protected:
-	virtual DResObject* OnLoad();
-
-private:
-	unsigned int m_resId;
-};

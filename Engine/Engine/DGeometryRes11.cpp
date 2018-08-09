@@ -30,7 +30,7 @@ void DGeometryRes11::Release()
 	m_deviceContext = NULL;
 }
 
-void DGeometryRes11::OnRefresh(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
+void DGeometryRes11::OnRefresh(float * vertexbuffer, unsigned int * indexbuffer, int vertexCount, int indexCount)
 {
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	float* dataPtr;
@@ -45,10 +45,10 @@ void DGeometryRes11::OnRefresh(float * vertexbuffer, unsigned long * indexbuffer
 	m_deviceContext->Unmap(m_vertexBuffer, 0);
 
 	D3D11_MAPPED_SUBRESOURCE imappedResource;
-	unsigned long* idataPtr;
+	unsigned int* idataPtr;
 	m_deviceContext->Map(m_indexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &imappedResource);
-	idataPtr = (unsigned long*)imappedResource.pData;
-	memcpy(idataPtr, indexbuffer, sizeof(unsigned long)*indexCount);
+	idataPtr = (unsigned int*)imappedResource.pData;
+	memcpy(idataPtr, indexbuffer, sizeof(unsigned int)*indexCount);
 	//for (i = 0; i < indexCount; i++)
 	//{
 	//	idataPtr[i] = indexbuffer[i];
@@ -56,7 +56,7 @@ void DGeometryRes11::OnRefresh(float * vertexbuffer, unsigned long * indexbuffer
 	m_deviceContext->Unmap(m_indexBuffer, 0);
 }
 
-bool DGeometryRes11::OnInit(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
+bool DGeometryRes11::OnInit(float * vertexbuffer, unsigned int * indexbuffer, int vertexCount, int indexCount)
 {
 	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
 	D3D11_SUBRESOURCE_DATA vertexData, indexData;
@@ -80,7 +80,7 @@ bool DGeometryRes11::OnInit(float * vertexbuffer, unsigned long * indexbuffer, i
 	}
 
 	indexBufferDesc.Usage = m_isDynamic ? D3D11_USAGE_DYNAMIC : D3D11_USAGE_DEFAULT;
-	indexBufferDesc.ByteWidth = sizeof(unsigned long) * indexCount;
+	indexBufferDesc.ByteWidth = sizeof(unsigned int) * indexCount;
 	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	indexBufferDesc.CPUAccessFlags = m_isDynamic ? D3D11_CPU_ACCESS_WRITE : 0;
 	indexBufferDesc.MiscFlags = 0;

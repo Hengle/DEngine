@@ -509,18 +509,3 @@ DResObject * DGeometryResItem::OnLoad()
 {
 	return DGeometry::Create(m_path);
 }
-
-DInternalResItem::DInternalResItem(unsigned int resid)
-{
-	m_resId = resid;
-}
-
-DResObject * DInternalResItem::OnLoad()
-{
-	//TODO 暂时直接这样创建内部资源
-	if (m_resId == D_RES_PLANE)
-		return DGeometry::Create(DGeometry_Plane);
-	if (m_resId == D_RES_SPHERE)
-		return DGeometry::Create(DGeometry_Sphere);
-	return nullptr;
-}

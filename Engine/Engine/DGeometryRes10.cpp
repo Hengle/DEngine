@@ -80,7 +80,7 @@ void DGeometryRes10::Release()
 	m_device = NULL;
 }
 
-void DGeometryRes10::OnRefresh(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
+void DGeometryRes10::OnRefresh(float * vertexbuffer, unsigned int * indexbuffer, int vertexCount, int indexCount)
 {
 
 	void* pdata;
@@ -91,12 +91,12 @@ void DGeometryRes10::OnRefresh(float * vertexbuffer, unsigned long * indexbuffer
 
 	void* idata;
 	m_indexBuffer->Map(D3D10_MAP_WRITE_DISCARD, 0, &idata);
-	unsigned long* idataPtr = (unsigned long*)idata;
-	memcpy(idataPtr, indexbuffer, sizeof(unsigned long)*indexCount);
+	unsigned int* idataPtr = (unsigned int*)idata;
+	memcpy(idataPtr, indexbuffer, sizeof(unsigned int)*indexCount);
 	m_indexBuffer->Unmap();
 }
 
-bool DGeometryRes10::OnInit(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
+bool DGeometryRes10::OnInit(float * vertexbuffer, unsigned int * indexbuffer, int vertexCount, int indexCount)
 {
 	D3D10_BUFFER_DESC  vertexBufferDesc, indexBufferDesc;
 	D3D10_SUBRESOURCE_DATA vertexData, indexData;
@@ -117,7 +117,7 @@ bool DGeometryRes10::OnInit(float * vertexbuffer, unsigned long * indexbuffer, i
 	}
 
 	indexBufferDesc.Usage = m_isDynamic ? D3D10_USAGE_DYNAMIC : D3D10_USAGE_DEFAULT;
-	indexBufferDesc.ByteWidth = sizeof(unsigned long) * indexCount;
+	indexBufferDesc.ByteWidth = sizeof(unsigned int) * indexCount;
 	indexBufferDesc.BindFlags = D3D10_BIND_INDEX_BUFFER;
 	indexBufferDesc.CPUAccessFlags = m_isDynamic ? D3D10_CPU_ACCESS_WRITE : 0;
 	indexBufferDesc.MiscFlags = 0;

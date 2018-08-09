@@ -62,7 +62,7 @@ private:
 	std::stack<DMatrix4x4> m_PMatrixStack;
 	DGeometryRes* m_geometryRes;
 	std::vector<float> m_vertices;
-	std::vector<unsigned long> m_indecies;
+	std::vector<unsigned int> m_indecies;
 	int m_vertexCount;
 	int m_indexCount;
 	DColor m_currentColor;

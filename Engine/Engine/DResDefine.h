@@ -8,8 +8,8 @@
 #define D_RES_PLANE                0
 #define D_RES_SPHERE               1
 #define D_RES_CUBE                 2
-#define D_RES_SCREEN_PLANE         3
-#define D_RES_SKYBOX               4
+#define D_RES_CAPSULE              3
+#define D_RES_CYLINDER             4
 //Internal Mesh Res End
 
 //Internal Shader Res Begin:

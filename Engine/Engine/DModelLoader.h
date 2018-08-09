@@ -6,6 +6,8 @@ static class DModelLoader
 public:
 	static bool LoadObj(const char *, DGeometryBufferDesc*);
 
+	static bool LoadMesh(const char *, DGeometryBufferDesc*);
+
 	static bool CreateCube(DGeometryBufferDesc*);
 
 	static bool CreatePlane(DGeometryBufferDesc*);

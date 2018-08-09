@@ -15,7 +15,7 @@ DGeometryRes9::~DGeometryRes9()
 {
 }
 
-void DGeometryRes9::OnRefresh(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
+void DGeometryRes9::OnRefresh(float * vertexbuffer, unsigned int * indexbuffer, int vertexCount, int indexCount)
 {
 	float* vertices = 0;
 	int i;
@@ -37,7 +37,7 @@ void DGeometryRes9::OnRefresh(float * vertexbuffer, unsigned long * indexbuffer,
 	m_indexBuffer->Unlock();
 }
 
-bool DGeometryRes9::OnInit(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
+bool DGeometryRes9::OnInit(float * vertexbuffer, unsigned int * indexbuffer, int vertexCount, int indexCount)
 {
 	std::vector<D3DVERTEXELEMENT9> elements;
 	WORD offset = 0;

@@ -40,6 +40,7 @@ public:
 private:
 	static DResObject* LoadRes(unsigned int groupid, unsigned int resid);
 	bool LoadResManifest(char * fileName);
+	bool LoadInternalResManifest();
 	void LoadResGroupManifest(ifstream&, unsigned int groupid);
 
 private:

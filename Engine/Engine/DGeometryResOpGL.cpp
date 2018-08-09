@@ -119,7 +119,7 @@ void DGeometryResOpGL::Release()
 //	return true;
 //}
 
-void DGeometryResOpGL::OnRefresh(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
+void DGeometryResOpGL::OnRefresh(float * vertexbuffer, unsigned int * indexbuffer, int vertexCount, int indexCount)
 {
 	glBindVertexArray(m_vertexArrayId);
 
@@ -127,22 +127,12 @@ void DGeometryResOpGL::OnRefresh(float * vertexbuffer, unsigned long * indexbuff
 
 	glBufferData(GL_ARRAY_BUFFER, vertexCount*m_dataSize, vertexbuffer, GL_STATIC_DRAW);
 
-	unsigned int* indexes = new unsigned int[m_indexCount];
-	int i = 0;
-	for (i = 0; i < m_indexCount; i++)
-	{
-		indexes[i] = indexbuffer[i];
-	}
-
-
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int)*indexCount, indexes, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int)*indexCount, indexbuffer, GL_STATIC_DRAW);
 
-
-	delete[] indexes;
 }
 
-bool DGeometryResOpGL::OnInit(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
+bool DGeometryResOpGL::OnInit(float * vertexbuffer, unsigned int * indexbuffer, int vertexCount, int indexCount)
 {
 	int offset = 0;
 

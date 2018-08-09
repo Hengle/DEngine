@@ -1,3 +1,21 @@
 #RES_GROUP_BEGIN 0
+	#RES_BEGIN GEOMETRY 0
+		#PATH ../Res/InternalRes/Plane.mesh
+	#RES_END
 
+	#RES_BEGIN GEOMETRY 1
+		#PATH ../Res/InternalRes/Sphere.mesh
+	#RES_END
+
+	#RES_BEGIN GEOMETRY 2
+		#PATH ../Res/InternalRes/Cube.mesh
+	#RES_END
+
+	#RES_BEGIN GEOMETRY 3
+		#PATH ../Res/InternalRes/Capsule.mesh
+	#RES_END
+
+	#RES_BEGIN GEOMETRY 4
+		#PATH ../Res/InternalRes/Cylinder.mesh
+	#RES_END
 #RES_GROUP_END

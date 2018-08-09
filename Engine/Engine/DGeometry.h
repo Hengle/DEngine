@@ -5,13 +5,6 @@
 #include "DResObject.h"
 #include <map>
 
-enum DGeometryDefine
-{
-	DGeometry_Cube = 0,
-	DGeometry_Sphere = 1,
-	DGeometry_Plane = 2,
-};
-
 /*几何体类*/
 class DGeometry : public DResObject
 {
@@ -40,15 +33,14 @@ public:
 	void SetUVs(int channel, float*, int);
 	void SetNormals(DVector3*, int);
 	void SetColors(DColor*, int);
-	void SetIndices(unsigned long*, int);
+	void SetIndices(unsigned int*, int);
 	void SetTopology(DGeometryTopology);
-	void GetIndex(int index, unsigned long& outIndex) const;
+	void GetIndex(int index, unsigned int& outIndex) const;
 	bool HasNormal() const;
 	bool HasColor() const;
 	bool HasUV(int channel) const;
 	void Draw(int);
 
-	static DGeometry* Create(DGeometryDefine meshDefine, bool dynamic = false);
 	static DGeometry*Create(char* fileName, bool dynamic = false);
 	
 private:

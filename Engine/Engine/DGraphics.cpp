@@ -690,11 +690,11 @@ void DGraphics::InitScreenPlane()
 	int indexCount = 30;
 
 	float *vertices,*uvs;
-	unsigned long *indexBuffer;
+	unsigned int *indexBuffer;
 
 	vertices = new float[vertexCount * 3];
 	uvs = new float[vertexCount * 2];
-	indexBuffer = new unsigned long[indexCount];
+	indexBuffer = new unsigned int[indexCount];
 
 	float screenWidth, screenHeight;
 	m_GL->GetResolution(screenWidth, screenHeight);
@@ -760,7 +760,7 @@ void DGraphics::InitSkyBox()
 {
 	m_skyGeometry = new DGeometry();
 	float *vertices = new float[108];
-	unsigned long* indices = new unsigned long[36];
+	unsigned int* indices = new unsigned int[36];
 
 	float sz = 500.0f;
 

@@ -287,7 +287,7 @@ void TestScene::TestLoad()
 	transform->SetPosition(5.05f, 12.04f, -8.74f);
 
 	//DMesh* mesh = DMesh::Create("../Res/eboy.obj");
-	plane = DGeometry::Create(DGeometry_Plane);
+	plane = DRes::LoadInternal<DGeometry>(D_RES_PLANE);//DGeometry::Create(DGeometry_Plane);
 	//shader = DRes::Load<DShader>(DEFAULT_GROUP, TEXTURE_SHADER);
 	//floor = DRes::Load<DTexture2D>(DEFAULT_GROUP, DECAL_TEX);
 	//map = DRes::Load<DTexture2D>(DEFAULT_GROUP, BODY_TEX);

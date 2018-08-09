@@ -368,7 +368,7 @@ void DGeometry::SetColors(DColor * colors, int length)
 	m_vertexChanged = true;
 }
 
-void DGeometry::SetIndices(unsigned long * indices, int length)
+void DGeometry::SetIndices(unsigned int * indices, int length)
 {
 	if (m_geometryDesc.indices != 0)
 	{
@@ -415,7 +415,7 @@ void DGeometry::SetTopology(DGeometryTopology topology)
 	m_topology = topology;
 }
 
-void DGeometry::GetIndex(int index, unsigned long & outIndex) const
+void DGeometry::GetIndex(int index, unsigned int & outIndex) const
 {
 	if (index < 0 || index >= m_geometryDesc.indexCount)
 		return;
@@ -472,34 +472,17 @@ void DGeometry::Draw(int vertexUsage)
 	}
 }
 
-DGeometry * DGeometry::Create(DGeometryDefine geometryDefine, bool dynamic)
-{
-	DGeometryBufferDesc desc;
-	if (geometryDefine == DGeometry_Plane)
-	{
-		DModelLoader::CreatePlane(&desc);
-	}
-	else if (geometryDefine == DGeometry_Cube)
-	{
-		DModelLoader::CreateCube(&desc);
-	}
-	else if (geometryDefine == DGeometry_Sphere)
-	{
-		DModelLoader::CreateSphere(&desc);
-	}
-	else
-		return NULL;
-
-	DGeometry* geometry = new DGeometry(dynamic);
-	geometry->m_geometryDesc = desc;
-
-	return geometry;
-}
-
 DGeometry * DGeometry::Create(char* fileName, bool dynamic)
 {
 	DGeometryBufferDesc desc;
-	DModelLoader::LoadObj(fileName, &desc);
+	int len = strlen(fileName);
+	//TODO 临时处理
+	if (fileName[len - 3] == 'o' && fileName[len - 2] == 'b'&&fileName[len - 1] == 'j')
+		DModelLoader::LoadObj(fileName, &desc);
+	else if (fileName[len - 4] == 'm' && fileName[len - 3] == 'e' && fileName[len - 2] == 's' && fileName[len - 1] == 'h')
+		DModelLoader::LoadMesh(fileName, &desc);
+	else
+		return NULL;
 
 	DGeometry* geometry = new DGeometry(dynamic);
 	geometry->m_geometryDesc = desc;

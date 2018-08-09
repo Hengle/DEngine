@@ -175,7 +175,7 @@ void DGeometryRes::Refresh(DGeometryBufferDesc * desc)
 	//vertices = 0;
 }
 
-void DGeometryRes::Refresh(float * vertexbuffer, unsigned long * indexbuffer, int vertexCount, int indexCount)
+void DGeometryRes::Refresh(float * vertexbuffer, unsigned int * indexbuffer, int vertexCount, int indexCount)
 {
 	if (indexCount <= 0 || vertexCount <= 0)
 		return;

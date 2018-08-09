@@ -13,6 +13,7 @@ void DRes::Init(char* resmanifest)
 {
 	m_groups = new std::map<unsigned int, DResGroup*>();
 	LoadResManifest(resmanifest);
+	LoadInternalResManifest();
 }
 
 void DRes::Shutdown()
@@ -165,6 +166,11 @@ bool DRes::LoadResManifest(char * fileName)
 		}
 	}
 	ifile.close();
+}
+
+bool DRes::LoadInternalResManifest()
+{
+	return LoadResManifest("../Res/InternalRes/InternalResManifest.dres");
 }
 
 void DRes::LoadResGroupManifest(ifstream & ifile, unsigned int groupid)

@@ -25,8 +25,8 @@ void EmptyScene::OnLoad()
 	//testmat = DRes::Load<DMaterial>(DEFAULT_GROUP, PEFFECT_MAT);
 	//testtex = DRes::Load<DTexture2D>(DEFAULT_GROUP, 2003);
 
-	m_camera->SetRenderTexture(m_rt);
-	m_camera->SetFilter(m_filter);
+	//m_camera->SetRenderTexture(m_rt);
+	//m_camera->SetFilter(m_filter);
 
 	DTransform* transform;
 

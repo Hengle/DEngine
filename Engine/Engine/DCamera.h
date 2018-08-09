@@ -23,6 +23,8 @@ enum DCameraAdditionalTextureType
 	DCameraAdditional_None = 0U,
 	/*额外渲染屏幕深度*/
 	DCameraAdditional_Depth = 1U,
+	/*额外渲染屏幕纹理*/
+	DCameraAdditional_Screen = 2U,
 };
 
 /*相机滤镜接口*/

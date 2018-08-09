@@ -8,14 +8,14 @@ public:
 
 	static bool LoadMesh(const char *, DGeometryBufferDesc*);
 
-	static bool CreateCube(DGeometryBufferDesc*);
+	/*static bool CreateCube(DGeometryBufferDesc*);
 
 	static bool CreatePlane(DGeometryBufferDesc*);
 
-	static bool CreateSphere(DGeometryBufferDesc*);
+	static bool CreateSphere(DGeometryBufferDesc*);*/
 
 private:
-	static void SetSphereFace(int, int, DVector3&, DVector3&, DVector3&, DGeometryBufferDesc*);
+	//static void SetSphereFace(int, int, DVector3&, DVector3&, DVector3&, DGeometryBufferDesc*);
 	static void CalculateTangent(DVector3*, int, int, int, DGeometryBufferDesc*);
 };
 

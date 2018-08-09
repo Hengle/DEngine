@@ -50,10 +50,10 @@ private:
 template<class T>
 inline T * DRes::Load(unsigned int groupid, unsigned int resid)
 {
-	if (groupid >= D_INTERNAL_RES_GROUP_BEGIN && groupid <= D_INTERNAL_RES_GROUP_END)
+	/*if (groupid >= D_INTERNAL_RES_GROUP_BEGIN && groupid <= D_INTERNAL_RES_GROUP_END)
 	{
 		throw "请使用LoadInternal加载内部资源";
-	}
+	}*/
 	return (T*)LoadRes(groupid, resid);
 }
 

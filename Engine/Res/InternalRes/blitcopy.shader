@@ -1,8 +1,8 @@
 ShaderBlock {
 	Pass {
 		State {
-			zwrite off
-			ztest always
+			zwrite on
+			ztest lequal
 		}
 
 		SHADER_BEGIN: [ d3d10 d3d11 ]
@@ -32,46 +32,25 @@ ShaderBlock {
 				Texture2D screenTexture;
 				SamplerState SampleType;
 
-				float2 offset;
-				
 				PixelInputType VertMain(VertexInputType input)
 				{
 				    PixelInputType output;
-	    
-
-					// Change the position vector to be 4 units for proper matrix calculations.
 				    input.position.w = 1.0f;
-
-					// Calculate the position of the vertex against the world, view, and projection matrices.
 
 				    output.position  = mul(g_engineWorldMatrix, input.position);
 				    output.position  = mul(g_engineViewMatrix, output.position);
 				    output.position = mul(g_engineProjectionMatrix, output.position);
-	    
-					// Store the texture coordinates for the pixel shader.
 					output.tex = input.tex;
-	    
 				    return output;
 				}
 
 				float4 FragMain(PixelInputType input) : SV_TARGET
 				{
 				    float4 textureColor;
-
-
-	    			// Sample the pixel color from the texture using the sampler at this texture coordinate location.
-	    			textureColor.rgb = screenTexture.Sample(SampleType, input.tex).rgb*0.45;
-
-	    			textureColor.rgb += screenTexture.Sample(SampleType, input.tex + offset).rgb*0.175f;
-	    			textureColor.rgb += screenTexture.Sample(SampleType, input.tex - offset).rgb*0.175f;
-
-	    			textureColor.rgb += screenTexture.Sample(SampleType, input.tex + offset).rgb*0.1f;
-	    			textureColor.rgb += screenTexture.Sample(SampleType, input.tex - offset).rgb*0.1f;
-
-	    			textureColor.a = 1.0f;
-
+	    			textureColor = screenTexture.Sample(SampleType, input.tex);
 	    			return textureColor;
 				}
+				
 			]
 		SHADER_END
 		SHADER_BEGIN: [ d3d9 ]
@@ -97,8 +76,6 @@ ShaderBlock {
 
 				sampler screenTexture;
 
-				//float2 offset;
-
 				VS_OUTPUT VertMain(VS_INPUT input)
 				{
 				    VS_OUTPUT output = (VS_OUTPUT)0;
@@ -116,17 +93,7 @@ ShaderBlock {
 
 				float4 FragMain(VS_OUTPUT input) : SV_TARGET
 				{
-				    //float4 textureColor = tex2D(screenTexture,      input.uv) * 0.45;
-				    float4 textureColor = tex2D(screenTexture, input.uv);
-	    			// textureColor.rgb += tex2D(screenTexture, input.uv + offset).rgb*0.175;
-	    			// textureColor.rgb += tex2D(screenTexture, input.uv - offset).rgb*0.175;
-
-	    			// textureColor.rgb += tex2D(screenTexture, input.uv + offset).rgb*0.1;
-	    			// textureColor.rgb += tex2D(screenTexture, input.uv - offset).rgb*0.1;
-
-	    			//  textureColor.a = 1.0;
-
-	    			return textureColor;
+				    return tex2D(screenTexture,      input.uv);
 				}
 			]
 		SHADER_END
@@ -160,18 +127,9 @@ ShaderBlock {
 
 					uniform sampler2D screenTexture;
 
-					uniform vec2 offset;
-
 					out vec4 color;
 					void main(){
-						color = texture(screenTexture, uv)*0.5;
-						color.rgb += texture(screenTexture, uv + offset).rgb*0.15;
-						color.rgb += texture(screenTexture, uv - offset).rgb*0.15;
-						color.rgb += texture(screenTexture, uv + offset).rgb*0.1;
-						color.rgb += texture(screenTexture, uv - offset).rgb*0.1;
-						//color = vec4(1.0,0.0,0.0,1.0);
-
-	    				color.a = 1.0;
+						color = texture(screenTexture, uv);
 					}
 				]
 			]

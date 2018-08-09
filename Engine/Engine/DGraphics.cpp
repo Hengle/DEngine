@@ -353,6 +353,12 @@ void DGraphics::Blit(DTexture * src, DMaterial * material)
 	}
 }
 
+void DGraphics::Blit(DTexture * src, DRenderTexture * dst)
+{
+	DMaterial* blitCopy = DRes::LoadInternal<DMaterial>(D_RES_BLIT_COPY_MAT);
+	Blit(src, dst, blitCopy);
+}
+
 void DGraphics::Blit(DTexture * src, DRenderTexture * dst, DMaterial * material)
 {
 	float rtw, rth;
@@ -368,6 +374,12 @@ void DGraphics::Blit(DTexture * src, DRenderTexture * dst, DMaterial * material)
 	float screenWidth, screenHeight;
 	DSystem::GetGraphicsMgr()->GetGLCore()->GetResolution(screenWidth, screenHeight);
 	DGraphics::SetViewPort(0, 0, screenWidth, screenHeight);
+}
+
+void DGraphics::DrawTexture(DTexture * src)
+{
+	DMaterial* blitCopy = DRes::LoadInternal<DMaterial>(D_RES_BLIT_COPY_MAT);
+	Blit(src, blitCopy);
 }
 
 void DGraphics::DrawSkyBox(DMaterial * material, const DCamera * camera)

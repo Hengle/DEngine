@@ -41,7 +41,9 @@ public:
 	static void PushRenderQueue(DDisplayObject*, DRenderQueue);
 
 	static void Blit(DTexture* src, DMaterial* material);
+	static void Blit(DTexture* src, DRenderTexture* dst);
 	static void Blit(DTexture* src, DRenderTexture* dst, DMaterial* material);
+	static void DrawTexture(DTexture* src);
 	/*绘制天空盒*/
 	static void DrawSkyBox(DMaterial*, const DCamera*);
 	

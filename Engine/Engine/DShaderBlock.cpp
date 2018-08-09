@@ -292,7 +292,7 @@ void DShaderBlock::InterpretPass(ifstream & ifile)
 			else if (strcmp(read, "SHADER_BEGIN:") == 0)
 			{
 				int targets = InterpretCompileTarget(ifile); //先解析该shader块的支持api
-				if ((targets & api) != 0) //如果该shader块支持则解析并编译该shader代码
+				if ((targets & api) != 0 && !isSupport) //如果该shader块支持则解析并编译该shader代码
 				{
 					//InterpretShader(ifile, pass);
 					if (pass != NULL)

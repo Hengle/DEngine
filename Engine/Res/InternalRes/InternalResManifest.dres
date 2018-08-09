@@ -18,4 +18,12 @@
 	#RES_BEGIN GEOMETRY 4
 		#PATH ../Res/InternalRes/Cylinder.mesh
 	#RES_END
+
+	#RES_BEGIN SHADER 100 
+		#PATH ../Res/InternalRes/blitcopy.shader
+	#RES_END
+
+	#RES_BEGIN MATERIAL 500 
+		#PATH ../Res/InternalRes/blitcopy.m
+	#RES_END
 #RES_GROUP_END

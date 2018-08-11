@@ -64,16 +64,9 @@ void DCamera::RenderFilter()
 {
 	if (m_filter != NULL && m_renderTexture != NULL)
 	{
-		//FLOAT width, height;
-		//if (m_testDrawScene)
-		//	DGraphics::BeginScene(true, true, true, m_backgroundColor);
-		//else
-		//	DGraphics::BeginScene(true, true, false, m_backgroundColor);
 		bool clearDepth = m_clearFlags != DClearFlags_DontClear;
 		bool clearColor = m_clearFlags != DClearFlags_Depth && m_clearFlags != DClearFlags_DontClear;
 		DGraphics::BeginScene(clearDepth, clearDepth, clearColor, m_backgroundColor);
-		//DGraphics::Clear(true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f));
-		//DSystem::GetGraphicsMgr()->GetResolution(width, height);
 		m_filter->Render(m_renderTexture);
 		DGraphics::EndScene();
 	}
@@ -505,7 +498,6 @@ bool DCamera::OnInit()
 	}
 	DSystem::GetSceneMgr()->GetCurrentScene()->SetCameraNode(camNode);
 
-	//m_render = new DRender();
 	return true;
 }
 
@@ -516,9 +508,12 @@ void DCamera::OnDestroy()
 	m_skyBoxMaterial = NULL;
 	m_filter = NULL;
 
-	//m_render->Release();
-	//delete m_render;
-	//m_render = NULL;
+	if (m_sourceTexture != NULL)
+	{
+		m_sourceTexture->Destroy();
+		delete m_sourceTexture;
+		m_sourceTexture = 0;
+	}
 
 	if (m_node != NULL)
 	{
@@ -543,6 +538,31 @@ void DCamera::OnUpdate()
 
 void DCamera::OnFixedUpdate()
 {
+}
+
+void DCamera::RenderDepthTexture()
+{
+}
+
+void DCamera::RenderScreenTexture()
+{
+	BeginRender();
+	if (m_skyBoxMaterial != NULL && m_clearFlags == DClearFlags_SkyBox)
+	{
+		DGraphics::DrawSkyBox(m_skyBoxMaterial, this);
+	}
+
+	DGraphics::SetGlobalRenderShader(m_replacementShader);
+
+	OnPreRender();
+
+	DScene::Draw(true, m_layerMask);
+
+	OnPostRender();
+
+
+	EndRender();
+	DGraphics::ClearGlobalRenderShader();
 }
 
 void DCamera::ForwardMoveCameraNode()
@@ -573,7 +593,7 @@ void DCamera::BackwardMoveCameraNode()
 	}
 }
 
-void DCamera::BeginRender()
+void DCamera::BeginRender(DRenderTexture* renderTexture, bool clearDepth, bool clearColor, DColor& color)
 {
 	
 	sCurrent = this;
@@ -608,26 +628,20 @@ void DCamera::BeginRender()
 	DGraphics::GlMultiMatrix(m_viewMatrix);
 	DGraphics::GlLoadProjectionMatrix(m_projection);
 
-	if (m_renderTexture != NULL)
+	if (renderTexture != NULL)
 	{
 		float rtw, rth;
-		rtw = m_renderTexture->GetWidth();
-		rth = m_renderTexture->GetHeight();
+		rtw = renderTexture->GetWidth();
+		rth = renderTexture->GetHeight();
 		float vx = rtw*m_viewPort.x;
 		float vy = rth*m_viewPort.y;
 		float vw = rtw*m_viewPort.width;
 		float vh = rth*m_viewPort.height;
 		DGraphics::SetViewPort(vx, vy, vw, vh);
 
-		bool clearDepth = m_clearFlags != DClearFlags_DontClear;
-		bool clearColor = m_clearFlags != DClearFlags_Depth && m_clearFlags != DClearFlags_DontClear;
-		DGraphics::BeginScene(clearDepth, clearDepth, clearColor, m_backgroundColor, m_renderTexture);
-		/*if (m_testDrawScene)
-			DGraphics::BeginScene(true, true, true, m_backgroundColor, m_renderTexture);
-		else
-			DGraphics::BeginScene(true, true, false, m_backgroundColor, m_renderTexture);*/
-		//DGraphics::SetRenderTarget(m_renderTexture);
-		//DGraphics::ClearRenderTarget(m_renderTexture, true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f));
+		//bool clearDepth = m_clearFlags != DClearFlags_DontClear;
+		//bool clearColor = m_clearFlags != DClearFlags_Depth && m_clearFlags != DClearFlags_DontClear;
+		DGraphics::BeginScene(clearDepth, clearDepth, clearColor, color, renderTexture);
 	}
 	else
 	{
@@ -639,30 +653,22 @@ void DCamera::BeginRender()
 		float vh = screenh*m_viewPort.height;
 		DGraphics::SetViewPort(vx, vy, vw, vh);
 
-		bool clearDepth = m_clearFlags != DClearFlags_DontClear;
-		bool clearColor = m_clearFlags != DClearFlags_Depth && m_clearFlags != DClearFlags_DontClear;
-		DGraphics::BeginScene(clearDepth, clearDepth, clearColor, m_backgroundColor);
-
-		/*if (m_testDrawScene)
-			DGraphics::BeginScene(true, true, true, m_backgroundColor);
-		else
-			DGraphics::BeginScene(true, true, false, m_backgroundColor);*/
-		//DGraphics::SetDefaultRenderTarget();
-		//DGraphics::Clear(true, false, DColor(0.0f, 0.0f, 1.0f, 1.0f));
+		//bool clearDepth = m_clearFlags != DClearFlags_DontClear;
+		//bool clearColor = m_clearFlags != DClearFlags_Depth && m_clearFlags != DClearFlags_DontClear;
+		DGraphics::BeginScene(clearDepth, clearDepth, clearColor, color);
 	}
 
-	if (m_skyBoxMaterial != NULL && m_clearFlags == DClearFlags_SkyBox)
+	/*if (m_skyBoxMaterial != NULL && m_clearFlags == DClearFlags_SkyBox)
 	{
 		DGraphics::DrawSkyBox(m_skyBoxMaterial, this);
-	}
+	}*/
 }
 
-void DCamera::EndRender()
+void DCamera::EndRender(DRenderTexture* renderTexture)
 {
-	//DGraphics::PostGL();
-	if (m_renderTexture != NULL)
+	if (renderTexture != NULL)
 	{
-		DGraphics::EndScene(m_renderTexture);
+		DGraphics::EndScene(renderTexture);
 	}
 	else
 	{
@@ -756,4 +762,13 @@ void DCamera::CameraPointToRay(float x, float y, float z, DRay * out) const
 		out->direction.y = dir.y;
 		out->direction.z = dir.z;
 	}
+}
+
+DRenderTexture * DCamera::GetSourceTexture()
+{
+	if (m_sourceTexture == NULL)
+	{
+		m_sourceTexture = DRenderTexture::Create(w, h);
+	}
+	return nullptr;
 }

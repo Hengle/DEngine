@@ -23,8 +23,6 @@ enum DCameraAdditionalTextureType
 	DCameraAdditional_None = 0U,
 	/*额外渲染屏幕深度*/
 	DCameraAdditional_Depth = 1U,
-	/*额外渲染屏幕纹理*/
-	DCameraAdditional_Screen = 2U,
 };
 
 /*相机滤镜接口*/
@@ -32,7 +30,7 @@ interface ICameraFilter
 {
 public:
 	/*渲染滤镜*/
-	virtual void Render(DRenderTexture* screenTexture /*相机RenderTexture*/) = 0;
+	virtual void Render(DRenderTexture* src, DRenderTexture* dst) = 0;
 	/*滤镜释放*/
 	virtual void Release() = 0;
 };
@@ -142,13 +140,18 @@ protected:
 private:
 	/*渲染滤镜*/
 	void RenderFilter();
+	/*渲染深度图*/
+	void RenderDepthTexture();
+	/*渲染屏幕图*/
+	void RenderScreenTexture();
 	void ForwardMoveCameraNode();
 	void BackwardMoveCameraNode();
-	void BeginRender();
-	void EndRender();
+	void BeginRender(DRenderTexture*, bool, bool, DColor&);
+	void EndRender(DRenderTexture*);
 	void RefreshCameraDirParam();
 	void CameraPointToWorldPoint(float x, float y, float z, DVector3* out) const;
 	void CameraPointToRay(float x, float y, float z, DRay* out) const;
+	DRenderTexture* GetSourceTexture();
 
 protected:
 	int m_sortOrder;
@@ -169,6 +172,7 @@ private:
 	bool m_isProjectionChanged;
 	ICameraFilter* m_filter;
 	DRenderTexture* m_renderTexture;
+	DRenderTexture* m_sourceTexture;
 	DColor m_backgroundColor;
 	DMaterial* m_skyBoxMaterial;
 	DRect m_viewPort;

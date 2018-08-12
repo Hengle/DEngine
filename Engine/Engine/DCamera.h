@@ -25,17 +25,17 @@ enum DCameraAdditionalTextureType
 	DCameraAdditional_Depth = 1U,
 };
 
+class DCamera;
+
 /*相机滤镜接口*/
 interface ICameraFilter
 {
 public:
 	/*渲染滤镜*/
-	virtual DRenderTexture* Render(DRenderTexture* src) = 0;
+	virtual DRenderTexture* Render(DCamera* camera, DRenderTexture* src) = 0;
 	/*滤镜释放*/
 	virtual void Release() = 0;
 };
-
-class DCamera;
 
 struct DCameraNode
 {

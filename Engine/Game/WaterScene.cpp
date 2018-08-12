@@ -1,83 +1,79 @@
 ﻿#include "stdafx.h"
-#include "EmptyScene.h"
-#include "DRes.h"
-#include "TestResDefine.h"
+#include "WaterScene.h"
 #include "DSystem.h"
 #include "DGUI.h"
+#include "TestResDefine.h"
 
-EmptyScene::EmptyScene(SCENEID sceneId, char * sceneName) : DScene(sceneId, sceneName)
+
+WaterScene::WaterScene(SCENEID sceneId, char * sceneName) : DScene(sceneId, sceneName)
 {
 	m_camera = 0;
 	m_lookDistance = 7.0f;
 }
 
-void EmptyScene::OnGUI()
+WaterScene::~WaterScene()
 {
-	ImGui::SliderFloat("Near", &m_filter->nearV, 0.0f, 1.0f);
-	ImGui::SliderFloat("Far", &m_filter->farV, 0.0f, 1.0f);
 }
 
-void EmptyScene::OnLoad()
+void WaterScene::OnGUI()
+{
+}
+
+void WaterScene::OnLoad()
 {
 	m_camera = new DCamera();
 	m_camera->Create();
-	//m_camera->SetAdditionalTextureActive(DCameraAdditional_Depth, true);
-	//m_camera->SetBackgroundColor(DCOLOR_BLACK);
-
-	float w, h;
-	DSystem::GetGraphicsMgr()->GetResolution(w, h);
-	//m_rt = DRenderTexture::Create(w, h);
-	m_filter = new TestFilter();
-
-	//testmat = DRes::Load<DMaterial>(DEFAULT_GROUP, PEFFECT_MAT);
-	//testtex = DRes::Load<DTexture2D>(DEFAULT_GROUP, 2003);
-
-	//m_camera->SetRenderTexture(m_rt);
+	
+	m_filter = new WaterFilter();
 	m_camera->SetFilter(m_filter);
 
-	DTransform* transform;
+	DTransform* transform = m_camera->GetTransform();
 
-	transform = m_camera->GetTransform();
-	transform->SetEuler(33.346f, -41.563f, 0.0f);
-	transform->SetPosition(3.975387f, 2.588932f, -3.703708f);
+	transform->SetPosition(-2.418302f, 9.734123f, -13.54027);
+	transform->SetEuler(35.065f, 19.253f, 0.0f);
 
-	DMaterial* colmat = DRes::Load<DMaterial>(DEFAULT_GROUP, PLANE_MAT);
-	DGeometry* obj = DRes::Load<DGeometry>(DEFAULT_GROUP, PLANE_MESH);
-	//DGeometry* obj = DGeometry::Create(DGeometry_Sphere);
-	//DGeometry* obj = DGeometry::Create(DGeometry_Plane);
+	DGeometry* geo = DRes::Load<DGeometry>(DEFAULT_GROUP, 4002);
+	DMaterial* mat = DRes::Load<DMaterial>(DEFAULT_GROUP, 3014);
+	
+	DDisplayObject* poolobj = new DDisplayObject(geo, mat);
+	poolobj->Create();
 
-	DDisplayObject* obj0 = new DDisplayObject(obj, colmat);
-	obj0->Create();
+	geo = DRes::Load<DGeometry>(DEFAULT_GROUP, 4004);
+	mat = DRes::Load<DMaterial>(DEFAULT_GROUP, 3015);
+
+	DDisplayObject* buildingObj = new DDisplayObject(geo, mat);
+	buildingObj->Create();
+	transform = buildingObj->GetTransform();
+	transform->SetPosition(-1.4f, 0.72f, -4.08f);
+	transform->SetEuler(0, -34.144f, 0);
+
+	geo = DRes::Load<DGeometry>(DEFAULT_GROUP, 4003);
+	mat = DRes::Load<DMaterial>(DEFAULT_GROUP, 3016);
+
+	DDisplayObject* waterObj = new DDisplayObject(geo, mat);
+	waterObj->Create();
 
 
 	DLight* light = new DLight();
 	light->Create();
 	transform = light->GetTransform();
 	transform->SetEuler(50.0f, -30.0f, 0.0f);
-
 }
 
-void EmptyScene::OnUnLoad()
+void WaterScene::OnUnLoad()
 {
-	m_filter->Release();
-	delete m_filter;
-	m_filter = 0;
-	/*m_rt->Destroy();
-	delete m_rt;
-	m_rt = 0;*/
+	if (m_filter != NULL)
+	{
+		m_filter->Release();
+		delete m_filter;
+		m_filter = 0;
+	}
 
 	DRes::UnLoadGroup(DEFAULT_GROUP);
 }
 
-void EmptyScene::OnUpdate()
+void WaterScene::OnUpdate()
 {
-
-	//if (DInput::IsKeyDown(0x10))
-	if (DInput::IsKeyDown(81))
-	{
-		DTexture2D* tex = DRes::Load<DTexture2D>(0, 2003);
-		tex->SetWrapMode(DWrapMode_Repeat);
-	}
 	if (DInput::IsMousePress(0) && !DGUI::IsGUIActive())
 	{
 		int dtx, dty;
@@ -86,7 +82,6 @@ void EmptyScene::OnUpdate()
 		DVector3 forward;
 		m_camera->GetTransform()->GetEuler(euler);
 
-		//euler.y += DTime::GetDeltaTime()*20.0f;
 		euler.y += dtx;
 		euler.x += dty;
 
@@ -127,8 +122,4 @@ void EmptyScene::OnUpdate()
 		DVector3 position = m_lookAtPoint - forward*m_lookDistance;
 		m_camera->GetTransform()->SetPosition(position);
 	}
-}
-
-void EmptyScene::OnRender()
-{
 }

@@ -89,7 +89,11 @@ ShaderBlock {
 				    float2 uv  : TEXCOORD0;
 				};
 
+				sampler g_engineDepthTexture;
+				sampler blurTex;
 				sampler screenTexture;
+
+				float2 area;
 
 				//float2 offset;
 
@@ -110,15 +114,14 @@ ShaderBlock {
 
 				float4 FragMain(VS_OUTPUT input) : SV_TARGET
 				{
-				    //float4 textureColor = tex2D(screenTexture,      input.uv) * 0.45;
+				    
 				    float4 textureColor = tex2D(screenTexture, input.uv);
-	    			// textureColor.rgb += tex2D(screenTexture, input.uv + offset).rgb*0.175;
-	    			// textureColor.rgb += tex2D(screenTexture, input.uv - offset).rgb*0.175;
+	    			float4 blurColor = tex2D(blurTex, input.uv);
+	    			float depth = tex2D(g_engineDepthTexture, input.uv).r;
 
-	    			// textureColor.rgb += tex2D(screenTexture, input.uv + offset).rgb*0.1;
-	    			// textureColor.rgb += tex2D(screenTexture, input.uv - offset).rgb*0.1;
+	    			depth = saturate((depth - area.x)/(area.y - area.x));
 
-	    			//  textureColor.a = 1.0;
+	    			textureColor.rgb = lerp(textureColor.rgb, blurColor.rgb, depth);
 
 	    			return textureColor;
 				}

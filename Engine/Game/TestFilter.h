@@ -8,7 +8,7 @@ public:
 	TestFilter();
 	~TestFilter();
 
-	virtual DRenderTexture* Render(DRenderTexture* screenTexture);
+	virtual DRenderTexture* Render(DCamera*, DRenderTexture* screenTexture);
 	virtual void Release();
 
 public:

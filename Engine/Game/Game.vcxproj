@@ -161,6 +161,8 @@
     <ClInclude Include="TestFilter.h" />
     <ClInclude Include="TestResDefine.h" />
     <ClInclude Include="TestScene.h" />
+    <ClInclude Include="WaterFilter.h" />
+    <ClInclude Include="WaterScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EmptyScene.cpp" />
@@ -176,6 +178,8 @@
     <ClCompile Include="SVCamera.cpp" />
     <ClCompile Include="TestFilter.cpp" />
     <ClCompile Include="TestScene.cpp" />
+    <ClCompile Include="WaterFilter.cpp" />
+    <ClCompile Include="WaterScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">

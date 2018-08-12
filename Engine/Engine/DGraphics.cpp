@@ -222,6 +222,7 @@ void DGraphics::BeginScene(bool clearDepth, bool clearStencil, bool clearColor, 
 	{
 		SetRenderTarget();
 		Clear(clearDepth, clearStencil, clearColor, color);
+		
 	}
 	
 	DSystem::GetGraphicsMgr()->ClearRenderQueue();

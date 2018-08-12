@@ -32,128 +32,128 @@ TestScene::TestScene(SCENEID sceneId, char * sceneName) : DScene(sceneId, sceneN
 
 void TestScene::OnGUI()
 {
-	DGUI::Label(u8"SG DEEP_LIGHT Engine：中文utf-8测试");
-	DGUI::Label("DeltaTime:%lf", DTime::GetDeltaTime());
-	DGUI::Label("FixedDeltaTime:%lf", DTime::GetFixedDeltaTime());
-	DGUI::Label("Timer:%lf", DTime::GetTimer());
-	DGUI::Label("FPS:%d", DTime::GetFPS());
-	DGUI::Label("DrawCall:%d", DGraphics::GetDrawCall());
+	//DGUI::Label(u8"SG DEEP_LIGHT Engine：中文utf-8测试");
+	//DGUI::Label("DeltaTime:%lf", DTime::GetDeltaTime());
+	//DGUI::Label("FixedDeltaTime:%lf", DTime::GetFixedDeltaTime());
+	//DGUI::Label("Timer:%lf", DTime::GetTimer());
+	//DGUI::Label("FPS:%d", DTime::GetFPS());
+	//DGUI::Label("DrawCall:%d", DGraphics::GetDrawCall());
 
-	if (DGUI::Button("Test Destroy"))
-	{
-		m_obj0->Destroy();
-		delete m_obj0;
-		m_obj0 = 0;
-	}
-	//DGUI::Label("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+	//if (DGUI::Button("Test Destroy"))
+	//{
+	//	m_obj0->Destroy();
+	//	delete m_obj0;
+	//	m_obj0 = 0;
+	//}
+	////DGUI::Label("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
-	/*D3DXVECTOR3 euler;
-	DTransform* transform;
-	transform = m_obj->GetTransform();
-	transform->GetEuler(euler);
+	///*D3DXVECTOR3 euler;
+	//DTransform* transform;
+	//transform = m_obj->GetTransform();
+	//transform->GetEuler(euler);
 
-	ImGui::SliderFloat("Pitch", &euler.x, 0.0f, 360.0f);
-	ImGui::SliderFloat("Yall", &euler.y, 0.0f, 360.0f);
-	ImGui::SliderFloat("Roll", &euler.z, 0.0f, 360.0f);*/
+	//ImGui::SliderFloat("Pitch", &euler.x, 0.0f, 360.0f);
+	//ImGui::SliderFloat("Yall", &euler.y, 0.0f, 360.0f);
+	//ImGui::SliderFloat("Roll", &euler.z, 0.0f, 360.0f);*/
 
-	/*if (DInput::IsMousePress(0)) 
-	{
-		DGUI::Label("Mouse Down");
-	}
-	if (DInput::IsMouseDown(0))
-	{
-		DLog::Info("Mouse Click");
-	}
-	if (DInput::IsKeyPress(DIK_A))
-	{
-		DGUI::Label("Key A Down");
-	}
-	if (DInput::IsKeyDown(DIK_A))
-	{
-		DLog::Info("Key A Click");
-	}*/
-	
-	/*ImGui::Begin("xa", 0, ImGuiWindowFlags_NoTitleBar|ImGuiWindowFlags_NoResize|ImGuiWindowFlags_NoInputs);
-	if (ImGui::Button("Pitch"))
-	{
-		DLog::Info("xas");
-	}
-	ImGui::Text("xas");
-	ImGui::End();*/
+	///*if (DInput::IsMousePress(0)) 
+	//{
+	//	DGUI::Label("Mouse Down");
+	//}
+	//if (DInput::IsMouseDown(0))
+	//{
+	//	DLog::Info("Mouse Click");
+	//}
+	//if (DInput::IsKeyPress(DIK_A))
+	//{
+	//	DGUI::Label("Key A Down");
+	//}
+	//if (DInput::IsKeyDown(DIK_A))
+	//{
+	//	DLog::Info("Key A Click");
+	//}*/
+	//
+	///*ImGui::Begin("xa", 0, ImGuiWindowFlags_NoTitleBar|ImGuiWindowFlags_NoResize|ImGuiWindowFlags_NoInputs);
+	//if (ImGui::Button("Pitch"))
+	//{
+	//	DLog::Info("xas");
+	//}
+	//ImGui::Text("xas");
+	//ImGui::End();*/
 
+
+
+	////transform->SetEuler(euler.x, euler.y, euler.z);
+
+	//DTransform* transform = m_light->GetTransform();
+	//DVector3 euler, forward;
+	//transform->GetEuler(euler);
+
+	//ImGui::SliderFloat("LPitch", &euler.x, 0.0f, 360.0f);
+	//ImGui::SliderFloat("LYall", &euler.y, 0.0f, 360.0f);
+	//ImGui::SliderFloat("LRoll", &euler.z, 0.0f, 360.0f);
 
 
 	//transform->SetEuler(euler.x, euler.y, euler.z);
 
-	DTransform* transform = m_light->GetTransform();
-	DVector3 euler, forward;
-	transform->GetEuler(euler);
+	//if (m_obj0 != NULL)
+	//{
+	//	transform = m_obj0->GetTransform();
 
-	ImGui::SliderFloat("LPitch", &euler.x, 0.0f, 360.0f);
-	ImGui::SliderFloat("LYall", &euler.y, 0.0f, 360.0f);
-	ImGui::SliderFloat("LRoll", &euler.z, 0.0f, 360.0f);
+	//	/*DVector3 right, up, forward, position;
+	//	transform->GetRight(right);
+	//	transform->GetUp(up);
+	//	transform->GetForward(forward);
+	//	transform->GetPosition(position);
 
+	//	DGUI::Label("Right:(%f,%f,%f)", right.x, right.y, right.z);
+	//	DGUI::Label("Up:(%f,%f,%f)", up.x, up.y, up.z);
+	//	DGUI::Label("Forward:(%f,%f,%f)", forward.x, forward.y, forward.z);*/
 
-	transform->SetEuler(euler.x, euler.y, euler.z);
+	//	DVector3 obje, objp, objs;
+	//	transform->GetEuler(obje);
+	//	transform->GetPosition(objp);
+	//	transform->GetLocalScale(objs);
 
-	if (m_obj0 != NULL)
-	{
-		transform = m_obj0->GetTransform();
+	//	ImGui::SliderFloat("objPos", &objp.x, 0.0f, 3.0f);
+	//	ImGui::SliderFloat("objRot", &obje.y, 0.0f, 360.0f);
+	//	ImGui::SliderFloat("objSize", &objs.x, 0.1f, 3.0f);
 
-		/*DVector3 right, up, forward, position;
-		transform->GetRight(right);
-		transform->GetUp(up);
-		transform->GetForward(forward);
-		transform->GetPosition(position);
+	//	transform->SetPosition(objp);
+	//	transform->SetEuler(obje);
+	//	transform->SetLocalScale(objs);
+	//}
+	//if (m_cube != NULL)
+	//{
+	//	transform = m_cube->GetTransform();
 
-		DGUI::Label("Right:(%f,%f,%f)", right.x, right.y, right.z);
-		DGUI::Label("Up:(%f,%f,%f)", up.x, up.y, up.z);
-		DGUI::Label("Forward:(%f,%f,%f)", forward.x, forward.y, forward.z);*/
+	//	/*DVector3 right, up, forward;
+	//	transform->GetRight(right);
+	//	transform->GetUp(up);
+	//	transform->GetForward(forward);
 
-		DVector3 obje, objp, objs;
-		transform->GetEuler(obje);
-		transform->GetPosition(objp);
-		transform->GetLocalScale(objs);
+	//	DGUI::Label("Right:(%f,%f,%f)", right.x, right.y, right.z);
+	//	DGUI::Label("Up:(%f,%f,%f)", up.x, up.y, up.z);
+	//	DGUI::Label("Forward:(%f,%f,%f)", forward.x, forward.y, forward.z);*/
 
-		ImGui::SliderFloat("objPos", &objp.x, 0.0f, 3.0f);
-		ImGui::SliderFloat("objRot", &obje.y, 0.0f, 360.0f);
-		ImGui::SliderFloat("objSize", &objs.x, 0.1f, 3.0f);
+	//	
+	//	/*float posLerp = 0, eulerV = 0, sizeV = 1.0;
+	//	ImGui::SliderFloat("cubePos", &posLerp, 0.0f, 1.0f);
+	//	ImGui::SliderFloat("cubeRot", &eulerV, 0.0f, 360.0f);
+	//	ImGui::SliderFloat("cubeSize", &sizeV, 0.1f, 3.0f);
 
-		transform->SetPosition(objp);
-		transform->SetEuler(obje);
-		transform->SetLocalScale(objs);
-	}
-	if (m_cube != NULL)
-	{
-		transform = m_cube->GetTransform();
+	//	DVector3 pos;
+	//	DVector3::Lerp(DVector3(2.64f, 2.61f, 0.0f), DVector3(1.2f, 2.0f, 0.4f), posLerp, pos);
+	//	transform->SetPosition(pos);
+	//	transform->SetEuler(0.0f, eulerV, 0.0f);
+	//	transform->SetLocalScale(sizeV, sizeV, sizeV);*/
+	//}
 
-		/*DVector3 right, up, forward;
-		transform->GetRight(right);
-		transform->GetUp(up);
-		transform->GetForward(forward);
-
-		DGUI::Label("Right:(%f,%f,%f)", right.x, right.y, right.z);
-		DGUI::Label("Up:(%f,%f,%f)", up.x, up.y, up.z);
-		DGUI::Label("Forward:(%f,%f,%f)", forward.x, forward.y, forward.z);*/
-
-		
-		/*float posLerp = 0, eulerV = 0, sizeV = 1.0;
-		ImGui::SliderFloat("cubePos", &posLerp, 0.0f, 1.0f);
-		ImGui::SliderFloat("cubeRot", &eulerV, 0.0f, 360.0f);
-		ImGui::SliderFloat("cubeSize", &sizeV, 0.1f, 3.0f);
-
-		DVector3 pos;
-		DVector3::Lerp(DVector3(2.64f, 2.61f, 0.0f), DVector3(1.2f, 2.0f, 0.4f), posLerp, pos);
-		transform->SetPosition(pos);
-		transform->SetEuler(0.0f, eulerV, 0.0f);
-		transform->SetLocalScale(sizeV, sizeV, sizeV);*/
-	}
-
-	ImGui::SliderFloat("GLPosX", &m_glPos.x, 0.0f, 7.0f);
-	ImGui::SliderFloat("GLPosY", &m_glPos.y, 0.0f, 7.0f);
-	ImGui::SliderFloat("GLPosZ", &m_glPos.z, 0.0f, 7.0f);
-	//transform->GetForward(forward);
-	//DShader::SetGlobalVector3("g_sundir", forward);
+	//ImGui::SliderFloat("GLPosX", &m_glPos.x, 0.0f, 7.0f);
+	//ImGui::SliderFloat("GLPosY", &m_glPos.y, 0.0f, 7.0f);
+	//ImGui::SliderFloat("GLPosZ", &m_glPos.z, 0.0f, 7.0f);
+	////transform->GetForward(forward);
+	////DShader::SetGlobalVector3("g_sundir", forward);
 }
 
 void TestScene::OnLoad()

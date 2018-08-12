@@ -45,6 +45,7 @@ DCamera::~DCamera()
 
 void DCamera::Render()
 {
+	RefreshCameraDirParam();
 	RenderScreenTexture();
 	RenderDepthTexture();
 
@@ -59,7 +60,7 @@ void DCamera::RenderFilter()
 		//bool clearDepth = m_clearFlags != DClearFlags_DontClear;
 		//bool clearColor = m_clearFlags != DClearFlags_Depth && m_clearFlags != DClearFlags_DontClear;
 		//DGraphics::BeginScene(clearDepth, clearDepth, clearColor, m_backgroundColor);
-		DRenderTexture* dst = m_filter->Render(src);
+		DRenderTexture* dst = m_filter->Render(this, src);
 		//DGraphics::EndScene();
 
 		if (m_renderTexture != NULL && dst != NULL)
@@ -642,8 +643,6 @@ void DCamera::BeginRender(DRenderTexture* renderTexture, bool clearDepth, bool c
 {
 	
 	sCurrent = this;
-
-	RefreshCameraDirParam();
 
 	if (m_isProjectionChanged)
 	{

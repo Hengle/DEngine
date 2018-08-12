@@ -45,6 +45,12 @@
     <ClInclude Include="SVCamera.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="WaterScene.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WaterFilter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -69,6 +75,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="SVCamera.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="WaterScene.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="WaterFilter.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -8,12 +8,16 @@ public:
 	TestFilter();
 	~TestFilter();
 
-	virtual void Render(DRenderTexture* screenTexture);
+	virtual DRenderTexture* Render(DRenderTexture* screenTexture);
 	virtual void Release();
+
+public:
+	float nearV;
+	float farV;
 
 private:
 	DMaterial* m_mat;
-	DMaterial* m_glowMat;
+	//DMaterial* m_glowMat;
 	DMaterial* m_mixMat;
 	DRenderTexture* m_dst;
 	DRenderTexture* m_dst2;

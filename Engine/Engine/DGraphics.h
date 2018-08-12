@@ -103,6 +103,7 @@ public:
 	static bool IsFrustrumZeroToOne();
 
 private:
+	static void BlitInternal(DTexture* texture, DMaterial* material);
 	void InitScreenPlane();
 	void InitSkyBox();
 	void ClearRenderQueue();

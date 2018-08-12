@@ -320,42 +320,14 @@ void DGraphics::PushRenderQueue(DDisplayObject * displayObject, DRenderQueue ren
 
 void DGraphics::Blit(DTexture * src, DMaterial * material)
 {
-	if (DSystem::GetGraphicsMgr()->m_screenPlane == NULL)
-	{
-		DSystem::GetGraphicsMgr()->InitScreenPlane();
-	}
-	DMatrix4x4 world, view, proj;
-	DMatrix4x4::Identity(&world);
-	view = DMatrix4x4(1.0f, 0.0f, 0.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f,
-		0.0f, 0.0f, -1.0f, 0.0f,
-		0.0f, -1.0f, 0.0f, 1.0f);
-	float screenWidth, screenHeight;
-	DSystem::GetGraphicsMgr()->GetGLCore()->GetResolution(screenWidth, screenHeight);
-	DMatrix4x4::Ortho(&proj, screenWidth, screenHeight, -100.0f, 100.0f);
-
-	material->SetMatrix(D_SC_MATRIX_M, world);
-	material->SetMatrix(D_SC_MATRIX_V, view);
-	material->SetMatrix(D_SC_MATRIX_P, proj);
-	material->SetTexture(D_SC_TEXTURE_SCREEN, src);
-
-	int passcount = material->GetPassCount();
-	int i;
-
-	for (i = 0; i < passcount; i++)
-	{
-		if (material->SetPass(i))
-		{
-			DSystem::GetGraphicsMgr()->m_screenPlane->Draw(material->GetVertexUsage(i));
-
-			DSystem::GetGraphicsMgr()->m_drawCall += 1;
-		}
-	}
+	DGraphics::BeginScene(true, true, true, DCOLOR_BLACK);
+	BlitInternal(src, material);
+	DGraphics::EndScene();
 }
 
 void DGraphics::Blit(DTexture * src, DRenderTexture * dst)
 {
-	DMaterial* blitCopy = DRes::LoadInternal<DMaterial>(D_RES_BLIT_COPY_MAT);
+	DMaterial* blitCopy = DRes::LoadInternal<DMaterial>(D_RES_MAT_BLIT_COPY);
 	Blit(src, dst, blitCopy);
 }
 
@@ -368,7 +340,7 @@ void DGraphics::Blit(DTexture * src, DRenderTexture * dst, DMaterial * material)
 
 	DGraphics::BeginScene(true, true, false, DCOLOR_BLACK, dst);
 
-	Blit(src, material);
+	BlitInternal(src, material);
 
 	DGraphics::EndScene(dst);
 	float screenWidth, screenHeight;
@@ -378,7 +350,7 @@ void DGraphics::Blit(DTexture * src, DRenderTexture * dst, DMaterial * material)
 
 void DGraphics::DrawTexture(DTexture * src)
 {
-	DMaterial* blitCopy = DRes::LoadInternal<DMaterial>(D_RES_BLIT_COPY_MAT);
+	DMaterial* blitCopy = DRes::LoadInternal<DMaterial>(D_RES_MAT_BLIT_COPY);
 	Blit(src, blitCopy);
 }
 
@@ -694,6 +666,41 @@ void DGraphics::ApplyActiveMaterial()
 bool DGraphics::IsFrustrumZeroToOne()
 {
 	return DSystem::GetGraphicsMgr()->GetGLCore()->IsFrustrumZeroToOne();
+}
+
+void DGraphics::BlitInternal(DTexture* texture, DMaterial* material)
+{
+	if (DSystem::GetGraphicsMgr()->m_screenPlane == NULL)
+	{
+		DSystem::GetGraphicsMgr()->InitScreenPlane();
+	}
+	DMatrix4x4 world, view, proj;
+	DMatrix4x4::Identity(&world);
+	view = DMatrix4x4(1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, -1.0f, 0.0f,
+		0.0f, -1.0f, 0.0f, 1.0f);
+	float screenWidth, screenHeight;
+	DSystem::GetGraphicsMgr()->GetGLCore()->GetResolution(screenWidth, screenHeight);
+	DMatrix4x4::Ortho(&proj, screenWidth, screenHeight, -100.0f, 100.0f);
+
+	material->SetMatrix(D_SC_MATRIX_M, world);
+	material->SetMatrix(D_SC_MATRIX_V, view);
+	material->SetMatrix(D_SC_MATRIX_P, proj);
+	material->SetTexture(D_SC_TEXTURE_SCREEN, texture);
+
+	int passcount = material->GetPassCount();
+	int i;
+
+	for (i = 0; i < passcount; i++)
+	{
+		if (material->SetPass(i))
+		{
+			DSystem::GetGraphicsMgr()->m_screenPlane->Draw(material->GetVertexUsage(i));
+
+			DSystem::GetGraphicsMgr()->m_drawCall += 1;
+		}
+	}
 }
 
 void DGraphics::InitScreenPlane()

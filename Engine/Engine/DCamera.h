@@ -30,7 +30,7 @@ interface ICameraFilter
 {
 public:
 	/*渲染滤镜*/
-	virtual void Render(DRenderTexture* src, DRenderTexture* dst) = 0;
+	virtual DRenderTexture* Render(DRenderTexture* src) = 0;
 	/*滤镜释放*/
 	virtual void Release() = 0;
 };
@@ -121,6 +121,9 @@ public:
 	void ViewportPointToRay(const DVector3, DRay* out) const;
 	void ViewportPointToRay(float x, float y, float z, DRay* out) const;
 
+	void SetAdditionalTextureActive(DCameraAdditionalTextureType, bool);
+	bool IsAdditionalTextureActive(DCameraAdditionalTextureType) const;
+
 	void SetLayerMask(DLAYER);
 	DLAYER GetLayerMask() const;
 	void AddLayer(DLAYER);
@@ -152,6 +155,7 @@ private:
 	void CameraPointToWorldPoint(float x, float y, float z, DVector3* out) const;
 	void CameraPointToRay(float x, float y, float z, DRay* out) const;
 	DRenderTexture* GetSourceTexture();
+	DRenderTexture* GetDepthTexture();
 
 protected:
 	int m_sortOrder;
@@ -173,6 +177,7 @@ private:
 	ICameraFilter* m_filter;
 	DRenderTexture* m_renderTexture;
 	DRenderTexture* m_sourceTexture;
+	DRenderTexture* m_depthTexture;
 	DColor m_backgroundColor;
 	DMaterial* m_skyBoxMaterial;
 	DRect m_viewPort;
@@ -180,6 +185,7 @@ private:
 	/*保存当前的相机节点*/
 	DCameraNode* m_node;
 	/*当前相机额外渲染纹理类型*/
+	unsigned int m_additionalTexture;
 };
 
 static DCamera* sCurrent;

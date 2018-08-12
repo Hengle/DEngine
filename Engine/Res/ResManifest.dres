@@ -52,6 +52,14 @@
 		#PATH ../Res/mix.shader
 	#RES_END
 
+	#RES_BEGIN SHADER 1013 
+		#PATH ../Res/depthTexTes.shader
+	#RES_END
+
+	#RES_BEGIN SHADER 1014 
+		#PATH ../Res/depthField.shader
+	#RES_END
+
 	#RES_BEGIN TEXTURE2D 2000
 		#PATH ../Res/decal.jpg
 		#WRAPMODE REPEAT
@@ -164,6 +172,10 @@
 
 	#RES_BEGIN MATERIAL 3012
 		#PATH ../Res/mix.m
+	#RES_END
+
+	#RES_BEGIN MATERIAL 3013
+		#PATH ../Res/depth.m
 	#RES_END
 
 	#RES_BEGIN GEOMETRY 4000

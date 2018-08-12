@@ -17,3 +17,4 @@
 #define D_SC_TIME             "g_engineTime"
 
 #define D_SC_TEXTURE_SCREEN   "screenTexture"
+#define D_SC_DEPTH_TEXTURE    "g_engineDepthTexture"

@@ -8,6 +8,7 @@ public:
 	EmptyScene(SCENEID sceneId, char* sceneName);
 
 protected:
+	virtual void OnGUI();
 	virtual void OnLoad();
 	virtual void OnUnLoad();
 	virtual void OnUpdate();
@@ -18,7 +19,7 @@ private:
 	DVector3 m_lookAtPoint;
 	float m_lookDistance;
 	TestFilter* m_filter;
-	DRenderTexture* m_rt;
+	//DRenderTexture* m_rt;
 	//DMaterial* testmat;
 	//DTexture2D* testtex;
 };

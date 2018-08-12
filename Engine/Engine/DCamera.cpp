@@ -34,6 +34,8 @@ DCamera::DCamera() : DSceneObject()
 
 	m_layerMask = D_LAYERMASK_DEFAULT;
 	m_clearFlags = DClearFlags_SkyBox;
+
+	m_additionalTexture = 0U;
 }
 
 
@@ -43,32 +45,31 @@ DCamera::~DCamera()
 
 void DCamera::Render()
 {
-	BeginRender();
-
-	DGraphics::SetGlobalRenderShader(m_replacementShader);
-
-	OnPreRender();
-
-	DScene::Draw(true, m_layerMask);
-
-	OnPostRender();
-
-
-	EndRender();
-	DGraphics::ClearGlobalRenderShader();
+	RenderScreenTexture();
+	RenderDepthTexture();
 
 	RenderFilter();
 }
 
 void DCamera::RenderFilter()
 {
-	if (m_filter != NULL && m_renderTexture != NULL)
+	if (m_filter != NULL)
 	{
-		bool clearDepth = m_clearFlags != DClearFlags_DontClear;
-		bool clearColor = m_clearFlags != DClearFlags_Depth && m_clearFlags != DClearFlags_DontClear;
-		DGraphics::BeginScene(clearDepth, clearDepth, clearColor, m_backgroundColor);
-		m_filter->Render(m_renderTexture);
-		DGraphics::EndScene();
+		DRenderTexture* src = GetSourceTexture();
+		//bool clearDepth = m_clearFlags != DClearFlags_DontClear;
+		//bool clearColor = m_clearFlags != DClearFlags_Depth && m_clearFlags != DClearFlags_DontClear;
+		//DGraphics::BeginScene(clearDepth, clearDepth, clearColor, m_backgroundColor);
+		DRenderTexture* dst = m_filter->Render(src);
+		//DGraphics::EndScene();
+
+		if (m_renderTexture != NULL && dst != NULL)
+		{
+			DGraphics::Blit(dst, m_renderTexture);
+		}
+		else if(dst != NULL)
+		{
+			DGraphics::DrawTexture(dst);
+		}
 	}
 }
 
@@ -428,6 +429,22 @@ void DCamera::ViewportPointToRay(float x, float y, float z, DRay * out) const
 	CameraPointToRay(vx, vy, z, out);
 }
 
+void DCamera::SetAdditionalTextureActive(DCameraAdditionalTextureType type, bool active)
+{
+	if (active)
+		m_additionalTexture |= type;
+	else
+	{
+		if ((m_additionalTexture&type) != 0)
+			m_additionalTexture ^= type;
+	}
+}
+
+bool DCamera::IsAdditionalTextureActive(DCameraAdditionalTextureType type) const
+{
+	return ((m_additionalTexture&type) != 0);
+}
+
 void DCamera::SetLayerMask(DLAYER layerMask)
 {
 	m_layerMask = layerMask;
@@ -512,7 +529,14 @@ void DCamera::OnDestroy()
 	{
 		m_sourceTexture->Destroy();
 		delete m_sourceTexture;
-		m_sourceTexture = 0;
+		m_sourceTexture = NULL;
+	}
+
+	if (m_depthTexture != NULL)
+	{
+		m_depthTexture->Destroy();
+		delete m_depthTexture;
+		m_depthTexture = NULL;
 	}
 
 	if (m_node != NULL)
@@ -542,11 +566,32 @@ void DCamera::OnFixedUpdate()
 
 void DCamera::RenderDepthTexture()
 {
+	if (!IsAdditionalTextureActive(DCameraAdditional_Depth))
+		return;
+	DShader* depthShader = DRes::LoadInternal<DShader>(D_RES_SHADER_DEPTH);
+	DRenderTexture* depthTexture = GetDepthTexture();
+	BeginRender(depthTexture, true, true, DCOLOR_WHITE);
+
+	DGraphics::SetGlobalRenderShader(depthShader);
+
+	DScene::Draw(false, m_layerMask);
+
+	EndRender(depthTexture);
+	DGraphics::ClearGlobalRenderShader();
+
+	DShader::SetGlobalTexture(D_SC_DEPTH_TEXTURE, depthTexture);
 }
 
 void DCamera::RenderScreenTexture()
 {
-	BeginRender();
+	DRenderTexture* src = NULL;
+	if (m_filter != NULL)
+	{
+		src = GetSourceTexture();
+	}
+	bool clearDepth = m_clearFlags != DClearFlags_DontClear;
+	bool clearColor = m_clearFlags != DClearFlags_Depth && m_clearFlags != DClearFlags_DontClear;
+	BeginRender(src, clearDepth, clearColor, m_backgroundColor);
 	if (m_skyBoxMaterial != NULL && m_clearFlags == DClearFlags_SkyBox)
 	{
 		DGraphics::DrawSkyBox(m_skyBoxMaterial, this);
@@ -561,7 +606,7 @@ void DCamera::RenderScreenTexture()
 	OnPostRender();
 
 
-	EndRender();
+	EndRender(src);
 	DGraphics::ClearGlobalRenderShader();
 }
 
@@ -768,7 +813,20 @@ DRenderTexture * DCamera::GetSourceTexture()
 {
 	if (m_sourceTexture == NULL)
 	{
+		float w, h;
+		DSystem::GetGraphicsMgr()->GetResolution(w, h);
 		m_sourceTexture = DRenderTexture::Create(w, h);
 	}
-	return nullptr;
+	return m_sourceTexture;
+}
+
+DRenderTexture * DCamera::GetDepthTexture()
+{
+	if (m_depthTexture == NULL)
+	{
+		float w, h;
+		DSystem::GetGraphicsMgr()->GetResolution(w, h);
+		m_depthTexture = DRenderTexture::Create(w, h);
+	}
+	return m_depthTexture;
 }

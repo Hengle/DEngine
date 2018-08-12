@@ -23,6 +23,10 @@
 		#PATH ../Res/InternalRes/blitcopy.shader
 	#RES_END
 
+	#RES_BEGIN SHADER 101 
+		#PATH ../Res/InternalRes/depth.shader
+	#RES_END
+
 	#RES_BEGIN MATERIAL 500 
 		#PATH ../Res/InternalRes/blitcopy.m
 	#RES_END

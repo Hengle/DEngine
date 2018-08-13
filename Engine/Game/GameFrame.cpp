@@ -20,5 +20,5 @@ void GameFrame::OnInit()
 	RegisterScene(new GlTestScene(6, "glsce"));
 	RegisterScene(new EmptyScene(7, "empty"));
 	RegisterScene(new WaterScene(8, "water"));
-	ChangeScene(7);
+	ChangeScene(5);
 }

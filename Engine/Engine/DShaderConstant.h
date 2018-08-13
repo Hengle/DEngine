@@ -18,3 +18,4 @@
 
 #define D_SC_TEXTURE_SCREEN   "screenTexture"
 #define D_SC_DEPTH_TEXTURE    "g_engineDepthTexture"
+#define D_SC_GRAB_TEXTURE     "g_engineGrabTexture"

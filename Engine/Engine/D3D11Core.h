@@ -37,6 +37,8 @@ public:
 	virtual ITextureRes* CreateCubeMapRes(ITextureRes*, ITextureRes*, ITextureRes*, ITextureRes*, ITextureRes*, ITextureRes*);
 	/*创建RenderTexture资源*/
 	virtual IRenderTextureViewRes* CreateRenderTextureRes(float width, float height);
+
+	virtual IRenderTextureViewRes* GetBackBufferViewRes();
 	/*创建shader程序*/
 	virtual DShaderPass* CreateShaderPass();
 	virtual void ApplySamplerState(UINT, DWrapMode);
@@ -59,12 +61,14 @@ private:
 	IDXGISwapChain* m_swapChain;
 	ID3D11Device* m_device;
 	ID3D11DeviceContext* m_deviceContext;
-	ID3D11Texture2D* m_depthStencilBuffer;
-	IRenderBuffer* m_colorBuffer;
-	IRenderBuffer* m_depthBuffer;
+	//ID3D11Texture2D* m_depthStencilBuffer;
+	//IRenderBuffer* m_colorBuffer;
+	//IRenderBuffer* m_depthBuffer;
 	IRenderStateMgr* m_renderStateMgr;
 	D3D11_VIEWPORT m_viewPort;
 	std::map<DWrapMode, ID3D11SamplerState*> m_samplerStates;
+	IRenderTextureViewRes* m_backBuffer;
+	//ID3D11ShaderResourceView* m_renderTargetView;
 	
 };
 

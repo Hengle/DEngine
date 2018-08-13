@@ -293,7 +293,7 @@ void TestScene::TestLoad()
 	//floor = DRes::Load<DTexture2D>(DEFAULT_GROUP, DECAL_TEX);
 	//map = DRes::Load<DTexture2D>(DEFAULT_GROUP, BODY_TEX);
 	//cb = DRes::Load<DTexture2D>(DEFAULT_GROUP, GROUND_TEX);
-	DMaterial* mat = DRes::Load<DMaterial>(DEFAULT_GROUP, DECAL_MAT);
+	DMaterial* mat = DRes::Load<DMaterial>(DEFAULT_GROUP, 3016);
 	//mat = new DMaterial(shader);
 
 	//mat->SetFloat("power", 1.3f);
@@ -303,6 +303,7 @@ void TestScene::TestLoad()
 	////DTexture2D* texture = new DTexture2D(L"../Res/eboy.tif");
 	////DTexture2D* decal = new DTexture2D(L"../Res/decal.jpg");
 	m_plane = new DDisplayObject(plane, mat);
+	m_plane->testUseGrab = true;
 	transform = m_plane->GetTransform();
 	m_plane->Create();
 

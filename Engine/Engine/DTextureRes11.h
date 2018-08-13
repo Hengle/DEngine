@@ -29,6 +29,7 @@ class DRenderTextureViewRes11 : public IRenderTextureViewRes
 {
 public:
 	DRenderTextureViewRes11(ID3D11Device* device, ID3D11DeviceContext * deviceContext, float, float);
+	DRenderTextureViewRes11(ID3D11Device* device, ID3D11DeviceContext * deviceContext, ID3D11Texture2D* backbuffer, ID3D11Texture2D* depthbuffer);
 	~DRenderTextureViewRes11();
 	virtual void Apply(UINT, int);
 	virtual void ApplyWrapMode(UINT, DWrapMode);

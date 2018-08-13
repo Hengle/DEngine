@@ -40,9 +40,9 @@ public:
 	static void DrawGeometry(DGeometry*, const DMatrix4x4&, DMaterial*);
 	static void PushRenderQueue(DDisplayObject*, DRenderQueue);
 
-	static void Blit(DTexture* src, DMaterial* material);
+	static void Blit(DTexture* src, DMaterial* material, int pass = -1);
 	static void Blit(DTexture* src, DRenderTexture* dst);
-	static void Blit(DTexture* src, DRenderTexture* dst, DMaterial* material);
+	static void Blit(DTexture* src, DRenderTexture* dst, DMaterial* material, int pass = -1);
 	static void DrawTexture(DTexture* src);
 	/*绘制天空盒*/
 	static void DrawSkyBox(DMaterial*, const DCamera*);
@@ -100,10 +100,13 @@ public:
 	static void ClearActiveMaterial(DMaterial*);
 	static void ApplyActiveMaterial();
 
+
+	static void GrabScreenTexture();
+
 	static bool IsFrustrumZeroToOne();
 
 private:
-	static void BlitInternal(DTexture* texture, DMaterial* material);
+	static void BlitInternal(DTexture* texture, DMaterial* material, int pass);
 	void InitScreenPlane();
 	void InitSkyBox();
 	void ClearRenderQueue();
@@ -123,6 +126,8 @@ private:
 	DShader* m_globalRenderShader;
 	DRenderer* m_renderer;
 	DMaterial* m_activeMaterial;
+	DRenderTexture* m_backbuffer;
+	DRenderTexture* m_grabTexture;
 
 	unsigned int m_drawCall;
 };

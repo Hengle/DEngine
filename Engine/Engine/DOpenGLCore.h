@@ -32,6 +32,8 @@ public:
 	virtual ITextureRes* CreateCubeMapRes(ITextureRes*, ITextureRes*, ITextureRes*, ITextureRes*, ITextureRes*, ITextureRes*);
 	/*创建RenderTexture资源*/
 	virtual IRenderTextureViewRes* CreateRenderTextureRes(float width, float height);
+
+	virtual IRenderTextureViewRes* GetBackBufferViewRes();
 	/*创建shader程序*/
 	//virtual DShaderProgram* CreateShaderProgram(DShaderProgramType);
 	virtual DShaderPass* CreateShaderPass();

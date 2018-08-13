@@ -20,6 +20,7 @@ DGraphics::DGraphics()
 	m_drawCall = 0;
 	m_renderer = 0;
 	m_activeMaterial = 0;
+	m_backbuffer = 0;
 }
 
 
@@ -94,6 +95,8 @@ bool DGraphics::Init(int width, int height, bool fullScreen, DGraphicsAPI api)
 	m_renderer = new DRenderer();
 
 	m_glDrawer = new DGLDrawer();
+
+	m_backbuffer = DRenderTexture::BackBuffer();
 
 	return true;
 }
@@ -179,6 +182,18 @@ void DGraphics::Shutdown()
 		m_renderer->Release();
 		delete m_renderer;
 		m_renderer = NULL;
+	}
+	if (m_backbuffer != NULL)
+	{
+		m_backbuffer->Destroy();
+		delete m_backbuffer;
+		m_backbuffer = NULL;
+	}
+	if (m_grabTexture != NULL)
+	{
+		m_grabTexture->Destroy();
+		delete m_grabTexture;
+		m_grabTexture = NULL;
 	}
 	m_activeMaterial = NULL;
 	m_globalRenderShader = NULL;
@@ -319,10 +334,10 @@ void DGraphics::PushRenderQueue(DDisplayObject * displayObject, DRenderQueue ren
 	}
 }
 
-void DGraphics::Blit(DTexture * src, DMaterial * material)
+void DGraphics::Blit(DTexture * src, DMaterial * material, int pass)
 {
 	DGraphics::BeginScene(true, true, true, DCOLOR_BLACK);
-	BlitInternal(src, material);
+	BlitInternal(src, material, pass);
 	DGraphics::EndScene();
 }
 
@@ -332,7 +347,7 @@ void DGraphics::Blit(DTexture * src, DRenderTexture * dst)
 	Blit(src, dst, blitCopy);
 }
 
-void DGraphics::Blit(DTexture * src, DRenderTexture * dst, DMaterial * material)
+void DGraphics::Blit(DTexture * src, DRenderTexture * dst, DMaterial * material, int pass)
 {
 	float rtw, rth;
 	rtw = dst->GetWidth();
@@ -341,7 +356,7 @@ void DGraphics::Blit(DTexture * src, DRenderTexture * dst, DMaterial * material)
 
 	DGraphics::BeginScene(true, true, false, DCOLOR_BLACK, dst);
 
-	BlitInternal(src, material);
+	BlitInternal(src, material, pass);
 
 	DGraphics::EndScene(dst);
 	float screenWidth, screenHeight;
@@ -664,12 +679,25 @@ void DGraphics::ApplyActiveMaterial()
 	}
 }
 
+void DGraphics::GrabScreenTexture()
+{
+	/*if (DSystem::GetGraphicsMgr()->m_grabTexture == NULL)
+	{
+		float w = DSystem::GetGraphicsMgr()->m_backbuffer->GetWidth();
+		float h = DSystem::GetGraphicsMgr()->m_backbuffer->GetHeight();
+		DSystem::GetGraphicsMgr()->m_grabTexture = DRenderTexture::Create(w, h);
+	}
+	DGraphics::Blit(DSystem::GetGraphicsMgr()->m_backbuffer, DSystem::GetGraphicsMgr()->m_grabTexture);
+	DShader::SetGlobalTexture(D_SC_GRAB_TEXTURE, DSystem::GetGraphicsMgr()->m_grabTexture);*/
+	DShader::SetGlobalTexture(D_SC_GRAB_TEXTURE, DSystem::GetGraphicsMgr()->m_backbuffer);
+}
+
 bool DGraphics::IsFrustrumZeroToOne()
 {
 	return DSystem::GetGraphicsMgr()->GetGLCore()->IsFrustrumZeroToOne();
 }
 
-void DGraphics::BlitInternal(DTexture* texture, DMaterial* material)
+void DGraphics::BlitInternal(DTexture* texture, DMaterial* material, int pass)
 {
 	if (DSystem::GetGraphicsMgr()->m_screenPlane == NULL)
 	{
@@ -690,14 +718,26 @@ void DGraphics::BlitInternal(DTexture* texture, DMaterial* material)
 	material->SetMatrix(D_SC_MATRIX_P, proj);
 	material->SetTexture(D_SC_TEXTURE_SCREEN, texture);
 
-	int passcount = material->GetPassCount();
-	int i;
-
-	for (i = 0; i < passcount; i++)
+	
+	if (pass < 0)
 	{
-		if (material->SetPass(i))
+		int passcount = material->GetPassCount();
+		int i;
+		for (i = 0; i < passcount; i++)
 		{
-			DSystem::GetGraphicsMgr()->m_screenPlane->Draw(material->GetVertexUsage(i));
+			if (material->SetPass(i))
+			{
+				DSystem::GetGraphicsMgr()->m_screenPlane->Draw(material->GetVertexUsage(i));
+
+				DSystem::GetGraphicsMgr()->m_drawCall += 1;
+			}
+		}
+	}
+	else
+	{
+		if (material->SetPass(pass))
+		{
+			DSystem::GetGraphicsMgr()->m_screenPlane->Draw(material->GetVertexUsage(pass));
 
 			DSystem::GetGraphicsMgr()->m_drawCall += 1;
 		}

@@ -29,7 +29,7 @@ ShaderBlock {
 				    float2 tex : TEXCOORD0;
 				};
 
-				Texture2D g_grabTexture;
+				Texture2D g_engineGrabTexture;
 				SamplerState SampleType;
 
 				PixelInputType VertMain(VertexInputType input)
@@ -58,7 +58,7 @@ ShaderBlock {
 
 
 	    			// Sample the pixel color from the texture using the sampler at this texture coordinate location.
-	    			textureColor = g_grabTexture.Sample(SampleType, input.tex);
+	    			textureColor = g_engineGrabTexture.Sample(SampleType, input.tex);
 
 	    			return textureColor;
 				}

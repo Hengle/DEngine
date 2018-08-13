@@ -193,6 +193,8 @@ public:
 	virtual ITextureRes* CreateTextureRes(WCHAR*) = 0;
 	/*创建RenderTexture资源*/
 	virtual IRenderTextureViewRes* CreateRenderTextureRes(float, float) = 0;
+
+	virtual IRenderTextureViewRes* GetBackBufferViewRes() = 0;
 	/*创建CubeMap资源*/
 	virtual ITextureRes* CreateCubeMapRes(ITextureRes*, ITextureRes*, ITextureRes*, ITextureRes*, ITextureRes*, ITextureRes*) = 0;
 	/*创建shader程序*/

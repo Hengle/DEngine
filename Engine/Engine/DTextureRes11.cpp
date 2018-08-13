@@ -185,6 +185,68 @@ DRenderTextureViewRes11::DRenderTextureViewRes11(ID3D11Device * device, ID3D11De
 	m_isSuccess = true;
 }
 
+DRenderTextureViewRes11::DRenderTextureViewRes11(ID3D11Device * device, ID3D11DeviceContext * deviceContext, ID3D11Texture2D * backbuffer, ID3D11Texture2D * depthbuffer)
+{
+	m_isSuccess = false;
+	HRESULT result;
+	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
+	D3D11_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc;
+	D3D11_TEXTURE2D_DESC textureDesc;
+	D3D11_TEXTURE2D_DESC backbuffertextureDesc;
+
+	backbuffer->GetDesc(&backbuffertextureDesc);
+
+	ZeroMemory(&textureDesc, sizeof(textureDesc));
+
+	textureDesc.Width = backbuffertextureDesc.Width;
+	textureDesc.Height = backbuffertextureDesc.Height;
+	textureDesc.MipLevels = 1;
+	textureDesc.ArraySize = 1;
+	textureDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	textureDesc.SampleDesc.Count = 1;
+	textureDesc.Usage = D3D11_USAGE_DEFAULT;
+	textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+	textureDesc.CPUAccessFlags = 0;
+	textureDesc.MiscFlags = 0;
+
+	result = device->CreateTexture2D(&textureDesc, NULL, &m_renderTexture);
+	if (FAILED(result))
+		return;
+
+	deviceContext->CopyResource(backbuffer, m_renderTexture);
+
+	m_depthTexture = depthbuffer;
+
+	m_colorBuffer = DColorBuffer11::Create(device, backbuffer, NULL);
+	if (m_colorBuffer == NULL)
+	{
+		return;
+	}
+	ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
+
+	depthStencilViewDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	depthStencilViewDesc.Texture2D.MipSlice = 0;
+	m_depthBuffer = DDepthBuffer11::Create(device, depthbuffer, &depthStencilViewDesc);
+	if (m_depthBuffer == NULL)
+	{
+		return;
+	}
+
+	//ZeroMemory(&shaderResourceViewDesc, sizeof(shaderResourceViewDesc));
+	shaderResourceViewDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	shaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	shaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
+	shaderResourceViewDesc.Texture2D.MipLevels = 1;
+
+	result = device->CreateShaderResourceView(m_renderTexture, &shaderResourceViewDesc, &m_texture);
+	if (FAILED(result))
+		return;
+
+	m_deviceContext = deviceContext;
+	m_isSuccess = true;
+}
+
 DRenderTextureViewRes11::~DRenderTextureViewRes11()
 {
 }

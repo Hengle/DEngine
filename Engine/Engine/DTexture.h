@@ -62,7 +62,6 @@ public:
 
 	static DRenderTexture* Create(float, float);
 	static DRenderTexture* Create(float, float, DWrapMode);
-	static DRenderTexture* BackBuffer();
 
 
 private:

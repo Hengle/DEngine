@@ -18,9 +18,10 @@ protected:
 
 private:
 	DCamera* m_camera;
+	DCamera* m_waterCamera;
 	DVector3 m_lookAtPoint;
 	float m_lookDistance;
 
-	WaterFilter* m_filter;
+	//WaterFilter* m_filter;
 };
 

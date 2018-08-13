@@ -303,7 +303,6 @@ void TestScene::TestLoad()
 	////DTexture2D* texture = new DTexture2D(L"../Res/eboy.tif");
 	////DTexture2D* decal = new DTexture2D(L"../Res/decal.jpg");
 	m_plane = new DDisplayObject(plane, mat);
-	m_plane->testUseGrab = true;
 	transform = m_plane->GetTransform();
 	m_plane->Create();
 

@@ -179,13 +179,3 @@ DRenderTexture * DRenderTexture::Create(float width, float height, DWrapMode wra
 	return tex;
 }
 
-DRenderTexture * DRenderTexture::BackBuffer()
-{
-	float w, h;
-	DSystem::GetGraphicsMgr()->GetResolution(w, h);
-	DRenderTexture* tex = new DRenderTexture(w, h);
-	tex->m_renderTextureRes = DSystem::GetGraphicsMgr()->GetGLCore()->GetBackBufferViewRes();
-	tex->m_wrapMode = DWrapMode_Clamp;
-	return tex;
-}
-

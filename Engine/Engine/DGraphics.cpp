@@ -20,7 +20,6 @@ DGraphics::DGraphics()
 	m_drawCall = 0;
 	m_renderer = 0;
 	m_activeMaterial = 0;
-	m_backbuffer = 0;
 }
 
 
@@ -95,8 +94,6 @@ bool DGraphics::Init(int width, int height, bool fullScreen, DGraphicsAPI api)
 	m_renderer = new DRenderer();
 
 	m_glDrawer = new DGLDrawer();
-
-	m_backbuffer = DRenderTexture::BackBuffer();
 
 	return true;
 }
@@ -182,18 +179,6 @@ void DGraphics::Shutdown()
 		m_renderer->Release();
 		delete m_renderer;
 		m_renderer = NULL;
-	}
-	if (m_backbuffer != NULL)
-	{
-		m_backbuffer->Destroy();
-		delete m_backbuffer;
-		m_backbuffer = NULL;
-	}
-	if (m_grabTexture != NULL)
-	{
-		m_grabTexture->Destroy();
-		delete m_grabTexture;
-		m_grabTexture = NULL;
 	}
 	m_activeMaterial = NULL;
 	m_globalRenderShader = NULL;
@@ -677,19 +662,6 @@ void DGraphics::ApplyActiveMaterial()
 	{
 		currentActive->ApplyPass();
 	}
-}
-
-void DGraphics::GrabScreenTexture()
-{
-	/*if (DSystem::GetGraphicsMgr()->m_grabTexture == NULL)
-	{
-		float w = DSystem::GetGraphicsMgr()->m_backbuffer->GetWidth();
-		float h = DSystem::GetGraphicsMgr()->m_backbuffer->GetHeight();
-		DSystem::GetGraphicsMgr()->m_grabTexture = DRenderTexture::Create(w, h);
-	}
-	DGraphics::Blit(DSystem::GetGraphicsMgr()->m_backbuffer, DSystem::GetGraphicsMgr()->m_grabTexture);
-	DShader::SetGlobalTexture(D_SC_GRAB_TEXTURE, DSystem::GetGraphicsMgr()->m_grabTexture);*/
-	DShader::SetGlobalTexture(D_SC_GRAB_TEXTURE, DSystem::GetGraphicsMgr()->m_backbuffer);
 }
 
 bool DGraphics::IsFrustrumZeroToOne()

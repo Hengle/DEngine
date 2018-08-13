@@ -443,11 +443,6 @@ IRenderTextureViewRes * D3D10Core::CreateRenderTextureRes(float width, float hei
 	return new DRenderTextureViewRes10(m_device, width, height);
 }
 
-IRenderTextureViewRes * D3D10Core::GetBackBufferViewRes()
-{
-	return nullptr;
-}
-
 //DShaderProgram * D3D10Core::CreateShaderProgram(DShaderProgramType programType)
 //{
 //	if (programType == DShaderProgram_Vertex)

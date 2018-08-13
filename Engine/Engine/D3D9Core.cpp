@@ -195,11 +195,6 @@ IRenderTextureViewRes * D3D9Core::CreateRenderTextureRes(float width, float heig
 	return new DRenderTextureViewRes9(m_device, width, height);
 }
 
-IRenderTextureViewRes * D3D9Core::GetBackBufferViewRes()
-{
-	return nullptr;
-}
-
 //DShaderProgram * D3D9Core::CreateShaderProgram(DShaderProgramType programType)
 //{
 //	if(programType == DShaderProgram_Vertex)

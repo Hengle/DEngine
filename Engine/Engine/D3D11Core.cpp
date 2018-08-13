@@ -465,11 +465,6 @@ IRenderTextureViewRes * D3D11Core::CreateRenderTextureRes(float width, float hei
 	return new DRenderTextureViewRes11(m_device, m_deviceContext, width, height);
 }
 
-IRenderTextureViewRes * D3D11Core::GetBackBufferViewRes()
-{
-	return m_backBuffer;
-}
-
 //DShaderProgram * D3D11Core::CreateShaderProgram(DShaderProgramType programType)
 //{
 //	if(programType == DShaderProgram_Vertex)

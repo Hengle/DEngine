@@ -109,11 +109,6 @@ IRenderTextureViewRes * DOpenGLCore::CreateRenderTextureRes(float width, float h
 	return new DRenderTextureViewResOpGL(width, height, DWrapMode_Clamp);
 }
 
-IRenderTextureViewRes * DOpenGLCore::GetBackBufferViewRes()
-{
-	return nullptr;
-}
-
 DShaderPass * DOpenGLCore::CreateShaderPass()
 {
 	return new DShaderPassOpGL();

@@ -40,9 +40,6 @@ protected:
 private:
 	void UpdateBounds();
 
-public:
-	bool testUseGrab;
-
 protected:
 	DGeometry* m_geometry;
 	DMaterial* m_material;

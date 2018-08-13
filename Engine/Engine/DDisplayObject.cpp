@@ -7,7 +7,6 @@ DDisplayObject::DDisplayObject(DGeometry* geometry, DMaterial* material) : DScen
 	m_material = material;
 	m_geometry = geometry;
 	m_isVisible = true;
-	testUseGrab = false;
 }
 
 
@@ -105,8 +104,6 @@ bool DDisplayObject::OnCullObject()
 
 void DDisplayObject::OnRenderObject()
 {
-	if (testUseGrab)
-		DGraphics::GrabScreenTexture();
 	if (m_geometry != NULL && m_material != NULL && m_isVisible)
 	{
 		DShader* rpshader = DGraphics::GetGlobalRenderShader();

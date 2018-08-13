@@ -100,9 +100,6 @@ public:
 	static void ClearActiveMaterial(DMaterial*);
 	static void ApplyActiveMaterial();
 
-
-	static void GrabScreenTexture();
-
 	static bool IsFrustrumZeroToOne();
 
 private:
@@ -126,8 +123,6 @@ private:
 	DShader* m_globalRenderShader;
 	DRenderer* m_renderer;
 	DMaterial* m_activeMaterial;
-	DRenderTexture* m_backbuffer;
-	DRenderTexture* m_grabTexture;
 
 	unsigned int m_drawCall;
 };

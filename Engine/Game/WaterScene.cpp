@@ -4,6 +4,11 @@
 #include "DGUI.h"
 #include "TestResDefine.h"
 
+enum TestLayer
+{
+	Default = 1U,
+	Water = 2U,
+};
 
 WaterScene::WaterScene(SCENEID sceneId, char * sceneName) : DScene(sceneId, sceneName)
 {

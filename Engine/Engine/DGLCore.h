@@ -61,11 +61,11 @@ public:
 	unsigned int*indices;
 } DGeometryBufferDesc;
 
-//抽象Geometry资源-用于实现不同API下的Geometry
-class DGeometryRes
+//抽象Geometry包装器-用于实现不同API下的Geometry
+class DGeometryWrapper
 {
 public:
-	DGeometryRes(int vertexUsage /*顶点用法描述*/, bool dynamic /*是否为动态mesh*/);
+	DGeometryWrapper(int vertexUsage /*顶点用法描述*/, bool dynamic /*是否为动态mesh*/);
 	void Refresh(DGeometryBufferDesc* desc); //更新顶点缓存
 	void Refresh(float* vertexbuffer, unsigned int* indexbuffer, int vertexCount, int indexCount);//更新顶点缓存
 	void DrawPrimitive(DGeometryTopology topology);//绘制
@@ -73,22 +73,12 @@ public:
 	bool IsInitialized();
 
 protected:
-	//virtual void OnRefresh(DGeometryBufferDesc* desc) = 0;
-	//virtual bool OnInit(DGeometryBufferDesc* desc) = 0;
 	virtual void OnRefresh(float* vertexbuffer, unsigned int* indexbuffer, int vertexCount, int indexCount) = 0;
 	virtual bool OnInit(float* vertexbuffer, unsigned int* indexbuffer, int vertexCount, int indexCount) = 0;
 	virtual void OnDraw(DGeometryTopology) = 0;
 
 protected:
 	int m_vertexUsage;
-	/*bool m_hasUV;
-	bool m_hasUV1;
-	bool m_hasUV2;
-	bool m_hasUV3;
-	bool m_hasColor;
-	bool m_hasNormal;
-	bool m_hasTangent;
-	bool m_hasBinormal;*/
 	int m_uv0Offset;
 	int m_uv1Offset;
 	int m_uv2Offset;
@@ -117,8 +107,8 @@ private:
 
 };
 
-/*抽象贴图资源接口-用于实现不同API下的texture*/
-interface ITextureRes
+/*抽象贴图包装器接口-用于实现不同API下的texture*/
+interface ITextureWrapper
 {
 public:
 	virtual void Release() = 0;
@@ -133,8 +123,8 @@ public:
 	virtual void Release() = 0;
 };
 
-/*抽象RenderTextureView接口*/
-interface IRenderTextureViewRes : public ITextureRes
+/*抽象RenderTextureView包装器接口*/
+interface IRenderTextureViewWrapper : public ITextureWrapper
 {
 public:
 
@@ -142,6 +132,7 @@ public:
 	virtual IRenderBuffer* GetDepthBuffer() = 0;
 };
 
+/*抽象状态管理器接口*/
 interface IRenderStateMgr
 {
 public:
@@ -180,22 +171,22 @@ public:
 	/*提交渲染结果*/
 	virtual void Present() = 0;
 	/*清除缓冲区*/
-	virtual void Clear(bool, bool, bool, DColor&, IRenderTextureViewRes* = NULL) = 0;
+	virtual void Clear(bool, bool, bool, DColor&, IRenderTextureViewWrapper* = NULL) = 0;
 	/*设置渲染目标*/
-	virtual void SetRenderTarget(IRenderTextureViewRes* = NULL) = 0;
+	virtual void SetRenderTarget(IRenderTextureViewWrapper* = NULL) = 0;
 	/*设置视口区域*/
 	virtual void SetViewPort(float, float, float, float) = 0;
 	/*结束渲染*/
-	virtual void EndSetRenderTarget(IRenderTextureViewRes* = NULL) = 0;
-	/*创建几何体资源*/
-	virtual DGeometryRes* CreateGeometryRes(int, bool) = 0;
-	/*创建贴图资源*/
-	virtual ITextureRes* CreateTextureRes(WCHAR*) = 0;
-	/*创建RenderTexture资源*/
-	virtual IRenderTextureViewRes* CreateRenderTextureRes(float, float) = 0;
+	virtual void EndSetRenderTarget(IRenderTextureViewWrapper* = NULL) = 0;
+	/*创建几何体包装器*/
+	virtual DGeometryWrapper* CreateGeometryWrapper(int, bool) = 0;
+	/*创建贴图包装器*/
+	virtual ITextureWrapper* CreateTextureWrapper(WCHAR*) = 0;
+	/*创建RenderTexture包装器*/
+	virtual IRenderTextureViewWrapper* CreateRenderTextureWrapper(float, float) = 0;
 
-	/*创建CubeMap资源*/
-	virtual ITextureRes* CreateCubeMapRes(ITextureRes*, ITextureRes*, ITextureRes*, ITextureRes*, ITextureRes*, ITextureRes*) = 0;
+	/*创建CubeMap包装器*/
+	virtual ITextureWrapper* CreateCubeMapWrapper(ITextureWrapper*, ITextureWrapper*, ITextureWrapper*, ITextureWrapper*, ITextureWrapper*, ITextureWrapper*) = 0;
 	/*创建shader程序*/
 	virtual DShaderPass* CreateShaderPass() = 0;
 	virtual void ApplySamplerState(UINT, DWrapMode) = 0;

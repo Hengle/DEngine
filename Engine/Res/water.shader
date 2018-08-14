@@ -27,6 +27,7 @@ ShaderBlock {
 				{
 				    float4 position : SV_POSITION;
 				    float2 tex : TEXCOORD0;
+				    float2 uv : TEXCOORD1; 
 				};
 
 				Texture2D g_grabTexture;
@@ -58,14 +59,16 @@ ShaderBlock {
 
 					output.tex.x = output.position.x / output.position.w * 0.5f + 0.5f;
 					output.tex.y = -(output.position.y / output.position.w * 0.5f)+0.5f;
+
+					output.uv = input.tex;
 	    
 				    return output;
 				}
 
 				float4 FragMain(PixelInputType input) : SV_TARGET
 				{
-					float4 noise1 = noise.Sample(noiseSampleType, input.tex*size+float2(g_engineTime*speed,0.0f));
-					float4 noise2 = noise.Sample(noiseSampleType, float2(input.tex.y, 1-input.tex.x)*size+float2(g_engineTime*speed,0.0f));
+					float4 noise1 = noise.Sample(noiseSampleType, input.uv*size+float2(g_engineTime*speed,0.0f));
+					float4 noise2 = noise.Sample(noiseSampleType, float2(input.uv.y, 1-input.uv.x)*size+float2(g_engineTime*speed,0.0f));
 					float2 n = (noise1.rg+noise2.rg)*0.5f*2-1;
 					n*=power;
 				    float4 textureColor = g_grabTexture.Sample(SampleType, input.tex+n);

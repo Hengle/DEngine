@@ -1,7 +1,7 @@
 ﻿#ifdef _DGAPI_D3D11
-#include "DGeometryRes11.h"
+#include "DGeometryWrapper11.h"
 
-DGeometryRes11::DGeometryRes11(ID3D11Device* device,ID3D11DeviceContext * deviceContext, int vertexUsage, bool dynamic) : DGeometryRes(vertexUsage, dynamic)
+DGeometryWrapper11::DGeometryWrapper11(ID3D11Device* device,ID3D11DeviceContext * deviceContext, int vertexUsage, bool dynamic) : DGeometryWrapper(vertexUsage, dynamic)
 {
 	m_vertexBuffer = 0;
 	m_indexBuffer = 0;
@@ -10,11 +10,11 @@ DGeometryRes11::DGeometryRes11(ID3D11Device* device,ID3D11DeviceContext * device
 
 }
 
-DGeometryRes11::~DGeometryRes11()
+DGeometryWrapper11::~DGeometryWrapper11()
 {
 }
 
-void DGeometryRes11::Release()
+void DGeometryWrapper11::Release()
 {
 	if (m_vertexBuffer != NULL)
 	{
@@ -30,7 +30,7 @@ void DGeometryRes11::Release()
 	m_deviceContext = NULL;
 }
 
-void DGeometryRes11::OnRefresh(float * vertexbuffer, unsigned int * indexbuffer, int vertexCount, int indexCount)
+void DGeometryWrapper11::OnRefresh(float * vertexbuffer, unsigned int * indexbuffer, int vertexCount, int indexCount)
 {
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	float* dataPtr;
@@ -56,7 +56,7 @@ void DGeometryRes11::OnRefresh(float * vertexbuffer, unsigned int * indexbuffer,
 	m_deviceContext->Unmap(m_indexBuffer, 0);
 }
 
-bool DGeometryRes11::OnInit(float * vertexbuffer, unsigned int * indexbuffer, int vertexCount, int indexCount)
+bool DGeometryWrapper11::OnInit(float * vertexbuffer, unsigned int * indexbuffer, int vertexCount, int indexCount)
 {
 	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
 	D3D11_SUBRESOURCE_DATA vertexData, indexData;
@@ -98,7 +98,7 @@ bool DGeometryRes11::OnInit(float * vertexbuffer, unsigned int * indexbuffer, in
 	return true;
 }
 
-void DGeometryRes11::OnDraw(DGeometryTopology topology)
+void DGeometryWrapper11::OnDraw(DGeometryTopology topology)
 {
 	unsigned int stride;
 	unsigned int offset;

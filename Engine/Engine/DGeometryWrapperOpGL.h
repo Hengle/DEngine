@@ -4,13 +4,13 @@
 #include "DOpenGLCore.h"
 
 /*
-Geometry资源OpenGL底层
+Geometry包装器OpenGL底层
 */
-class DGeometryResOpGL : public DGeometryRes
+class DGeometryWrapperOpGL : public DGeometryWrapper
 {
 public:
-	DGeometryResOpGL(int vertexUsage /*顶点用法描述*/, bool dynamic /*是否为动态mesh*/);
-	~DGeometryResOpGL();
+	DGeometryWrapperOpGL(int vertexUsage /*顶点用法描述*/, bool dynamic /*是否为动态mesh*/);
+	~DGeometryWrapperOpGL();
 	virtual void Release();
 
 protected:

@@ -73,11 +73,11 @@ void EmptyScene::OnUpdate()
 {
 
 	//if (DInput::IsKeyDown(0x10))
-	if (DInput::IsKeyDown(81))
+	/*if (DInput::IsKeyDown(81))
 	{
 		DTexture2D* tex = DRes::Load<DTexture2D>(0, 2003);
 		tex->SetWrapMode(DWrapMode_Repeat);
-	}
+	}*/
 	if (DInput::IsMousePress(0) && !DGUI::IsGUIActive())
 	{
 		int dtx, dty;

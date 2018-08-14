@@ -4,14 +4,14 @@
 #include "D3D11Core.h"
 
 /*
-	纹理资源Direct3D11底层
+	纹理包装器Direct3D11底层
 */
-class DTextureRes11 : public ITextureRes
+class DTextureWrapper11 : public ITextureWrapper
 {
 public:
-	DTextureRes11(ID3D11Device* device, ID3D11DeviceContext * deviceContext, WCHAR* filename);
-	DTextureRes11(ID3D11Device* device, ID3D11DeviceContext * deviceContext, DTextureRes11*, DTextureRes11*, DTextureRes11*, DTextureRes11*, DTextureRes11*, DTextureRes11*);
-	~DTextureRes11();
+	DTextureWrapper11(ID3D11Device* device, ID3D11DeviceContext * deviceContext, WCHAR* filename);
+	DTextureWrapper11(ID3D11Device* device, ID3D11DeviceContext * deviceContext, DTextureWrapper11*, DTextureWrapper11*, DTextureWrapper11*, DTextureWrapper11*, DTextureWrapper11*, DTextureWrapper11*);
+	~DTextureWrapper11();
 	virtual void Apply(UINT, int);
 	virtual void ApplyWrapMode(UINT, DWrapMode);
 	virtual void Release();
@@ -25,12 +25,12 @@ protected:
 /*
 	RenderTexture Direct3D11底层
 */
-class DRenderTextureViewRes11 : public IRenderTextureViewRes
+class DRenderTextureViewWrapper11 : public IRenderTextureViewWrapper
 {
 public:
-	DRenderTextureViewRes11(ID3D11Device* device, ID3D11DeviceContext * deviceContext, float, float);
-	DRenderTextureViewRes11(ID3D11Device* device, ID3D11DeviceContext * deviceContext, ID3D11Texture2D* backbuffer, ID3D11Texture2D* depthbuffer);
-	~DRenderTextureViewRes11();
+	DRenderTextureViewWrapper11(ID3D11Device* device, ID3D11DeviceContext * deviceContext, float, float);
+	DRenderTextureViewWrapper11(ID3D11Device* device, ID3D11DeviceContext * deviceContext, ID3D11Texture2D* backbuffer, ID3D11Texture2D* depthbuffer);
+	~DRenderTextureViewWrapper11();
 	virtual void Apply(UINT, int);
 	virtual void ApplyWrapMode(UINT, DWrapMode);
 	virtual void Release();

@@ -27,8 +27,8 @@ DGeometry::~DGeometry()
 
 void DGeometry::Destroy()
 {
-	std::map<int, DGeometryRes*>::iterator  iter;
-	for (iter = m_geometryReses.begin(); iter != m_geometryReses.end(); iter++)
+	std::map<int, DGeometryWrapper*>::iterator  iter;
+	for (iter = m_geometryWrappers.begin(); iter != m_geometryWrappers.end(); iter++)
 	{
 		if (iter->second != NULL)
 		{
@@ -36,7 +36,7 @@ void DGeometry::Destroy()
 			delete iter->second;
 		}
 	}
-	m_geometryReses.clear();
+	m_geometryWrappers.clear();
 
 	if (m_geometryDesc.vertices != NULL)
 	{
@@ -450,25 +450,25 @@ void DGeometry::Draw(int vertexUsage)
 	
 	DGraphics::ApplyActiveMaterial();
 
-	if (m_geometryReses.find(vertexUsage) == m_geometryReses.end())
+	if (m_geometryWrappers.find(vertexUsage) == m_geometryWrappers.end())
 	{
-		DGeometryRes* res = DSystem::GetGraphicsMgr()->GetGLCore()->CreateGeometryRes(vertexUsage, m_dynamic);
+		DGeometryWrapper* wrapper = DSystem::GetGraphicsMgr()->GetGLCore()->CreateGeometryWrapper(vertexUsage, m_dynamic);
 	
-		m_geometryReses.insert(std::pair<int, DGeometryRes*>(vertexUsage, res));
+		m_geometryWrappers.insert(std::pair<int, DGeometryWrapper*>(vertexUsage, wrapper));
 	}
 	if (m_vertexChanged)
 	{
 		UpdateGeometryReses();
 		m_vertexChanged = false;
 	}
-	if (m_geometryReses.find(vertexUsage) != m_geometryReses.end())
+	if (m_geometryWrappers.find(vertexUsage) != m_geometryWrappers.end())
 	{
-		DGeometryRes* res = m_geometryReses.at(vertexUsage);
-		if (!res->IsInitialized())
+		DGeometryWrapper* wrapper = m_geometryWrappers.at(vertexUsage);
+		if (!wrapper->IsInitialized())
 		{
-			res->Refresh(&m_geometryDesc);
+			wrapper->Refresh(&m_geometryDesc);
 		}
-		res->DrawPrimitive(m_topology);
+		wrapper->DrawPrimitive(m_topology);
 	}
 }
 
@@ -492,8 +492,8 @@ DGeometry * DGeometry::Create(char* fileName, bool dynamic)
 
 void DGeometry::UpdateGeometryReses()
 {
-	std::map<int, DGeometryRes*>::iterator  iter;
-	for (iter = m_geometryReses.begin(); iter != m_geometryReses.end(); iter++)
+	std::map<int, DGeometryWrapper*>::iterator  iter;
+	for (iter = m_geometryWrappers.begin(); iter != m_geometryWrappers.end(); iter++)
 	{
 		if (iter->second != NULL)
 		{

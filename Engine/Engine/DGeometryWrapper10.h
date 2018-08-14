@@ -5,13 +5,13 @@
 #include "D3DCore.h"
 
 /*
-	Geometry资源Direct3D10底层
+	Geometry包装器Direct3D10底层
 */
-class DGeometryRes10 : public DGeometryRes
+class DGeometryWrapper10 : public DGeometryWrapper
 {
 public:
-	DGeometryRes10(ID3D10Device* device, int vertexUsage, bool dynamic);
-	~DGeometryRes10();
+	DGeometryWrapper10(ID3D10Device* device, int vertexUsage, bool dynamic);
+	~DGeometryWrapper10();
 	virtual void Release();
 
 protected:

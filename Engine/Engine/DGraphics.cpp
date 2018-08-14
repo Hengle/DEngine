@@ -246,9 +246,9 @@ void DGraphics::Clear(bool clearDepth, bool clearStencil, bool clearColor, DColo
 {
 	if (renderTexture != NULL)
 	{
-		IRenderTextureViewRes* res = renderTexture->GetTextureRes();
-		if (res != NULL)
-			DSystem::GetGraphicsMgr()->GetGLCore()->Clear(clearDepth, clearStencil, clearColor, color, res);
+		IRenderTextureViewWrapper* wrapper = renderTexture->GetTextureWrapper();
+		if (wrapper != NULL)
+			DSystem::GetGraphicsMgr()->GetGLCore()->Clear(clearDepth, clearStencil, clearColor, color, wrapper);
 	}
 	else
 	{
@@ -260,7 +260,7 @@ void DGraphics::SetRenderTarget(DRenderTexture * res)
 {
 	if (res != NULL)
 	{
-		DSystem::GetGraphicsMgr()->GetGLCore()->SetRenderTarget(res->GetTextureRes());
+		DSystem::GetGraphicsMgr()->GetGLCore()->SetRenderTarget(res->GetTextureWrapper());
 	}
 	else
 	{
@@ -272,7 +272,7 @@ void DGraphics::EndSetRenderTarget(DRenderTexture * res)
 {
 	if (res != NULL)
 	{
-		DSystem::GetGraphicsMgr()->GetGLCore()->EndSetRenderTarget(res->GetTextureRes());
+		DSystem::GetGraphicsMgr()->GetGLCore()->EndSetRenderTarget(res->GetTextureWrapper());
 	}
 	else
 	{

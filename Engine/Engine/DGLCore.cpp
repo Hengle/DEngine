@@ -1,6 +1,6 @@
 ﻿#include "DGLCore.h"
 
-DGeometryRes::DGeometryRes(int vertexUsage, bool dynamic)
+DGeometryWrapper::DGeometryWrapper(int vertexUsage, bool dynamic)
 {
 	m_isSupported = false;
 	m_isInitialized = false;
@@ -105,7 +105,7 @@ DGeometryRes::DGeometryRes(int vertexUsage, bool dynamic)
 //	m_isInitialized = OnInit(desc);
 //}
 
-void DGeometryRes::Refresh(DGeometryBufferDesc * desc)
+void DGeometryWrapper::Refresh(DGeometryBufferDesc * desc)
 {
 	if (desc == NULL)
 		return;
@@ -175,7 +175,7 @@ void DGeometryRes::Refresh(DGeometryBufferDesc * desc)
 	//vertices = 0;
 }
 
-void DGeometryRes::Refresh(float * vertexbuffer, unsigned int * indexbuffer, int vertexCount, int indexCount)
+void DGeometryWrapper::Refresh(float * vertexbuffer, unsigned int * indexbuffer, int vertexCount, int indexCount)
 {
 	if (indexCount <= 0 || vertexCount <= 0)
 		return;
@@ -197,13 +197,13 @@ void DGeometryRes::Refresh(float * vertexbuffer, unsigned int * indexbuffer, int
 	}
 }
 
-void DGeometryRes::DrawPrimitive(DGeometryTopology topology)
+void DGeometryWrapper::DrawPrimitive(DGeometryTopology topology)
 {
 	if (m_isSupported)
 		OnDraw(topology);
 }
 
-bool DGeometryRes::IsInitialized()
+bool DGeometryWrapper::IsInitialized()
 {
 	return m_isInitialized;
 }

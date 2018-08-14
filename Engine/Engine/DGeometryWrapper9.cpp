@@ -1,9 +1,9 @@
 ﻿#ifdef _DGAPI_D3D9
-#include "DGeometryRes9.h"
+#include "DGeometryWrapper9.h"
 #include <vector>
 #include <exception>
 
-DGeometryRes9::DGeometryRes9(LPDIRECT3DDEVICE9 device, int vertexUsage, bool dynamic) : DGeometryRes(vertexUsage, dynamic)
+DGeometryWrapper9::DGeometryWrapper9(LPDIRECT3DDEVICE9 device, int vertexUsage, bool dynamic) : DGeometryWrapper(vertexUsage, dynamic)
 {
 	m_device = device;
 	m_vertexBuffer = 0;
@@ -11,11 +11,11 @@ DGeometryRes9::DGeometryRes9(LPDIRECT3DDEVICE9 device, int vertexUsage, bool dyn
 	m_vertexDeclaration = 0;
 }
 
-DGeometryRes9::~DGeometryRes9()
+DGeometryWrapper9::~DGeometryWrapper9()
 {
 }
 
-void DGeometryRes9::OnRefresh(float * vertexbuffer, unsigned int * indexbuffer, int vertexCount, int indexCount)
+void DGeometryWrapper9::OnRefresh(float * vertexbuffer, unsigned int * indexbuffer, int vertexCount, int indexCount)
 {
 	float* vertices = 0;
 	int i;
@@ -37,7 +37,7 @@ void DGeometryRes9::OnRefresh(float * vertexbuffer, unsigned int * indexbuffer, 
 	m_indexBuffer->Unlock();
 }
 
-bool DGeometryRes9::OnInit(float * vertexbuffer, unsigned int * indexbuffer, int vertexCount, int indexCount)
+bool DGeometryWrapper9::OnInit(float * vertexbuffer, unsigned int * indexbuffer, int vertexCount, int indexCount)
 {
 	std::vector<D3DVERTEXELEMENT9> elements;
 	WORD offset = 0;
@@ -94,7 +94,7 @@ bool DGeometryRes9::OnInit(float * vertexbuffer, unsigned int * indexbuffer, int
 	return true;
 }
 
-void DGeometryRes9::OnDraw(DGeometryTopology topology)
+void DGeometryWrapper9::OnDraw(DGeometryTopology topology)
 {
 	if (m_dataSize <= 0)
 		throw std::exception("不正确的缓冲长度");
@@ -118,7 +118,7 @@ void DGeometryRes9::OnDraw(DGeometryTopology topology)
 
 }
 
-void DGeometryRes9::Release()
+void DGeometryWrapper9::Release()
 {
 	m_device = NULL;
 

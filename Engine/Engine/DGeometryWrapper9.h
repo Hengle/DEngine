@@ -4,13 +4,13 @@
 #include "D3D9Core.h"
 
 /*
-	Geometry资源Direct3D9底层
+	Geometry包装器Direct3D9底层
 */
-class DGeometryRes9 : public DGeometryRes
+class DGeometryWrapper9 : public DGeometryWrapper
 {
 public:
-	DGeometryRes9(LPDIRECT3DDEVICE9, int vertexUsage /*顶点用法*/, bool dynamic);
-	~DGeometryRes9();
+	DGeometryWrapper9(LPDIRECT3DDEVICE9, int vertexUsage /*顶点用法*/, bool dynamic);
+	~DGeometryWrapper9();
 	virtual void Release();
 
 protected:

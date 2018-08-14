@@ -31,6 +31,13 @@ ShaderBlock {
 
 				Texture2D g_grabTexture;
 				SamplerState SampleType;
+				Texture2D noise;
+				SamplerState noiseSampleType;
+
+				float speed;
+				float g_engineTime;
+				float power;
+				float2 size;
 
 				PixelInputType VertMain(VertexInputType input)
 				{
@@ -57,11 +64,11 @@ ShaderBlock {
 
 				float4 FragMain(PixelInputType input) : SV_TARGET
 				{
-				    float4 textureColor;
-
-
-	    			// Sample the pixel color from the texture using the sampler at this texture coordinate location.
-	    			textureColor = g_grabTexture.Sample(SampleType, input.tex);
+					float4 noise1 = noise.Sample(noiseSampleType, input.tex*size+float2(g_engineTime*speed,0.0f));
+					float4 noise2 = noise.Sample(noiseSampleType, float2(input.tex.y, 1-input.tex.x)*size+float2(g_engineTime*speed,0.0f));
+					float2 n = (noise1.rg+noise2.rg)*0.5f*2-1;
+					n*=power;
+				    float4 textureColor = g_grabTexture.Sample(SampleType, input.tex+n);
 
 	    			return textureColor;
 				}

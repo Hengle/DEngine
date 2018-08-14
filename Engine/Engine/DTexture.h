@@ -23,12 +23,12 @@ public:
 	virtual void Apply(UINT, int = 0);
 	DWrapMode GetWrapMode();
 	void SetWrapMode(DWrapMode);
-	ITextureRes* GetTextureRes();
+	ITextureWrapper* GetTextureWrapper();
 	static DTexture2D* Create(WCHAR*);
 	static DTexture2D* Create(WCHAR*, DWrapMode);
 
 private:
-	ITextureRes* m_textureRes;
+	ITextureWrapper* m_textureWrapper;
 	DWrapMode m_wrapMode;
 };
 
@@ -43,7 +43,7 @@ public:
 	static DTextureCube* Create(DTexture2D * right, DTexture2D * left, DTexture2D * top, DTexture2D * bottom, DTexture2D * front, DTexture2D * back);
 
 private:
-	ITextureRes* m_textureRes;
+	ITextureWrapper* m_textureWrapper;
 };
 
 class DRenderTexture : public DTexture
@@ -56,7 +56,7 @@ public:
 	virtual void Apply(UINT, int = 0);
 	DWrapMode GetWrapMode();
 	void SetWrapMode(DWrapMode);
-	IRenderTextureViewRes* GetTextureRes();
+	IRenderTextureViewWrapper* GetTextureWrapper();
 	float GetWidth() const;
 	float GetHeight() const;
 
@@ -65,7 +65,7 @@ public:
 
 
 private:
-	IRenderTextureViewRes* m_renderTextureRes;
+	IRenderTextureViewWrapper* m_renderTextureWrapper;
 	DWrapMode m_wrapMode;
 	float m_width;
 	float m_height;

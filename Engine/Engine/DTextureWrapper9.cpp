@@ -1,8 +1,8 @@
 ﻿#ifdef _DGAPI_D3D9
-#include "DTextureRes9.h"
+#include "DTextureWrapper9.h"
 #include "DSystem.h"
 
-DTextureRes9::DTextureRes9(LPDIRECT3DDEVICE9 device, WCHAR * filename)
+DTextureWrapper9::DTextureWrapper9(LPDIRECT3DDEVICE9 device, WCHAR * filename)
 {
 	m_device = device;
 
@@ -15,7 +15,7 @@ DTextureRes9::DTextureRes9(LPDIRECT3DDEVICE9 device, WCHAR * filename)
 	m_isSuccess = true;
 }
 
-DTextureRes9::DTextureRes9(LPDIRECT3DDEVICE9 device)
+DTextureWrapper9::DTextureWrapper9(LPDIRECT3DDEVICE9 device)
 {
 	/*m_device = device;
 
@@ -37,11 +37,11 @@ DTextureRes9::DTextureRes9(LPDIRECT3DDEVICE9 device)
 	m_texture->LockRect(0, &rect, &r, );*/
 }
 
-DTextureRes9::~DTextureRes9()
+DTextureWrapper9::~DTextureWrapper9()
 {
 }
 
-void DTextureRes9::Apply(UINT textureOffset, int)
+void DTextureWrapper9::Apply(UINT textureOffset, int)
 {
 	if (m_isSuccess)
 	{
@@ -49,7 +49,7 @@ void DTextureRes9::Apply(UINT textureOffset, int)
 	}
 }
 
-void DTextureRes9::ApplyWrapMode(UINT textureOffset, DWrapMode mode)
+void DTextureWrapper9::ApplyWrapMode(UINT textureOffset, DWrapMode mode)
 {
 	if (m_isSuccess)
 	{
@@ -57,7 +57,7 @@ void DTextureRes9::ApplyWrapMode(UINT textureOffset, DWrapMode mode)
 	}
 }
 
-void DTextureRes9::Release()
+void DTextureWrapper9::Release()
 {
 	if (m_texture != NULL)
 	{
@@ -67,7 +67,7 @@ void DTextureRes9::Release()
 	m_device = NULL;
 }
 
-DCubeTextureRes9::DCubeTextureRes9(LPDIRECT3DDEVICE9 device, DTextureRes9 * right, DTextureRes9 * left, DTextureRes9 * top, DTextureRes9 * bottom, DTextureRes9 * front, DTextureRes9 * back)
+DCubeTextureWrapper9::DCubeTextureWrapper9(LPDIRECT3DDEVICE9 device, DTextureWrapper9 * right, DTextureWrapper9 * left, DTextureWrapper9 * top, DTextureWrapper9 * bottom, DTextureWrapper9 * front, DTextureWrapper9 * back)
 {
 	LPDIRECT3DCUBETEXTURE9 cubemap;
 	m_isSuccess = false;
@@ -84,7 +84,7 @@ DCubeTextureRes9::DCubeTextureRes9(LPDIRECT3DDEVICE9 device, DTextureRes9 * righ
 	m_isSuccess = true;
 }
 
-DRenderTextureViewRes9::DRenderTextureViewRes9(LPDIRECT3DDEVICE9 device, float width, float height)
+DRenderTextureViewWrapper9::DRenderTextureViewWrapper9(LPDIRECT3DDEVICE9 device, float width, float height)
 {
 	HRESULT hr;
 	m_isSuccess = false;
@@ -107,11 +107,11 @@ DRenderTextureViewRes9::DRenderTextureViewRes9(LPDIRECT3DDEVICE9 device, float w
 	m_isSuccess = true;
 }
 
-DRenderTextureViewRes9::~DRenderTextureViewRes9()
+DRenderTextureViewWrapper9::~DRenderTextureViewWrapper9()
 {
 }
 
-void DRenderTextureViewRes9::Apply(UINT textureOffset, int)
+void DRenderTextureViewWrapper9::Apply(UINT textureOffset, int)
 {
 	if (m_isSuccess)
 	{
@@ -119,7 +119,7 @@ void DRenderTextureViewRes9::Apply(UINT textureOffset, int)
 	}
 }
 
-void DRenderTextureViewRes9::ApplyWrapMode(UINT textureOffset, DWrapMode mode)
+void DRenderTextureViewWrapper9::ApplyWrapMode(UINT textureOffset, DWrapMode mode)
 {
 	if (m_isSuccess)
 	{
@@ -127,7 +127,7 @@ void DRenderTextureViewRes9::ApplyWrapMode(UINT textureOffset, DWrapMode mode)
 	}
 }
 
-void DRenderTextureViewRes9::Release()
+void DRenderTextureViewWrapper9::Release()
 {
 	if (m_texture != NULL)
 	{
@@ -147,12 +147,12 @@ void DRenderTextureViewRes9::Release()
 	m_device = NULL;
 }
 
-IRenderBuffer * DRenderTextureViewRes9::GetColorBuffer()
+IRenderBuffer * DRenderTextureViewWrapper9::GetColorBuffer()
 {
 	return nullptr;
 }
 
-IRenderBuffer * DRenderTextureViewRes9::GetDepthBuffer()
+IRenderBuffer * DRenderTextureViewWrapper9::GetDepthBuffer()
 {
 	return nullptr;
 }

@@ -1,10 +1,10 @@
 ﻿#ifdef _DGAPI_D3D11
 #include "D3D11Core.h"
 #include "DSystem.h"
-#include "DGeometryRes11.h"
+#include "DGeometryWrapper11.h"
 //#include "DShaderProgram11.h"
 #include "D3DShaderPass11.h"
-#include "DTextureRes11.h"
+#include "DTextureWrapper11.h"
 #include "DRenderStateMgr11.h"
 #include "DRenderBuffer11.h"
 #include <D3DX11.h>
@@ -239,7 +239,7 @@ bool D3D11Core::Init(int width, int height, bool fullScreen, HWND hwnd)
 
 	//m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
 
-	m_backBuffer = new DRenderTextureViewRes11(m_device, m_deviceContext, backBuffer, depthBuffer);
+	m_backBuffer = new DRenderTextureViewWrapper11(m_device, m_deviceContext, backBuffer, depthBuffer);
 
 	SetRenderTarget();
 
@@ -369,7 +369,7 @@ void D3D11Core::Present()
 	}
 }
 
-void D3D11Core::Clear(bool clearDepth, bool clearStencil, bool clearColor, DColor & color, IRenderTextureViewRes * res)
+void D3D11Core::Clear(bool clearDepth, bool clearStencil, bool clearColor, DColor & color, IRenderTextureViewWrapper * renderTexture)
 {
 	int flag = 0;
 	if (clearDepth && clearStencil)
@@ -384,13 +384,13 @@ void D3D11Core::Clear(bool clearDepth, bool clearStencil, bool clearColor, DColo
 	c[2] = color.b;
 	c[3] = color.a;
 
-	if (res == NULL)
-		res = m_backBuffer;
+	if (renderTexture == NULL)
+		renderTexture = m_backBuffer;
 
 	//if (res != NULL)
 	{
-		DColorBuffer11*cb = (DColorBuffer11*)(res->GetColorBuffer());
-		DDepthBuffer11*db = (DDepthBuffer11*)(res->GetDepthBuffer());
+		DColorBuffer11*cb = (DColorBuffer11*)(renderTexture->GetColorBuffer());
+		DDepthBuffer11*db = (DDepthBuffer11*)(renderTexture->GetDepthBuffer());
 		if (flag != 0)
 			m_deviceContext->ClearDepthStencilView(db->GetView(), flag, 1.0f, 0);
 		if (clearColor)
@@ -405,14 +405,14 @@ void D3D11Core::Clear(bool clearDepth, bool clearStencil, bool clearColor, DColo
 	}*/
 }
 
-void D3D11Core::SetRenderTarget(IRenderTextureViewRes * res)
+void D3D11Core::SetRenderTarget(IRenderTextureViewWrapper * renderTexture)
 {
-	if (res == NULL)
-		res = m_backBuffer;
+	if (renderTexture == NULL)
+		renderTexture = m_backBuffer;
 	//if (res != NULL)
 	{
-		DColorBuffer11*cb = (DColorBuffer11*)(res->GetColorBuffer());
-		DDepthBuffer11*db = (DDepthBuffer11*)(res->GetDepthBuffer());
+		DColorBuffer11*cb = (DColorBuffer11*)(renderTexture->GetColorBuffer());
+		DDepthBuffer11*db = (DDepthBuffer11*)(renderTexture->GetDepthBuffer());
 		ID3D11RenderTargetView* rv = cb->GetView();
 		ID3D11DepthStencilView* dv = db->GetView();
 		m_deviceContext->OMSetRenderTargets(1, &rv, dv);
@@ -435,7 +435,7 @@ void D3D11Core::SetViewPort(float x, float y, float width, float height)
 	m_deviceContext->RSSetViewports(1, &m_viewPort);
 }
 
-void D3D11Core::EndSetRenderTarget(IRenderTextureViewRes *)
+void D3D11Core::EndSetRenderTarget(IRenderTextureViewWrapper *)
 {
 	DColorBuffer11*cb = (DColorBuffer11*)(m_backBuffer->GetColorBuffer());
 	DDepthBuffer11*db = (DDepthBuffer11*)(m_backBuffer->GetDepthBuffer());
@@ -444,25 +444,25 @@ void D3D11Core::EndSetRenderTarget(IRenderTextureViewRes *)
 	m_deviceContext->OMSetRenderTargets(1, &rv, dv);
 }
 
-DGeometryRes * D3D11Core::CreateGeometryRes(int vertexUsage, bool dynamic)
+DGeometryWrapper * D3D11Core::CreateGeometryWrapper(int vertexUsage, bool dynamic)
 {
-	DGeometryRes11* res = new DGeometryRes11(m_device, m_deviceContext, vertexUsage, dynamic);
-	return res;
+	DGeometryWrapper11* wrapper = new DGeometryWrapper11(m_device, m_deviceContext, vertexUsage, dynamic);
+	return wrapper;
 }
 
-ITextureRes * D3D11Core::CreateTextureRes(WCHAR* filename)
+ITextureWrapper * D3D11Core::CreateTextureWrapper(WCHAR* filename)
 {
-	return new DTextureRes11(m_device, m_deviceContext, filename);
+	return new DTextureWrapper11(m_device, m_deviceContext, filename);
 }
 
-ITextureRes * D3D11Core::CreateCubeMapRes(ITextureRes * right, ITextureRes * left, ITextureRes * top, ITextureRes * bottom, ITextureRes * front, ITextureRes * back)
+ITextureWrapper * D3D11Core::CreateCubeMapWrapper(ITextureWrapper * right, ITextureWrapper * left, ITextureWrapper * top, ITextureWrapper * bottom, ITextureWrapper * front, ITextureWrapper * back)
 {
-	return new DTextureRes11(m_device, m_deviceContext, (DTextureRes11*)right, (DTextureRes11*)left, (DTextureRes11*)top, (DTextureRes11*)bottom, (DTextureRes11*)front, (DTextureRes11*)back);
+	return new DTextureWrapper11(m_device, m_deviceContext, (DTextureWrapper11*)right, (DTextureWrapper11*)left, (DTextureWrapper11*)top, (DTextureWrapper11*)bottom, (DTextureWrapper11*)front, (DTextureWrapper11*)back);
 }
 
-IRenderTextureViewRes * D3D11Core::CreateRenderTextureRes(float width, float height)
+IRenderTextureViewWrapper * D3D11Core::CreateRenderTextureWrapper(float width, float height)
 {
-	return new DRenderTextureViewRes11(m_device, m_deviceContext, width, height);
+	return new DRenderTextureViewWrapper11(m_device, m_deviceContext, width, height);
 }
 
 //DShaderProgram * D3D11Core::CreateShaderProgram(DShaderProgramType programType)

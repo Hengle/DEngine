@@ -8,7 +8,7 @@ DGLDrawer::DGLDrawer()
 	//m_currentPLen = 0;
 	//m_prePLen = 0;
 	m_currentColor = DCOLOR_WHITE;
-	m_geometryRes = 0;
+	m_geometry = 0;
 	m_vertexCount = 0;
 	m_indexCount = 0;
 }
@@ -47,12 +47,12 @@ void DGLDrawer::GlEnd()
 {
 	if (m_vertexCount == 0 || m_indexCount == 0)
 		return;
-	if (m_geometryRes == NULL)
+	if (m_geometry == NULL)
 	{
 		int vusage = (1UL << DVertexUsage_POSITION) | (1UL << DVertexUsage_COLOR);
-		m_geometryRes = DSystem::GetGraphicsMgr()->GetGLCore()->CreateGeometryRes(vusage, true);
+		m_geometry = DSystem::GetGraphicsMgr()->GetGLCore()->CreateGeometryWrapper(vusage, true);
 	}
-	m_geometryRes->Refresh(&m_vertices[0], &m_indecies[0], m_vertexCount, m_indexCount);
+	m_geometry->Refresh(&m_vertices[0], &m_indecies[0], m_vertexCount, m_indexCount);
 	DMatrix4x4 world;
 	DMatrix4x4::Identity(&world);
 
@@ -61,7 +61,7 @@ void DGLDrawer::GlEnd()
 	DShader::SetGlobalMatrix(D_SC_MATRIX_P, m_currentP);
 
 	DGraphics::ApplyActiveMaterial();
-	m_geometryRes->DrawPrimitive(m_mode);
+	m_geometry->DrawPrimitive(m_mode);
 	/*if (m_currentProcess != NULL)
 	{
 		m_currentProcess->PostProcess(m_currentMV, m_currentP);
@@ -165,11 +165,11 @@ void DGLDrawer::GlMultiMatrix(DMatrix4x4& matrix)
 
 void DGLDrawer::Release()
 {
-	if (m_geometryRes != NULL)
+	if (m_geometry != NULL)
 	{
-		m_geometryRes->Release();
-		delete m_geometryRes;
-		m_geometryRes = 0;
+		m_geometry->Release();
+		delete m_geometry;
+		m_geometry = 0;
 	}
 	/*int i = 0;
 	int len = m_processVector.size();

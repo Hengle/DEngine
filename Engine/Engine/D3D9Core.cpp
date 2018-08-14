@@ -1,10 +1,10 @@
 ﻿#ifdef _DGAPI_D3D9
 #include "D3D9Core.h"
 #include <fstream>
-#include "DGeometryRes9.h"
+#include "DGeometryWrapper9.h"
 //#include "DShaderProgram9.h"
 #include "D3DShaderPass9.h"
-#include "DTextureRes9.h"
+#include "DTextureWrapper9.h"
 #include "DRenderStateMgr9.h"
 #include <exception>
 
@@ -106,7 +106,7 @@ void D3D9Core::Present()
 	m_device->Present(0, 0, 0, 0);
 }
 
-void D3D9Core::Clear(bool clearDepth, bool clearStencil, bool clearColor, DColor & color, IRenderTextureViewRes * res)
+void D3D9Core::Clear(bool clearDepth, bool clearStencil, bool clearColor, DColor & color, IRenderTextureViewWrapper * renderTexture)
 {
 	DWORD flag = 0;
 	if (clearColor)
@@ -118,9 +118,9 @@ void D3D9Core::Clear(bool clearDepth, bool clearStencil, bool clearColor, DColor
 	D3DCOLOR c = D3DCOLOR_COLORVALUE(color.r, color.g, color.b, color.a);
 
 	//m_device->Clear(0, NULL, flag, c, 1.0f, 0);
-	if (res != NULL)
+	if (renderTexture != NULL)
 	{
-		DRenderTextureViewRes9* r = (DRenderTextureViewRes9*)res;
+		DRenderTextureViewWrapper9* r = (DRenderTextureViewWrapper9*)renderTexture;
 		LPD3DXRENDERTOSURFACE isurface = r->GetInterface();
 		isurface->BeginScene(r->GetSurface(), &m_viewPort);
 		m_device->Clear(0, NULL, flag, c, 1.0f, 0);
@@ -132,7 +132,7 @@ void D3D9Core::Clear(bool clearDepth, bool clearStencil, bool clearColor, DColor
 	}
 }
 
-void D3D9Core::SetRenderTarget(IRenderTextureViewRes * res)
+void D3D9Core::SetRenderTarget(IRenderTextureViewWrapper * renderTexture)
 {
 	//if (res != NULL)
 	//{
@@ -160,11 +160,11 @@ void D3D9Core::SetViewPort(float x, float y, float width, float height)
 	m_device->SetViewport(&m_viewPort);
 }
 
-void D3D9Core::EndSetRenderTarget(IRenderTextureViewRes * res)
+void D3D9Core::EndSetRenderTarget(IRenderTextureViewWrapper * renderTexture)
 {
-	if (res != NULL)
+	if (renderTexture != NULL)
 	{
-		DRenderTextureViewRes9* r = (DRenderTextureViewRes9*)res;
+		DRenderTextureViewWrapper9* r = (DRenderTextureViewWrapper9*)renderTexture;
 		LPD3DXRENDERTOSURFACE isurface = r->GetInterface();
 		isurface->EndScene(0);
 	}
@@ -174,25 +174,25 @@ void D3D9Core::EndSetRenderTarget(IRenderTextureViewRes * res)
 	}
 }
 
-DGeometryRes * D3D9Core::CreateGeometryRes(int vertexUsage, bool dynamic)
+DGeometryWrapper * D3D9Core::CreateGeometryWrapper(int vertexUsage, bool dynamic)
 {
-	DGeometryRes9* res = new DGeometryRes9(m_device, vertexUsage, dynamic);
-	return res;
+	DGeometryWrapper9* wrapper = new DGeometryWrapper9(m_device, vertexUsage, dynamic);
+	return wrapper;
 }
 
-ITextureRes * D3D9Core::CreateTextureRes(WCHAR* filename)
+ITextureWrapper * D3D9Core::CreateTextureWrapper(WCHAR* filename)
 {
-	return new DTextureRes9(m_device, filename);
+	return new DTextureWrapper9(m_device, filename);
 }
 
-ITextureRes * D3D9Core::CreateCubeMapRes(ITextureRes *, ITextureRes *, ITextureRes *, ITextureRes *, ITextureRes *, ITextureRes *)
+ITextureWrapper * D3D9Core::CreateCubeMapWrapper(ITextureWrapper *, ITextureWrapper *, ITextureWrapper *, ITextureWrapper *, ITextureWrapper *, ITextureWrapper *)
 {
 	return nullptr;
 }
 
-IRenderTextureViewRes * D3D9Core::CreateRenderTextureRes(float width, float height)
+IRenderTextureViewWrapper * D3D9Core::CreateRenderTextureWrapper(float width, float height)
 {
-	return new DRenderTextureViewRes9(m_device, width, height);
+	return new DRenderTextureViewWrapper9(m_device, width, height);
 }
 
 //DShaderProgram * D3D9Core::CreateShaderProgram(DShaderProgramType programType)

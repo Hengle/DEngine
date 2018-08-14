@@ -3,146 +3,12 @@
 
 DInput::DInput()
 {
-	/*m_directInput = 0;
-	m_keyboard = 0;
-	m_mouse = 0;*/
 }
 
 
 DInput::~DInput()
 {
 }
-
-//bool DInput::Init(HINSTANCE hInstance, HWND hwnd, int screenWidth, int screenHeight)
-//{
-//	HRESULT result;
-//
-//	m_screenWidth = screenWidth;
-//	m_screenHeight = screenHeight;
-//
-//	m_mouseX = 0;
-//	m_mouseY = 0;
-//
-//	result = DirectInput8Create(hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&m_directInput, NULL);
-//	if (FAILED(result))
-//	{
-//		return false;
-//	}
-//
-//	// Initialize the direct input interface for the keyboard.
-//	result = m_directInput->CreateDevice(GUID_SysKeyboard, &m_keyboard, NULL);
-//	if (FAILED(result))
-//	{
-//		return false;
-//	}
-//
-//	// Set the data format.  In this case since it is a keyboard we can use the predefined data format.
-//	result = m_keyboard->SetDataFormat(&c_dfDIKeyboard);
-//	if (FAILED(result))
-//	{
-//		return false;
-//	}
-//
-//	// Set the cooperative level of the keyboard to not share with other programs.
-//	result = m_keyboard->SetCooperativeLevel(hwnd, DISCL_FOREGROUND | DISCL_EXCLUSIVE);
-//	if (FAILED(result))
-//	{
-//		return false;
-//	}
-//
-//	// Now acquire the keyboard.
-//	/*result = m_keyboard->Acquire();
-//	if (FAILED(result))
-//	{
-//		return false;
-//	}*/
-//
-//	// Initialize the direct input interface for the mouse.
-//	result = m_directInput->CreateDevice(GUID_SysMouse, &m_mouse, NULL);
-//	if (FAILED(result))
-//	{
-//		return false;
-//	}
-//
-//	// Set the data format for the mouse using the pre-defined mouse data format.
-//	result = m_mouse->SetDataFormat(&c_dfDIMouse);
-//	if (FAILED(result))
-//	{
-//		return false;
-//	}
-//
-//	// Set the cooperative level of the mouse to share with other programs.
-//	result = m_mouse->SetCooperativeLevel(hwnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
-//	if (FAILED(result))
-//	{
-//		return false;
-//	}
-//
-//	// Acquire the mouse.
-//	/*result = m_mouse->Acquire();
-//	if (FAILED(result))
-//	{
-//		return false;
-//	}*/
-//	m_hwnd = hwnd;
-//
-//	return true;
-//}
-//
-//void DInput::Shutdown()
-//{
-//	// Release the mouse.
-//	if (m_mouse)
-//	{
-//		m_mouse->Unacquire();
-//		m_mouse->Release();
-//		m_mouse = 0;
-//	}
-//
-//	// Release the keyboard.
-//	if (m_keyboard)
-//	{
-//		m_keyboard->Unacquire();
-//		m_keyboard->Release();
-//		m_keyboard = 0;
-//	}
-//
-//	// Release the main interface to direct input.
-//	if (m_directInput)
-//	{
-//		m_directInput->Release();
-//		m_directInput = 0;
-//	}
-//
-//	m_hwnd = 0;
-//
-//	return;
-//}
-//
-//bool DInput::InputLoop()
-//{
-//	bool result;
-//
-//
-//	// Read the current state of the keyboard.
-//	result = ReadKeyboard();
-//	if (!result)
-//	{
-//		return false;
-//	}
-//
-//	// Read the current state of the mouse.
-//	result = ReadMouse(m_hwnd);
-//	if (!result)
-//	{
-//		return false;
-//	}
-//
-//	// Process the changes in the mouse and keyboard.
-//	ProcessInput();
-//
-//	return true;
-//}
 
 void DInput::GetMousePosition(int & x, int & y)
 {
@@ -182,7 +48,7 @@ bool DInput::IsMouseDown(int button)
 	return false;
 }
 
-bool DInput::IsKeyPress(int keycode)
+bool DInput::IsKeyPress(DKey keycode)
 {
 	IInputCore* core = DSystem::GetInputMgr();
 	if (core != NULL)
@@ -192,7 +58,7 @@ bool DInput::IsKeyPress(int keycode)
 	return false;
 }
 
-bool DInput::IsKeyDown(int keycode)
+bool DInput::IsKeyDown(DKey keycode)
 {
 	IInputCore* core = DSystem::GetInputMgr();
 	if (core != NULL)

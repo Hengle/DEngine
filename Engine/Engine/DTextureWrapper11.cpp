@@ -1,9 +1,9 @@
 ﻿#ifdef _DGAPI_D3D11
-#include "DTextureRes11.h"
+#include "DTextureWrapper11.h"
 #include "DSystem.h"
 #include "DRenderBuffer11.h"
 
-DTextureRes11::DTextureRes11(ID3D11Device* device, ID3D11DeviceContext * deviceContext, WCHAR* filename)
+DTextureWrapper11::DTextureWrapper11(ID3D11Device* device, ID3D11DeviceContext * deviceContext, WCHAR* filename)
 {
 	HRESULT result;
 
@@ -19,7 +19,7 @@ DTextureRes11::DTextureRes11(ID3D11Device* device, ID3D11DeviceContext * deviceC
 	m_isSuccess = true;
 }
 
-DTextureRes11::DTextureRes11(ID3D11Device * device, ID3D11DeviceContext * deviceContext, DTextureRes11 * right, DTextureRes11 * left, DTextureRes11 * top, DTextureRes11 * bottom, DTextureRes11 * front, DTextureRes11 * back)
+DTextureWrapper11::DTextureWrapper11(ID3D11Device * device, ID3D11DeviceContext * deviceContext, DTextureWrapper11 * right, DTextureWrapper11 * left, DTextureWrapper11 * top, DTextureWrapper11 * bottom, DTextureWrapper11 * front, DTextureWrapper11 * back)
 {
 	m_deviceContext = deviceContext;
 
@@ -87,11 +87,11 @@ DTextureRes11::DTextureRes11(ID3D11Device * device, ID3D11DeviceContext * device
 	m_isSuccess = true;
 }
 
-DTextureRes11::~DTextureRes11()
+DTextureWrapper11::~DTextureWrapper11()
 {
 }
 
-void DTextureRes11::Apply(UINT textureOffset, int)
+void DTextureWrapper11::Apply(UINT textureOffset, int)
 {
 	if (m_isSuccess)
 	{
@@ -99,7 +99,7 @@ void DTextureRes11::Apply(UINT textureOffset, int)
 	}
 }
 
-void DTextureRes11::ApplyWrapMode(UINT textureOffset, DWrapMode mode)
+void DTextureWrapper11::ApplyWrapMode(UINT textureOffset, DWrapMode mode)
 {
 	if (m_isSuccess)
 	{
@@ -107,7 +107,7 @@ void DTextureRes11::ApplyWrapMode(UINT textureOffset, DWrapMode mode)
 	}
 }
 
-void DTextureRes11::Release()
+void DTextureWrapper11::Release()
 {
 	if (m_texture != NULL)
 		m_texture->Release();
@@ -115,7 +115,7 @@ void DTextureRes11::Release()
 	m_deviceContext = NULL;
 }
 
-DRenderTextureViewRes11::DRenderTextureViewRes11(ID3D11Device * device, ID3D11DeviceContext * deviceContext, float width, float height)
+DRenderTextureViewWrapper11::DRenderTextureViewWrapper11(ID3D11Device * device, ID3D11DeviceContext * deviceContext, float width, float height)
 {
 	m_isSuccess = false;
 	HRESULT result;
@@ -185,7 +185,7 @@ DRenderTextureViewRes11::DRenderTextureViewRes11(ID3D11Device * device, ID3D11De
 	m_isSuccess = true;
 }
 
-DRenderTextureViewRes11::DRenderTextureViewRes11(ID3D11Device * device, ID3D11DeviceContext * deviceContext, ID3D11Texture2D * backbuffer, ID3D11Texture2D * depthbuffer)
+DRenderTextureViewWrapper11::DRenderTextureViewWrapper11(ID3D11Device * device, ID3D11DeviceContext * deviceContext, ID3D11Texture2D * backbuffer, ID3D11Texture2D * depthbuffer)
 {
 	m_isSuccess = false;
 	HRESULT result;
@@ -217,11 +217,11 @@ DRenderTextureViewRes11::DRenderTextureViewRes11(ID3D11Device * device, ID3D11De
 	m_isSuccess = true;
 }
 
-DRenderTextureViewRes11::~DRenderTextureViewRes11()
+DRenderTextureViewWrapper11::~DRenderTextureViewWrapper11()
 {
 }
 
-void DRenderTextureViewRes11::Apply(UINT textureOffset, int)
+void DRenderTextureViewWrapper11::Apply(UINT textureOffset, int)
 {
 	if (m_isSuccess && m_texture != NULL)
 	{
@@ -229,7 +229,7 @@ void DRenderTextureViewRes11::Apply(UINT textureOffset, int)
 	}
 }
 
-void DRenderTextureViewRes11::ApplyWrapMode(UINT textureOffset, DWrapMode mode)
+void DRenderTextureViewWrapper11::ApplyWrapMode(UINT textureOffset, DWrapMode mode)
 {
 	if (m_isSuccess && m_texture != NULL)
 	{
@@ -237,7 +237,7 @@ void DRenderTextureViewRes11::ApplyWrapMode(UINT textureOffset, DWrapMode mode)
 	}
 }
 
-void DRenderTextureViewRes11::Release()
+void DRenderTextureViewWrapper11::Release()
 {
 	if (m_texture != NULL)
 		m_texture->Release();
@@ -263,12 +263,12 @@ void DRenderTextureViewRes11::Release()
 	m_deviceContext = NULL;
 }
 
-IRenderBuffer * DRenderTextureViewRes11::GetColorBuffer()
+IRenderBuffer * DRenderTextureViewWrapper11::GetColorBuffer()
 {
 	return m_colorBuffer;
 }
 
-IRenderBuffer * DRenderTextureViewRes11::GetDepthBuffer()
+IRenderBuffer * DRenderTextureViewWrapper11::GetDepthBuffer()
 {
 	return m_depthBuffer;
 }

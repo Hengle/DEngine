@@ -48,18 +48,6 @@ public:
 	DRSBlendFactor dstfactor;
 };
 
-//class DGeometryResD3D : public DGeometryRes
-//{
-//public:
-//	DGeometryResD3D(int vertexUsage, bool dynamic);
-//
-//protected:
-//	virtual void OnRefresh(DGeometryBufferDesc* desc);
-//	virtual bool OnInit(DGeometryBufferDesc* desc);
-//	virtual void OnRefresh(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount) = 0;
-//	virtual bool OnInit(float* vertexbuffer, unsigned long* indexbuffer, int vertexCount, int indexCount) = 0;
-//};
-
 class D3DShaderProgram : public DShaderProgram
 {
 public:

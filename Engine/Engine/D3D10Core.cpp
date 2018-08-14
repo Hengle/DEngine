@@ -1,9 +1,9 @@
 ﻿#ifdef _DGAPI_D3D10
 #include "D3D10Core.h"
-#include "DGeometryRes10.h"
+#include "DGeometryWrapper10.h"
 //#include "DShaderProgram10.h"
 #include "D3DShaderPass10.h"
-#include "DTextureRes10.h"
+#include "DTextureWrapper10.h"
 #include "DRenderStateMgr10.h"
 #include "DRenderBuffer10.h"
 #include <d3dcompiler.h>
@@ -355,7 +355,7 @@ void D3D10Core::Present()
 		m_swapChain->Present(0, 0);
 }
 
-void D3D10Core::Clear(bool clearDepth, bool clearStencil, bool clearColor, DColor & color, IRenderTextureViewRes * res)
+void D3D10Core::Clear(bool clearDepth, bool clearStencil, bool clearColor, DColor & color, IRenderTextureViewWrapper * renderTexture)
 {
 	int flag = 0;
 	if (clearDepth && clearStencil)
@@ -370,10 +370,10 @@ void D3D10Core::Clear(bool clearDepth, bool clearStencil, bool clearColor, DColo
 	c[2] = color.b;
 	c[3] = color.a;
 
-	if (res != NULL)
+	if (renderTexture != NULL)
 	{
-		DColorBuffer10*cb = (DColorBuffer10*)(res->GetColorBuffer());
-		DDepthBuffer10*db = (DDepthBuffer10*)(res->GetDepthBuffer());
+		DColorBuffer10*cb = (DColorBuffer10*)(renderTexture->GetColorBuffer());
+		DDepthBuffer10*db = (DDepthBuffer10*)(renderTexture->GetDepthBuffer());
 		if (flag != 0)
 			m_device->ClearDepthStencilView(db->GetView(), flag, 1.0f, 0);
 		if (clearColor)
@@ -388,12 +388,12 @@ void D3D10Core::Clear(bool clearDepth, bool clearStencil, bool clearColor, DColo
 	}
 }
 
-void D3D10Core::SetRenderTarget(IRenderTextureViewRes *res)
+void D3D10Core::SetRenderTarget(IRenderTextureViewWrapper *renderTexture)
 {
-	if (res != NULL)
+	if (renderTexture != NULL)
 	{
-		DColorBuffer10*cb = (DColorBuffer10*)(res->GetColorBuffer());
-		DDepthBuffer10*db = (DDepthBuffer10*)(res->GetDepthBuffer());
+		DColorBuffer10*cb = (DColorBuffer10*)(renderTexture->GetColorBuffer());
+		DDepthBuffer10*db = (DDepthBuffer10*)(renderTexture->GetDepthBuffer());
 		ID3D10RenderTargetView* rv = cb->GetView();
 		ID3D10DepthStencilView* dv = db->GetView();
 		m_device->OMSetRenderTargets(1, &rv, dv);
@@ -416,31 +416,31 @@ void D3D10Core::SetViewPort(float x, float y, float width, float height)
 	m_device->RSSetViewports(1, &m_viewPort);
 }
 
-void D3D10Core::EndSetRenderTarget(IRenderTextureViewRes *)
+void D3D10Core::EndSetRenderTarget(IRenderTextureViewWrapper *)
 {
 	ID3D10RenderTargetView* rv = ((DColorBuffer10*)m_colorBuffer)->GetView();
 	ID3D10DepthStencilView* dv = ((DDepthBuffer10*)m_depthBuffer)->GetView();
 	m_device->OMSetRenderTargets(1, &rv, dv);
 }
 
-DGeometryRes * D3D10Core::CreateGeometryRes(int vertexUsage, bool dynamic)
+DGeometryWrapper * D3D10Core::CreateGeometryWrapper(int vertexUsage, bool dynamic)
 {
-	return new DGeometryRes10(m_device, vertexUsage, dynamic);
+	return new DGeometryWrapper10(m_device, vertexUsage, dynamic);
 }
 
-ITextureRes * D3D10Core::CreateTextureRes(WCHAR* filename)
+ITextureWrapper * D3D10Core::CreateTextureWrapper(WCHAR* filename)
 {
-	return new DTextureRes10(m_device, filename);;
+	return new DTextureWrapper10(m_device, filename);;
 }
 
-ITextureRes * D3D10Core::CreateCubeMapRes(ITextureRes * right, ITextureRes * left, ITextureRes * top, ITextureRes * bottom, ITextureRes * front, ITextureRes * back)
+ITextureWrapper * D3D10Core::CreateCubeMapWrapper(ITextureWrapper * right, ITextureWrapper * left, ITextureWrapper * top, ITextureWrapper * bottom, ITextureWrapper * front, ITextureWrapper * back)
 {
-	return new DTextureRes10(m_device, (DTextureRes10*)right, (DTextureRes10*)left, (DTextureRes10*)top, (DTextureRes10*)bottom, (DTextureRes10*)front, (DTextureRes10*)back);
+	return new DTextureWrapper10(m_device, (DTextureWrapper10*)right, (DTextureWrapper10*)left, (DTextureWrapper10*)top, (DTextureWrapper10*)bottom, (DTextureWrapper10*)front, (DTextureWrapper10*)back);
 }
 
-IRenderTextureViewRes * D3D10Core::CreateRenderTextureRes(float width, float height)
+IRenderTextureViewWrapper * D3D10Core::CreateRenderTextureWrapper(float width, float height)
 {
-	return new DRenderTextureViewRes10(m_device, width, height);
+	return new DRenderTextureViewWrapper10(m_device, width, height);
 }
 
 //DShaderProgram * D3D10Core::CreateShaderProgram(DShaderProgramType programType)

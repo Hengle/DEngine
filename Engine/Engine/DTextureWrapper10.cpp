@@ -1,10 +1,10 @@
 ﻿#ifdef _DGAPI_D3D10
-#include "DTextureRes10.h"
+#include "DTextureWrapper10.h"
 #include "DSystem.h"
 #include "DRenderBuffer10.h"
 #include <D3DX10.h>
 
-DTextureRes10::DTextureRes10(ID3D10Device * device, WCHAR * filename)
+DTextureWrapper10::DTextureWrapper10(ID3D10Device * device, WCHAR * filename)
 {
 	HRESULT result;
 
@@ -20,7 +20,7 @@ DTextureRes10::DTextureRes10(ID3D10Device * device, WCHAR * filename)
 	m_isSuccess = true;
 }
 
-DTextureRes10::DTextureRes10(ID3D10Device * device, DTextureRes10 * right, DTextureRes10 * left, DTextureRes10 * top, DTextureRes10 * bottom, DTextureRes10 * front, DTextureRes10 * back)
+DTextureWrapper10::DTextureWrapper10(ID3D10Device * device, DTextureWrapper10 * right, DTextureWrapper10 * left, DTextureWrapper10 * top, DTextureWrapper10 * bottom, DTextureWrapper10 * front, DTextureWrapper10 * back)
 {
 	m_device = device;
 
@@ -88,11 +88,11 @@ DTextureRes10::DTextureRes10(ID3D10Device * device, DTextureRes10 * right, DText
 	m_isSuccess = true;
 }
 
-DTextureRes10::~DTextureRes10()
+DTextureWrapper10::~DTextureWrapper10()
 {
 }
 
-void DTextureRes10::Apply(UINT textureOffset, int)
+void DTextureWrapper10::Apply(UINT textureOffset, int)
 {
 	if (m_isSuccess)
 	{
@@ -100,7 +100,7 @@ void DTextureRes10::Apply(UINT textureOffset, int)
 	}
 }
 
-void DTextureRes10::ApplyWrapMode(UINT textureOffset, DWrapMode mode)
+void DTextureWrapper10::ApplyWrapMode(UINT textureOffset, DWrapMode mode)
 {
 	if (m_isSuccess)
 	{
@@ -108,7 +108,7 @@ void DTextureRes10::ApplyWrapMode(UINT textureOffset, DWrapMode mode)
 	}
 }
 
-void DTextureRes10::Release()
+void DTextureWrapper10::Release()
 {
 	if (m_texture != NULL)
 		m_texture->Release();
@@ -116,7 +116,7 @@ void DTextureRes10::Release()
 	m_device = NULL;
 }
 
-DRenderTextureViewRes10::DRenderTextureViewRes10(ID3D10Device * device, float width, float height)
+DRenderTextureViewWrapper10::DRenderTextureViewWrapper10(ID3D10Device * device, float width, float height)
 {
 	m_isSuccess = false;
 	HRESULT result;
@@ -186,11 +186,11 @@ DRenderTextureViewRes10::DRenderTextureViewRes10(ID3D10Device * device, float wi
 	m_isSuccess = true;
 }
 
-DRenderTextureViewRes10::~DRenderTextureViewRes10()
+DRenderTextureViewWrapper10::~DRenderTextureViewWrapper10()
 {
 }
 
-void DRenderTextureViewRes10::Apply(UINT textureOffset, int)
+void DRenderTextureViewWrapper10::Apply(UINT textureOffset, int)
 {
 	if (m_isSuccess)
 	{
@@ -198,7 +198,7 @@ void DRenderTextureViewRes10::Apply(UINT textureOffset, int)
 	}
 }
 
-void DRenderTextureViewRes10::ApplyWrapMode(UINT textureOffset, DWrapMode mode)
+void DRenderTextureViewWrapper10::ApplyWrapMode(UINT textureOffset, DWrapMode mode)
 {
 	if (m_isSuccess)
 	{
@@ -206,7 +206,7 @@ void DRenderTextureViewRes10::ApplyWrapMode(UINT textureOffset, DWrapMode mode)
 	}
 }
 
-void DRenderTextureViewRes10::Release()
+void DRenderTextureViewWrapper10::Release()
 {
 	if (m_texture != NULL)
 		m_texture->Release();
@@ -232,12 +232,12 @@ void DRenderTextureViewRes10::Release()
 	m_device = NULL;
 }
 
-IRenderBuffer * DRenderTextureViewRes10::GetColorBuffer()
+IRenderBuffer * DRenderTextureViewWrapper10::GetColorBuffer()
 {
 	return m_colorBuffer;
 }
 
-IRenderBuffer * DRenderTextureViewRes10::GetDepthBuffer()
+IRenderBuffer * DRenderTextureViewWrapper10::GetDepthBuffer()
 {
 	return m_depthBuffer;
 }

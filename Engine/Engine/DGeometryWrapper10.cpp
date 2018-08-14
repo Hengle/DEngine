@@ -1,71 +1,19 @@
 ﻿#ifdef _DGAPI_D3D10
-#include "DGeometryRes10.h"
+#include "DGeometryWrapper10.h"
 
-DGeometryRes10::DGeometryRes10(ID3D10Device * device, int vertexUsage, bool dynamic) : DGeometryRes(vertexUsage, dynamic)
+DGeometryWrapper10::DGeometryWrapper10(ID3D10Device * device, int vertexUsage, bool dynamic) : DGeometryWrapper(vertexUsage, dynamic)
 {
 	m_device = device;
 	m_vertexBuffer = 0;
 	m_indexBuffer = 0;
-	//m_dataSize = 0;
-	//m_dataCount = 0;
-	//m_indexCount = 0;
 
-	//m_dataSize = sizeof(float) * m_dataCount;
-	/*if (vertexUsage & (1UL << DVertexUsage_TEXCOORD0))
-	{
-		m_dataSize += fsize * 2;
-		m_dataCount += 2;
-		m_hasUV = true;
-	}
-	if (vertexUsage & (1UL << DVertexUsage_TEXCOORD1))
-	{
-		m_dataSize += fsize * 2;
-		m_dataCount += 2;
-		m_hasUV1 = true;
-	}
-	if (vertexUsage & (1UL << DVertexUsage_TEXCOORD2))
-	{
-		m_dataSize += fsize * 2;
-		m_dataCount += 2;
-		m_hasUV2 = true;
-	}
-	if (vertexUsage & (1UL << DVertexUsage_TEXCOORD3))
-	{
-		m_dataSize += fsize * 2;
-		m_dataCount += 2;
-		m_hasUV3 = true;
-	}
-	if (vertexUsage & (1UL << DVertexUsage_NORMAL))
-	{
-		m_dataSize += fsize * 3;
-		m_dataCount += 3;
-		m_hasNormal = true;
-	}
-	if (vertexUsage & (1UL << DVertexUsage_COLOR))
-	{
-		m_dataSize += fsize * 4;
-		m_dataCount += 4;
-		m_hasColor = true;
-	}
-	if (vertexUsage & (1UL << DVertexUsage_TANGENT))
-	{
-		m_dataSize += fsize * 4;
-		m_dataCount += 4;
-		m_hasTangent = true;
-	}
-	if (vertexUsage & (1UL << DVertexUsage_BINORMAL))
-	{
-		m_dataSize += fsize * 3;
-		m_dataCount += 3;
-		m_hasBinormal = true;
-	}*/
 }
 
-DGeometryRes10::~DGeometryRes10()
+DGeometryWrapper10::~DGeometryWrapper10()
 {
 }
 
-void DGeometryRes10::Release()
+void DGeometryWrapper10::Release()
 {
 	if (m_vertexBuffer != NULL)
 	{
@@ -80,7 +28,7 @@ void DGeometryRes10::Release()
 	m_device = NULL;
 }
 
-void DGeometryRes10::OnRefresh(float * vertexbuffer, unsigned int * indexbuffer, int vertexCount, int indexCount)
+void DGeometryWrapper10::OnRefresh(float * vertexbuffer, unsigned int * indexbuffer, int vertexCount, int indexCount)
 {
 
 	void* pdata;
@@ -96,7 +44,7 @@ void DGeometryRes10::OnRefresh(float * vertexbuffer, unsigned int * indexbuffer,
 	m_indexBuffer->Unmap();
 }
 
-bool DGeometryRes10::OnInit(float * vertexbuffer, unsigned int * indexbuffer, int vertexCount, int indexCount)
+bool DGeometryWrapper10::OnInit(float * vertexbuffer, unsigned int * indexbuffer, int vertexCount, int indexCount)
 {
 	D3D10_BUFFER_DESC  vertexBufferDesc, indexBufferDesc;
 	D3D10_SUBRESOURCE_DATA vertexData, indexData;
@@ -132,7 +80,7 @@ bool DGeometryRes10::OnInit(float * vertexbuffer, unsigned int * indexbuffer, in
 	return true;
 }
 
-void DGeometryRes10::OnDraw(DGeometryTopology topology)
+void DGeometryWrapper10::OnDraw(DGeometryTopology topology)
 {
 	unsigned int stride;
 	unsigned int offset;

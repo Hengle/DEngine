@@ -3,12 +3,12 @@
 
 #include "DOpenGLCore.h"
 
-class DTextureResOpGL : public ITextureRes
+class DTextureWrapperOpGL : public ITextureWrapper
 {
 public:
-	DTextureResOpGL(WCHAR* filename, DWrapMode);
-	DTextureResOpGL(DTextureResOpGL*, DTextureResOpGL*, DTextureResOpGL*, DTextureResOpGL*, DTextureResOpGL*, DTextureResOpGL*);
-	~DTextureResOpGL();
+	DTextureWrapperOpGL(WCHAR* filename, DWrapMode);
+	DTextureWrapperOpGL(DTextureWrapperOpGL*, DTextureWrapperOpGL*, DTextureWrapperOpGL*, DTextureWrapperOpGL*, DTextureWrapperOpGL*, DTextureWrapperOpGL*);
+	~DTextureWrapperOpGL();
 	virtual void Apply(UINT, int);
 	virtual void ApplyWrapMode(UINT, DWrapMode);
 	virtual void Release();
@@ -27,11 +27,11 @@ private:
 	bool m_isSuccess;
 };
 
-class DRenderTextureViewResOpGL : public IRenderTextureViewRes
+class DRenderTextureViewWrapperOpGL : public IRenderTextureViewWrapper
 {
 public:
-	DRenderTextureViewResOpGL(float, float, DWrapMode wrapMode);
-	~DRenderTextureViewResOpGL();
+	DRenderTextureViewWrapperOpGL(float, float, DWrapMode wrapMode);
+	~DRenderTextureViewWrapperOpGL();
 	virtual void Apply(UINT, int);
 	virtual void ApplyWrapMode(UINT, DWrapMode);
 	virtual void Release();

@@ -22,20 +22,20 @@ public:
 	/*提交渲染结果*/
 	virtual void Present();
 	/*清除缓冲区*/
-	virtual void Clear(bool clearDepth /*清除深度缓冲*/, bool clearStencil /*清除模板缓冲*/, bool /*清除颜色缓冲*/, DColor& clearColor /*颜色缓冲区清除颜色*/, IRenderTextureViewRes* = NULL);
+	virtual void Clear(bool clearDepth /*清除深度缓冲*/, bool clearStencil /*清除模板缓冲*/, bool /*清除颜色缓冲*/, DColor& clearColor /*颜色缓冲区清除颜色*/, IRenderTextureViewWrapper* = NULL);
 	/*设置渲染目标*/
-	virtual void SetRenderTarget(IRenderTextureViewRes* = NULL);
+	virtual void SetRenderTarget(IRenderTextureViewWrapper* = NULL);
 	/*设置视口区域*/
 	virtual void SetViewPort(float, float, float, float);
 	/*结束渲染*/
-	virtual void EndSetRenderTarget(IRenderTextureViewRes* = NULL);
-	/*创建几何体资源*/
-	virtual DGeometryRes* CreateGeometryRes(int vertexUsage, bool dynamic);
-	/*创建贴图资源*/
-	virtual ITextureRes* CreateTextureRes(WCHAR* path);
-	virtual ITextureRes* CreateCubeMapRes(ITextureRes*, ITextureRes*, ITextureRes*, ITextureRes*, ITextureRes*, ITextureRes*);
-	/*创建RenderTexture资源*/
-	virtual IRenderTextureViewRes* CreateRenderTextureRes(float width, float height);
+	virtual void EndSetRenderTarget(IRenderTextureViewWrapper* = NULL);
+	/*创建几何体包装器*/
+	virtual DGeometryWrapper* CreateGeometryWrapper(int vertexUsage, bool dynamic);
+	/*创建贴图包装器*/
+	virtual ITextureWrapper* CreateTextureWrapper(WCHAR* path);
+	virtual ITextureWrapper* CreateCubeMapWrapper(ITextureWrapper*, ITextureWrapper*, ITextureWrapper*, ITextureWrapper*, ITextureWrapper*, ITextureWrapper*);
+	/*创建RenderTexture包装器*/
+	virtual IRenderTextureViewWrapper* CreateRenderTextureWrapper(float width, float height);
 
 	/*创建shader程序*/
 	virtual DShaderPass* CreateShaderPass();

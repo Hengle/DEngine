@@ -5,28 +5,6 @@
 #include <stack>
 #include <vector>
 
-//class DGLDrawerProcess
-//{
-//public:
-//	DGLDrawerProcess();
-//	void Release();
-//	void ProcessVector(float, float, float);
-//	void ProcessColor(DColor*);
-//	void PostProcess(DMatrix4x4&, DMatrix4x4&);
-//	
-//private:
-//	void ProcessDraw(DMatrix4x4&, DMatrix4x4&);
-//
-//private:
-//	float* m_vertices;
-//	unsigned long* m_indices;
-//	//DGeometryBufferDesc m_geoDesc;
-//	DColor m_currentColor;
-//	DGeometryRes* m_geometryRes;
-//	unsigned long m_currentIndex, m_preIndex;
-//	bool m_hasDrawCommand;
-//};
-
 class DGLDrawer
 {
 public:
@@ -60,7 +38,7 @@ private:
 	std::stack<DMatrix4x4> m_MVMatrixStack;
 	/*投影矩阵栈*/
 	std::stack<DMatrix4x4> m_PMatrixStack;
-	DGeometryRes* m_geometryRes;
+	DGeometryWrapper* m_geometry;
 	std::vector<float> m_vertices;
 	std::vector<unsigned int> m_indecies;
 	int m_vertexCount;

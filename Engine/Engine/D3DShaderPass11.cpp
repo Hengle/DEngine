@@ -1,6 +1,5 @@
 ﻿#ifdef _DGAPI_D3D11
 #include "D3DShaderPass11.h"
-#include "DTextureRes11.h"
 #include "DSystem.h"
 #include "D3D11Core.h"
 #include <d3dcompiler.h>

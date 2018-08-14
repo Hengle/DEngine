@@ -4,14 +4,14 @@
 #include "D3D10Core.h"
 
 /*
-	纹理资源Direct3D10底层
+	纹理包装器Direct3D10底层
 */
-class DTextureRes10 : public ITextureRes
+class DTextureWrapper10 : public ITextureWrapper
 {
 public:
-	DTextureRes10(ID3D10Device* device, WCHAR* filename);
-	DTextureRes10(ID3D10Device* device, DTextureRes10*, DTextureRes10*, DTextureRes10*, DTextureRes10*, DTextureRes10*, DTextureRes10*);
-	~DTextureRes10();
+	DTextureWrapper10(ID3D10Device* device, WCHAR* filename);
+	DTextureWrapper10(ID3D10Device* device, DTextureWrapper10*, DTextureWrapper10*, DTextureWrapper10*, DTextureWrapper10*, DTextureWrapper10*, DTextureWrapper10*);
+	~DTextureWrapper10();
 	virtual void Apply(UINT, int);
 	virtual void ApplyWrapMode(UINT, DWrapMode);
 	virtual void Release();
@@ -25,11 +25,11 @@ private:
 /*
 	RenderTexture Direct3D10底层
 */
-class DRenderTextureViewRes10 : public IRenderTextureViewRes
+class DRenderTextureViewWrapper10 : public IRenderTextureViewWrapper
 {
 public:
-	DRenderTextureViewRes10(ID3D10Device* device, float, float);
-	~DRenderTextureViewRes10();
+	DRenderTextureViewWrapper10(ID3D10Device* device, float, float);
+	~DRenderTextureViewWrapper10();
 	virtual void Apply(UINT, int);
 	virtual void ApplyWrapMode(UINT, DWrapMode);
 	virtual void Release();

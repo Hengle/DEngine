@@ -1,5 +1,5 @@
 ﻿#pragma once
-
+#include "DEngineDefine.h"
 
 
 class DInput
@@ -12,7 +12,7 @@ public:
 	static void GetDeltaMouseMove(int&, int&);
 	static bool IsMousePress(int button);
 	static bool IsMouseDown(int button);
-	static bool IsKeyPress(int keycode);
-	static bool IsKeyDown(int keycode);
+	static bool IsKeyPress(DKey keycode);
+	static bool IsKeyDown(DKey keycode);
 };
 

@@ -4,14 +4,14 @@
 #include "D3D9Core.h"
 
 /*
-	纹理资源Direct3D9底层
+	纹理包装器Direct3D9底层
 */
-class DTextureRes9 : public ITextureRes
+class DTextureWrapper9 : public ITextureWrapper
 {
 public:
-	DTextureRes9(LPDIRECT3DDEVICE9 device, WCHAR* filename);
-	DTextureRes9(LPDIRECT3DDEVICE9 device);
-	~DTextureRes9();
+	DTextureWrapper9(LPDIRECT3DDEVICE9 device, WCHAR* filename);
+	DTextureWrapper9(LPDIRECT3DDEVICE9 device);
+	~DTextureWrapper9();
 	virtual void Apply(UINT, int);
 	virtual void ApplyWrapMode(UINT, DWrapMode);
 	virtual void Release();
@@ -22,10 +22,10 @@ private:
 	LPDIRECT3DDEVICE9 m_device;
 };
 
-class DCubeTextureRes9 : public ITextureRes
+class DCubeTextureWrapper9 : public ITextureWrapper
 {
 public:
-	DCubeTextureRes9(LPDIRECT3DDEVICE9 device, DTextureRes9* right, DTextureRes9* left, DTextureRes9* top, DTextureRes9* bottom, DTextureRes9* front, DTextureRes9* back);
+	DCubeTextureWrapper9(LPDIRECT3DDEVICE9 device, DTextureWrapper9* right, DTextureWrapper9* left, DTextureWrapper9* top, DTextureWrapper9* bottom, DTextureWrapper9* front, DTextureWrapper9* back);
 
 private:
 	bool m_isSuccess;
@@ -35,11 +35,11 @@ private:
 /*
 	RenderTexture Direct3D9底层
 */
-class DRenderTextureViewRes9 : public IRenderTextureViewRes
+class DRenderTextureViewWrapper9 : public IRenderTextureViewWrapper
 {
 public:
-	DRenderTextureViewRes9(LPDIRECT3DDEVICE9 device, float, float);
-	~DRenderTextureViewRes9();
+	DRenderTextureViewWrapper9(LPDIRECT3DDEVICE9 device, float, float);
+	~DRenderTextureViewWrapper9();
 	virtual void Apply(UINT, int);
 	virtual void ApplyWrapMode(UINT, DWrapMode);
 	virtual void Release();

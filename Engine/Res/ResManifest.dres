@@ -134,6 +134,11 @@
 		#PATH ../Res/3.jpg
 	#RES_END
 
+	#RES_BEGIN TEXTURE2D 2016
+		#PATH ../Res/water7b.jpg
+		#WRAPMODE REPEAT
+	#RES_END
+
 	#RES_BEGIN MATERIAL 3000
 		#PATH ../Res/decal.m
 	#RES_END

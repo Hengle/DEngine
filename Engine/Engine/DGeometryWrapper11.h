@@ -5,13 +5,13 @@
 #include "D3DCore.h"
 
 /*
-	Geometry资源Direct3D11底层
+	Geometry包装器Direct3D11底层
 */
-class DGeometryRes11 : public DGeometryRes
+class DGeometryWrapper11 : public DGeometryWrapper
 {
 public:
-	DGeometryRes11(ID3D11Device* device, ID3D11DeviceContext* deviceContext, int vertexUsage /*顶点用法*/, bool dynamic);
-	~DGeometryRes11();
+	DGeometryWrapper11(ID3D11Device* device, ID3D11DeviceContext* deviceContext, int vertexUsage /*顶点用法*/, bool dynamic);
+	~DGeometryWrapper11();
 	virtual void Release();
 
 protected:

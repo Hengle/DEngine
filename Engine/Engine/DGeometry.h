@@ -51,7 +51,7 @@ private:
 	bool m_vertexChanged;
 	DGeometryBufferDesc m_geometryDesc;
 	DGeometryTopology m_topology;
-	std::map<int, DGeometryRes*> m_geometryReses;
+	std::map<int, DGeometryWrapper*> m_geometryWrappers;
 	bool m_dynamic;
 	DVector3 m_centerVertex;
 	DVector3 m_rangeSize;

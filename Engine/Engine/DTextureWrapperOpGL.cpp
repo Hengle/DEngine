@@ -1,6 +1,6 @@
 ﻿#ifdef _DGAPI_OPENGL
 
-#include "DTextureResOpGL.h"
+#include "DTextureWrapperOpGL.h"
 #include "GLFW/glfw3native.h"
 #include <comdef.h>
 
@@ -13,7 +13,7 @@ struct TargaHeader
 	unsigned char data2;
 };
 
-DTextureResOpGL::DTextureResOpGL(WCHAR * filename, DWrapMode wrapMode)
+DTextureWrapperOpGL::DTextureWrapperOpGL(WCHAR * filename, DWrapMode wrapMode)
 {
 	m_isSuccess = false;
 
@@ -42,7 +42,7 @@ DTextureResOpGL::DTextureResOpGL(WCHAR * filename, DWrapMode wrapMode)
 	m_isSuccess = true;
 }
 
-DTextureResOpGL::DTextureResOpGL(DTextureResOpGL * right, DTextureResOpGL * left, DTextureResOpGL * top, DTextureResOpGL * bottom, DTextureResOpGL * front, DTextureResOpGL* back)
+DTextureWrapperOpGL::DTextureWrapperOpGL(DTextureWrapperOpGL * right, DTextureWrapperOpGL * left, DTextureWrapperOpGL * top, DTextureWrapperOpGL * bottom, DTextureWrapperOpGL * front, DTextureWrapperOpGL* back)
 {
 	m_isSuccess = false;
 
@@ -87,11 +87,11 @@ DTextureResOpGL::DTextureResOpGL(DTextureResOpGL * right, DTextureResOpGL * left
 	m_isSuccess = true;
 }
 
-DTextureResOpGL::~DTextureResOpGL()
+DTextureWrapperOpGL::~DTextureWrapperOpGL()
 {
 }
 
-void DTextureResOpGL::Apply(UINT location, int index)
+void DTextureWrapperOpGL::Apply(UINT location, int index)
 {
 	if (!m_isSuccess)
 		return;
@@ -106,7 +106,7 @@ void DTextureResOpGL::Apply(UINT location, int index)
 	}
 }
 
-void DTextureResOpGL::ApplyWrapMode(UINT location, DWrapMode wrapMode)
+void DTextureWrapperOpGL::ApplyWrapMode(UINT location, DWrapMode wrapMode)
 {
 	if (!m_isSuccess)
 		return;
@@ -121,7 +121,7 @@ void DTextureResOpGL::ApplyWrapMode(UINT location, DWrapMode wrapMode)
 	glTexParameteri(m_textureType, GL_TEXTURE_WRAP_T, GetWrapMode(m_wrapMode));
 }
 
-void DTextureResOpGL::Release()
+void DTextureWrapperOpGL::Release()
 {
 	if (m_isSuccess)
 		glDeleteTextures(1, &m_textureId);
@@ -132,7 +132,7 @@ void DTextureResOpGL::Release()
 	}
 }
 
-unsigned char* DTextureResOpGL::LoadBMP(WCHAR * path, unsigned int& width, unsigned int& height)
+unsigned char* DTextureWrapperOpGL::LoadBMP(WCHAR * path, unsigned int& width, unsigned int& height)
 {
 	// Data read from the header of the BMP file
 	unsigned char header[54]; // Each BMP file begins by a 54-bytes header
@@ -184,7 +184,7 @@ unsigned char* DTextureResOpGL::LoadBMP(WCHAR * path, unsigned int& width, unsig
 	return data;
 }
 
-unsigned char* DTextureResOpGL::LoadTGA(WCHAR * path, unsigned int& width, unsigned int& height)
+unsigned char* DTextureWrapperOpGL::LoadTGA(WCHAR * path, unsigned int& width, unsigned int& height)
 {
 	int error, bpp, imageSize;
 	FILE* filePtr;
@@ -258,7 +258,7 @@ unsigned char* DTextureResOpGL::LoadTGA(WCHAR * path, unsigned int& width, unsig
 	return targaImage;
 }
 
-GLint DTextureResOpGL::GetWrapMode(DWrapMode wrapMode)
+GLint DTextureWrapperOpGL::GetWrapMode(DWrapMode wrapMode)
 {
 	if (wrapMode == DWrapMode_Clamp)
 		return GL_CLAMP;
@@ -267,7 +267,7 @@ GLint DTextureResOpGL::GetWrapMode(DWrapMode wrapMode)
 	return GL_CLAMP;
 }
 
-DRenderTextureViewResOpGL::DRenderTextureViewResOpGL(float width, float height, DWrapMode wrapMode)
+DRenderTextureViewWrapperOpGL::DRenderTextureViewWrapperOpGL(float width, float height, DWrapMode wrapMode)
 {
 	m_isSuccess = false;
 	m_wrapMode = wrapMode;
@@ -304,11 +304,11 @@ DRenderTextureViewResOpGL::DRenderTextureViewResOpGL(float width, float height, 
 	m_isSuccess = true;
 }
 
-DRenderTextureViewResOpGL::~DRenderTextureViewResOpGL()
+DRenderTextureViewWrapperOpGL::~DRenderTextureViewWrapperOpGL()
 {
 }
 
-void DRenderTextureViewResOpGL::Apply(UINT location, int index)
+void DRenderTextureViewWrapperOpGL::Apply(UINT location, int index)
 {
 	if (!m_isSuccess)
 		return;
@@ -323,7 +323,7 @@ void DRenderTextureViewResOpGL::Apply(UINT location, int index)
 	}
 }
 
-void DRenderTextureViewResOpGL::ApplyWrapMode(UINT, DWrapMode wrapMode)
+void DRenderTextureViewWrapperOpGL::ApplyWrapMode(UINT, DWrapMode wrapMode)
 {
 	if (!m_isSuccess)
 		return;
@@ -338,35 +338,35 @@ void DRenderTextureViewResOpGL::ApplyWrapMode(UINT, DWrapMode wrapMode)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GetWrapMode(m_wrapMode));
 }
 
-void DRenderTextureViewResOpGL::Release()
+void DRenderTextureViewWrapperOpGL::Release()
 {
 	if (m_isSuccess)
 		glDeleteTextures(1, &m_frameBufferId);
 	glDeleteFramebuffers(1, &m_frameBufferId);
 }
 
-IRenderBuffer * DRenderTextureViewResOpGL::GetColorBuffer()
+IRenderBuffer * DRenderTextureViewWrapperOpGL::GetColorBuffer()
 {
 	return nullptr;
 }
 
-IRenderBuffer * DRenderTextureViewResOpGL::GetDepthBuffer()
+IRenderBuffer * DRenderTextureViewWrapperOpGL::GetDepthBuffer()
 {
 	return nullptr;
 }
 
-void DRenderTextureViewResOpGL::BindFBO()
+void DRenderTextureViewWrapperOpGL::BindFBO()
 {
 	if(m_isSuccess)
 		glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferId);
 }
 
-void DRenderTextureViewResOpGL::UnBindFBO()
+void DRenderTextureViewWrapperOpGL::UnBindFBO()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-GLint DRenderTextureViewResOpGL::GetWrapMode(DWrapMode wrapMode)
+GLint DRenderTextureViewWrapperOpGL::GetWrapMode(DWrapMode wrapMode)
 {
 	if (wrapMode == DWrapMode_Clamp)
 		return GL_CLAMP;

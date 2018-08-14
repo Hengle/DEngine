@@ -218,7 +218,7 @@ void DCamera::SetViewPort(DRect & viewPort)
 void DCamera::SetSortOrder(int sortOrder)
 {
 	m_sortOrder = sortOrder;
-	throw "TODO 暂未实现重新排序";
+	/*throw "TODO 暂未实现重新排序";
 	if (m_node->pre != NULL && m_node->pre->camera->GetSortOrder() > m_sortOrder)
 	{
 
@@ -226,7 +226,8 @@ void DCamera::SetSortOrder(int sortOrder)
 	else if(m_node->next != NULL && m_node->next->camera->GetSortOrder() < m_sortOrder)
 	{
 
-	}
+	}*/
+	DSystem::GetSceneMgr()->GetCurrentScene()->InsertCameraNode(m_node);
 }
 
 void DCamera::ClearSkyBox()
@@ -479,8 +480,11 @@ void DCamera::GetCurrentCamera(DCamera ** cam)
 
 bool DCamera::OnInit()
 {
-	DCameraNode* camNode = DSystem::GetSceneMgr()->GetCurrentScene()->GetCameraNode();
 	m_node = new DCameraNode();
+	m_node->camera = this;
+	DSystem::GetSceneMgr()->GetCurrentScene()->InsertCameraNode(m_node);
+	//DCameraNode* camNode = DSystem::GetSceneMgr()->GetCurrentScene()->GetCameraNode();
+	/*m_node = new DCameraNode();
 	m_node->camera = this;
 	if (camNode == NULL)
 		camNode = m_node;
@@ -513,8 +517,8 @@ bool DCamera::OnInit()
 				node = node->next;
 			}
 		}
-	}
-	DSystem::GetSceneMgr()->GetCurrentScene()->SetCameraNode(camNode);
+	}*/
+	//DSystem::GetSceneMgr()->GetCurrentScene()->SetCameraNode(camNode);
 
 	return true;
 }
@@ -542,11 +546,7 @@ void DCamera::OnDestroy()
 
 	if (m_node != NULL)
 	{
-		if (m_node->pre == NULL)
-		{
-			DSystem::GetSceneMgr()->GetCurrentScene()->SetCameraNode(m_node->next);
-		}
-		else
+		if (m_node->pre != NULL)
 		{
 			m_node->pre->next = m_node->next;
 		}
@@ -615,33 +615,33 @@ void DCamera::RenderScreenTexture()
 	DGraphics::ClearGlobalRenderShader();
 }
 
-void DCamera::ForwardMoveCameraNode()
-{
-	if (m_node->pre != NULL && m_node->pre->camera->GetSortOrder() > m_sortOrder)
-	{
-		DCameraNode* pre = m_node->pre;
-		pre->next = m_node->next;
-		m_node->pre = pre->pre;
-		pre->pre = m_node;
-		ForwardMoveCameraNode();
-	}
-	else if (m_node->pre == NULL)
-	{
-		DSystem::GetSceneMgr()->GetCurrentScene()->SetCameraNode(m_node);
-	}
-}
-
-void DCamera::BackwardMoveCameraNode()
-{
-	if (m_node->next != NULL && m_node->next->camera->GetSortOrder() < m_sortOrder)
-	{
-		DCameraNode* next = m_node->next;
-		next->pre = m_node->pre;
-		m_node->next = next->next;
-		next->next = m_node;
-		BackwardMoveCameraNode();
-	}
-}
+//void DCamera::ForwardMoveCameraNode()
+//{
+//	if (m_node->pre != NULL && m_node->pre->camera->GetSortOrder() > m_sortOrder)
+//	{
+//		DCameraNode* pre = m_node->pre;
+//		pre->next = m_node->next;
+//		m_node->pre = pre->pre;
+//		pre->pre = m_node;
+//		ForwardMoveCameraNode();
+//	}
+//	else if (m_node->pre == NULL)
+//	{
+//		DSystem::GetSceneMgr()->GetCurrentScene()->SetCameraNode(m_node);
+//	}
+//}
+//
+//void DCamera::BackwardMoveCameraNode()
+//{
+//	if (m_node->next != NULL && m_node->next->camera->GetSortOrder() < m_sortOrder)
+//	{
+//		DCameraNode* next = m_node->next;
+//		next->pre = m_node->pre;
+//		m_node->next = next->next;
+//		next->next = m_node;
+//		BackwardMoveCameraNode();
+//	}
+//}
 
 void DCamera::BeginRender(DRenderTexture* renderTexture, bool clearDepth, bool clearColor, DColor& color)
 {

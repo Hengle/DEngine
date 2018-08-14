@@ -147,8 +147,8 @@ private:
 	void RenderDepthTexture();
 	/*渲染屏幕图*/
 	void RenderScreenTexture();
-	void ForwardMoveCameraNode();
-	void BackwardMoveCameraNode();
+	//void ForwardMoveCameraNode();
+	//void BackwardMoveCameraNode();
 	void BeginRender(DRenderTexture*, bool, bool, DColor&);
 	void EndRender(DRenderTexture*);
 	void RefreshCameraDirParam();

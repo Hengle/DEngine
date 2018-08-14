@@ -13,6 +13,7 @@ DScene::DScene(SCENEID sceneId, char * sceneName)
 	//m_light = 0;
 	//m_transforms = 0;
 	m_rootTransform = 0;
+	m_cameraNodeHead = 0;
 }
 
 DScene::~DScene()
@@ -43,10 +44,11 @@ void DScene::Render()
 		m_camera->Render();
 		m_camera->RenderFilter();
 	}*/
-	DCameraNode* node = m_cameraNode;
+	DCameraNode* node = m_cameraNodeHead->next;
 	while (node != NULL)
 	{
-		node->camera->Render();
+		if (node->camera != NULL)
+			node->camera->Render();
 		node = node->next;
 	}
 	/*if (m_camera != NULL)
@@ -189,6 +191,11 @@ void DScene::UnLoad()
 		delete m_rootTransform;
 		m_rootTransform = NULL;
 	}
+	if (m_cameraNodeHead != NULL)
+	{
+		delete m_cameraNodeHead;
+		m_cameraNodeHead = 0;
+	}
 	//if (m_camera != NULL)
 	//{
 	//	m_camera->Destroy();
@@ -249,14 +256,64 @@ void DScene::AddSceneObject(DSceneObject * sceneObj)
 	//m_transforms->push_back(sceneObj->GetTransform());
 }
 
-DCameraNode * DScene::GetCameraNode()
-{
-	return m_cameraNode;
-}
+//DCameraNode * DScene::GetCameraNode()
+//{
+//	return m_cameraNode;
+//}
+//
+//void DScene::SetCameraNode(DCameraNode * cameraNode)
+//{
+//	m_cameraNode = cameraNode;
+//}
 
-void DScene::SetCameraNode(DCameraNode * cameraNode)
+void DScene::InsertCameraNode(DCameraNode * node)
 {
-	m_cameraNode = cameraNode;
+	if (node != NULL)
+	{
+		if (node->pre != NULL)
+		{
+			node->pre->next = node->next;
+		}
+		node->pre = NULL;
+		node->next = NULL;
+		
+		if (m_cameraNodeHead == NULL)
+			m_cameraNodeHead = new DCameraNode();
+
+		if (m_cameraNodeHead->next == NULL)
+			m_cameraNodeHead->next = node;
+		else
+		{
+			if (m_cameraNodeHead->next->camera->GetSortOrder() >= node->camera->GetSortOrder())
+			{
+				node->next = m_cameraNodeHead->next;
+				m_cameraNodeHead->next->pre = node;
+				m_cameraNodeHead->next = node;
+			}
+			else
+			{
+				DCameraNode* n = m_cameraNodeHead->next;
+				while (n != NULL && n->camera->GetSortOrder() < node->camera->GetSortOrder())
+				{
+					if (n->next == NULL)
+					{
+						n->next = node;
+						node->pre = n;
+						break;
+					}
+					if (n->next->camera->GetSortOrder() >= node->camera->GetSortOrder())
+					{
+						node->next = n->next;
+						n->next->pre = node;
+						n->next = node;
+						node->pre = n;
+						break;
+					}
+					n = n->next;
+				}
+			}
+		}
+	}
 }
 
 DLightNode * DScene::GetLightNode()

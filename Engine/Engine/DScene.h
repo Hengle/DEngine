@@ -25,8 +25,9 @@ public:
 	virtual void Destroy();
 
 	void AddSceneObject(DSceneObject*);
-	DCameraNode* GetCameraNode();
-	void SetCameraNode(DCameraNode*);
+	//DCameraNode* GetCameraNode();
+	//void SetCameraNode(DCameraNode*);
+	void InsertCameraNode(DCameraNode*);
 	DLightNode* GetLightNode();
 	void SetLightNode(DLightNode*);
 
@@ -57,7 +58,7 @@ protected:
 protected:
 	//std::vector<DTransform*>* m_transforms;
 	DTransform* m_rootTransform;
-	DCameraNode* m_cameraNode;
+	DCameraNode* m_cameraNodeHead;
 	DLightNode* m_lightNode;
 	//DCamera* m_camera;
 	//DLight* m_light;

@@ -71,6 +71,8 @@ public:
 	void Release();
 
 private:
+	void SetChildChange(DTransform*);
+
 	void SetLossyScale(float, float, float);
 
 	void RefreshLocalToWorldMatrix();
@@ -116,5 +118,6 @@ private:
 
 	bool m_isRoot;
 	bool m_isAreaChanged;
+	bool m_isParentChanged;
 };
 

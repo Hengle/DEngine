@@ -6,8 +6,8 @@
 
 enum TestLayer
 {
-	Default = 1U,
-	Water = 2U,
+	TL_Default = 1U,
+	TL_Water = 2U,
 };
 
 WaterScene::WaterScene(SCENEID sceneId, char * sceneName) : DScene(sceneId, sceneName)
@@ -28,14 +28,30 @@ void WaterScene::OnLoad()
 {
 	m_camera = new DCamera();
 	m_camera->Create();
+	m_camera->SetLayerMask(TL_Default | TL_Water);
+
+	m_waterCamera = new DCamera();
+	m_waterCamera->Create();
+	m_waterCamera->SetLayerMask(TL_Default);
+	m_water = DRenderTexture::Create(1024, 1024);
+	m_waterCamera->SetRenderTexture(m_water);
 	
-	m_filter = new WaterFilter();
-	m_camera->SetFilter(m_filter);
+	/*m_filter = new WaterFilter();
+	m_camera->SetFilter(m_filter);*/
 
 	DTransform* transform = m_camera->GetTransform();
+	DTransform* child = m_waterCamera->GetTransform();
+	child->SetParent(transform);
+	child->SetLocalPosition(0, 0, 0);
+	child->SetLocalEuler(0, 0, 0);
 
 	transform->SetPosition(-2.418302f, 9.734123f, -13.54027);
 	transform->SetEuler(35.065f, 19.253f, 0.0f);
+
+	/*DVector3 pos, euler;
+	child->GetPosition(pos);
+	child->GetEuler(euler);*/
+
 
 	DGeometry* geo = DRes::Load<DGeometry>(DEFAULT_GROUP, 4002);
 	DMaterial* mat = DRes::Load<DMaterial>(DEFAULT_GROUP, 3014);
@@ -56,6 +72,7 @@ void WaterScene::OnLoad()
 	mat = DRes::Load<DMaterial>(DEFAULT_GROUP, 3016);
 
 	DDisplayObject* waterObj = new DDisplayObject(geo, mat);
+	waterObj->SetLayer(TL_Water);
 	waterObj->Create();
 
 
@@ -67,11 +84,17 @@ void WaterScene::OnLoad()
 
 void WaterScene::OnUnLoad()
 {
-	if (m_filter != NULL)
+	/*if (m_filter != NULL)
 	{
 		m_filter->Release();
 		delete m_filter;
 		m_filter = 0;
+	}*/
+	if (m_water != NULL)
+	{
+		m_water->Destroy();
+		delete m_water;
+		m_water = 0;
 	}
 
 	DRes::UnLoadGroup(DEFAULT_GROUP);
@@ -79,6 +102,8 @@ void WaterScene::OnUnLoad()
 
 void WaterScene::OnUpdate()
 {
+	DShader::SetGlobalTexture("g_grabTexture", m_water);
+
 	if (DInput::IsMousePress(0) && !DGUI::IsGUIActive())
 	{
 		int dtx, dty;

@@ -37,7 +37,7 @@ DTransform::DTransform()
 	m_isRoot = false;
 	m_isAreaChanged = false;
 
-	
+	m_isParentChanged = false;
 }
 
 DTransform::DTransform(bool root) : DTransform()
@@ -68,6 +68,7 @@ void DTransform::SetPosition(float x, float y, float z)
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
 	m_isAreaChanged = true;
+	SetChildChange(this);
 }
 
 void DTransform::SetPosition(DVector3 position)
@@ -82,6 +83,7 @@ void DTransform::SetPosition(DVector3 position)
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
 	m_isAreaChanged = true;
+	SetChildChange(this);
 }
 
 void DTransform::SetLocalPosition(float x, float y, float z)
@@ -98,6 +100,7 @@ void DTransform::SetLocalPosition(float x, float y, float z)
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
 	m_isAreaChanged = true;
+	SetChildChange(this);
 }
 
 void DTransform::SetLocalPosition(DVector3 localPosition)
@@ -112,6 +115,7 @@ void DTransform::SetLocalPosition(DVector3 localPosition)
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
 	m_isAreaChanged = true;
+	SetChildChange(this);
 }
 
 void DTransform::SetRotation(float x, float y, float z, float w)
@@ -131,6 +135,7 @@ void DTransform::SetRotation(float x, float y, float z, float w)
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
 	m_isAreaChanged = true;
+	SetChildChange(this);
 }
 
 void DTransform::SetRotation(DQuaternion rotation)
@@ -147,6 +152,7 @@ void DTransform::SetRotation(DQuaternion rotation)
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
 	m_isAreaChanged = true;
+	SetChildChange(this);
 }
 
 void DTransform::SetLocalRotation(float x, float y, float z, float w)
@@ -166,6 +172,7 @@ void DTransform::SetLocalRotation(float x, float y, float z, float w)
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
 	m_isAreaChanged = true;
+	SetChildChange(this);
 }
 
 void DTransform::SetLocalRotation(DQuaternion localRotation)
@@ -182,6 +189,7 @@ void DTransform::SetLocalRotation(DQuaternion localRotation)
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
 	m_isAreaChanged = true;
+	SetChildChange(this);
 }
 
 void DTransform::SetEuler(float pitch, float yaw, float roll)
@@ -200,6 +208,7 @@ void DTransform::SetEuler(float pitch, float yaw, float roll)
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
 	m_isAreaChanged = true;
+	SetChildChange(this);
 }
 
 void DTransform::SetEuler(DVector3 euler)
@@ -216,6 +225,7 @@ void DTransform::SetEuler(DVector3 euler)
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
 	m_isAreaChanged = true;
+	SetChildChange(this);
 }
 
 void DTransform::SetLocalEuler(float pitch, float yaw, float roll)
@@ -234,6 +244,7 @@ void DTransform::SetLocalEuler(float pitch, float yaw, float roll)
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
 	m_isAreaChanged = true;
+	SetChildChange(this);
 }
 
 void DTransform::SetLocalEuler(DVector3 localEuler)
@@ -250,6 +261,7 @@ void DTransform::SetLocalEuler(DVector3 localEuler)
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
 	m_isAreaChanged = true;
+	SetChildChange(this);
 }
 
 void DTransform::SetLocalScale(float x, float y, float z)
@@ -264,6 +276,7 @@ void DTransform::SetLocalScale(float x, float y, float z)
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
 	m_isAreaChanged = true;
+	SetChildChange(this);
 }
 
 void DTransform::SetLocalScale(DVector3 localScale)
@@ -276,11 +289,16 @@ void DTransform::SetLocalScale(DVector3 localScale)
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
 	m_isAreaChanged = true;
+	SetChildChange(this);
 }
 
 void DTransform::GetPosition(DVector3 &position)
 {
-	if (m_positionChangedMark == SpaceDefine_Local)
+	if(m_isParentChanged)
+	{
+		RefreshLocalToWorldMatrix();
+	}
+	else if (m_positionChangedMark == SpaceDefine_Local)
 	{
 		//更新坐标
 		RefreshPosition();
@@ -291,7 +309,11 @@ void DTransform::GetPosition(DVector3 &position)
 
 void DTransform::GetRotation(DQuaternion & rotation)
 {
-	if (m_rotationChangedMark == SpaceDefine_Local  /*上一次设置了局部四元数改变*/
+	if (m_isParentChanged)
+	{
+		RefreshLocalToWorldMatrix();
+	}
+	else if (m_rotationChangedMark == SpaceDefine_Local  /*上一次设置了局部四元数改变*/
 		|| m_eulerChangedMark != SpaceDefine_None  /*上一次设置了欧拉角改变*/ )
 	{
 		//更新坐标
@@ -303,7 +325,11 @@ void DTransform::GetRotation(DQuaternion & rotation)
 
 void DTransform::GetEuler(DVector3 & euler)
 {
-	if (m_eulerChangedMark == SpaceDefine_Local  /*上一次设置了局部欧拉角改变*/
+	if (m_isParentChanged)
+	{
+		RefreshLocalToWorldMatrix();
+	}
+	else if (m_eulerChangedMark == SpaceDefine_Local  /*上一次设置了局部欧拉角改变*/
 		|| m_rotationChangedMark != SpaceDefine_None  /*上一次设置了四元数改变*/)
 	{
 		RefreshRotation();
@@ -313,7 +339,11 @@ void DTransform::GetEuler(DVector3 & euler)
 
 void DTransform::GetLocalPosition(DVector3 & localPosition)
 {
-	if (m_positionChangedMark == SpaceDefine_World)
+	if (m_isParentChanged)
+	{
+		RefreshLocalToWorldMatrix();
+	}
+	else if (m_positionChangedMark == SpaceDefine_World)
 	{
 		RefreshPosition();
 	}
@@ -323,7 +353,11 @@ void DTransform::GetLocalPosition(DVector3 & localPosition)
 
 void DTransform::GetLocalRotation(DQuaternion & localRotation)
 {
-	if (m_rotationChangedMark == SpaceDefine_World  /*上一次设置了世界四元数改变*/
+	if (m_isParentChanged)
+	{
+		RefreshLocalToWorldMatrix();
+	}
+	else if (m_rotationChangedMark == SpaceDefine_World  /*上一次设置了世界四元数改变*/
 		|| m_eulerChangedMark != SpaceDefine_None  /*上一次设置了欧拉角改变*/)
 	{
 		RefreshRotation();
@@ -334,7 +368,11 @@ void DTransform::GetLocalRotation(DQuaternion & localRotation)
 
 void DTransform::GetLocalEuler(DVector3 & localEuler)
 {
-	if (m_eulerChangedMark == SpaceDefine_World  /*上一次设置了世界欧拉角改变*/
+	if (m_isParentChanged)
+	{
+		RefreshLocalToWorldMatrix();
+	}
+	else if (m_eulerChangedMark == SpaceDefine_World  /*上一次设置了世界欧拉角改变*/
 		|| m_rotationChangedMark != SpaceDefine_None  /*上一次设置了四元数改变*/)
 	{
 		RefreshRotation();
@@ -345,7 +383,11 @@ void DTransform::GetLocalEuler(DVector3 & localEuler)
 
 void DTransform::GetLocalScale(DVector3 & localScale)
 {
-	if (m_scaleChangedMark == SpaceDefine_World)
+	if (m_isParentChanged)
+	{
+		RefreshLocalToWorldMatrix();
+	}
+	else if (m_scaleChangedMark == SpaceDefine_World)
 	{
 		RefreshScale();
 	}
@@ -354,7 +396,11 @@ void DTransform::GetLocalScale(DVector3 & localScale)
 
 void DTransform::GetLossyScale(DVector3 & lossyScale)
 {
-	if (m_scaleChangedMark == SpaceDefine_Local)
+	if (m_isParentChanged)
+	{
+		RefreshLocalToWorldMatrix();
+	}
+	else if (m_scaleChangedMark == SpaceDefine_Local)
 	{
 		RefreshScale();
 	}
@@ -363,7 +409,7 @@ void DTransform::GetLossyScale(DVector3 & lossyScale)
 
 void DTransform::GetUp(DVector3 & up)
 {
-	if (m_isL2WMatrixChanged) { //方向向量仅取决于旋转，因此当发生旋转时更新矩阵的旋转部分
+	if (m_isL2WMatrixChanged || m_isParentChanged) { //方向向量仅取决于旋转，因此当发生旋转时更新矩阵的旋转部分
 		RefreshLocalToWorldMatrix();
 	}
 	up = m_up;
@@ -371,7 +417,7 @@ void DTransform::GetUp(DVector3 & up)
 
 void DTransform::GetForward(DVector3 & forward)
 {
-	if (m_isL2WMatrixChanged) { //方向向量仅取决于旋转，因此当发生旋转时更新矩阵的旋转部分
+	if (m_isL2WMatrixChanged || m_isParentChanged) { //方向向量仅取决于旋转，因此当发生旋转时更新矩阵的旋转部分
 		RefreshLocalToWorldMatrix();
 	}
 	forward = m_forward;
@@ -379,7 +425,7 @@ void DTransform::GetForward(DVector3 & forward)
 
 void DTransform::GetRight(DVector3 & right)
 {
-	if (m_isL2WMatrixChanged) { //方向向量仅取决于旋转，因此当发生旋转时更新矩阵的旋转部分
+	if (m_isL2WMatrixChanged || m_isParentChanged) { //方向向量仅取决于旋转，因此当发生旋转时更新矩阵的旋转部分
 		RefreshLocalToWorldMatrix();
 	}
 	right = m_right;
@@ -387,7 +433,7 @@ void DTransform::GetRight(DVector3 & right)
 
 void DTransform::GetLocalToWorld(DMatrix4x4 & localToWorld)
 {
-	if (m_isL2WMatrixChanged) {  //存在任何引起矩阵变化的元素都重新计算矩阵
+	if (m_isL2WMatrixChanged || m_isParentChanged) {  //存在任何引起矩阵变化的元素都重新计算矩阵
 		RefreshLocalToWorldMatrix();
 	}
 
@@ -396,7 +442,7 @@ void DTransform::GetLocalToWorld(DMatrix4x4 & localToWorld)
 
 void DTransform::GetWorldToLocal(DMatrix4x4 & worldToLocal)
 {
-	if (m_isW2LMatrixChanged)
+	if (m_isW2LMatrixChanged || m_isParentChanged)
 	{
 		RefreshWorldToLocalMatrix();
 	}
@@ -440,10 +486,6 @@ void DTransform::SetParent(DTransform * parent, bool useLocalInfo)
 	//父节点孩子数量+1
 	parent->m_childCount += 1;
 
-	RefreshPosition();
-	RefreshRotation();
-	RefreshScale();
-
 	//由于设置了父节点，导致矩阵发生变化
 	if (useLocalInfo) 
 	{
@@ -460,6 +502,12 @@ void DTransform::SetParent(DTransform * parent, bool useLocalInfo)
 		m_scaleChangedMark = SpaceDefine_World;
 		//m_lossyScale = m_localScale;
 	}
+
+	RefreshPosition();
+	RefreshRotation();
+	RefreshScale();
+	SetChildChange(this);
+
 	//m_isW2LMatrixChanged = true;
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
@@ -534,6 +582,17 @@ void DTransform::Release()
 	m_parent = NULL;
 }
 
+void DTransform::SetChildChange(DTransform* transform)
+{
+	DTransform* node = transform->m_firstChild;
+	while (node != NULL)
+	{
+		node->m_isParentChanged = true;
+		SetChildChange(node);
+		node = node->m_nextNeighbor;
+	}
+}
+
 void DTransform::SetLossyScale(float x, float y, float z)
 {
 	if (IS_FLOAT_EQUAL(m_lossyScale.x, x) && IS_FLOAT_EQUAL(m_lossyScale.y, y) && IS_FLOAT_EQUAL(m_lossyScale.z, z))
@@ -545,6 +604,8 @@ void DTransform::SetLossyScale(float x, float y, float z)
 	m_scaleChangedMark = SpaceDefine_World;
 	m_isW2LMatrixChanged = true;
 	m_isL2WMatrixChanged = true;
+
+	SetChildChange(this);
 }
 
 void DTransform::RefreshLocalToWorldMatrix()
@@ -632,6 +693,7 @@ void DTransform::RefreshLocalToWorldMatrix()
 	}
 
 	m_isL2WMatrixChanged = false;
+	m_isParentChanged = false;
 }
 
 void DTransform::RefreshWorldToLocalMatrix()
@@ -648,12 +710,12 @@ void DTransform::RefreshPosition()
 {
 	if (m_parent != NULL)
 	{
-		if (m_positionChangedMark == SpaceDefine_Local)
+		if (m_positionChangedMark == SpaceDefine_Local || m_isParentChanged)
 		{
 			//坐标更改来源为局部坐标，则根据父节点更新世界坐标
 			m_parent->TransformPointToWorld(m_localPosition, m_position);
 		}
-		else if(m_positionChangedMark == SpaceDefine_World)
+		else if(m_positionChangedMark == SpaceDefine_World || m_isParentChanged)
 		{
 			//坐标更改来源为世界坐标，则根据父节点更新局部坐标
 			m_parent->TransformPointToLocal(m_position, m_localPosition);
@@ -679,11 +741,11 @@ void DTransform::RefreshScale()
 	{
 		DVector3 pscale;
 		m_parent->GetLossyScale(pscale);
-		if (m_scaleChangedMark == SpaceDefine_Local)
+		if (m_scaleChangedMark == SpaceDefine_Local || m_isParentChanged)
 		{
 			m_lossyScale = DVector3(pscale.x*m_localScale.x, pscale.y*m_localScale.y, pscale.z*m_localScale.z);
 		}
-		else if(m_scaleChangedMark == SpaceDefine_World)
+		else if(m_scaleChangedMark == SpaceDefine_World || m_isParentChanged)
 		{
 			m_localScale = DVector3(m_lossyScale.x / pscale.x, m_lossyScale.y / pscale.y, m_lossyScale.z / pscale.z);
 		}
@@ -704,15 +766,15 @@ void DTransform::RefreshScale()
 
 void DTransform::RefreshRotation()
 {
-	if (m_rotationChangedMark != SpaceDefine_None)
+	if (m_rotationChangedMark != SpaceDefine_None || m_isParentChanged)
 		RefreshEuler();
-	if (m_eulerChangedMark != SpaceDefine_None)
+	if (m_eulerChangedMark != SpaceDefine_None || m_isParentChanged)
 		RefreshQuaterion();
 }
 
 void DTransform::RefreshEuler()
 {
-	if (m_rotationChangedMark == SpaceDefine_Local) //局部四元数导致局部欧拉角发生变化
+	if (m_rotationChangedMark == SpaceDefine_Local || m_isParentChanged) //局部四元数导致局部欧拉角发生变化
 	{
 		m_localRotation.EulerAngle(m_localEuler);
 		if (m_parent != NULL)
@@ -728,7 +790,7 @@ void DTransform::RefreshEuler()
 			m_rotation.EulerAngle(m_euler);
 		}
 	}
-	else if (m_rotationChangedMark == SpaceDefine_World) //世界四元数导致世界欧拉角发生变化
+	else if (m_rotationChangedMark == SpaceDefine_World || m_isParentChanged) //世界四元数导致世界欧拉角发生变化
 	{
 		m_rotation.EulerAngle(m_euler);
 		if (m_parent != NULL)
@@ -750,7 +812,7 @@ void DTransform::RefreshEuler()
 
 void DTransform::RefreshQuaterion()
 {
-	if (m_eulerChangedMark == SpaceDefine_Local)
+	if (m_eulerChangedMark == SpaceDefine_Local || m_isParentChanged)
 	{
 		DQuaternion::Euler(&m_localRotation, m_localEuler);
 		if (m_parent != NULL)
@@ -766,7 +828,7 @@ void DTransform::RefreshQuaterion()
 			m_rotation.EulerAngle(m_euler);
 		}
 	}
-	else if (m_eulerChangedMark == SpaceDefine_World)
+	else if (m_eulerChangedMark == SpaceDefine_World || m_isParentChanged)
 	{
 		DQuaternion::Euler(&m_rotation, m_euler);
 		if (m_parent != NULL)

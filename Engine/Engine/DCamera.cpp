@@ -590,6 +590,10 @@ void DCamera::RenderScreenTexture()
 	{
 		src = GetSourceTexture();
 	}
+	else
+	{
+		src = m_renderTexture;
+	}
 	bool clearDepth = m_clearFlags != DClearFlags_DontClear;
 	bool clearColor = m_clearFlags != DClearFlags_Depth && m_clearFlags != DClearFlags_DontClear;
 	BeginRender(src, clearDepth, clearColor, m_backgroundColor);
@@ -656,7 +660,7 @@ void DCamera::BeginRender(DRenderTexture* renderTexture, bool clearDepth, bool c
 		}
 		m_isProjectionChanged = false;
 	}
-	if (m_transform->IsMatrixWillChange())
+	//if (m_transform->IsMatrixWillChange())
 	{
 		DVector3 up, lookAt, position;
 		m_transform->GetForward(lookAt);

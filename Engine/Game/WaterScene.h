@@ -21,6 +21,7 @@ private:
 	DCamera* m_waterCamera;
 	DVector3 m_lookAtPoint;
 	float m_lookDistance;
+	DRenderTexture* m_water;
 
 	//WaterFilter* m_filter;
 };

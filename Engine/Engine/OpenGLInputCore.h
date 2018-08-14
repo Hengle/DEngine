@@ -17,10 +17,13 @@ public:
 	virtual void GetDeltaMouseMove(int&, int&);
 	virtual bool IsMousePress(int button);
 	virtual bool IsMouseDown(int button);
-	virtual bool IsKeyPress(int keycode);
-	virtual bool IsKeyDown(int keycode);
+	virtual bool IsKeyPress(DKey keycode);
+	virtual bool IsKeyDown(DKey keycode);
 
 	void Update();
+
+private:
+	void InitKeyCodes();
 
 private:
 	GLFWwindow* m_window;
@@ -28,6 +31,8 @@ private:
 
 	unsigned char m_keyboardDownState[256];
 	BYTE m_mouseBtnState[4];
+
+	unsigned int m_keyCodes[100];
 };
 
 #endif

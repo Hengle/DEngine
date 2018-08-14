@@ -18,10 +18,11 @@ public:
 	virtual void GetDeltaMouseMove(int&, int&);
 	virtual bool IsMousePress(int button);
 	virtual bool IsMouseDown(int button);
-	virtual bool IsKeyPress(int keycode);
-	virtual bool IsKeyDown(int keycode);
+	virtual bool IsKeyPress(DKey keycode);
+	virtual bool IsKeyDown(DKey keycode);
 
 private:
+	void InitKeyCodes();
 	bool ReadKeyboard();
 	bool ReadMouse(HWND);
 	void ProcessInput();
@@ -40,6 +41,8 @@ private:
 	int m_mouseX, m_mouseY;
 	int m_deltaMouseX, m_deltaMouseY;
 	HWND m_hwnd;
+
+	unsigned int m_keyCodes[100];
 };
 
 #endif

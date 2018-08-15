@@ -322,17 +322,21 @@ void DShader::ApplyParams(DShaderConstantTable * constantTable, int index)
 		if (sGlobalShaderConstants == nullptr)
 			sGlobalShaderConstants = new DShaderConstantTable();
 		//pass->ApplyParams(constantTable, sGlobalShaderConstants);
-		pass->Draw();
+		
 		int programCount = pass->GetShaderProgramCount();
 		int i;
 		DShaderProgram* program = 0;
 		
+		pass->Draw();
+
 		for (i = 0; i < programCount; i++)
 		{
 			program = pass->GetShaderProgram(i);
 			if (program != NULL)
 				ApplyShaderProgramParams(program, constantTable);
 		}
+
+		
 		
 	}
 }

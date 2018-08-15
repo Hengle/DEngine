@@ -219,8 +219,6 @@ ShaderBlock {
 
 					uniform vec4 g_engineCameraPos;
 
-					uniform float g_engineTime;
-
 					uniform float gloss;
 					uniform float specular;
 
@@ -237,7 +235,7 @@ ShaderBlock {
 					}
 
 					void main(){
-					    color = texture(shaderTexture, uv+vec2(g_engineTime*0.1,0.0));
+					    color = texture(shaderTexture, uv);
 					    //color = vec4(uv,0.0,1.0);
 
 					    float ndl = max(0.0, dot(worldNormal, -g_engineLightDir));

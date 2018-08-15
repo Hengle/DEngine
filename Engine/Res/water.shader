@@ -97,9 +97,17 @@ ShaderBlock {
 				{
 				    float4 position : POSITION;
 				    float2 uv  : TEXCOORD0;
+				    float2 proj : TEXCOORD1;
 				};
 
-				sampler shaderTexture;
+				sampler g_grabTexture;
+				sampler noise;
+				sampler g_engineShadowMap;
+
+				float speed;
+				float g_engineTime;
+				float power;
+				float2 size;
 
 				VS_OUTPUT VertMain(VS_INPUT input)
 				{
@@ -111,6 +119,9 @@ ShaderBlock {
 	    			output.position = mul(output.position, g_engineViewMatrix);
 	    			output.position = mul(output.position, g_engineProjectionMatrix);
 
+	    			output.proj.x = output.position.x / output.position.w * 0.5f + 0.5f;
+					output.proj.y = -(output.position.y / output.position.w * 0.5f)+0.5f;
+
 	    			output.uv = input.uv;
 	    
 	    			return output;
@@ -118,7 +129,14 @@ ShaderBlock {
 
 				float4 FragMain(VS_OUTPUT input) : SV_TARGET
 				{
-				    return tex2D(shaderTexture,      input.uv);
+					float4 noise1 = tex2D(noise, input.uv*size+float2(g_engineTime*speed,0.0f));
+					float4 noise2 = tex2D(noise, float2(input.uv.y, 1-input.uv.x)*size+float2(g_engineTime*speed,0.0f));
+					float2 n = (noise1.rg+noise2.rg)*0.5f*2-1;
+					n*=power;
+				    float4 textureColor = tex2D(g_grabTexture, input.proj+n);
+
+				    //return float4(1,0,0,1);
+				    return tex2D(g_grabTexture, input.uv);
 				}
 			]
 		SHADER_END
@@ -129,6 +147,7 @@ ShaderBlock {
 
 					out vec4 gl_Position;
 					out vec2 uv;
+					out vec2 proj;
 
 					layout(location = 0) in vec3 input_position;
 					layout(location = 1) in vec2 input_texcoord0;
@@ -142,6 +161,9 @@ ShaderBlock {
 						gl_Position = g_engineViewMatrix * gl_Position;
 						gl_Position = g_engineProjectionMatrix * gl_Position;
 						uv = input_texcoord0;
+
+						proj.x = gl_Position.x / gl_Position.w * 0.5 + 0.5;
+						proj.y = gl_Position.y / gl_Position.w * 0.5 + 0.5;
 					}
 
 				]
@@ -149,12 +171,24 @@ ShaderBlock {
 					#version 330 core
 
 					in vec2 uv;
+					in vec2 proj;
 
-					uniform sampler2D shaderTexture;
+					uniform sampler2D g_grabTexture;
+					uniform sampler2D noise;
+
+					uniform float speed;
+					uniform float g_engineTime;
+					uniform float power;
+					uniform vec2 size;
 
 					out vec4 color;
 					void main(){
-						color = texture(shaderTexture, uv);
+						vec4 noise1 = texture(noise, uv*size+vec2(g_engineTime*speed,0.0));
+						vec4 noise2 = texture(noise, vec2(uv.y, 1-uv.x)*size+vec2(g_engineTime*speed,0.0));
+						vec2 n = (noise1.xy+noise2.xy)*0.5*2-1;
+						n*=power;
+
+						color = texture(g_grabTexture, proj+n);
 					}
 				]
 			]

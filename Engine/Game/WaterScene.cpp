@@ -13,6 +13,7 @@ enum TestLayer
 WaterScene::WaterScene(SCENEID sceneId, char * sceneName) : DScene(sceneId, sceneName)
 {
 	m_camera = 0;
+	m_waterCamera = 0;
 	m_lookDistance = 7.0f;
 }
 

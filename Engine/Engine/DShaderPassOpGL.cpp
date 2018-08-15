@@ -374,7 +374,7 @@ void DShaderPassOpGL::CompileShaderCode(std::ifstream & ifile)
 {
 	char read[64];
 	bool isBegin = false;
-	//m_program = new DShaderProgramOpGL();
+	m_program = new DShaderProgramOpGL();
 	while (!ifile.eof())
 	{
 		ifile >> read;

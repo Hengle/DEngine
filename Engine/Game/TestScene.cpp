@@ -293,7 +293,7 @@ void TestScene::TestLoad()
 	//floor = DRes::Load<DTexture2D>(DEFAULT_GROUP, DECAL_TEX);
 	//map = DRes::Load<DTexture2D>(DEFAULT_GROUP, BODY_TEX);
 	//cb = DRes::Load<DTexture2D>(DEFAULT_GROUP, GROUND_TEX);
-	DMaterial* mat = DRes::Load<DMaterial>(DEFAULT_GROUP, 3016);
+	DMaterial* mat = DRes::Load<DMaterial>(DEFAULT_GROUP, DECAL_MAT);
 	//mat = new DMaterial(shader);
 
 	//mat->SetFloat("power", 1.3f);

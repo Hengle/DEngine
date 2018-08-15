@@ -29,6 +29,14 @@ using namespace std;
 /*shader代码块*/
 class DShaderBlock
 {
+private:
+	struct DShaderPassLink
+	{
+	public:
+		DShaderPass* pass = 0;
+		unsigned int groupid, resid, passid;
+	};
+
 public:
 	DShaderBlock();
 	~DShaderBlock();
@@ -54,6 +62,8 @@ private:
 	void InterpretRenderQueue(ifstream&);
 	/*解释pass块*/
 	void InterpretPass(ifstream&);
+	/*解释链接pass块*/
+	void InterpretLinkPass(ifstream&);
 	/*解释标签块*/
 	//void InterpretTags(ifstream&, DShaderPass*);
 	/*解释状态块*/
@@ -67,7 +77,7 @@ private:
 
 private:
 	DRenderQueue m_renderQueue;
-	vector<DShaderPass*> m_passes;
+	vector<DShaderPassLink> m_passes;
 	//DSubShader* m_supportShader;
 };
 

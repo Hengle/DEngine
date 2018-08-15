@@ -42,6 +42,7 @@ public:
 	DRenderQueue GetRenderQueue();
 	bool IsPassEnable(int);
 	void SetPassEnable(int, bool);
+	DShaderPass* GetPass(int);
 	static DShader* Create(char*);
 	static void ReleaseGlobalConstants();
 

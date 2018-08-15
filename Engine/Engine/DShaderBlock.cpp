@@ -16,9 +16,16 @@ void DShaderBlock::Release()
 	int i;
 	for (i = 0; i < m_passes.size(); i++)
 	{
-		DShaderPass* pass = m_passes[i];
-		pass->Release();
-		delete pass;
+		DShaderPassLink passLink = m_passes[i];
+		//if (passLink != NULL)
+		{
+			if (passLink.pass != NULL)
+			{
+				passLink.pass->Release();
+				delete passLink.pass;
+			}
+			//delete passLink;
+		}
 	}
 	m_passes.clear();
 	/*if (m_supportShader != NULL)
@@ -149,6 +156,10 @@ bool DShaderBlock::InterpretShaderBlock(ifstream & ifile)
 			{
 				InterpretPass(ifile);
 			}
+			else if (strcmp(read, "LinkPass") == 0)
+			{
+
+			}
 		}
 	}
 	return false;
@@ -278,7 +289,11 @@ void DShaderBlock::InterpretPass(ifstream & ifile)
 			{
 				isBegin = false;
 				if (isSupport)
-					m_passes.push_back(pass);
+				{
+					DShaderPassLink link;
+					link.pass = pass;
+					m_passes.push_back(link);
+				}
 				return;
 			}
 			/*else if (strcmp(read, "Tags") == 0)
@@ -311,6 +326,42 @@ void DShaderBlock::InterpretPass(ifstream & ifile)
 					}
 				//}
 				
+			}
+		}
+	}
+}
+
+void DShaderBlock::InterpretLinkPass(ifstream & ifile)
+{
+	bool isBegin = false;
+	char read[128];
+	unsigned int groupid, resid, passid;
+
+	while (!ifile.eof())
+	{
+		ifile >> read;
+
+		if (!isBegin)
+		{
+			if (strcmp(read, "{") == 0)
+			{
+				ifile >> groupid >> resid >> passid;
+				isBegin = true;
+			}
+		}
+		else
+		{
+			if (strcmp(read, "}") == 0)
+			{
+				isBegin = false;
+				DShaderPassLink link;
+				link.pass = 0;
+				link.groupid = groupid;
+				link.resid = resid;
+				link.passid = passid;
+				//if (isSupport)
+					m_passes.push_back(link);
+				return;
 			}
 		}
 	}
@@ -620,7 +671,16 @@ DShaderPass * DShaderBlock::GetPass(int index)
 {
 	if (index < 0 || index >= m_passes.size())
 		return NULL;
-	return m_passes.at(index);
+	DShaderPassLink link = m_passes.at(index);
+	if (link.pass != NULL)
+		return link.pass;
+	else
+	{
+		DShader* shader = DRes::Load<DShader>(link.groupid, link.resid);
+		if (shader != NULL)
+			return shader->GetPass(link.passid);
+	}
+	return NULL;
 	//return m_supportShader->GetPass(index);
 }
 
@@ -628,6 +688,51 @@ DRenderQueue DShaderBlock::GetRenderQueue()
 {
 	return m_renderQueue;
 }
+
+//bool DShaderBlock::HasProperty(const LPCSTR key, int pass)
+//{
+//	if (pass < 0 || pass >= m_passes.size())
+//		return false;
+//	DShaderPassLink link = m_passes.at(pass);
+//	if (link.pass != NULL)
+//		return link.pass->HasProperty(key);
+//	else
+//	{
+//		DShader* shader = DRes::Load<DShader>(link.groupid, link.resid);
+//		if (shader != NULL)
+//		{
+//			return shader->HasProperty(key, pass);
+//		}
+//	}
+//	return false;
+//}
+//
+//unsigned int DShaderBlock::GetShaderProgramCount(int pass)
+//{
+//	if (pass < 0 || pass >= m_passes.size())
+//		return false;
+//	DShaderPassLink link = m_passes.at(pass);
+//	if (link.pass != NULL)
+//		return link.pass->GetShaderProgramCount();
+//	else
+//	{
+//		DShader* shader = DRes::Load<DShader>(link.groupid, link.resid);
+//		if (shader != NULL)
+//		{
+//			return shader->HasProperty(key, pass);
+//		}
+//	}
+//	return 0;
+//}
+//
+//void DShaderBlock::Draw(int pass)
+//{
+//}
+//
+//DShaderProgram * DShaderBlock::GetShaderProgram(int pass, unsigned int)
+//{
+//	return nullptr;
+//}
 
 //DSubShader::DSubShader()
 //{

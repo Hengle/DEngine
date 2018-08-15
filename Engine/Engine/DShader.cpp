@@ -309,6 +309,26 @@ bool DShader::HasProperty(const LPCSTR key) const
 	return false;
 }
 
+//bool DShader::HasProperty(const LPCSTR key, int pass) const
+//{
+//	if (m_shaderBlock != NULL)
+//	{
+//		int scount, i;
+//		scount = m_shaderBlock->GetPassCount();
+//		return m_shaderBlock->HasProperty(key, pass);
+//		//DShaderPass* pass;
+//		//DShaderProgram* prog;
+//		/*for (i = 0; i < scount; i++)
+//		{
+//			pass = m_shaderBlock->GetPass(i);
+//			if (pass == NULL)
+//				continue;
+//			return pass->HasProperty(key);
+//		}*/
+//	}
+//	return false;
+//}
+
 void DShader::ApplyParams(DShaderConstantTable * constantTable, int index)
 {
 	if (m_shaderBlock != NULL)
@@ -428,4 +448,17 @@ void DShader::SetPassEnable(int index, bool enable)
 			return;
 		pass->SetPassEnable(enable);
 	}
+}
+
+DShaderPass * DShader::GetPass(int index)
+{
+	if (m_shaderBlock != NULL)
+	{
+		int passcount = m_shaderBlock->GetPassCount();
+		if (index < 0 || index >= passcount)
+			return NULL;
+		DShaderPass* pass = m_shaderBlock->GetPass(index);
+		return pass;
+	}
+	return NULL;
 }

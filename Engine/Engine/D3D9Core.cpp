@@ -13,6 +13,7 @@ D3D9Core::D3D9Core()
 	m_d3d = 0;
 	m_device = 0;
 	m_renderStateMgr = 0;
+	m_backBuffer = 0;
 }
 
 
@@ -69,6 +70,13 @@ bool D3D9Core::Init(int width, int height, bool fullScreen, HWND hwnd)
 		return false;
 	}
 
+	/*result = m_device->GetRenderTarget(0, &m_backBuffer);
+	if (FAILED(result))
+	{
+		MessageBox(hwnd, L"获取RenderTarget失败", L"初始化失败", MB_ERR_INVALID_CHARS);
+		return false;
+	}*/
+
 	m_viewPort.Width = width;
 	m_viewPort.Height = height;
 	m_viewPort.X = 0.0f;
@@ -83,6 +91,11 @@ bool D3D9Core::Init(int width, int height, bool fullScreen, HWND hwnd)
 
 void D3D9Core::Destroy()
 {
+	if (m_backBuffer != NULL)
+	{
+		m_backBuffer->Release();
+		m_backBuffer = 0;
+	}
 	if (m_d3d != NULL)
 	{
 		m_d3d->Release();
@@ -121,9 +134,24 @@ void D3D9Core::Clear(bool clearDepth, bool clearStencil, bool clearColor, DColor
 	if (renderTexture != NULL)
 	{
 		DRenderTextureViewWrapper9* r = (DRenderTextureViewWrapper9*)renderTexture;
-		LPD3DXRENDERTOSURFACE isurface = r->GetInterface();
-		isurface->BeginScene(r->GetSurface(), &m_viewPort);
+		//LPD3DXRENDERTOSURFACE isurface = r->GetInterface();
+		//isurface->BeginScene(r->GetSurface(), &m_viewPort);
+
+		if (m_backBuffer != NULL)
+		{
+			m_backBuffer->Release();
+			m_backBuffer = NULL;
+		}
+		m_device->GetRenderTarget(0, &m_backBuffer);
+
+		IDirect3DSurface9* surface = r->GetSurface();
+
+		
+		m_device->SetRenderTarget(0, surface);
+		r->ReleaseSurface();
+
 		m_device->Clear(0, NULL, flag, c, 1.0f, 0);
+		m_device->BeginScene();
 	}
 	else
 	{
@@ -164,9 +192,15 @@ void D3D9Core::EndSetRenderTarget(IRenderTextureViewWrapper * renderTexture)
 {
 	if (renderTexture != NULL)
 	{
-		DRenderTextureViewWrapper9* r = (DRenderTextureViewWrapper9*)renderTexture;
-		LPD3DXRENDERTOSURFACE isurface = r->GetInterface();
-		isurface->EndScene(0);
+		
+		//DRenderTextureViewWrapper9* r = (DRenderTextureViewWrapper9*)renderTexture;
+		//IDirect3DSurface9* surface = r->GetSurface();
+		m_device->EndScene();
+		m_device->SetRenderTarget(0, m_backBuffer);
+		m_backBuffer->Release();
+		m_backBuffer = NULL;
+		//LPD3DXRENDERTOSURFACE isurface = r->GetInterface();
+		//isurface->EndScene(0);
 	}
 	else
 	{

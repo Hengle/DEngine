@@ -59,6 +59,7 @@ private:
 	LPDIRECT3DDEVICE9 m_device;
 	D3DVIEWPORT9 m_viewPort;
 	IRenderStateMgr* m_renderStateMgr;
+	IDirect3DSurface9* m_backBuffer;
 };
 
 #endif

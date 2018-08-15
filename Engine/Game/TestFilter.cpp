@@ -22,6 +22,10 @@ TestFilter::TestFilter()
 	m_dst2 = DRenderTexture::Create(64.0f, 64.0f);
 	//testshadow = DShader::Create("../Res/testshadow.shader");
 	//m_mat = new DMaterial(testshadow);
+
+
+	/*DShader* dp = DRes::Load<DShader>(DEFAULT_GROUP, 1013);
+	m_mixMat = new DMaterial(dp);*/
 }
 
 
@@ -31,29 +35,31 @@ TestFilter::~TestFilter()
 
 DRenderTexture* TestFilter::Render(DCamera*, DRenderTexture * screenTexture)
 {
-	///*DGraphics::Blit(screenTexture, m_dst, m_mat);
-	//return m_dst;*/
+	/*DGraphics::Blit(screenTexture, m_dst, m_mat);
+	return m_dst;*/
 
-	//DGraphics::Blit(screenTexture, m_dst2);
-	////m_glowMat->SetFloat("blackness", 0.2f);
+	DGraphics::Blit(screenTexture, m_dst2);
+	//m_glowMat->SetFloat("blackness", 0.2f);
 
-	////DGraphics::Blit(m_dst, m_dst2, m_glowMat);
-	//m_mat->SetVector2("offset", DVector2(0.02f, 0.0f));
-	//DGraphics::Blit(m_dst2, m_dst, m_mat);
-	//DGraphics::Blit(m_dst, m_dst2, m_mat);
-	//DGraphics::Blit(m_dst2, m_dst, m_mat);
-	//m_mat->SetVector2("offset", DVector2(0.00f, 0.02f));
-	//DGraphics::Blit(m_dst, m_dst2, m_mat);
-	//DGraphics::Blit(m_dst2, m_dst, m_mat);
-	//DGraphics::Blit(m_dst, m_dst2, m_mat);
+	//DGraphics::Blit(m_dst, m_dst2, m_glowMat);
+	m_mat->SetVector2("offset", DVector2(0.02f, 0.0f));
+	DGraphics::Blit(m_dst2, m_dst, m_mat);
+	DGraphics::Blit(m_dst, m_dst2, m_mat);
+	DGraphics::Blit(m_dst2, m_dst, m_mat);
+	m_mat->SetVector2("offset", DVector2(0.00f, 0.02f));
+	DGraphics::Blit(m_dst, m_dst2, m_mat);
+	DGraphics::Blit(m_dst2, m_dst, m_mat);
+	DGraphics::Blit(m_dst, m_dst2, m_mat);
 
-	////m_mixMat->SetTexture("blurTex", m_dst2);
-	////m_mixMat->SetVector2("area", DVector2(nearV, farV));
-	//////m_mixMat->SetTexture("mix", m_dst2);
-	////DGraphics::Blit(screenTexture, m_mixMat);
-	//return NULL;
+	m_mixMat->SetTexture("blurTex", m_dst2);
+	m_mixMat->SetVector2("area", DVector2(nearV, farV));
+	////m_mixMat->SetTexture("mix", m_dst2);
+	DGraphics::Blit(screenTexture, m_mixMat);
+	return NULL;
 
-	return screenTexture;
+
+	/*DGraphics::Blit(screenTexture, m_mixMat);
+	return NULL;*/
 }
 
 void TestFilter::Release()

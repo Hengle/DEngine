@@ -73,7 +73,7 @@ ShaderBlock {
 				{
 				    VS_OUTPUT output = (VS_OUTPUT)0;
 
-				    float4 pos = float4(input.position, 1.0f);
+				    float4 pos = float4(input.position, 1.0);
 
 	    			output.position = mul(pos, g_engineWorldMatrix);
 	    			output.position = mul(output.position, g_engineViewMatrix);
@@ -87,7 +87,7 @@ ShaderBlock {
 
 				float4 FragMain(VS_OUTPUT input) : SV_TARGET
 				{
-				    return float4(input.depth, input.depth, input.depth, 1.0f);
+				    return float4(input.depth, input.depth, input.depth, 1.0);
 				}
 			]
 		SHADER_END

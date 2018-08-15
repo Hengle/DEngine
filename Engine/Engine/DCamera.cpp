@@ -596,6 +596,7 @@ void DCamera::RenderScreenTexture()
 	}
 	bool clearDepth = m_clearFlags != DClearFlags_DontClear;
 	bool clearColor = m_clearFlags != DClearFlags_Depth && m_clearFlags != DClearFlags_DontClear;
+
 	BeginRender(src, clearDepth, clearColor, m_backgroundColor);
 	if (m_skyBoxMaterial != NULL && m_clearFlags == DClearFlags_SkyBox)
 	{
@@ -613,6 +614,7 @@ void DCamera::RenderScreenTexture()
 
 	EndRender(src);
 	DGraphics::ClearGlobalRenderShader();
+
 }
 
 //void DCamera::ForwardMoveCameraNode()

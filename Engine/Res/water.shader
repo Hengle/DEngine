@@ -101,6 +101,7 @@ ShaderBlock {
 				};
 
 				sampler g_grabTexture;
+				sampler g_engineDepthTexture;
 				sampler noise;
 				sampler g_engineShadowMap;
 
@@ -136,7 +137,7 @@ ShaderBlock {
 				    float4 textureColor = tex2D(g_grabTexture, input.proj+n);
 
 				    //return float4(1,0,0,1);
-				    return tex2D(g_grabTexture, input.uv);
+				    return textureColor;
 				}
 			]
 		SHADER_END

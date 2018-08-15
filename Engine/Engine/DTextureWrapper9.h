@@ -45,18 +45,20 @@ public:
 	virtual void Release();
 	virtual IRenderBuffer* GetColorBuffer();
 	virtual IRenderBuffer* GetDepthBuffer();
-	LPD3DXRENDERTOSURFACE GetInterface() 
+	LPDIRECT3DSURFACE9 GetSurface();
+	void ReleaseSurface();
+	/*LPD3DXRENDERTOSURFACE GetInterface() 
 	{
 		return m_interface;
 	}
 	LPDIRECT3DSURFACE9 GetSurface()
 	{
 		return m_surface;
-	}
+	}*/
 
 private:
 	IDirect3DTexture9* m_texture;
-	LPD3DXRENDERTOSURFACE m_interface;
+	//LPD3DXRENDERTOSURFACE m_interface;
 	LPDIRECT3DSURFACE9 m_surface;
 	bool m_isSuccess;
 	LPDIRECT3DDEVICE9 m_device;

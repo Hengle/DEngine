@@ -27,15 +27,17 @@ void WaterScene::OnGUI()
 
 void WaterScene::OnLoad()
 {
+
 	m_camera = new DCamera();
 	m_camera->Create();
 	m_camera->SetLayerMask(TL_Default | TL_Water);
-
+	
 	m_waterCamera = new DCamera();
 	m_waterCamera->Create();
 	m_waterCamera->SetLayerMask(TL_Default);
-	m_water = DRenderTexture::Create(1024, 1024);
+	m_water = DRenderTexture::Create(1024, 768);
 	m_waterCamera->SetRenderTexture(m_water);
+	
 	
 	/*m_filter = new WaterFilter();
 	m_camera->SetFilter(m_filter);*/

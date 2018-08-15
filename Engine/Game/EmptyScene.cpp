@@ -13,27 +13,27 @@ EmptyScene::EmptyScene(SCENEID sceneId, char * sceneName) : DScene(sceneId, scen
 
 void EmptyScene::OnGUI()
 {
-	//ImGui::SliderFloat("Near", &m_filter->nearV, 0.0f, 1.0f);
-	//ImGui::SliderFloat("Far", &m_filter->farV, 0.0f, 1.0f);
+	ImGui::SliderFloat("Near", &m_filter->nearV, 0.0f, 1.0f);
+	ImGui::SliderFloat("Far", &m_filter->farV, 0.0f, 1.0f);
 }
 
 void EmptyScene::OnLoad()
 {
 	m_camera = new DCamera();
 	m_camera->Create();
-	//m_camera->SetAdditionalTextureActive(DCameraAdditional_Depth, true);
+	m_camera->SetAdditionalTextureActive(DCameraAdditional_Depth, true);
 	//m_camera->SetBackgroundColor(DCOLOR_BLACK);
 
 	float w, h;
 	DSystem::GetGraphicsMgr()->GetResolution(w, h);
 	//m_rt = DRenderTexture::Create(w, h);
-	//m_filter = new TestFilter();
+	m_filter = new TestFilter();
 
 	//testmat = DRes::Load<DMaterial>(DEFAULT_GROUP, PEFFECT_MAT);
 	//testtex = DRes::Load<DTexture2D>(DEFAULT_GROUP, 2003);
 
 	//m_camera->SetRenderTexture(m_rt);
-	//m_camera->SetFilter(m_filter);
+	m_camera->SetFilter(m_filter);
 
 	DTransform* transform;
 
@@ -59,9 +59,12 @@ void EmptyScene::OnLoad()
 
 void EmptyScene::OnUnLoad()
 {
-	//m_filter->Release();
-	//delete m_filter;
-	//m_filter = 0;
+	if (m_filter != NULL)
+	{
+		m_filter->Release();
+		delete m_filter;
+		m_filter = 0;
+	}
 	/*m_rt->Destroy();
 	delete m_rt;
 	m_rt = 0;*/

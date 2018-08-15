@@ -321,7 +321,7 @@ void DGraphics::PushRenderQueue(DDisplayObject * displayObject, DRenderQueue ren
 
 void DGraphics::Blit(DTexture * src, DMaterial * material, int pass)
 {
-	DGraphics::BeginScene(true, true, true, DCOLOR_BLACK);
+	DGraphics::BeginScene(true, true, true, DCOLOR_WHITE);
 	BlitInternal(src, material, pass);
 	DGraphics::EndScene();
 }
@@ -731,15 +731,25 @@ void DGraphics::InitScreenPlane()
 	float screenWidth, screenHeight;
 	m_GL->GetResolution(screenWidth, screenHeight);
 
-	vertices[0] = -0.5f*screenWidth; vertices[1] = -0.5f*screenHeight; vertices[2] = 0.0f;
-	vertices[3] = -0.5f*screenWidth; vertices[4] = 0.5f*screenHeight; vertices[5] = 0.0f;
-	vertices[6] = 0.5f*screenWidth; vertices[7] = 0.5f*screenHeight; vertices[8] = 0.0f;
-	vertices[9] = 0.5f*screenWidth; vertices[10] = -0.5f*screenHeight; vertices[11] = 0.0f;
+	float bottom = -0.5f*screenHeight, bottomEx = -0.7f*screenHeight;
+	float top = 0.5f*screenHeight, topEx = 0.7f*screenHeight;
+	float left = -0.5f*screenWidth, leftEx = -0.7f*screenWidth;
+	float right = 0.5f*screenWidth, rightEx = 0.7f*screenWidth;
 
-	vertices[12] = -0.7f*screenWidth; vertices[13] = -0.7f*screenHeight; vertices[14] = 0.0f;
-	vertices[15] = -0.7f*screenWidth; vertices[16] = 0.7f*screenHeight; vertices[17] = 0.0f;
-	vertices[18] = 0.7f*screenWidth; vertices[19] = 0.7f*screenHeight; vertices[20] = 0.0f;
-	vertices[21] = 0.7f*screenWidth; vertices[22] = -0.7f*screenHeight; vertices[23] = 0.0f;
+	/*float bottom = 0.05f*screenHeight, bottomEx = 0.0f*screenHeight;
+	float top = 0.45f*screenHeight, topEx = 0.5f*screenHeight;
+	float left = 0.05f*screenWidth, leftEx = 0.0f*screenWidth;
+	float right = 0.45f*screenWidth, rightEx = 0.5f*screenWidth;*/
+
+	vertices[0] = left; vertices[1] = bottom; vertices[2] = 0.0f;
+	vertices[3] = left; vertices[4] = top; vertices[5] = 0.0f;
+	vertices[6] = right; vertices[7] = top; vertices[8] = 0.0f;
+	vertices[9] = right; vertices[10] = bottom; vertices[11] = 0.0f;
+
+	vertices[12] = leftEx; vertices[13] = bottomEx; vertices[14] = 0.0f;
+	vertices[15] = leftEx; vertices[16] = topEx; vertices[17] = 0.0f;
+	vertices[18] = rightEx; vertices[19] = topEx; vertices[20] = 0.0f;
+	vertices[21] = rightEx; vertices[22] = bottomEx; vertices[23] = 0.0f;
 
 	if (m_GL->IsUVStartsAtTop())
 	{

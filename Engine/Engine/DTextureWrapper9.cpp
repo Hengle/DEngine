@@ -93,7 +93,7 @@ DRenderTextureViewWrapper9::DRenderTextureViewWrapper9(LPDIRECT3DDEVICE9 device,
 			return;
 		}
 	}
-	D3DSURFACE_DESC desc;
+	/*D3DSURFACE_DESC desc;
 	hr = m_texture->GetSurfaceLevel(0, &m_surface);
 	if (FAILED(hr))
 		return;
@@ -101,7 +101,7 @@ DRenderTextureViewWrapper9::DRenderTextureViewWrapper9(LPDIRECT3DDEVICE9 device,
 	if (FAILED(hr))
 		return;
 	if (FAILED(hr = D3DXCreateRenderToSurface(device, desc.Width, desc.Height, desc.Format, TRUE, D3DFMT_D16, &m_interface)))
-		return;
+		return;*/
 
 	m_device = device;
 	m_isSuccess = true;
@@ -139,11 +139,11 @@ void DRenderTextureViewWrapper9::Release()
 		m_surface->Release();
 		m_surface = NULL;
 	}
-	if (m_interface != NULL)
+	/*if (m_interface != NULL)
 	{
 		m_interface->Release();
 		m_interface = NULL;
-	}
+	}*/
 	m_device = NULL;
 }
 
@@ -155,6 +155,23 @@ IRenderBuffer * DRenderTextureViewWrapper9::GetColorBuffer()
 IRenderBuffer * DRenderTextureViewWrapper9::GetDepthBuffer()
 {
 	return nullptr;
+}
+
+LPDIRECT3DSURFACE9 DRenderTextureViewWrapper9::GetSurface()
+{
+	if (m_surface != NULL)
+		return m_surface;
+	HRESULT hr = m_texture->GetSurfaceLevel(0, &m_surface);
+	if (FAILED(hr))
+		return NULL;
+	return m_surface;
+}
+
+void DRenderTextureViewWrapper9::ReleaseSurface()
+{
+	if (m_surface != NULL)
+		m_surface->Release();
+	m_surface = NULL;
 }
 
 #endif

@@ -1,4 +1,4 @@
-#include "DLog.h"
+﻿#include "DLog.h"
 #include "DGUI.h"
 #include "DSystem.h"
 #include "atlstr.h"
@@ -72,7 +72,7 @@ void DLog::Init()
 void DLog::Shutdown()
 {
 #if _DEBUG
-	SaveLog();
+	WriteLog();
 	int i;
 	int size = m_logMsgs->size();
 	for (i = 0; i < size; i++) {
@@ -137,7 +137,7 @@ void DLog::DrawMsg(DLogMsg * msg)
 	DGUI::Label(color, msg->msg.data());
 }
 
-void DLog::SaveLog()
+void DLog::WriteLog()
 {
 #if _DEBUG
 	std::ofstream fout;
@@ -152,7 +152,6 @@ void DLog::SaveLog()
 	fout.close();
 #endif
 }
-
 
 void DLog::Info(char * msg)
 {
@@ -206,7 +205,7 @@ void DLog::WarnArgs(char * msg, ...)
 #endif
 }
 
-void DLog::Err(char * msg)
+void DLog::Err(const char * msg)
 {
 #if _DEBUG
 	DLogMsg* lg = new DLogMsg(msg, DLogType::DLogType_Error);
@@ -229,5 +228,12 @@ void DLog::ErrArgs(char * msg, ...)
 	va_end(list);
 
 	Err(buf);
+#endif
+}
+
+void DLog::SaveLog()
+{
+#if _DEBUG
+	DSystem::GetLogMgr()->WriteLog();
 #endif
 }

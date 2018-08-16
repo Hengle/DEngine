@@ -1,22 +1,22 @@
-#pragma once
+ï»¿#pragma once
 #include <vector>
 
 #define DLOG_MAX_SHOW_LOG_NUMS 99
 #define DLOG_MAX_CACHE_LOG_NUMS 9999
 #define DLOG_SHOW true
 
-/*logÀàĞÍ*/
+/*logç±»å‹*/
 enum DLogType
 {
-	/*ÏûÏ¢*/
+	/*æ¶ˆæ¯*/
 	DLogType_Info = 0,
-	/*¾¯¸æ*/
+	/*è­¦å‘Š*/
 	DLogType_Warning = 1,
-	/*´íÎó*/
+	/*é”™è¯¯*/
 	DLogType_Error = 2,
 };
 
-/*LogÏûÏ¢ÌõÄ¿*/
+/*Logæ¶ˆæ¯æ¡ç›®*/
 typedef struct DLogMsg
 {
 public:
@@ -47,10 +47,11 @@ public:
 	static void WarnArgs(char*, ...);
 	static void Err(char*);
 	static void ErrArgs(char*, ...);
+	static void SaveLog();
 
 private:
 	void DrawMsg(DLogMsg*);
-	void SaveLog();
+	void WriteLog();
 
 private:
 	std::vector<DLogMsg*> *m_logMsgs;

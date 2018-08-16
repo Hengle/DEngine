@@ -127,15 +127,15 @@
 	#RES_END
 
 	#RES_BEGIN TEXTURE2D 2014
-		#PATH ../Res/smp_d.tga
+		#PATH ../Res/smp_d.jpg
 	#RES_END
 
 	#RES_BEGIN TEXTURE2D 2015
-		#PATH ../Res/3.tga
+		#PATH ../Res/3.jpg
 	#RES_END
 
 	#RES_BEGIN TEXTURE2D 2016
-		#PATH ../Res/water7b.tga
+		#PATH ../Res/water7b.jpg
 		#WRAPMODE REPEAT
 	#RES_END
 

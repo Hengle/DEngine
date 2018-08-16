@@ -42,8 +42,11 @@ public:
 	void AddLog(DLogMsg*);
 
 	static void Info(char*);
+	static void InfoArgs(char*, ...);
 	static void Warn(char*);
+	static void WarnArgs(char*, ...);
 	static void Err(char*);
+	static void ErrArgs(char*, ...);
 
 private:
 	void DrawMsg(DLogMsg*);

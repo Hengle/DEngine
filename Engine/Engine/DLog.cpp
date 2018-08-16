@@ -164,6 +164,22 @@ void DLog::Info(char * msg)
 #endif
 }
 
+void DLog::InfoArgs(char * msg, ...)
+{
+#if _DEBUG
+	char buf[2048];
+	va_list list;
+
+	va_start(list, msg);
+
+	vsnprintf(buf, 2048, msg, list);
+
+	va_end(list);
+
+	Info(buf);
+#endif
+}
+
 void DLog::Warn(char * msg)
 {
 #if _DEBUG
@@ -174,6 +190,22 @@ void DLog::Warn(char * msg)
 #endif
 }
 
+void DLog::WarnArgs(char * msg, ...)
+{
+#if _DEBUG
+	char buf[2048];
+	va_list list;
+
+	va_start(list, msg);
+
+	vsnprintf(buf, 2048, msg, list);
+
+	va_end(list);
+
+	Warn(buf);
+#endif
+}
+
 void DLog::Err(char * msg)
 {
 #if _DEBUG
@@ -181,5 +213,21 @@ void DLog::Err(char * msg)
 	DSystem::GetLogMgr()->AddLog(lg);
 
 	OutputDebugString(CA2W(lg->msg.data()));
+#endif
+}
+
+void DLog::ErrArgs(char * msg, ...)
+{
+#if _DEBUG
+	char buf[2048];
+	va_list list;
+
+	va_start(list, msg);
+
+	vsnprintf(buf, 2048, msg, list);
+
+	va_end(list);
+
+	Err(buf);
 #endif
 }

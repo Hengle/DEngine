@@ -5,6 +5,13 @@
 #include "DResObject.h"
 #include <map>
 
+typedef struct DBoneWeight
+{
+public:
+	unsigned int boneIndex0, boneIndex1, boneIndex2, boneIndex3;
+	float weight0, weight1, weight2, weight3;
+} DBoneWeight;
+
 /*几何体类*/
 class DGeometry : public DResObject
 {
@@ -34,6 +41,8 @@ public:
 	void SetNormals(DVector3*, int);
 	void SetColors(DColor*, int);
 	void SetIndices(unsigned int*, int);
+	void SetBoneMatrixCount(int count);
+	void SetBoneMatrix(DMatrix4x4*, int index);
 	void SetTopology(DGeometryTopology);
 	void GetIndex(int index, unsigned int& outIndex) const;
 	bool HasNormal() const;
@@ -55,6 +64,8 @@ private:
 	bool m_dynamic;
 	DVector3 m_centerVertex;
 	DVector3 m_rangeSize;
+	DBoneWeight* m_boneWeights;
+	DMatrix4x4* m_boneMatrices;
 
 	bool m_isBoundsChanged;
 };

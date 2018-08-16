@@ -171,6 +171,7 @@ void DGeometryWrapper::Refresh(DGeometryBufferDesc * desc)
 			OnRefresh(vertices, desc->indices, desc->vertexCount, desc->indexCount);
 	}
 
+	m_isDirty = false;
 	//delete[] vertices;
 	//vertices = 0;
 }
@@ -195,6 +196,8 @@ void DGeometryWrapper::Refresh(float * vertexbuffer, unsigned int * indexbuffer,
 		if (m_isSupported)
 			OnRefresh(vertexbuffer, indexbuffer, vertexCount, indexCount);
 	}
+
+	m_isDirty = false;
 }
 
 void DGeometryWrapper::DrawPrimitive(DGeometryTopology topology)
@@ -203,10 +206,20 @@ void DGeometryWrapper::DrawPrimitive(DGeometryTopology topology)
 		OnDraw(topology);
 }
 
-bool DGeometryWrapper::IsInitialized()
+bool DGeometryWrapper::IsDirty()
 {
-	return m_isInitialized;
+	return m_isDirty;
 }
+
+void DGeometryWrapper::SetDirty()
+{
+	m_isDirty = true;
+}
+
+//bool DGeometryWrapper::IsInitialized()
+//{
+//	return m_isInitialized;
+//}
 
 DGLCore::DGLCore()
 {

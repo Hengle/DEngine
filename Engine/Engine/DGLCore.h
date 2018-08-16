@@ -70,7 +70,9 @@ public:
 	void Refresh(float* vertexbuffer, unsigned int* indexbuffer, int vertexCount, int indexCount);//更新顶点缓存
 	void DrawPrimitive(DGeometryTopology topology);//绘制
 	virtual void Release() = 0; //释放资源
-	bool IsInitialized();
+	//bool IsInitialized();
+	bool IsDirty();
+	void SetDirty();
 
 protected:
 	virtual void OnRefresh(float* vertexbuffer, unsigned int* indexbuffer, int vertexCount, int indexCount) = 0;
@@ -104,7 +106,7 @@ protected:
 private:
 	bool m_isInitialized;
 	bool m_isSupported;
-
+	bool m_isDirty;
 };
 
 /*抽象贴图包装器接口-用于实现不同API下的texture*/

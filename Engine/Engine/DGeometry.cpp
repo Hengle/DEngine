@@ -2,6 +2,7 @@
 #include "DModelLoader.h"
 #include "DSystem.h"
 
+
 DGeometry::DGeometry(bool dynamic)
 {
 
@@ -453,6 +454,7 @@ void DGeometry::Draw(int vertexUsage)
 	if (m_geometryWrappers.find(vertexUsage) == m_geometryWrappers.end())
 	{
 		DGeometryWrapper* wrapper = DSystem::GetGraphicsMgr()->GetGLCore()->CreateGeometryWrapper(vertexUsage, m_dynamic);
+		wrapper->SetDirty();
 	
 		m_geometryWrappers.insert(std::pair<int, DGeometryWrapper*>(vertexUsage, wrapper));
 	}
@@ -464,7 +466,7 @@ void DGeometry::Draw(int vertexUsage)
 	if (m_geometryWrappers.find(vertexUsage) != m_geometryWrappers.end())
 	{
 		DGeometryWrapper* wrapper = m_geometryWrappers.at(vertexUsage);
-		if (!wrapper->IsInitialized())
+		if (wrapper->IsDirty())
 		{
 			wrapper->Refresh(&m_geometryDesc);
 		}
@@ -497,7 +499,8 @@ void DGeometry::UpdateGeometryReses()
 	{
 		if (iter->second != NULL)
 		{
-			iter->second->Refresh(&m_geometryDesc);
+			iter->second->SetDirty();
+			//iter->second->Refresh(&m_geometryDesc);
 		}
 	}
 }

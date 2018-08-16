@@ -111,7 +111,7 @@ void D3DSystem::InitWindow(int & width, int & height, bool)
 
 	RECT rc = { 0, 0, width, height };
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
-	m_hwnd = CreateWindowEx(WS_EX_APPWINDOW, m_applicationName, m_title, WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_OVERLAPPEDWINDOW, posX, posY, rc.right - rc.left, rc.bottom - rc.top, NULL, NULL, m_hInstance, NULL);
+	m_hwnd = CreateWindow(m_applicationName, m_title, WS_OVERLAPPEDWINDOW, posX, posY, rc.right - rc.left, rc.bottom - rc.top, NULL, NULL, m_hInstance, NULL);
 
 	ShowWindow(m_hwnd, SW_SHOW);
 	SetFocus(m_hwnd);
@@ -126,6 +126,12 @@ LRESULT CALLBACK SysWndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lpar
 		return 0;
 
 	case WM_CLOSE:
+		HMENU hMenu;
+		hMenu = GetMenu(hwnd);
+		if (hMenu != NULL)
+			DestroyMenu(hMenu);
+		DestroyWindow(hwnd);
+		UnregisterClass(L"DEngine", NULL);
 		PostQuitMessage(0);
 		return 0;
 

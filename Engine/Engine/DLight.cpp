@@ -7,7 +7,7 @@ DLight::DLight() : DSceneObject()
 	m_shadowMap = 0;
 	m_shadowShader = 0;
 	m_far = 100.0f;
-	m_size = 30.0f;
+	//m_size = 30.0f;
 	m_isProjChanged = false;
 
 	m_node = 0;
@@ -69,10 +69,10 @@ float DLight::GetFar()
 	return m_far;
 }
 
-float DLight::GetSize()
-{
-	return m_size;
-}
+//float DLight::GetSize()
+//{
+//	return m_size;
+//}
 
 void DLight::SetFar(float farClipPlane)
 {
@@ -80,11 +80,11 @@ void DLight::SetFar(float farClipPlane)
 	m_far = farClipPlane;
 }
 
-void DLight::SetSize(float size)
-{
-	m_isProjChanged = true;
-	m_size = size;
-}
+//void DLight::SetSize(float size)
+//{
+//	m_isProjChanged = true;
+//	m_size = size;
+//}
 
 void DLight::SetIntensity(float intensity)
 {
@@ -145,7 +145,7 @@ bool DLight::OnInit()
 	m_shadowMap = DRenderTexture::Create(1024, 1024);
 	m_shadowShader = DShader::Create("../Res/shadow.shader");
 
-	DMatrix4x4::Ortho(&m_proj, m_size, m_size, 0.0f, m_far);
+	DMatrix4x4::Ortho(&m_proj, m_far*2.0f, m_far*2.0f, -m_far, m_far);
 	//DMatrix4x4::Perspective(&m_proj, D_PI / 3.0f, 1.0f, 0.03f, 34.0f);
 	return true;
 }
@@ -194,11 +194,15 @@ void DLight::OnFixedUpdate()
 
 void DLight::ApplyLightDirParam()
 {
-	if (m_transform->IsMatrixWillChange())
+	DCamera* camera;
+	DCamera::GetCurrentCamera(&camera);
+	DTransform* transform = camera->GetTransform();
+
+	//if (m_transform->IsMatrixWillChange())
 	{
 		DVector3 up, lookAt, position;
 		m_transform->GetUp(up);
-		m_transform->GetPosition(position);
+		transform->GetPosition(position);
 		m_transform->GetForward(lookAt);
 
 		DShader::SetGlobalVector3(D_SC_LIGHT_DIR, lookAt);
@@ -215,7 +219,7 @@ void DLight::BeginRenderShadow()
 	if (m_isProjChanged)
 	{
 		m_isProjChanged = false;
-		DMatrix4x4::Ortho(&m_proj, m_size, m_size, 0.0f, m_far);
+		DMatrix4x4::Ortho(&m_proj, m_far*2.0f, m_far*2.0f, -m_far, m_far);
 	}
 	
 	

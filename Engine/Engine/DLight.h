@@ -31,9 +31,9 @@ public:
 	void SetColor(DColor);
 	float GetIntensity();
 	float GetFar();
-	float GetSize();
+	//float GetSize();
 	void SetFar(float);
-	void SetSize(float);
+	//void SetSize(float);
 	void SetIntensity(float);
 	void SetShadowActive(bool);
 	bool GetShadowActive();
@@ -64,7 +64,7 @@ private:
 	DMatrix4x4 m_view;
 	DMatrix4x4 m_proj;
 	float m_far;
-	float m_size;
+	//float m_size;
 	bool m_isProjChanged;
 
 	DLightNode* m_node;

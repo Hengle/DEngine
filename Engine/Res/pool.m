@@ -1,4 +1,4 @@
-#SHADER 101 1008
+#SHADER 101 1006
 #PARAM_TEX    shaderTexture 101 2014
 #PARAM_FLOAT gloss  0.3
 #PARAM_FLOAT specular 0.5

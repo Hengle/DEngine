@@ -205,7 +205,7 @@ void DLog::WarnArgs(char * msg, ...)
 #endif
 }
 
-void DLog::Err(const char * msg)
+void DLog::Err(char * msg)
 {
 #if _DEBUG
 	DLogMsg* lg = new DLogMsg(msg, DLogType::DLogType_Error);

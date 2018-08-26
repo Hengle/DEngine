@@ -318,6 +318,9 @@
     <ClInclude Include="DException.h">
       <Filter>头文件\Core</Filter>
     </ClInclude>
+    <ClInclude Include="DSkinnedGeometryObject.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DMath.cpp">
@@ -526,6 +529,9 @@
     </ClCompile>
     <ClCompile Include="DException.cpp">
       <Filter>源文件\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DSkinnedGeometryObject.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

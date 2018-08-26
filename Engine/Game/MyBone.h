@@ -16,8 +16,6 @@ protected:
 	virtual void OnFixedUpdate();
 	virtual bool OnCullObject();
 
-private:
-	DMaterial* m_material;
 };
 
 class MyBoneObj : public DSceneObject
@@ -38,5 +36,6 @@ protected:
 
 private:
 	std::vector<MyBone*> m_bones;
+	DMaterial* m_material;
 };
 

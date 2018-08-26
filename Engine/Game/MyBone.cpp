@@ -7,7 +7,7 @@
 
 MyBone::MyBone() : DSceneObject()
 {
-	m_material = 0;
+	
 }
 
 
@@ -17,19 +17,13 @@ MyBone::~MyBone()
 
 bool MyBone::OnInit()
 {
-	DShader* shader = DRes::LoadInternal<DShader>(D_RES_SHADER_COLOR);
-	m_material = new DMaterial(shader);
+	
 	return true;
 }
 
 void MyBone::OnDestroy()
 {
-	if (m_material != NULL)
-	{
-		m_material->Destroy();
-		delete m_material;
-		m_material = 0;
-	}
+	
 }
 
 void MyBone::OnUpdate()
@@ -42,26 +36,7 @@ void MyBone::OnFixedUpdate()
 
 bool MyBone::OnCullObject()
 {
-	DTransform* parent = m_transform->GetParent();
-	if (parent == NULL)
-		return false;
-
-	m_material->SetPass(0);
-	DGraphics::GlPushMatrix();
-
-	DGraphics::GlBegin(DGeometryTopology_LineList);
-
-	DVector3 pos, parentpos;
-	parent->GetPosition(pos);
-	m_transform->GetPosition(parentpos);
-
-
-	DGraphics::GlVertex(pos);
-	DGraphics::GlVertex(parentpos);
-
-	DGraphics::GlEnd();
-
-	DGraphics::GlPopMatrix();
+	
 	return true;
 }
 
@@ -73,8 +48,9 @@ public:
 	float posx, posy, posz, rotx, roty, rotz, rotw;
 };
 
-MyBoneObj::MyBoneObj()
+MyBoneObj::MyBoneObj() : DSceneObject()
 {
+	m_material = 0;
 }
 
 MyBoneObj::~MyBoneObj()
@@ -104,7 +80,7 @@ void MyBoneObj::LoadBone(char * path)
 
 		BoneData data;
 		data.bone = new MyBone();
-		data.bone->Create();
+		//data.bone->Create();
 		data.parent = index;
 		data.posx = posx;
 		data.posy = posy;
@@ -141,11 +117,19 @@ void MyBoneObj::LoadBone(char * path)
 
 bool MyBoneObj::OnInit()
 {
+	DShader* shader = DRes::LoadInternal<DShader>(D_RES_SHADER_COLOR);
+	m_material = new DMaterial(shader);
 	return true;
 }
 
 void MyBoneObj::OnDestroy()
 {
+	if (m_material != NULL)
+	{
+		m_material->Destroy();
+		delete m_material;
+		m_material = 0;
+	}
 	/*int i;
 	for (i = 0; i < m_bones.size(); i++)
 	{
@@ -166,5 +150,28 @@ void MyBoneObj::OnFixedUpdate()
 
 bool MyBoneObj::OnCullObject()
 {
+	if (m_bones.size() == 0)
+		return false;
+
+	m_material->SetPass(0);
+	DGraphics::GlPushMatrix();
+
+	DGraphics::GlBegin(DGeometryTopology_LineList);
+
+	int i;
+	for (i = 0; i < m_bones.size(); i++)
+	{
+		DVector3 pos, parentpos;
+		DTransform* chi = m_bones[i]->GetTransform();
+		chi->GetPosition(pos);
+		chi->GetParent()->GetPosition(parentpos);
+
+		DGraphics::GlVertex(pos);
+		DGraphics::GlVertex(parentpos);
+	}
+
+	DGraphics::GlEnd();
+
+	DGraphics::GlPopMatrix();
 	return true;
 }

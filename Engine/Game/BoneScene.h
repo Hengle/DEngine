@@ -15,5 +15,7 @@ protected:
 private:
 	DCamera* m_camera;
 	MyBoneObj* m_bone;
+	DVector3 m_lookAtPoint;
+	float m_lookDistance;
 };
 

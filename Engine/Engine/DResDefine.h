@@ -15,6 +15,7 @@
 //Internal Shader Res Begin:
 #define D_RES_SHADER_BLIT_COPY         100
 #define D_RES_SHADER_DEPTH             101
+#define D_RES_SHADER_COLOR             102
 //Internal Shader Res End
 
 //Internal Material Res Begin:

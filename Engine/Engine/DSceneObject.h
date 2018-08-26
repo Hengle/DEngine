@@ -19,7 +19,6 @@ public:
 	void Update();
 	void FixedUpdate();
 	bool CullObject();
-	void RenderObject();
 	DTransform* GetTransform() const;
 	bool IsInitialized();
 	bool IsDestroyed();
@@ -33,13 +32,10 @@ protected:
 	virtual void OnUpdate() = 0;
 	virtual void OnFixedUpdate() = 0;
 	virtual bool OnCullObject() { return false; }
-	virtual void OnRenderObject() {}
 
 protected:
 	DTransform* m_transform;
 	DLAYER m_layer;
-
-private:
 	bool m_isInitialized;
 	bool m_isDestroyed;
 

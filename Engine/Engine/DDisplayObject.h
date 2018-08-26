@@ -25,6 +25,7 @@ public:
 	void SetVisible(bool visible /*是否可见*/);
 	/*获取可见性*/
 	bool GetVisible();
+	void RenderObject();
 	DMaterial* GetMaterial();
 	DGeometry* GetGeometry();
 	void GetBounds(DBounds*);

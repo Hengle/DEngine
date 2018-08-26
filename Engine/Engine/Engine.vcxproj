@@ -150,6 +150,7 @@
     <ClInclude Include="DCuller.h" />
     <ClInclude Include="DDisplayObject.h" />
     <ClInclude Include="DEngineDefine.h" />
+    <ClInclude Include="DException.h" />
     <ClInclude Include="DFrameBase.h" />
     <ClInclude Include="DGeometryWrapperOpGL.h" />
     <ClInclude Include="DGLCore.h" />
@@ -231,6 +232,7 @@
     <ClCompile Include="DColor.cpp" />
     <ClCompile Include="DCuller.cpp" />
     <ClCompile Include="DDisplayObject.cpp" />
+    <ClCompile Include="DException.cpp" />
     <ClCompile Include="DFrameBase.cpp" />
     <ClCompile Include="DGeometryWrapperOpGL.cpp" />
     <ClCompile Include="DGLCore.cpp" />

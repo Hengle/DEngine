@@ -24,6 +24,12 @@ bool DDisplayObject::GetVisible()
 	return m_isVisible;
 }
 
+void DDisplayObject::RenderObject()
+{
+	if (m_isInitialized && !m_isDestroyed)
+		OnRenderObject();
+}
+
 DMaterial * DDisplayObject::GetMaterial()
 {
 	return m_material;

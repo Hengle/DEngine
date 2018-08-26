@@ -51,6 +51,12 @@
     <ClInclude Include="WaterFilter.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MyBone.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BoneScene.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -81,6 +87,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="WaterFilter.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MyBone.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BoneScene.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -194,15 +194,15 @@ void DLight::OnFixedUpdate()
 
 void DLight::ApplyLightDirParam()
 {
-	DCamera* camera;
-	DCamera::GetCurrentCamera(&camera);
-	DTransform* transform = camera->GetTransform();
+	//DCamera* camera;
+	//DCamera::GetCurrentCamera(&camera);
+	//DTransform* transform = camera->GetTransform();
 
 	//if (m_transform->IsMatrixWillChange())
 	{
 		DVector3 up, lookAt, position;
 		m_transform->GetUp(up);
-		transform->GetPosition(position);
+		m_transform->GetPosition(position);
 		m_transform->GetForward(lookAt);
 
 		DShader::SetGlobalVector3(D_SC_LIGHT_DIR, lookAt);

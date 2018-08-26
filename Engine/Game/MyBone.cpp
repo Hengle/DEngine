@@ -115,6 +115,23 @@ void MyBoneObj::LoadBone(char * path)
 	}
 }
 
+void MyBoneObj::LoadAnim(char * path)
+{
+	std::ifstream ifile;
+	ifile.open(path);
+	if (ifile.fail())
+	{
+		return;
+	}
+	int boneIndex;
+	while (!ifile.eof())
+	{
+		ifile >> boneIndex;
+	}
+
+	ifile.close();
+}
+
 bool MyBoneObj::OnInit()
 {
 	DShader* shader = DRes::LoadInternal<DShader>(D_RES_SHADER_COLOR);

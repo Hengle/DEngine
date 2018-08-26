@@ -42,13 +42,22 @@ void MyBone::OnFixedUpdate()
 
 bool MyBone::OnCullObject()
 {
+	DTransform* parent = m_transform->GetParent();
+	if (parent == NULL)
+		return false;
+
 	m_material->SetPass(0);
 	DGraphics::GlPushMatrix();
 
 	DGraphics::GlBegin(DGeometryTopology_LineList);
 
-	DGraphics::GlVertex3(0.0f, 0.0f, 0.0f);
-	DGraphics::GlVertex3(-0.342f, 0.0f, -0.814f);
+	DVector3 pos, parentpos;
+	parent->GetPosition(pos);
+	m_transform->GetPosition(parentpos);
+
+
+	DGraphics::GlVertex(pos);
+	DGraphics::GlVertex(parentpos);
 
 	DGraphics::GlEnd();
 
@@ -85,18 +94,49 @@ void MyBoneObj::LoadBone(char * path)
 	float posx, posy, posz, rotx, roty, rotz, rotw;
 	int index;
 
+	vector<BoneData> boneDatas;
+
 	while (!ifile.eof())
 	{
 		ifile >> boneName >> posx >> posy >> posz >> rotx >> roty >> rotz >> rotw >> index;
 		
 		DLog::InfoArgs("BoneName:%s,Pos:(%f,%f,%f),Rot:(%f,%f,%f,%f),index:%d", boneName, posx, posy, posz, rotx, roty, rotz, rotw, index);
 
-		MyBone* bone = new MyBone();
-		bone->Create();
-		m_bones.push_back(bone);
+		BoneData data;
+		data.bone = new MyBone();
+		data.bone->Create();
+		data.parent = index;
+		data.posx = posx;
+		data.posy = posy;
+		data.posz = posz;
+		data.rotx = rotx;
+		data.roty = roty;
+		data.rotz = rotz;
+		data.rotw = rotw;
+
+		boneDatas.push_back(data);
 	}
 
 	ifile.close();
+
+	int i;
+	for (i = 0; i < boneDatas.size(); i++)
+	{
+		BoneData data = boneDatas[i];
+		DTransform* transform = data.bone->GetTransform();
+		if (data.parent == -1)
+		{
+			transform->SetParent(m_transform);
+		}
+		else
+		{
+			DTransform* parent = boneDatas[data.parent].bone->GetTransform();
+			transform->SetParent(parent);
+		}
+		transform->SetLocalPosition(data.posx, data.posy, data.posz);
+		transform->SetLocalRotation(data.rotx, data.roty, data.rotz, data.rotw);
+		m_bones.push_back(data.bone);
+	}
 }
 
 bool MyBoneObj::OnInit()
@@ -106,6 +146,14 @@ bool MyBoneObj::OnInit()
 
 void MyBoneObj::OnDestroy()
 {
+	/*int i;
+	for (i = 0; i < m_bones.size(); i++)
+	{
+		MyBone* bone = m_bones[i];
+		bone->Destroy();
+		delete bone;
+		bone = NULL;
+	}*/
 }
 
 void MyBoneObj::OnUpdate()

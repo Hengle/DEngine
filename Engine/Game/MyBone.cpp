@@ -3,7 +3,7 @@
 #include "DRes.h"
 #include "DGraphics.h"
 #include "DLog.h"
-#include <fstream>
+#include "DTime.h"
 
 MyBone::MyBone() : DSceneObject()
 {
@@ -51,6 +51,8 @@ public:
 MyBoneObj::MyBoneObj() : DSceneObject()
 {
 	m_material = 0;
+	m_maxTime = 0;
+	m_currentTime = 0;
 }
 
 MyBoneObj::~MyBoneObj()
@@ -124,9 +126,40 @@ void MyBoneObj::LoadAnim(char * path)
 		return;
 	}
 	int boneIndex;
+	char read[32];
+	MyBoneData bonedata;
+	
+	//bool isBegin = false;
 	while (!ifile.eof())
 	{
-		ifile >> boneIndex;
+		ifile >> read;
+
+		//if (!isBegin)
+		{
+			if (strcmp(read, "bonebegin") == 0)
+			{
+				ifile >> boneIndex;
+				bonedata = MyBoneData();
+				bonedata.boneIndex = boneIndex;
+				bonedata.positionKey = 0;
+				bonedata.rotationKey = 0;
+				bonedata.scaleKey = 0;
+				//isBegin = true;
+
+				LoadAnimCurves(ifile, &bonedata);
+
+				m_boneDatas.push_back(bonedata);
+			}
+		}
+		//else
+		/*{
+			if (strcmp(read, "boneend") == 0)
+			{
+				isBegin = false;
+				m_boneDatas.push_back(bonedata);
+			}
+		}*/
+		
 	}
 
 	ifile.close();
@@ -155,10 +188,35 @@ void MyBoneObj::OnDestroy()
 		delete bone;
 		bone = NULL;
 	}*/
+	int i;
+	for (i = 0; i < m_boneDatas.size(); i++)
+	{
+		MyBoneData bonedata = m_boneDatas[i];
+		bonedata.Release();
+	}
 }
 
 void MyBoneObj::OnUpdate()
 {
+	bool reset = false;
+	m_currentTime += DTime::GetDeltaTime();
+	if (m_currentTime > m_maxTime) {
+		m_currentTime = 0;
+		reset = true;
+	}
+
+	int i;
+	for (i = 0; i < m_boneDatas.size(); i++)
+	{
+		MyBoneData bonedata = m_boneDatas[i];
+		if (reset)
+			bonedata.Reset();
+		if (bonedata.boneIndex >= 0 && bonedata.boneIndex < m_bones.size()) {
+			MyBone* bone = m_bones[bonedata.boneIndex];
+			DTransform* transform = bone->GetTransform();
+			bonedata.Sample(transform, m_currentTime);
+		}
+	}
 }
 
 void MyBoneObj::OnFixedUpdate()
@@ -191,4 +249,246 @@ bool MyBoneObj::OnCullObject()
 
 	DGraphics::GlPopMatrix();
 	return true;
+}
+
+void MyBoneObj::LoadPositionKeys(std::ifstream & ifile, MyBoneData *bonedata, int count)
+{
+	int i = 0;
+	float x, y, z, time;
+	for (i = 0; i < count; i++)
+	{
+		ifile >> x >> y >> z>>time;
+		if (time > m_maxTime)
+			m_maxTime = time;
+		if (bonedata->positionKey == 0)
+			bonedata->positionKey = new PositionKey();
+		bonedata->positionKey->Insert(x, y, z, time);
+	}
+}
+
+void MyBoneObj::LoadRotationKeys(std::ifstream & ifile, MyBoneData *bonedata, int count)
+{
+	int i = 0;
+	float x, y, z, w, time;
+	for (i = 0; i < count; i++)
+	{
+		ifile >> x >> y >> z >> w >> time;
+		if (time > m_maxTime)
+			m_maxTime = time;
+		if (bonedata->rotationKey == 0)
+			bonedata->rotationKey = new RotationKey();
+		bonedata->rotationKey->Insert(x, y, z, w, time);
+	}
+}
+
+void MyBoneObj::LoadScaleKeys(std::ifstream & ifile, MyBoneData *bonedata, int count)
+{
+	int i = 0;
+	float x, y, z, time;
+	for (i = 0; i < count; i++)
+	{
+		ifile >> x >> y >> z >> time;
+		if (time > m_maxTime)
+			m_maxTime = time;
+		if (bonedata->scaleKey == 0)
+			bonedata->scaleKey = new ScaleKey();
+		bonedata->scaleKey->Insert(x, y, z, time);
+	}
+}
+
+void MyBoneObj::LoadAnimCurves(std::ifstream & ifile, MyBoneData * bonedata)
+{
+	int keycount;
+	char read[32];
+	while (!ifile.eof())
+	{
+		ifile >> read;
+
+		if (strcmp(read, "p") == 0)
+		{
+			ifile >> keycount;
+			LoadPositionKeys(ifile, bonedata, keycount);
+		}
+		else if (strcmp(read, "r") == 0)
+		{
+			ifile >> keycount;
+			LoadRotationKeys(ifile, bonedata, keycount);
+		}
+		else if (strcmp(read, "s") == 0)
+		{
+			ifile >> keycount;
+			LoadScaleKeys(ifile, bonedata, keycount);
+		}
+		else if (strcmp(read, "boneend") == 0)
+		{
+			return;
+		}
+	}
+}
+
+void MyBoneObj::PoseKey::Release()
+{
+	int i;
+	for (i = 0; i < m_keys.size(); i++)
+	{
+		delete[] m_keys[i];
+	}
+	m_keys.clear();
+}
+
+void MyBoneObj::MyBoneData::Sample(DTransform * transform, float time)
+{
+	if (positionKey != 0)
+		positionKey->Sample(transform, time);
+	if (rotationKey != 0)
+		rotationKey->Sample(transform, time);
+	if (scaleKey != 0)
+		scaleKey->Sample(transform, time);
+}
+
+void MyBoneObj::MyBoneData::Reset()
+{
+	if (positionKey != 0)
+		positionKey->Reset();
+	if (rotationKey != 0)
+		rotationKey->Reset();
+	if (scaleKey != 0)
+		scaleKey->Reset();
+}
+
+void MyBoneObj::MyBoneData::Release()
+{
+	if (positionKey != 0)
+	{
+		positionKey->Release();
+		delete positionKey;
+		positionKey = 0;
+	}
+	if (rotationKey != 0)
+	{
+		rotationKey->Release();
+		delete rotationKey;
+		rotationKey = 0;
+	}
+	if (scaleKey != 0)
+	{
+		scaleKey->Release();
+		delete scaleKey;
+		scaleKey = 0;
+	}
+}
+
+void MyBoneObj::ScaleKey::Insert(float x, float y, float z, float time)
+{
+	float* keys = new float[4];
+	keys[0] = x;
+	keys[1] = y;
+	keys[2] = z;
+	keys[3] = time;
+	m_keys.push_back(keys);
+}
+
+void MyBoneObj::ScaleKey::Sample(DTransform * transform, float time)
+{
+	if (m_keys.size() < 2)
+		return;
+	if (m_currentKey == m_keys.size() - 1)
+		return;
+
+	float* begin = m_keys[m_currentKey];
+	float* end = m_keys[m_currentKey + 1];
+
+	float lp = (time - begin[3]) / (end[3] - begin[3]);
+	if (lp < 0.0f)
+		lp = 0.0f;
+	if (lp > 1.0f)
+		lp = 1.0f;
+
+	DVector3 scale;
+	transform->GetLocalScale(scale);
+
+	DVector3::Lerp(DVector3(begin[0], begin[1], begin[2]), DVector3(end[0], end[1], end[2]), lp, scale);
+
+	transform->SetLocalScale(scale);
+
+	if (time >= end[3]) {
+		m_currentKey += 1;
+	}
+}
+
+void MyBoneObj::RotationKey::Insert(float x, float y, float z, float w, float time)
+{
+	float* keys = new float[5];
+	keys[0] = x;
+	keys[1] = y;
+	keys[2] = z;
+	keys[3] = w;
+	keys[4] = time;
+	m_keys.push_back(keys);
+}
+
+void MyBoneObj::RotationKey::Sample(DTransform * transform, float time)
+{
+	if (m_keys.size() < 2)
+		return;
+	if (m_currentKey == m_keys.size() - 1)
+		return;
+
+	float* begin = m_keys[m_currentKey];
+	float* end = m_keys[m_currentKey + 1];
+
+	float lp = (time - begin[4]) / (end[4] - begin[4]);
+	if (lp < 0.0f)
+		lp = 0.0f;
+	if (lp > 1.0f)
+		lp = 1.0f;
+
+	DQuaternion rotation;
+	transform->GetLocalRotation(rotation);
+
+	DQuaternion::Lerp(DQuaternion(begin[0], begin[1], begin[2], begin[3]), DQuaternion(end[0], end[1], end[2], end[3]), lp, rotation);
+
+	transform->SetLocalRotation(rotation);
+
+	if (time >= end[4]) {
+		m_currentKey += 1;
+	}
+}
+
+void MyBoneObj::PositionKey::Insert(float x, float y, float z, float time)
+{
+	float* keys = new float[4];
+	keys[0] = x;
+	keys[1] = y;
+	keys[2] = z;
+	keys[3] = time;
+	m_keys.push_back(keys);
+}
+
+void MyBoneObj::PositionKey::Sample(DTransform * transform, float time)
+{
+	if (m_keys.size() < 2)
+		return;
+	if (m_currentKey == m_keys.size() - 1)
+		return;
+
+	float* begin = m_keys[m_currentKey];
+	float* end = m_keys[m_currentKey + 1];
+
+	float lp = (time - begin[3]) / (end[3] - begin[3]);
+	if (lp < 0.0f)
+		lp = 0.0f;
+	if (lp > 1.0f)
+		lp = 1.0f;
+
+	DVector3 position;
+	transform->GetLocalPosition(position);
+
+	DVector3::Lerp(DVector3(begin[0], begin[1], begin[2]), DVector3(end[0], end[1], end[2]), lp, position);
+
+	transform->SetLocalPosition(position);
+
+	if (time >= end[3]) {
+		m_currentKey += 1;
+	}
 }

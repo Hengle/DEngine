@@ -29,6 +29,7 @@ void BoneScene::OnLoad()
 	transform->SetEuler(-90.0f, 89.9999f, 0.0f);
 
 	m_bone->LoadBone("../Res/bone.txt");
+	m_bone->LoadAnim("../Res/anim.txt");
 }
 
 void BoneScene::OnUnLoad()

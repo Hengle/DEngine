@@ -848,6 +848,15 @@ DQuaternion & DQuaternion::operator*=(const DQuaternion & b)
 	return result;
 }
 
+void DQuaternion::Lerp(const DQuaternion & a, const DQuaternion & b, float t, DQuaternion & out)
+{
+	if (t < 0.0f)
+		t = 0.0f;
+	else if (t>1.0f)
+		t = 1.0f;
+	out = DQuaternion(a.x + (b.x - a.x)*t, a.y + (b.y - a.y)*t, a.z + (b.z - a.z)*t, a.w + (b.w - a.w)*t);
+}
+
 float DQuaternion::Dot(const DQuaternion a, const DQuaternion b)
 {
 	return a.w * b.w + a.x * b.x + a.y * b.y + a.z * b.z;

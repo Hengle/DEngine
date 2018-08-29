@@ -196,6 +196,7 @@ public:
 	DQuaternion& operator *= (const DQuaternion&);
 
 	static void Lerp(const DQuaternion&, const DQuaternion&, float, DQuaternion&);
+	static void Slerp(const DQuaternion&, const DQuaternion&, float, DQuaternion&);
 	static float Dot(const DQuaternion a, const DQuaternion b);
 	static void Euler(DQuaternion* rotation, float, float, float);
 	static void Euler(DQuaternion* rotation, const DVector3&);

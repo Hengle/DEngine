@@ -482,6 +482,8 @@ void DTransform::SetParent(DTransform * parent, bool useLocalInfo)
 
 	//插入到父节点的子节点链表
 	m_nextNeighbor = parent->m_firstChild;
+	parent->m_firstChild->m_preNeighbor = this;
+	m_preNeighbor = NULL;
 	parent->m_firstChild = this;
 	//父节点孩子数量+1
 	parent->m_childCount += 1;
@@ -530,10 +532,12 @@ void DTransform::RemoveFromParent()
 	if (m_parent->m_firstChild == this)
 	{
 		m_parent->m_firstChild = this->m_nextNeighbor;
+		this->m_nextNeighbor->m_preNeighbor = NULL;
 	}
 	else if (m_preNeighbor != NULL)
 	{
 		m_preNeighbor->m_nextNeighbor = m_nextNeighbor;
+		m_nextNeighbor->m_preNeighbor = m_preNeighbor;
 	}
 
 	//父节点孩子数量-1

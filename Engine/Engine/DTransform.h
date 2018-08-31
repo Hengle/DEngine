@@ -66,7 +66,7 @@ public:
 	//清除区域（包围盒）变换
 	void ClearAreaChange();
 
-	bool IsMatrixWillChange();
+	//bool IsMatrixWillChange();
 
 	void Release();
 
@@ -77,8 +77,9 @@ private:
 
 	void RefreshLocalToWorldMatrix();
 	void RefreshWorldToLocalMatrix();
+	void RefreshMatrix();
 	void RefreshPosition();
-	void RefreshScale();
+	//void RefreshScale(bool useLocalInfo);
 	void RefreshRotation();
 	void RefreshEuler();
 	void RefreshQuaterion();
@@ -89,7 +90,7 @@ private:
 	DVector3 m_euler;
 	DVector3 m_localEuler;
 	DVector3 m_localScale;
-	DVector3 m_lossyScale;
+	//DVector3 m_lossyScale;
 	DVector3 m_right;
 	DVector3 m_up;
 	DVector3 m_forward;
@@ -103,21 +104,22 @@ private:
 	DTransform* m_firstChild;
 	int m_childCount;
 
-	bool m_isL2WMatrixChanged;    //标记localToWorld矩阵是否发生变化
-	bool m_isW2LMatrixChanged;    //标记worldToLocal矩阵是否发生变化
+	//bool m_isL2WMatrixChanged;    //标记localToWorld矩阵是否发生变化
+	//bool m_isW2LMatrixChanged;    //标记worldToLocal矩阵是否发生变化
+	bool m_isMatrixChanged;
 
 	SpaceDefine m_positionChangedMark; //标记当前坐标改变的来源-可能设置局部或世界坐标，根据来源不同，矩阵的更新也不同
 	SpaceDefine m_eulerChangedMark;  //标记当前欧拉角改变的来源-可能设置局部或世界欧拉角，根据来源不同，矩阵的更新也不同
 	SpaceDefine m_rotationChangedMark;  
-	SpaceDefine m_scaleChangedMark;
+	//SpaceDefine m_scaleChangedMark;
 
 	DMatrix4x4 m_localToWorld;
-	DMatrix4x4 m_worldToLocal;
+	DMatrix4x4 m_worldToLocal; 
 
 	DSceneObject* m_sceneObj;
 
 	bool m_isRoot;
 	bool m_isAreaChanged;
-	bool m_isParentChanged;
+	//bool m_isParentChanged;
 };
 

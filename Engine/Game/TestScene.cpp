@@ -47,14 +47,34 @@ void TestScene::OnGUI()
 	//}
 	////DGUI::Label("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
-	///*D3DXVECTOR3 euler;
-	//DTransform* transform;
-	//transform = m_obj->GetTransform();
-	//transform->GetEuler(euler);
+	DVector3 euler;
+	DTransform* transform;
+	transform = m_obj0->GetTransform();
+	transform->GetLocalEuler(euler);
 
-	//ImGui::SliderFloat("Pitch", &euler.x, 0.0f, 360.0f);
-	//ImGui::SliderFloat("Yall", &euler.y, 0.0f, 360.0f);
-	//ImGui::SliderFloat("Roll", &euler.z, 0.0f, 360.0f);*/
+	ImGui::SliderFloat("Pitch", &euler.x, 0.0f, 360.0f);
+	ImGui::SliderFloat("Yall", &euler.y, 0.0f, 360.0f);
+	ImGui::SliderFloat("Roll", &euler.z, 0.0f, 360.0f);
+
+	transform->SetLocalEuler(euler);
+
+	transform = m_tobj0->GetTransform();
+	transform->GetLocalEuler(euler);
+
+	ImGui::SliderFloat("TPitch", &euler.x, 0.0f, 360.0f);
+	ImGui::SliderFloat("TYall", &euler.y, 0.0f, 360.0f);
+	ImGui::SliderFloat("TRoll", &euler.z, 0.0f, 360.0f);
+
+	transform->SetLocalEuler(euler);
+
+	transform = m_cube->GetTransform();
+	transform->GetLocalEuler(euler);
+
+	ImGui::SliderFloat("CPitch", &euler.x, 0.0f, 360.0f);
+	ImGui::SliderFloat("CYall", &euler.y, 0.0f, 360.0f);
+	ImGui::SliderFloat("CRoll", &euler.z, 0.0f, 360.0f);
+
+	transform->SetLocalEuler(euler);
 
 	///*if (DInput::IsMousePress(0)) 
 	//{
@@ -329,8 +349,9 @@ void TestScene::TestLoad()
 
 	m_tobj0 = new DDisplayObject(obj, mat4);
 	m_tobj0->Create();
-	transform = m_tobj0->GetTransform();
-	transform->SetPosition(2.0f, 1.64f, 3.6f);
+	DTransform* tchild = m_tobj0->GetTransform();
+	tchild->SetPosition(2.0f, 1.64f, 3.6f);
+	tchild->SetParent(transform);
 
 	//AddDisplayObject(m_obj0);
 
@@ -349,7 +370,7 @@ void TestScene::TestLoad()
 	transform->SetPosition(2.64f, 2.61f, 0.0f);
 
 	DTransform* objtr = m_obj0->GetTransform();
-	transform->SetParent(objtr);
+	objtr->SetParent(transform);
 	//AddDisplayObject(m_cube);
 }
 

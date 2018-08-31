@@ -4,15 +4,28 @@
 #include "DGraphics.h"
 #include "DLog.h"
 #include "DTime.h"
+#include "TestResDefine.h"
 
 MyBone::MyBone() : DSceneObject()
 {
-	
+	m_boneName = 0;
 }
 
 
 MyBone::~MyBone()
 {
+}
+
+void MyBone::SetBoneName(char * boneName)
+{
+	int len = strlen(boneName) + 1;
+	m_boneName = new char[len];
+	strcpy_s(m_boneName, len, boneName);
+}
+
+const char * MyBone::GetBoneName()
+{
+	return m_boneName;
 }
 
 bool MyBone::OnInit()
@@ -23,7 +36,9 @@ bool MyBone::OnInit()
 
 void MyBone::OnDestroy()
 {
-	
+	if (m_boneName != 0)
+		delete[] m_boneName;
+	m_boneName = 0;
 }
 
 void MyBone::OnUpdate()
@@ -91,6 +106,7 @@ void MyBoneObj::LoadBone(char * path)
 		data.roty = roty;
 		data.rotz = rotz;
 		data.rotw = rotw;
+		data.bone->SetBoneName(boneName);
 
 		boneDatas.push_back(data);
 	}
@@ -98,6 +114,13 @@ void MyBoneObj::LoadBone(char * path)
 	ifile.close();
 
 	int i;
+
+	DGeometry* cube = DRes::LoadInternal<DGeometry>(D_RES_MESH_CUBE);
+	DMaterial* mat3 = DRes::Load<DMaterial>(DEFAULT_GROUP, DECAL_MAT);
+	DDisplayObject* cubeobj;
+	DTransform* tr;
+	
+
 	for (i = 0; i < boneDatas.size(); i++)
 	{
 		BoneData data = boneDatas[i];
@@ -113,6 +136,14 @@ void MyBoneObj::LoadBone(char * path)
 		}
 		transform->SetLocalPosition(data.posx, data.posy, data.posz);
 		transform->SetLocalRotation(data.rotx, data.roty, data.rotz, data.rotw);
+
+		cubeobj = new DDisplayObject(cube, mat3);
+		cubeobj->Create();
+		tr = cubeobj->GetTransform();
+		tr->SetLocalScale(0.1f, 0.1f, 0.1f);
+		tr->SetParent(transform);
+		tr->SetLocalPosition(0, 0, 0);
+
 		m_bones.push_back(data.bone);
 	}
 }
@@ -165,6 +196,20 @@ void MyBoneObj::LoadAnim(char * path)
 	ifile.close();
 }
 
+int MyBoneObj::GetBoneCount() const
+{
+	return m_bones.size();
+}
+
+MyBone * MyBoneObj::GetBone(int index)
+{
+	if (index >= 0 && index < m_bones.size())
+	{
+		return m_bones[index];
+	}
+	return nullptr;
+}
+
 bool MyBoneObj::OnInit()
 {
 	DShader* shader = DRes::LoadInternal<DShader>(D_RES_SHADER_COLOR);
@@ -198,7 +243,7 @@ void MyBoneObj::OnDestroy()
 
 void MyBoneObj::OnUpdate()
 {
-	bool reset = false;
+	/*bool reset = false;
 	m_currentTime += DTime::GetDeltaTime();
 	if (m_currentTime > m_maxTime) {
 		m_currentTime = 0;
@@ -216,7 +261,7 @@ void MyBoneObj::OnUpdate()
 			DTransform* transform = bone->GetTransform();
 			bonedata.Sample(transform, m_currentTime);
 		}
-	}
+	}*/
 }
 
 void MyBoneObj::OnFixedUpdate()
@@ -446,7 +491,7 @@ void MyBoneObj::RotationKey::Sample(DTransform * transform, float time)
 	DQuaternion rotation;
 	transform->GetLocalRotation(rotation);
 
-	DQuaternion::Lerp(DQuaternion(begin[0], begin[1], begin[2], begin[3]), DQuaternion(end[0], end[1], end[2], end[3]), lp, rotation);
+	DQuaternion::Slerp(DQuaternion(begin[0], begin[1], begin[2], begin[3]), DQuaternion(end[0], end[1], end[2], end[3]), lp, rotation);
 
 	transform->SetLocalRotation(rotation);
 

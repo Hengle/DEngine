@@ -11,6 +11,32 @@ BoneScene::BoneScene(SCENEID sceneId, char * sceneName) : DScene(sceneId, sceneN
 	m_lookDistance = 7.0f;
 }
 
+void BoneScene::OnGUI()
+{
+	int boneCount = m_bone->GetBoneCount();
+	int i;
+
+	DTransform* transform;
+	DVector3 euler;
+
+	transform = m_bone->GetTransform();
+	transform->GetEuler(euler);
+
+	ImGui::SliderFloat("bonePitch", &euler.x, -180.0f, 180.0f);
+	ImGui::SliderFloat("boneYaw", &euler.y, -180.0f, 180.0f);
+	ImGui::SliderFloat("boneRoll", &euler.z, -180.0f, 180.0f);
+	
+	transform->SetEuler(euler);
+
+	for (i = 0; i < boneCount; i++)
+	{
+		MyBone* bone = m_bone->GetBone(i);
+		DrawBone(bone);
+
+		//transform->SetLocalEuler(x, y, z);
+	}
+}
+
 void BoneScene::OnLoad()
 {
 	m_camera = new DCamera();
@@ -29,7 +55,17 @@ void BoneScene::OnLoad()
 	transform->SetEuler(-90.0f, 89.9999f, 0.0f);
 
 	m_bone->LoadBone("../Res/bone.txt");
-	m_bone->LoadAnim("../Res/anim.txt");
+	//m_bone->LoadAnim("../Res/anim.txt");
+
+
+	//DGeometry* cube = DRes::LoadInternal<DGeometry>(D_RES_MESH_CUBE);
+	//DMaterial* mat3 = DRes::Load<DMaterial>(DEFAULT_GROUP, DECAL_MAT);
+	////mat3->SetZTest(DRSCompareFunc_Greater);
+	//DDisplayObject* cubeobj = new DDisplayObject(cube, mat3);
+	//cubeobj->Create();
+	//DTransform* tr = cubeobj->GetTransform();
+	//tr->SetPosition(0.004f, 0.941f, 0.057f);
+	//tr->SetParent(transform);
 }
 
 void BoneScene::OnUnLoad()
@@ -88,4 +124,36 @@ void BoneScene::OnUpdate()
 		DVector3 position = m_lookAtPoint - forward*m_lookDistance;
 		m_camera->GetTransform()->SetPosition(position);
 	}
+}
+
+void BoneScene::DrawBone(MyBone * bone)
+{
+	DTransform* transform;
+	transform = bone->GetTransform();
+
+	DVector3 euler;
+
+	const char* boneName = bone->GetBoneName();
+	ImGui::Text(boneName);
+
+	DTransform* parent = transform->GetParent();
+	if (parent != NULL)
+	{
+		MyBone* parentObj = (MyBone*)(parent->GetSceneObject());
+		ImGui::Text("Parent:%s", parentObj->GetBoneName());
+	}
+
+	transform->GetLocalEuler(euler);
+
+	char pitch[64], yall[64], roll[64];
+
+	sprintf_s(pitch, "   Pitch:%s", boneName);
+	sprintf_s(yall, "   Yall:%s", boneName);
+	sprintf_s(roll, "   Roll:%s", boneName);
+
+	ImGui::SliderFloat(pitch, &euler.x, -180.0f, 180.0f);
+	ImGui::SliderFloat(yall, &euler.y, -180.0f, 180.0f);
+	ImGui::SliderFloat(roll, &euler.z, -180.0f, 180.0f);
+
+	transform->SetLocalEuler(euler);
 }

@@ -10,6 +10,9 @@ public:
 	MyBone();
 	~MyBone();
 
+	void SetBoneName(char*);
+	const char* GetBoneName();
+
 protected:
 	virtual bool OnInit();
 	virtual void OnDestroy();
@@ -17,6 +20,8 @@ protected:
 	virtual void OnFixedUpdate();
 	virtual bool OnCullObject();
 
+private:
+	char* m_boneName;
 };
 
 class MyBoneObj : public DSceneObject
@@ -79,6 +84,8 @@ public:
 public:
 	void LoadBone(char*);
 	void LoadAnim(char*);
+	int GetBoneCount() const;
+	MyBone* GetBone(int index);
 
 protected:
 	virtual bool OnInit();

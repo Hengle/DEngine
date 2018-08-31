@@ -8,9 +8,13 @@ public:
 	BoneScene(SCENEID sceneId, char* sceneName);
 
 protected:
+	virtual void OnGUI();
 	virtual void OnLoad();
 	virtual void OnUnLoad();
 	virtual void OnUpdate();
+
+private:
+	void DrawBone(MyBone*);
 
 private:
 	DCamera* m_camera;

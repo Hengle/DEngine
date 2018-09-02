@@ -44,11 +44,30 @@ public:
 	std::map<std::string, DShaderPropertyDesc> properties;
 };
 
+//typedef struct DBoneWeight
+//{
+//public:
+//	unsigned int boneIndex0, boneIndex1, boneIndex2, boneIndex3;
+//	float weight0, weight1, weight2, weight3;
+//} DBoneWeight;
+
 /*geometrybuffer描述*/
 typedef struct DGeometryBufferDesc
 {
 public:
-	DGeometryBufferDesc(){}
+	DGeometryBufferDesc(){
+		vertices = 0;
+		uvs = 0;
+		uv2s = 0;
+		uv3s = 0;
+		normals = 0;
+		tangents = 0;
+		colors = 0;
+		//boneWeights = 0;
+		boneWeights = 0;
+		boneIndices = 0;
+		indices = 0;
+	}
 public:
 	int vertexCount /*顶点数量*/, indexCount /*索引数量*/;
 	float*vertices; /*顶点缓存*/
@@ -58,6 +77,9 @@ public:
 	float*normals;
 	float*tangents;
 	float*colors;
+	//DBoneWeight*boneWeights;
+	unsigned int*boneIndices;
+	float*boneWeights;
 	unsigned int*indices;
 } DGeometryBufferDesc;
 

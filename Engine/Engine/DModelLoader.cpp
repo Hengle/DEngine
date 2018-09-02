@@ -126,6 +126,8 @@ bool DModelLoader::LoadObj(const char * file, DGeometryBufferDesc* desc)
 	desc->uvs = new float[desc->vertexCount * 2];
 	desc->vertices = new float[desc->vertexCount * 3];
 	desc->tangents = new float[desc->vertexCount * 4];
+	desc->boneWeights = 0;
+	desc->boneIndices = 0;
 
 	DModelLoaderTangent* tangents = new DModelLoaderTangent[desc->vertexCount];
 	//dataSize = sizeof(float) * 5;
@@ -236,6 +238,8 @@ bool DModelLoader::LoadMesh(const char * path, DGeometryBufferDesc * desc)
 	desc->uvs = new float[desc->vertexCount * 2];
 	desc->vertices = new float[desc->vertexCount * 3];
 	desc->tangents = new float[desc->vertexCount * 4];
+	desc->boneWeights = 0;
+	desc->boneIndices = 0;
 
 	char define;
 
@@ -258,6 +262,18 @@ bool DModelLoader::LoadMesh(const char * path, DGeometryBufferDesc * desc)
 		else if (define == 'i')
 		{
 			f.read((char*)desc->indices, sizeof(unsigned int)*icount);
+		}
+		else if (define == 'b')
+		{
+			if (desc->boneIndices == 0)
+				desc->boneIndices = new unsigned int[desc->vertexCount * 4];
+			f.read((char*)desc->boneIndices, sizeof(unsigned int)*vcount * 4);
+		}
+		else if (define == 'w')
+		{
+			if (desc->boneWeights == 0)
+				desc->boneWeights = new float[desc->vertexCount * 4];
+			f.read((char*)desc->boneWeights, sizeof(float)*vcount*4);
 		}
 	}
 

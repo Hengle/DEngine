@@ -5,7 +5,7 @@
 
 DGeometry::DGeometry(bool dynamic)
 {
-
+	m_boneMatrices = 0;
 	m_vertexChanged = false;
 	m_geometryDesc.vertices = 0;
 	m_geometryDesc.uvs = 0;
@@ -78,6 +78,11 @@ void DGeometry::Destroy()
 	{
 		delete[] m_geometryDesc.tangents;
 		m_geometryDesc.tangents = 0;
+	}
+	if (m_boneMatrices != NULL)
+	{
+		delete[] m_boneMatrices;
+		m_boneMatrices = 0;
 	}
 }
 
@@ -381,6 +386,26 @@ void DGeometry::SetIndices(unsigned int * indices, int length)
 	m_vertexChanged = true;
 }
 
+void DGeometry::SetBoneMatrixCount(int count)
+{
+	if (m_boneMatrices != 0)
+	{
+		delete[] m_boneMatrices;
+		m_boneMatrices = 0;
+	}
+	m_boneMatrices = new DMatrix4x4[count];
+	m_boneMatrixCount = count;
+}
+
+void DGeometry::SetBoneMatrix(DMatrix4x4 matrix, int index)
+{
+	if (index < 0 || index >= m_boneMatrixCount)
+	{
+		return;
+	}
+	m_boneMatrices[index] = matrix;
+}
+
 void DGeometry::SetUV(int index, int channel, const DVector2 & uv)
 {
 	if (index < 0 || index >= m_geometryDesc.vertexCount)
@@ -472,6 +497,63 @@ void DGeometry::Draw(int vertexUsage)
 		}
 		wrapper->DrawPrimitive(m_topology);
 	}
+}
+
+void DGeometry::UpdateBone(DTransform ** bones, const DMatrix4x4& worldToLocal)
+{
+	if (m_geometryDesc.boneIndices == 0 || m_geometryDesc.boneWeights == 0 || m_boneMatrices == 0)
+		return;
+	int i;
+	DTransform* bone0, *bone1, *bone2, *bone3;
+	int boneIndex0, boneIndex1, boneIndex2, boneIndex3;
+	float weight0, weight1, weight2, weight3;
+	DMatrix4x4 pose0, pose1, pose2, pose3;
+	DMatrix4x4 boneMat0, boneMat1, boneMat2, boneMat3;
+
+	DVector3 pos,result,temp;
+	
+	for (i = 0; i < m_geometryDesc.vertexCount; i++)
+	{
+		boneIndex0 = m_geometryDesc.boneIndices[i * 4];
+		boneIndex1 = m_geometryDesc.boneIndices[i * 4 + 1];
+		boneIndex2 = m_geometryDesc.boneIndices[i * 4 + 2];
+		boneIndex3 = m_geometryDesc.boneIndices[i * 4 + 3];
+
+		bone0 = bones[boneIndex0];
+		bone1 = bones[boneIndex1];
+		bone2 = bones[boneIndex2];
+		bone3 = bones[boneIndex3];
+
+		pose0 = m_boneMatrices[boneIndex0];
+		pose1 = m_boneMatrices[boneIndex1];
+		pose2 = m_boneMatrices[boneIndex2];
+		pose3 = m_boneMatrices[boneIndex3];
+
+		weight0 = m_geometryDesc.boneWeights[i * 4];
+		weight1 = m_geometryDesc.boneWeights[i * 4 + 1];
+		weight2 = m_geometryDesc.boneWeights[i * 4 + 2];
+		weight3 = m_geometryDesc.boneWeights[i * 4 + 3];
+
+		pos = DVector3(m_geometryDesc.vertices[i * 3], m_geometryDesc.vertices[i * 3 + 1], m_geometryDesc.vertices[i * 3 + 2]);
+
+		bone0->GetLocalToWorld(boneMat0);
+		bone1->GetLocalToWorld(boneMat1);
+		bone2->GetLocalToWorld(boneMat2);
+		bone3->GetLocalToWorld(boneMat3);
+
+		(pose0*boneMat0*worldToLocal).TransformPoint(pos, temp);
+		result += temp*weight0;
+		
+		(pose1*boneMat1*worldToLocal).TransformPoint(pos, temp);
+		result += temp*weight1;
+
+		(pose2*boneMat2*worldToLocal).TransformPoint(pos, temp);
+		result += temp*weight2;
+
+		(pose3*boneMat3*worldToLocal).TransformPoint(pos, temp);
+		result += temp*weight3;
+	}
+	m_vertexChanged = true;
 }
 
 DGeometry * DGeometry::Create(char* fileName, bool dynamic)

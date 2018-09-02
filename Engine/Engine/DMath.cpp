@@ -859,16 +859,33 @@ void DQuaternion::Lerp(const DQuaternion & a, const DQuaternion & b, float t, DQ
 
 void DQuaternion::Slerp(const DQuaternion & a, const DQuaternion & b, float t, DQuaternion & out)
 {
-	float t_ = 1 - t;
-	float Wa, Wb;
-	float theta = acos(a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w);
-	float sn = sin(theta);
-	Wa = sin(t_ * theta) / sn;
-	Wb = sin(t * theta) / sn;
-	out.x = Wa * a.x + Wb * b.x;
-	out.y = Wa * a.y + Wb * b.y;
-	out.z = Wa * a.z + Wb * b.z;
-	out.w = Wa * a.w + Wb * b.w;
+	
+	double dot = a.x*b.x + a.y*b.y + a.z*b.z + a.w*b.w;
+
+	DQuaternion temp = b;
+
+	if (dot < 0.0f) {
+		temp = DQuaternion(b.x*-1.0f, b.y*-1.0f, b.z*-1.0f, b.w*-1.0f);
+		dot = -dot;
+	}
+
+	const float DOT_THRESHOLD = 0.9995;
+	if (dot > DOT_THRESHOLD) {
+
+		out = DQuaternion(a.x + t*(temp.x - a.x), a.y + t*(temp.y - a.y), a.z + t*(temp.z - a.z), a.w + t*(temp.w - a.w));
+		//result.normalize();
+		return;
+	}
+
+	float theta_0 = acos(dot);       
+	float theta = theta_0*t;
+	float sin_theta = sin(theta);
+	float sin_theta_0 = sin(theta_0);
+
+	float s0 = cos(theta) - dot * sin_theta / sin_theta_0;
+	float s1 = sin_theta / sin_theta_0;
+
+	out = DQuaternion(s0*a.x + s1*temp.x, s0*a.y + s1*temp.y, s0*a.z + s1*temp.z, s0*a.w + s1*temp.w);
 }
 
 float DQuaternion::Dot(const DQuaternion a, const DQuaternion b)

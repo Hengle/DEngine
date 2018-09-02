@@ -86,6 +86,8 @@ public:
 	void LoadAnim(char*);
 	int GetBoneCount() const;
 	MyBone* GetBone(int index);
+	void Play();
+	void Stop();
 
 protected:
 	virtual bool OnInit();
@@ -106,5 +108,7 @@ private:
 	DMaterial* m_material;
 	float m_maxTime;
 	float m_currentTime;
+
+	bool m_isPlaying;
 };
 

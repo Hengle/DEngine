@@ -68,6 +68,7 @@ MyBoneObj::MyBoneObj() : DSceneObject()
 	m_material = 0;
 	m_maxTime = 0;
 	m_currentTime = 0;
+	m_isPlaying = false;
 }
 
 MyBoneObj::~MyBoneObj()
@@ -140,7 +141,7 @@ void MyBoneObj::LoadBone(char * path)
 		cubeobj = new DDisplayObject(cube, mat3);
 		cubeobj->Create();
 		tr = cubeobj->GetTransform();
-		tr->SetLocalScale(0.1f, 0.1f, 0.1f);
+		tr->SetLocalScale(0.02f, 0.02f, 0.02f);
 		tr->SetParent(transform);
 		tr->SetLocalPosition(0, 0, 0);
 
@@ -210,6 +211,16 @@ MyBone * MyBoneObj::GetBone(int index)
 	return nullptr;
 }
 
+void MyBoneObj::Play()
+{
+	m_isPlaying = true;
+}
+
+void MyBoneObj::Stop()
+{
+	m_isPlaying = false;
+}
+
 bool MyBoneObj::OnInit()
 {
 	DShader* shader = DRes::LoadInternal<DShader>(D_RES_SHADER_COLOR);
@@ -243,8 +254,10 @@ void MyBoneObj::OnDestroy()
 
 void MyBoneObj::OnUpdate()
 {
-	/*bool reset = false;
-	m_currentTime += DTime::GetDeltaTime();
+	if (!m_isPlaying)
+		return;
+	bool reset = false;
+	
 	if (m_currentTime > m_maxTime) {
 		m_currentTime = 0;
 		reset = true;
@@ -261,7 +274,9 @@ void MyBoneObj::OnUpdate()
 			DTransform* transform = bone->GetTransform();
 			bonedata.Sample(transform, m_currentTime);
 		}
-	}*/
+	}
+
+	m_currentTime += DTime::GetDeltaTime();
 }
 
 void MyBoneObj::OnFixedUpdate()
@@ -469,6 +484,16 @@ void MyBoneObj::RotationKey::Insert(float x, float y, float z, float w, float ti
 	keys[2] = z;
 	keys[3] = w;
 	keys[4] = time;
+
+	//DQuaternion rot = DQuaternion(x, y, z, w);
+	//DVector3 euler;
+	//rot.EulerAngle(euler);
+	//float* keys = new float[4];
+	//keys[0] = euler.x;
+	//keys[1] = euler.y;
+	//keys[2] = euler.z;
+	////keys[3] = w;
+	//keys[3] = time;
 	m_keys.push_back(keys);
 }
 
@@ -494,6 +519,13 @@ void MyBoneObj::RotationKey::Sample(DTransform * transform, float time)
 	DQuaternion::Slerp(DQuaternion(begin[0], begin[1], begin[2], begin[3]), DQuaternion(end[0], end[1], end[2], end[3]), lp, rotation);
 
 	transform->SetLocalRotation(rotation);
+
+	/*DVector3 rotation;
+	transform->GetLocalEuler(rotation);
+
+	DVector3::Lerp(DVector3(begin[0], begin[1], begin[2]), DVector3(end[0], end[1], end[2]), lp, rotation);
+
+	transform->SetLocalEuler(rotation);*/
 
 	if (time >= end[4]) {
 		m_currentKey += 1;

@@ -14,7 +14,7 @@ protected:
 	virtual void OnUpdate();
 
 private:
-	void DrawBone(MyBone*);
+	void DrawBone(MyBone*, int index);
 
 private:
 	DCamera* m_camera;

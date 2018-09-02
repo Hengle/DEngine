@@ -31,7 +31,7 @@ void BoneScene::OnGUI()
 	for (i = 0; i < boneCount; i++)
 	{
 		MyBone* bone = m_bone->GetBone(i);
-		DrawBone(bone);
+		DrawBone(bone, i);
 
 		//transform->SetLocalEuler(x, y, z);
 	}
@@ -52,10 +52,12 @@ void BoneScene::OnLoad()
 
 	transform = m_bone->GetTransform();
 	transform->SetPosition(0.0f, 1.054817f, 0.01587593f);
-	transform->SetEuler(-90.0f, 89.9999f, 0.0f);
+	transform->SetEuler(-90.0f, 0.0f, 0.0f);
 
 	m_bone->LoadBone("../Res/bone.txt");
-	//m_bone->LoadAnim("../Res/anim.txt");
+	m_bone->LoadAnim("../Res/anim.txt");
+
+	m_bone->Play();
 
 
 	//DGeometry* cube = DRes::LoadInternal<DGeometry>(D_RES_MESH_CUBE);
@@ -126,15 +128,15 @@ void BoneScene::OnUpdate()
 	}
 }
 
-void BoneScene::DrawBone(MyBone * bone)
+void BoneScene::DrawBone(MyBone * bone, int index)
 {
 	DTransform* transform;
 	transform = bone->GetTransform();
 
-	DVector3 euler;
+	/*DVector3 euler;
 
 	const char* boneName = bone->GetBoneName();
-	ImGui::Text(boneName);
+	ImGui::Text("%s,index:%d",boneName, index);
 
 	DTransform* parent = transform->GetParent();
 	if (parent != NULL)
@@ -155,5 +157,32 @@ void BoneScene::DrawBone(MyBone * bone)
 	ImGui::SliderFloat(yall, &euler.y, -180.0f, 180.0f);
 	ImGui::SliderFloat(roll, &euler.z, -180.0f, 180.0f);
 
-	transform->SetLocalEuler(euler);
+	transform->SetLocalEuler(euler);*/
+
+
+	DVector3 position;
+
+	const char* boneName = bone->GetBoneName();
+	ImGui::Text("%s,index:%d", boneName, index);
+
+	DTransform* parent = transform->GetParent();
+	if (parent != NULL)
+	{
+		MyBone* parentObj = (MyBone*)(parent->GetSceneObject());
+		ImGui::Text("Parent:%s", parentObj->GetBoneName());
+	}
+
+	transform->GetLocalPosition(position);
+
+	/*char x[64], y[64], z[64];
+
+	sprintf_s(x, "   X:%s", boneName);
+	sprintf_s(y, "   Y:%s", boneName);
+	sprintf_s(z, "   Z:%s", boneName);*/
+
+	ImGui::Text("X:%f", position.x);
+	ImGui::Text("Y:%f", position.y);
+	ImGui::Text("Z:%f", position.z);
+
+	//transform->SetLocalEuler(euler);
 }

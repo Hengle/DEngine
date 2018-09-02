@@ -3,6 +3,7 @@
 #include "DColor.h"
 #include "DGLCore.h"
 #include "DResObject.h"
+#include "DTransform.h"
 #include <map>
 
 /*几何体类*/

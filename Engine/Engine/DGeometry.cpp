@@ -552,6 +552,10 @@ void DGeometry::UpdateBone(DTransform ** bones, const DMatrix4x4& worldToLocal)
 
 		(pose3*boneMat3*worldToLocal).TransformPoint(pos, temp);
 		result += temp*weight3;
+
+		m_geometryDesc.vertices[i * 3] = result.x;
+		m_geometryDesc.vertices[i * 3 + 1] = result.y;
+		m_geometryDesc.vertices[i * 3 + 2] = result.z;
 	}
 	m_vertexChanged = true;
 }
@@ -564,7 +568,7 @@ DGeometry * DGeometry::Create(char* fileName, bool dynamic)
 	if (fileName[len - 3] == 'o' && fileName[len - 2] == 'b'&&fileName[len - 1] == 'j')
 		DModelLoader::LoadObj(fileName, &desc);
 	else if (fileName[len - 4] == 'm' && fileName[len - 3] == 'e' && fileName[len - 2] == 's' && fileName[len - 1] == 'h')
-		DModelLoader::LoadMesh(fileName, &desc);
+		DModelLoader::LoadMesh(fileName, &desc, dynamic);
 	else
 		return NULL;
 

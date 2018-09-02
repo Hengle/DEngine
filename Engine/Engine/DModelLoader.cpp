@@ -218,7 +218,7 @@ bool DModelLoader::LoadObj(const char * file, DGeometryBufferDesc* desc)
 	return true;
 }
 
-bool DModelLoader::LoadMesh(const char * path, DGeometryBufferDesc * desc)
+bool DModelLoader::LoadMesh(const char * path, DGeometryBufferDesc * desc, bool& dynamic)
 {
 	ifstream f(path, ios::binary);
 
@@ -265,12 +265,14 @@ bool DModelLoader::LoadMesh(const char * path, DGeometryBufferDesc * desc)
 		}
 		else if (define == 'b')
 		{
+			dynamic = true;
 			if (desc->boneIndices == 0)
 				desc->boneIndices = new unsigned int[desc->vertexCount * 4];
 			f.read((char*)desc->boneIndices, sizeof(unsigned int)*vcount * 4);
 		}
 		else if (define == 'w')
 		{
+			dynamic = true;
 			if (desc->boneWeights == 0)
 				desc->boneWeights = new float[desc->vertexCount * 4];
 			f.read((char*)desc->boneWeights, sizeof(float)*vcount*4);

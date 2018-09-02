@@ -139,6 +139,10 @@
 		#WRAPMODE REPEAT
 	#RES_END
 
+	#RES_BEGIN TEXTURE2D 2017
+		#PATH ../Res/zombie.bmp
+	#RES_END
+
 	#RES_BEGIN MATERIAL 3000
 		#PATH ../Res/decal.m
 	#RES_END
@@ -207,6 +211,10 @@
 		#PATH ../Res/water.m
 	#RES_END
 
+	#RES_BEGIN MATERIAL 3017
+		#PATH ../Res/zombie.m
+	#RES_END
+
 	#RES_BEGIN GEOMETRY 4000
 		#PATH ../Res/eboy.obj
 	#RES_END
@@ -225,6 +233,10 @@
 
 	#RES_BEGIN GEOMETRY 4004
 		#PATH ../Res/og.obj
+	#RES_END
+
+	#RES_BEGIN GEOMETRY 4005
+		#PATH ../Res/body.mesh
 	#RES_END
 
 #RES_GROUP_END

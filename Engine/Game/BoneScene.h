@@ -21,5 +21,9 @@ private:
 	MyBoneObj* m_bone;
 	DVector3 m_lookAtPoint;
 	float m_lookDistance;
+
+	DMatrix4x4 wTL;
+
+	DDisplayObject* m_geo;
 };
 

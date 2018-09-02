@@ -86,6 +86,8 @@ public:
 	void LoadAnim(char*);
 	int GetBoneCount() const;
 	MyBone* GetBone(int index);
+	void GetBoneMatrix(int index, DMatrix4x4&);
+	DTransform** GetBones();
 	void Play();
 	void Stop();
 
@@ -105,6 +107,7 @@ private:
 private:
 	std::vector<MyBone*> m_bones;
 	std::vector<MyBoneData> m_boneDatas;
+	DTransform** m_realBones;
 	DMaterial* m_material;
 	float m_maxTime;
 	float m_currentTime;

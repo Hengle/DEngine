@@ -172,8 +172,8 @@ void DGeometryWrapper::Refresh(DGeometryBufferDesc * desc)
 	}
 
 	m_isDirty = false;
-	//delete[] vertices;
-	//vertices = 0;
+	delete[] vertices;
+	vertices = 0;
 }
 
 void DGeometryWrapper::Refresh(float * vertexbuffer, unsigned int * indexbuffer, int vertexCount, int indexCount)

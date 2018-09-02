@@ -68,6 +68,7 @@ MyBoneObj::MyBoneObj() : DSceneObject()
 	m_material = 0;
 	m_maxTime = 0;
 	m_currentTime = 0;
+	m_realBones = 0;
 	m_isPlaying = false;
 }
 
@@ -211,6 +212,34 @@ MyBone * MyBoneObj::GetBone(int index)
 	return nullptr;
 }
 
+void MyBoneObj::GetBoneMatrix(int index, DMatrix4x4 & result)
+{
+	if (index < 0 || index >= m_bones.size())
+	{
+		return;
+	}
+	DTransform* transform = m_bones[index]->GetTransform();
+	DMatrix4x4 mat,bonemat;
+	m_transform->GetLocalToWorld(mat);
+	transform->GetWorldToLocal(bonemat);
+	result = mat*bonemat;
+}
+
+DTransform ** MyBoneObj::GetBones()
+{
+	if (m_realBones == 0)
+	{
+		m_realBones = new DTransform*[m_bones.size()];
+		int i;
+		for (i = 0; i < m_bones.size(); i++)
+		{
+			DTransform* trans = m_bones[i]->GetTransform();
+			m_realBones[i] = trans;
+		}
+	}
+	return m_realBones;
+}
+
 void MyBoneObj::Play()
 {
 	m_isPlaying = true;
@@ -250,6 +279,8 @@ void MyBoneObj::OnDestroy()
 		MyBoneData bonedata = m_boneDatas[i];
 		bonedata.Release();
 	}
+	if (m_realBones != 0)
+		delete[]m_realBones;
 }
 
 void MyBoneObj::OnUpdate()

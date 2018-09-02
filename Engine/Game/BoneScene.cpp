@@ -59,6 +59,27 @@ void BoneScene::OnLoad()
 
 	m_bone->Play();
 
+	DMaterial* mat = DRes::Load<DMaterial>(DEFAULT_GROUP, 3017);
+	DGeometry* geo = DRes::Load<DGeometry>(DEFAULT_GROUP, 4005);
+
+	m_geo = new DDisplayObject(geo, mat);
+	m_geo->Create();
+	transform = m_geo->GetTransform();
+	transform->SetPosition(0.0f, 1.054817f, 0.01587593f);
+	transform->SetEuler(-90.0f, 0.0f, 0.0f);
+
+	int i, boneCount;
+	boneCount = m_bone->GetBoneCount();
+	m_geo->GetGeometry()->SetBoneMatrixCount(boneCount);
+
+	for (i = 0; i < boneCount; i++)
+	{
+		DMatrix4x4 matrix;
+		m_bone->GetBoneMatrix(i, matrix);
+		m_geo->GetGeometry()->SetBoneMatrix(matrix, i);
+	}
+
+	transform->GetWorldToLocal(wTL);
 
 	//DGeometry* cube = DRes::LoadInternal<DGeometry>(D_RES_MESH_CUBE);
 	//DMaterial* mat3 = DRes::Load<DMaterial>(DEFAULT_GROUP, DECAL_MAT);
@@ -77,6 +98,9 @@ void BoneScene::OnUnLoad()
 
 void BoneScene::OnUpdate()
 {
+	
+	m_geo->GetGeometry()->UpdateBone(m_bone->GetBones(), wTL);
+
 	if (DInput::IsMousePress(0) && !DGUI::IsGUIActive())
 	{
 		int dtx, dty;

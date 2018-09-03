@@ -294,6 +294,9 @@ void MyBoneObj::OnUpdate()
 		reset = true;
 	}
 
+	//m_currentTime += DTime::GetDeltaTime();
+	m_currentTime = 0.8f;
+
 	int i;
 	for (i = 0; i < m_boneDatas.size(); i++)
 	{
@@ -307,7 +310,7 @@ void MyBoneObj::OnUpdate()
 		}
 	}
 
-	m_currentTime += DTime::GetDeltaTime();
+	
 }
 
 void MyBoneObj::OnFixedUpdate()

@@ -66,11 +66,14 @@ void BoneScene::OnLoad()
 	m_geo->Create();
 	transform = m_geo->GetTransform();
 	transform->SetPosition(0.0f, 1.054817f, 0.01587593f);
-	transform->SetEuler(-90.0f, 0.0f, 0.0f);
+	//transform->SetEuler(-90.0f, 0.0f, 0.0f);
 
 	int i, boneCount;
 	boneCount = m_bone->GetBoneCount();
 	m_geo->GetGeometry()->SetBoneMatrixCount(boneCount);
+
+	//DMatrix4x4 ltw;
+	//transform->GetLocalToWorld(ltw);
 
 	for (i = 0; i < boneCount; i++)
 	{

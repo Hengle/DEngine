@@ -64,5 +64,8 @@ private:
 	DMatrix4x4* m_boneMatrices;
 	int m_boneMatrixCount;
 
+	float* m_verticeCache;
+	float* m_normalCache;
+
 	bool m_isBoundsChanged;
 };

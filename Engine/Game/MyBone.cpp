@@ -117,10 +117,10 @@ void MyBoneObj::LoadBone(char * path)
 
 	int i;
 
-	DGeometry* cube = DRes::LoadInternal<DGeometry>(D_RES_MESH_CUBE);
-	DMaterial* mat3 = DRes::Load<DMaterial>(DEFAULT_GROUP, DECAL_MAT);
-	DDisplayObject* cubeobj;
-	DTransform* tr;
+	//DGeometry* cube = DRes::LoadInternal<DGeometry>(D_RES_MESH_CUBE);
+	//DMaterial* mat3 = DRes::Load<DMaterial>(DEFAULT_GROUP, DECAL_MAT);
+	//DDisplayObject* cubeobj;
+	//DTransform* tr;
 	
 
 	for (i = 0; i < boneDatas.size(); i++)
@@ -139,12 +139,12 @@ void MyBoneObj::LoadBone(char * path)
 		transform->SetLocalPosition(data.posx, data.posy, data.posz);
 		transform->SetLocalRotation(data.rotx, data.roty, data.rotz, data.rotw);
 
-		cubeobj = new DDisplayObject(cube, mat3);
-		cubeobj->Create();
-		tr = cubeobj->GetTransform();
-		tr->SetLocalScale(0.02f, 0.02f, 0.02f);
-		tr->SetParent(transform);
-		tr->SetLocalPosition(0, 0, 0);
+		//cubeobj = new DDisplayObject(cube, mat3);
+		//cubeobj->Create();
+		//tr = cubeobj->GetTransform();
+		//tr->SetLocalScale(0.02f, 0.02f, 0.02f);
+		//tr->SetParent(transform);
+		//tr->SetLocalPosition(0, 0, 0);
 
 		m_bones.push_back(data.bone);
 	}
@@ -294,8 +294,7 @@ void MyBoneObj::OnUpdate()
 		reset = true;
 	}
 
-	//m_currentTime += DTime::GetDeltaTime();
-	m_currentTime = 0.8f;
+	m_currentTime += DTime::GetDeltaTime();
 
 	int i;
 	for (i = 0; i < m_boneDatas.size(); i++)

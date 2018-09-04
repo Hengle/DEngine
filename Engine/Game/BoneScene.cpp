@@ -43,15 +43,15 @@ void BoneScene::OnLoad()
 	m_camera->Create();
 
 	DTransform* transform = m_camera->GetTransform();
-	transform->SetPosition(-0.6467111f, 1.890899f, 1.754533f);
-	transform->SetEuler(24.511f, 156.074f, 0);
+	transform->SetPosition(-0.4731708f, 1.009849f, 0.70194f);
+	transform->SetEuler(34.378f, 143.56f, 0);
 	m_camera->SetBackgroundColor(DColor(49.0f / 255.0f, 77.0f / 255.0f, 121.0f / 255.0f));
 
 	m_bone = new MyBoneObj();
 	m_bone->Create();
 
 	transform = m_bone->GetTransform();
-	transform->SetPosition(0.0f, 1.054817f, 0.01587593f);
+	transform->SetPosition(0.0f, 0.0f, 0.0f);
 	transform->SetEuler(-90.0f, 0.0f, 0.0f);
 
 	m_bone->LoadBone("../Res/bone.txt");
@@ -65,7 +65,7 @@ void BoneScene::OnLoad()
 	m_geo = new DDisplayObject(geo, mat);
 	m_geo->Create();
 	transform = m_geo->GetTransform();
-	transform->SetPosition(0.0f, 1.054817f, 0.01587593f);
+	transform->SetPosition(0.0f, 0.0f, 0.0f);
 	//transform->SetEuler(-90.0f, 0.0f, 0.0f);
 
 	int i, boneCount;
@@ -104,6 +104,8 @@ void BoneScene::OnUpdate()
 	
 	m_geo->GetGeometry()->UpdateBone(m_bone->GetBones(), wTL);
 
+
+
 	if (DInput::IsMousePress(0) && !DGUI::IsGUIActive())
 	{
 		int dtx, dty;
@@ -128,7 +130,7 @@ void BoneScene::OnUpdate()
 		int dtx, dty;
 		DInput::GetDeltaMouseMove(dtx, dty);
 
-		m_lookDistance += dty*0.2f;
+		m_lookDistance += dty*0.05f;
 		DVector3 forward;
 		m_camera->GetTransform()->GetForward(forward);
 		DVector3 position = m_lookAtPoint - forward*m_lookDistance;
@@ -145,8 +147,8 @@ void BoneScene::OnUpdate()
 		transform->GetRight(camRight);
 		transform->GetUp(camUp);
 
-		m_lookAtPoint = camUp*dty*0.1f + m_lookAtPoint;
-		m_lookAtPoint = camRight*dtx*-0.1f + m_lookAtPoint;
+		m_lookAtPoint = camUp*dty*0.03f + m_lookAtPoint;
+		m_lookAtPoint = camRight*dtx*-0.03f + m_lookAtPoint;
 
 		DVector3 forward;
 		m_camera->GetTransform()->GetForward(forward);

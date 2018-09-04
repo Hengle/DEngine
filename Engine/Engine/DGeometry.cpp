@@ -15,6 +15,9 @@ DGeometry::DGeometry(bool dynamic)
 	m_geometryDesc.colors = 0;
 	m_geometryDesc.indices = 0;
 
+	m_verticeCache = 0;
+	m_normalCache = 0;
+
 	m_topology = DGeometryTopology_TriangleList;
 	m_dynamic = dynamic;
 
@@ -83,6 +86,16 @@ void DGeometry::Destroy()
 	{
 		delete[] m_boneMatrices;
 		m_boneMatrices = 0;
+	}
+	if (m_verticeCache != NULL)
+	{
+		delete[] m_verticeCache;
+		m_verticeCache = 0;
+	}
+	if (m_normalCache != NULL)
+	{
+		delete[] m_normalCache;
+		m_normalCache = 0;
 	}
 }
 
@@ -511,9 +524,32 @@ void DGeometry::UpdateBone(DTransform ** bones, const DMatrix4x4& worldToLocal)
 	DMatrix4x4 boneMat0, boneMat1, boneMat2, boneMat3;
 
 	DVector3 pos,result,temp;
+
+	bool m_isInit = true;
+
+	if (m_verticeCache == 0)
+	{
+		m_isInit = false;
+		m_verticeCache = new float[m_geometryDesc.vertexCount * 3];
+		if (m_geometryDesc.normals != 0)
+			m_normalCache = new float[m_geometryDesc.vertexCount * 3];
+	}
 	
 	for (i = 0; i < m_geometryDesc.vertexCount; i++)
 	{
+		if (!m_isInit)
+		{
+			m_verticeCache[i * 3] = m_geometryDesc.vertices[i * 3];
+			m_verticeCache[i * 3 + 1] = m_geometryDesc.vertices[i * 3 + 1];
+			m_verticeCache[i * 3 + 2] = m_geometryDesc.vertices[i * 3 + 2];
+			if (m_normalCache != 0)
+			{
+				m_normalCache[i * 3] = m_geometryDesc.normals[i * 3];
+				m_normalCache[i * 3 + 1] = m_geometryDesc.normals[i * 3 + 1];
+				m_normalCache[i * 3 + 2] = m_geometryDesc.normals[i * 3 + 2];
+			}
+		}
+
 		boneIndex0 = m_geometryDesc.boneIndices[i * 4];
 		boneIndex1 = m_geometryDesc.boneIndices[i * 4 + 1];
 		boneIndex2 = m_geometryDesc.boneIndices[i * 4 + 2];
@@ -534,7 +570,8 @@ void DGeometry::UpdateBone(DTransform ** bones, const DMatrix4x4& worldToLocal)
 		weight2 = m_geometryDesc.boneWeights[i * 4 + 2];
 		weight3 = m_geometryDesc.boneWeights[i * 4 + 3];
 
-		pos = DVector3(m_geometryDesc.vertices[i * 3], m_geometryDesc.vertices[i * 3 + 1], m_geometryDesc.vertices[i * 3 + 2]);
+		pos = DVector3(m_verticeCache[i * 3], m_verticeCache[i * 3 + 1], m_verticeCache[i * 3 + 2]);
+		result = DVector3(0.0f, 0.0f, 0.0f);
 
 		bone0->GetLocalToWorld(boneMat0);
 		bone1->GetLocalToWorld(boneMat1);
@@ -543,7 +580,7 @@ void DGeometry::UpdateBone(DTransform ** bones, const DMatrix4x4& worldToLocal)
 
 		(pose0*boneMat0*worldToLocal).TransformPoint(pos, temp);
 		result += temp*weight0;
-		
+
 		(pose1*boneMat1*worldToLocal).TransformPoint(pos, temp);
 		result += temp*weight1;
 

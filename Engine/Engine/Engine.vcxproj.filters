@@ -319,7 +319,7 @@
       <Filter>头文件\Core</Filter>
     </ClInclude>
     <ClInclude Include="DSkinnedGeometryObject.h">
-      <Filter>头文件</Filter>
+      <Filter>头文件\Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -531,7 +531,7 @@
       <Filter>源文件\Core</Filter>
     </ClCompile>
     <ClCompile Include="DSkinnedGeometryObject.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\Engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

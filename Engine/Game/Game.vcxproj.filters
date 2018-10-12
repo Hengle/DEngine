@@ -57,6 +57,18 @@
     <ClInclude Include="BoneScene.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="EgBloomScene.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="EgAnimScene.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="EgModelScene.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="EgWaterScene.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -93,6 +105,18 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="BoneScene.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="EgBloomScene.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="EgAnimScene.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="EgModelScene.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="EgWaterScene.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
